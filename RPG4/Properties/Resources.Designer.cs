@@ -69,13 +69,22 @@ namespace RPG4.Properties {
         ///      &quot;X&quot;: 50,
         ///      &quot;Y&quot;: 300,
         ///      &quot;Width&quot;: 250,
-        ///      &quot;Height&quot;: 50
+        ///      &quot;Height&quot;: 50,
+        ///	  &quot;Concrete&quot;: true
         ///    },
         ///    {
         ///      &quot;X&quot;: 100,
         ///      &quot;Y&quot;: 260,
         ///      &quot;Width&quot;: 50,
-        ///      &quot;Height&quot;: 140
+        ///      &quot;Height&quot;: 140,
+        ///	  &quot;Concrete&quot;: true
+        ///    },
+        ///    {
+        ///      &quot;X&quot;: 500,
+        ///      &quot;Y&quot;: 300,
+        ///      &quot;Width&quot;: 30,
+        ///      &quot;Height&quot;: 50,
+        ///	  &quot;Concrete&quot;: true
         ///    }
         ///  ],
         ///  &quot;Pngs&quot;: [
@@ -85,17 +94,53 @@ namespace RPG4.Properties {
         ///      &quot;Width&quot;: 40,
         ///      &quot;Height&quot;: 40,
         ///      &quot;Speed&quot;: 50,
-        ///      &quot;HourRotation&quot;: true,
-        ///      &quot;KickTolerance&quot;: 3,
-        ///      &quot;Pattern&quot;: {
-        ///        &quot;x&quot;: 50,
-        ///        &quot;y&quot;: 50,
-        ///        &quot;width&quot;: 550,
-        ///        &quot;height&quot;: 40 [le reste de la chaîne a été tronqué]&quot;;.
+        /// [le reste de la chaîne a été tronqué]&quot;;.
         /// </summary>
         internal static string Screen1 {
             get {
                 return ResourceManager.GetString("Screen1", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Recherche une chaîne localisée semblable à {
+        ///  &quot;AreaWidth&quot;: 640,
+        ///  &quot;AreaHeight&quot;: 480,
+        ///  &quot;Walls&quot;: [
+        ///    {
+        ///      &quot;X&quot;: 50,
+        ///      &quot;Y&quot;: 50,
+        ///      &quot;Width&quot;: 550,
+        ///      &quot;Height&quot;: 20,
+        ///	  &quot;Concrete&quot;: true
+        ///    },
+        ///	{
+        ///      &quot;X&quot;: 530,
+        ///      &quot;Y&quot;: 50,
+        ///      &quot;Width&quot;: 20,
+        ///      &quot;Height&quot;: 400,
+        ///	  &quot;Concrete&quot;: true
+        ///    },
+        ///	{
+        ///      &quot;X&quot;: 50,
+        ///      &quot;Y&quot;: 430,
+        ///      &quot;Width&quot;: 200,
+        ///      &quot;Height&quot;: 20,
+        ///	  &quot;Concrete&quot;: true
+        ///    },
+        ///	{
+        ///      &quot;X&quot;: 300,
+        ///      &quot;Y&quot;: 430,
+        ///      &quot;Width&quot;: 300,
+        ///      &quot;Height&quot;: 20,
+        ///	  &quot;Concrete&quot;: true
+        ///    },
+        ///	{
+        ///      &quot;X&quot;: 50 [le reste de la chaîne a été tronqué]&quot;;.
+        /// </summary>
+        internal static string Screen2 {
+            get {
+                return ResourceManager.GetString("Screen2", resourceCulture);
             }
         }
     }

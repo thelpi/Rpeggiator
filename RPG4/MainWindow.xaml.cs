@@ -18,20 +18,11 @@ namespace RPG4
     /// </summary>
     public partial class MainWindow : Window
     {
-        private const int REFRESH_DELAY_MS = 50;
-        private const int DISTANCE_BY_SECOND = 100;
-        private const int SPRITE_SIZE_X = 40;
-        private const int SPRITE_SIZE_Y = 40;
-        private const double KICK_SIZE_RATIO = 2;
-
         private const string KICK_TAG = "KICK";
         private const string ENEMY_TAG = "ENEMY";
         private const string WALL_TAG = "WALL";
         private const string WALL_TRIGGER_TAG = "WALL_TRIGGER";
         private const string UNIQUE_TIMESTAMP_PATTERN = "fffffff";
-
-        private readonly double KICK_THICK_X = ((KICK_SIZE_RATIO - 1) / 2) * SPRITE_SIZE_X;
-        private readonly double KICK_THICK_Y = ((KICK_SIZE_RATIO - 1) / 2) * SPRITE_SIZE_Y;
 
         private Timer _timer;
         private volatile bool _timerIsIn;
@@ -42,19 +33,18 @@ namespace RPG4
         {
             InitializeComponent();
 
-            dynamic modelJson = JsonConvert.DeserializeObject(Properties.Resources.Screen1);
+            double initialCanvasTop = (Constants.AREA_HEIGHT / 2) - (Constants.SPRITE_SIZE_Y / 2);
+            double initialCanvasLeft = (Constants.AREA_WIDTH / 2) - (Constants.SPRITE_SIZE_X / 2);
 
-            double initialCanvasTop = (modelJson.AreaHeight / 2) - (SPRITE_SIZE_Y / 2);
-            double initialCanvasLeft = (modelJson.AreaWidth / 2) - (SPRITE_SIZE_X / 2);
+            Player player = new Player(initialCanvasLeft, initialCanvasTop, Constants.SPRITE_SIZE_X, Constants.SPRITE_SIZE_Y,
+                Constants.PLAYER_SPEED * (Constants.PLAYER_SPEED / (double)1000), Constants.KICK_SIZE_RATIO);
 
-            _model = new AbstractEngine(
-                new Player(initialCanvasLeft, initialCanvasTop, SPRITE_SIZE_X, SPRITE_SIZE_Y,
-                    DISTANCE_BY_SECOND * (DISTANCE_BY_SECOND / (double)1000), KICK_SIZE_RATIO), modelJson);
+            _model = new AbstractEngine(player, 1);
 
-            cvsMain.Height = modelJson.AreaHeight;
-            cvsMain.Width = modelJson.AreaWidth;
-            rctMe.Height = SPRITE_SIZE_Y;
-            rctMe.Width = SPRITE_SIZE_X;
+            cvsMain.Height = Constants.AREA_HEIGHT;
+            cvsMain.Width = Constants.AREA_WIDTH;
+            rctMe.Height = Constants.SPRITE_SIZE_Y;
+            rctMe.Width = Constants.SPRITE_SIZE_X;
 
             RedrawMeSprite(initialCanvasTop, initialCanvasLeft, false);
             RedrawPngSprite(_model.Enemies);
@@ -62,7 +52,7 @@ namespace RPG4
 
             _model.WallTriggers.ForEach(DrawWallTrigger);
 
-            _timer = new Timer(REFRESH_DELAY_MS);
+            _timer = new Timer(Constants.REFRESH_DELAY_MS);
             _timer.Elapsed += OnTick;
             _timer.Start();
         }
@@ -134,10 +124,10 @@ namespace RPG4
 
             if (kick)
             {
-                var sp = new SizedPoint(left - KICK_THICK_X,
-                    top - KICK_THICK_Y,
-                    SPRITE_SIZE_X * KICK_SIZE_RATIO,
-                    SPRITE_SIZE_Y * KICK_SIZE_RATIO);
+                var sp = new SizedPoint(left - Constants.KICK_THICK_X,
+                    top - Constants.KICK_THICK_Y,
+                    Constants.SPRITE_SIZE_X * Constants.KICK_SIZE_RATIO,
+                    Constants.SPRITE_SIZE_Y * Constants.KICK_SIZE_RATIO);
 
                 DrawSizedPoint(sp, Brushes.DarkViolet, KICK_TAG, 1);
             }

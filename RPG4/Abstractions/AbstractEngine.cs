@@ -5,13 +5,10 @@ namespace RPG4.Abstractions
 {
     public class AbstractEngine
     {
-        private const int KICK_TICK_MAX_COUNT = 2;
-
         private int _kickTickCount;
+        private Dictionary<Directions, int> _adjacentScreens;
 
         public Player Player { get; private set; }
-        public double AreaHeight { get; private set; }
-        public double AreaWidth { get; private set; }
         public List<Wall> Walls { get; private set; }
         public List<Wall> ConcreteWalls { get { return Walls.Where(w => w.Concrete).ToList(); } }
         public List<Enemy> Enemies { get; private set; }
@@ -20,15 +17,23 @@ namespace RPG4.Abstractions
         public bool MeCollideToWall { get; set; }
         public bool IsKicking { get { return _kickTickCount >= 0; } }
 
-        public AbstractEngine(Player player, dynamic screenJsonDatas)
+        public AbstractEngine(Player player, int screenIndex)
         {
             Player = player;
-            AreaHeight = screenJsonDatas.AreaHeight;
-            AreaWidth = screenJsonDatas.AreaWidth;
+
+            SetEnginePropertiesFromScreenDatas(screenIndex);
+        }
+
+        private void SetEnginePropertiesFromScreenDatas(int screenIndex)
+        {
+            dynamic screenJsonDatas = Tools.GetScreenDatasFromIndex(screenIndex);
+
             Walls = new List<Wall>();
             Enemies = new List<Enemy>();
             WallTriggers = new List<WallTrigger>();
             _kickTickCount = -1;
+            MeCollideToWall = false;
+            MeCollideToPng = false;
 
             foreach (dynamic wallJson in screenJsonDatas.Walls)
             {
@@ -42,12 +47,24 @@ namespace RPG4.Abstractions
             {
                 WallTriggers.Add(new WallTrigger(walltriggerJson));
             }
+            dynamic adjacentScreens = screenJsonDatas.AdjacentScreens;
+            _adjacentScreens = new Dictionary<Directions, int>
+            {
+                { Directions.bottom, (int)adjacentScreens.bottom },
+                { Directions.bottom_left, (int)adjacentScreens.bottom_left },
+                { Directions.bottom_right, (int)adjacentScreens.bottom_right },
+                { Directions.left, (int)adjacentScreens.left },
+                { Directions.right, (int)adjacentScreens.right },
+                { Directions.top, (int)adjacentScreens.top },
+                { Directions.top_left, (int)adjacentScreens.top_left },
+                { Directions.top_right, (int)adjacentScreens.top_right },
+            };
         }
 
         public void CheckEngineAtTick(KeyPress keys)
         {
             // gère le temps d'effet du kick
-            if (_kickTickCount >= KICK_TICK_MAX_COUNT)
+            if (_kickTickCount >= Constants.KICK_TICK_MAX_COUNT)
             {
                 _kickTickCount = -1;
             }
@@ -84,6 +101,11 @@ namespace RPG4.Abstractions
             foreach (var wt in WallTriggers)
             {
                 wt.ComputeBehaviorAtTick(this, keys);
+            }
+
+            if (!MeCollideToPng && !MeCollideToWall && Player.NewScreenEntrance.HasValue)
+            {
+                SetEnginePropertiesFromScreenDatas(_adjacentScreens[Player.NewScreenEntrance.Value]);
             }
         }
     }

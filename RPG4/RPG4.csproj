@@ -57,11 +57,13 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Abstractions\Directions.cs" />
     <Compile Include="Abstractions\WallTrigger.cs" />
     <Compile Include="Abstractions\FloorTrigger.cs" />
     <Compile Include="Abstractions\Player.cs" />
     <Compile Include="Abstractions\Enemy.cs" />
     <Compile Include="Abstractions\SizedPoint.cs" />
+    <Compile Include="Tools.cs" />
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -72,6 +74,7 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Abstractions\KeyPress.cs" />
+    <Compile Include="Constants.cs" />
     <Compile Include="MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
@@ -106,6 +109,9 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\Screen1.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Screen2.txt" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

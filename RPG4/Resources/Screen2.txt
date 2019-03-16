@@ -1,0 +1,78 @@
+{
+  "Walls": [
+    {
+      "X": 80,
+      "Y": 80,
+      "Width": 480,
+      "Height": 40,
+	  "Concrete": true
+    },
+	{
+      "X": 80,
+      "Y": 80,
+      "Width": 40,
+      "Height": 320,
+	  "Concrete": true
+    },
+	{
+      "X": 520,
+      "Y": 80,
+      "Width": 40,
+      "Height": 320,
+	  "Concrete": true
+    },
+	{
+      "X": 80,
+      "Y": 360,
+      "Width": 300,
+      "Height": 40,
+	  "Concrete": true
+    },
+	{
+      "X": 480,
+      "Y": 360,
+      "Width": 80,
+      "Height": 40,
+	  "Concrete": true
+    },
+	{
+      "X": 380,
+      "Y": 360,
+      "Width": 100,
+      "Height": 40,
+	  "Concrete": true
+    }
+  ],
+  "Pngs": [
+  ],
+  "WallTriggers": [
+	{
+		"X": 570,
+		"Y": 20,
+		"Width": 20,
+		"Height": 20,
+		"ActionDelayMaxTickCount": 100,
+		"WallIndex": 5,
+		"ShowOnAction": false
+	},
+	{
+		"X": 160,
+		"Y": 220,
+		"Width": 20,
+		"Height": 20,
+		"ActionDelayMaxTickCount": 80,
+		"WallIndex": 5,
+		"ShowOnAction": false
+	}
+  ],
+  "AdjacentScreens": {
+	"top_left": 1,
+	"top": 1,
+	"top_right": 1,
+	"right": 1,
+	"bottom_right": 1,
+	"bottom": 1,
+	"bottom_left": 1,
+	"left": 1
+  }
+}
