@@ -23,7 +23,6 @@ namespace RPG4
         private const int SPRITE_SIZE_Y = 40;
         private const int CANVAS_HEIGHT = 480;
         private const int CANVAS_WIDTH = 640;
-        private const int KICK_DELAY_MS = 100;
         private const double KICK_SIZE_RATIO = 2;
         private const string KICK_TAG = "KICK";
         private const string PNG_TAG = "PNG";
@@ -34,7 +33,7 @@ namespace RPG4
         private Timer _timer;
         private volatile bool _timerIsIn;
         private AbstractEngine _model;
-        private volatile int _kickTimeCumulMs = -1;
+        //private volatile int _kickTimeCumulMs = -1;
 
         public MainWindow()
         {
@@ -92,7 +91,7 @@ namespace RPG4
                     Keyboard.IsKeyDown(Key.Down),
                     Keyboard.IsKeyDown(Key.Right),
                     Keyboard.IsKeyDown(Key.Left),
-                    _kickTimeCumulMs >= 0
+                    Keyboard.IsKeyDown(Key.Space)
                 );
             }));
 
@@ -101,7 +100,7 @@ namespace RPG4
             _model.CheckEngineAtTick(pressedKeys);
 
             // dessine le sprite joueur
-            Dispatcher.Invoke(new Action<SizedPoint, bool>(delegate(SizedPoint pt, bool kick) { RedrawMeSprite(pt.Y, pt.X, kick); }), _model.Player, _kickTimeCumulMs > 0);
+            Dispatcher.Invoke(new Action<SizedPoint, bool>(delegate(SizedPoint pt, bool kick) { RedrawMeSprite(pt.Y, pt.X, kick); }), _model.Player, _model.IsKicking);
 
             // dessine les sprites png
             Dispatcher.Invoke(new Action<List<PngBehavior>>(delegate (List<PngBehavior> pngs) { RedrawPngSprite(pngs); }), _model.Pngs);
@@ -111,16 +110,6 @@ namespace RPG4
             {
                 Dispatcher.Invoke(new Action(delegate() { MessageBox.Show("You die !"); }));
                 _timer.Stop();
-            }
-
-            // gère le temps d'effet du kick
-            if (_kickTimeCumulMs >= KICK_DELAY_MS)
-            {
-                _kickTimeCumulMs = -1;
-            }
-            else if (_kickTimeCumulMs >= 0)
-            {
-                _kickTimeCumulMs += REFRESH_DELAY_MS;
             }
 
             _timerIsIn = false;
@@ -199,12 +188,12 @@ namespace RPG4
             cvsMain.Children.Add(rctWall);
         }
 
-        private void Window_KeyDown(object sender, KeyEventArgs e)
+        /*private void Window_KeyDown(object sender, KeyEventArgs e)
         {
             if (e.Key == Key.Space && _kickTimeCumulMs < 0)
             {
                 _kickTimeCumulMs = 0;
             }
-        }
+        }*/
     }
 }
