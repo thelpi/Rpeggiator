@@ -2,7 +2,7 @@
 
 namespace RPG4.Abstractions
 {
-    public class PngBehavior : SizedPoint
+    public class Enemy : SizedPoint
     {
         public double Speed { get; private set; } // distance in pixels by tick
         public SizedPoint Pattern { get; private set; }
@@ -10,7 +10,7 @@ namespace RPG4.Abstractions
         public int KickTolerance { get; private set; }
         public int KickCount { get; private set; }
 
-        public PngBehavior(double x, double y, double width, double height, double distanceByTick, SizedPoint movePattern, bool hourRotation, int kickTolerance)
+        public Enemy(double x, double y, double width, double height, double distanceByTick, SizedPoint movePattern, bool hourRotation, int kickTolerance)
             : base (x, y, width, height)
         {
             Speed = distanceByTick;
@@ -19,19 +19,15 @@ namespace RPG4.Abstractions
             KickTolerance = kickTolerance;
         }
 
-        public static new PngBehavior FromDynamic(dynamic pngJson)
+        public Enemy(dynamic pngJson) : base((object)pngJson)
         {
-            double x = pngJson.X;
-            double y = pngJson.Y;
-            double width = pngJson.Width;
-            double height = pngJson.Height;
-            double speed = pngJson.Speed;
-            bool hourRotation = pngJson.HourRotation;
-            int kickTolerance = pngJson.KickTolerance;
-            return new PngBehavior(x, y, width, height, speed, SizedPoint.FromDynamic(pngJson.Pattern), hourRotation, kickTolerance);
+            Speed = pngJson.Speed;
+            HourRotation = pngJson.HourRotation;
+            KickTolerance = pngJson.KickTolerance;
+            Pattern = new SizedPoint(pngJson.Pattern);
         }
 
-        public override void ComputeNewPositionAtTick(AbstractEngine engine, KeyPress keys)
+        public override void ComputeBehaviorAtTick(AbstractEngine engine, KeyPress keys)
         {
             double nextX = X;
             double nextY = Y;
@@ -106,7 +102,7 @@ namespace RPG4.Abstractions
                 nextY = Pattern.BottomRightY - Height;
             }
 
-            if (engine.Walls.Any(w => w.Overlap(Copy(nextX, nextY))))
+            if (engine.ConcreteWalls.Any(w => w.Overlap(Copy(nextX, nextY))))
             {
                 HourRotation = !HourRotation;
             }

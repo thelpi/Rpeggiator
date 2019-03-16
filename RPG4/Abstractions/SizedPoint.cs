@@ -48,18 +48,15 @@ namespace RPG4.Abstractions
         }
 
         /// <summary>
-        /// Builds an instance from a json dynamic object.
+        /// Constructor.
         /// </summary>
         /// <param name="sizedPointJson">The json dynamic object.</param>
-        /// <returns>The instance</returns>
-        public static SizedPoint FromDynamic(dynamic sizedPointJson)
+        public SizedPoint(dynamic sizedPointJson)
         {
-            // do not remove the temporary variables !
-            double x = sizedPointJson.X;
-            double y = sizedPointJson.Y;
-            double width = sizedPointJson.Width;
-            double height = sizedPointJson.Height;
-            return new SizedPoint(x, y, width, height);
+            X = sizedPointJson.X;
+            Y = sizedPointJson.Y;
+            Width = sizedPointJson.Width;
+            Height = sizedPointJson.Height;
         }
 
         /// <summary>
@@ -118,7 +115,7 @@ namespace RPG4.Abstractions
         /// </summary>
         /// <param name="engine">The <see cref="AbstractEngine"/>.</param>
         /// <param name="keys">Keys pressed at ticking.</param>
-        public virtual void ComputeNewPositionAtTick(AbstractEngine engine, KeyPress keys)
+        public virtual void ComputeBehaviorAtTick(AbstractEngine engine, KeyPress keys)
         {
             // is there a default behavior to implement ?
         }

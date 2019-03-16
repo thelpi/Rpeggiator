@@ -6,13 +6,22 @@
       "X": 50,
       "Y": 300,
       "Width": 250,
-      "Height": 50
+      "Height": 50,
+	  "Concrete": true
     },
     {
       "X": 100,
       "Y": 260,
       "Width": 50,
-      "Height": 140
+      "Height": 140,
+	  "Concrete": true
+    },
+    {
+      "X": 500,
+      "Y": 300,
+      "Width": 30,
+      "Height": 50,
+	  "Concrete": true
     }
   ],
   "Pngs": [
@@ -31,5 +40,16 @@
         "Height": 400
       }
     }
+  ],
+  "WallTriggers": [
+	{
+		"X": 200,
+		"Y": 200,
+		"Width": 10,
+		"Height": 10,
+		"ActionDelayMaxTickCount": 60,
+		"WallIndex": 2,
+		"ShowOnAction": false
+	}
   ]
 }

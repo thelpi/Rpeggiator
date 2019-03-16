@@ -5,25 +5,30 @@ using System.Windows;
 
 namespace RPG4.Abstractions
 {
-    public class PlayerBehavior : SizedPoint
+    public class Player : SizedPoint
     {
         private const int MOVE_HISTORY_COUNT = 50;
         private Queue<Point> _moveHistory = new Queue<Point>(MOVE_HISTORY_COUNT);
 
-        // distance in pixels by tick
-        public double Speed { get; private set; } 
+        /// <summary>
+        /// Speed (i.e. distance, in pixels, by tick)
+        /// </summary>
+        public double Speed { get; private set; }
+        /// <summary>
+        /// 
+        /// </summary>
         public double KickReachRatio { get; private set; }
         // inverse de pythagore pour la distance parcourue dans chaque sens (top et left) lors d'un mouvement en diagonale
         public double DiagonaleMoveSideDistance { get { return Math.Sqrt((Speed * Speed) / 2); } }
 
-        public PlayerBehavior(double x, double y, double width, double height, double distanceByTick, double kickReachRatio)
+        public Player(double x, double y, double width, double height, double distanceByTick, double kickReachRatio)
             : base(x, y, width, height)
         {
             Speed = distanceByTick;
             KickReachRatio = kickReachRatio;
         }
 
-        public override void ComputeNewPositionAtTick(AbstractEngine engine, KeyPress keys)
+        public override void ComputeBehaviorAtTick(AbstractEngine engine, KeyPress keys)
         {
             double newTop = Y;
             double newLeft = X;
@@ -100,7 +105,7 @@ namespace RPG4.Abstractions
                 {
                     var currentPt = Copy(newLeft, newTop);
                     loop = false;
-                    foreach (SizedPoint rect in engine.Walls)
+                    foreach (SizedPoint rect in engine.ConcreteWalls)
                     {
                         Point pToMove = rect.CheckOverlapAndAdjustPosition(currentPt, this,
                             keys.PressLeft ? true : (keys.PressRight ? false : (bool?)null),
@@ -131,12 +136,12 @@ namespace RPG4.Abstractions
             }
         }
 
-        public bool CheckKick(PngBehavior png)
+        public bool CheckKick(Enemy enemy)
         {
             var kickHaloX = X - (((KickReachRatio - 1) / 2) * Width);
             var kickHaloY = Y - (((KickReachRatio - 1) / 2) * Height);
 
-            return png.Overlap(new SizedPoint(kickHaloX, kickHaloY, Width * KickReachRatio, Height * KickReachRatio));
+            return enemy.Overlap(new SizedPoint(kickHaloX, kickHaloY, Width * KickReachRatio, Height * KickReachRatio));
         }
     }
 }

@@ -2,8 +2,6 @@
 using RPG4.Abstractions;
 using System;
 using System.Collections.Generic;
-using System.IO;
-using System.Reflection;
 using System.Timers;
 using System.Windows;
 using System.Windows.Controls;
@@ -25,8 +23,12 @@ namespace RPG4
         private const int SPRITE_SIZE_X = 40;
         private const int SPRITE_SIZE_Y = 40;
         private const double KICK_SIZE_RATIO = 2;
+
         private const string KICK_TAG = "KICK";
-        private const string PNG_TAG = "PNG";
+        private const string ENEMY_TAG = "ENEMY";
+        private const string WALL_TAG = "WALL";
+        private const string WALL_TRIGGER_TAG = "WALL_TRIGGER";
+        private const string UNIQUE_TIMESTAMP_PATTERN = "fffffff";
 
         private readonly double KICK_THICK_X = ((KICK_SIZE_RATIO - 1) / 2) * SPRITE_SIZE_X;
         private readonly double KICK_THICK_Y = ((KICK_SIZE_RATIO - 1) / 2) * SPRITE_SIZE_Y;
@@ -46,7 +48,7 @@ namespace RPG4
             double initialCanvasLeft = (modelJson.AreaWidth / 2) - (SPRITE_SIZE_X / 2);
 
             _model = new AbstractEngine(
-                new PlayerBehavior(initialCanvasLeft, initialCanvasTop, SPRITE_SIZE_X, SPRITE_SIZE_Y,
+                new Player(initialCanvasLeft, initialCanvasTop, SPRITE_SIZE_X, SPRITE_SIZE_Y,
                     DISTANCE_BY_SECOND * (DISTANCE_BY_SECOND / (double)1000), KICK_SIZE_RATIO), modelJson);
 
             cvsMain.Height = modelJson.AreaHeight;
@@ -55,8 +57,10 @@ namespace RPG4
             rctMe.Width = SPRITE_SIZE_X;
 
             RedrawMeSprite(initialCanvasTop, initialCanvasLeft, false);
-            RedrawPngSprite(_model.Pngs);
-            _model.Walls.ForEach(DrawWall);
+            RedrawPngSprite(_model.Enemies);
+            _model.ConcreteWalls.ForEach(DrawWall);
+
+            _model.WallTriggers.ForEach(DrawWallTrigger);
 
             _timer = new Timer(REFRESH_DELAY_MS);
             _timer.Elapsed += OnTick;
@@ -91,15 +95,29 @@ namespace RPG4
             // dessine le sprite joueur
             Dispatcher.Invoke(new Action<SizedPoint, bool>(delegate(SizedPoint pt, bool kick) { RedrawMeSprite(pt.Y, pt.X, kick); }), _model.Player, _model.IsKicking);
 
-            // dessine les sprites png
-            Dispatcher.Invoke(new Action<List<PngBehavior>>(delegate (List<PngBehavior> pngs) { RedrawPngSprite(pngs); }), _model.Pngs);
+            // dessine les sprites enemies
+            Dispatcher.Invoke(new Action<List<Enemy>>(delegate (List<Enemy> pngs) { RedrawPngSprite(pngs); }), _model.Enemies);
 
-            // contrôle le contact joueur / png
-            if (_model.MeCollideToPng)
+            // contrôle le contact joueur / enemies
+            if (_model.MeCollideToPng || _model.MeCollideToWall)
             {
                 Dispatcher.Invoke(new Action(delegate() { MessageBox.Show("You die !"); }));
                 _timer.Stop();
             }
+
+            // redessine les murs
+            Dispatcher.Invoke(new Action<List<Wall>>(delegate (List<Wall> walls)
+            {
+                ClearCanvasByTag(WALL_TAG);
+                walls.ForEach(DrawWall);
+            }), _model.ConcreteWalls);
+
+            // redessine les triggers
+            Dispatcher.Invoke(new Action<List<WallTrigger>>(delegate (List<WallTrigger> tw)
+            {
+                ClearCanvasByTag(WALL_TRIGGER_TAG);
+                tw.ForEach(DrawWallTrigger);
+            }), _model.WallTriggers);
 
             _timerIsIn = false;
         }
@@ -109,52 +127,74 @@ namespace RPG4
             rctMe.SetValue(Canvas.TopProperty, top);
             rctMe.SetValue(Canvas.LeftProperty, left);
 
-            // nettoie toute trace d'un précédent kick
             Panel.SetZIndex(rctMe, 0);
+
+            // cleans previous kick
             ClearCanvasByTag(KICK_TAG);
 
             if (kick)
             {
-                Rectangle kickShape = new Rectangle
-                {
-                    Width = SPRITE_SIZE_X * KICK_SIZE_RATIO,
-                    Height = SPRITE_SIZE_Y * KICK_SIZE_RATIO,
-                    Fill = Brushes.DarkViolet
-                };
-                kickShape.Uid = string.Concat(KICK_TAG, DateTime.Now.ToString("fffffff"));
+                var sp = new SizedPoint(left - KICK_THICK_X,
+                    top - KICK_THICK_Y,
+                    SPRITE_SIZE_X * KICK_SIZE_RATIO,
+                    SPRITE_SIZE_Y * KICK_SIZE_RATIO);
 
-                kickShape.SetValue(Canvas.TopProperty, top - KICK_THICK_Y);
-                kickShape.SetValue(Canvas.LeftProperty, left - KICK_THICK_X);
-
-                Panel.SetZIndex(rctMe, 1);
-
-                cvsMain.Children.Add(kickShape);
+                DrawSizedPoint(sp, Brushes.DarkViolet, KICK_TAG, 1);
             }
         }
 
-        private void RedrawPngSprite(List<PngBehavior> pngs)
+        private void RedrawPngSprite(List<Enemy> enemies)
         {
-            ClearCanvasByTag(PNG_TAG);
-
-            foreach (var png in pngs)
+            ClearCanvasByTag(ENEMY_TAG);
+            foreach (Enemy enemy in enemies)
             {
-                Rectangle pngSprite = new Rectangle
-                {
-                    Fill = Brushes.Blue,
-                    Width = png.Width,
-                    Height = png.Height,
-                    Uid = string.Concat(PNG_TAG, DateTime.Now.ToString("fffffff"))
-                };
-                pngSprite.SetValue(Canvas.LeftProperty, png.X);
-                pngSprite.SetValue(Canvas.TopProperty, png.Y);
-
-                cvsMain.Children.Add(pngSprite);
+                DrawSizedPoint(enemy, Brushes.Blue, ENEMY_TAG);
             }
         }
 
+        private void DrawWall(Wall wall)
+        {
+            if (wall.Concrete)
+            {
+                DrawSizedPoint(wall, Brushes.Black, WALL_TAG);
+            }
+        }
+
+        private void DrawWallTrigger(WallTrigger wt)
+        {
+            DrawSizedPoint(wt, wt.CurrentlyOn ? Brushes.Yellow : Brushes.Orange, WALL_TRIGGER_TAG);
+        }
+
+        /// <summary>
+        /// Draws a <see cref="SizedPoint"/> inside the main canvas
+        /// </summary>
+        /// <param name="sp"><see cref="SizedPoint"/></param>
+        /// <param name="b"><see cref="Brush"/></param>
+        /// <param name="tag">The tag, which depends on the subtype.</param>
+        /// <param name="zIndex">Optionnal; Z index value.</param>
+        private void DrawSizedPoint(SizedPoint sp, Brush b, string tag, int? zIndex = null)
+        {
+            Rectangle rct = new Rectangle
+            {
+                Fill = b,
+                Width = sp.Width,
+                Height = sp.Height,
+                Uid = string.Concat(tag, DateTime.Now.ToString(UNIQUE_TIMESTAMP_PATTERN))
+            };
+            rct.SetValue(Canvas.TopProperty, sp.Y);
+            rct.SetValue(Canvas.LeftProperty, sp.X);
+
+            if (zIndex.HasValue)
+            {
+                Panel.SetZIndex(rctMe, zIndex.Value);
+            }
+
+            cvsMain.Children.Add(rct);
+        }
+
+        // cleans previous elements for the specified tag
         private void ClearCanvasByTag(string tag)
         {
-            // nettoie les précédents éléments pour ce tag
             for (int i = cvsMain.Children.Count - 1; i >= 0; i--)
             {
                 if (cvsMain.Children[i].Uid.StartsWith(tag))
@@ -162,19 +202,6 @@ namespace RPG4
                     cvsMain.Children.RemoveAt(i);
                 }
             }
-        }
-
-        private void DrawWall(SizedPoint rectPt)
-        {
-            Rectangle rctWall = new Rectangle
-            {
-                Fill = Brushes.Black,
-                Width = rectPt.BottomRightX - rectPt.X,
-                Height = rectPt.BottomRightY - rectPt.Y
-            };
-            rctWall.SetValue(Canvas.TopProperty, rectPt.Y);
-            rctWall.SetValue(Canvas.LeftProperty, rectPt.X);
-            cvsMain.Children.Add(rctWall);
         }
     }
 }

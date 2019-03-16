@@ -9,30 +9,38 @@ namespace RPG4.Abstractions
 
         private int _kickTickCount;
 
-        public PlayerBehavior Player { get; private set; }
+        public Player Player { get; private set; }
         public double AreaHeight { get; private set; }
         public double AreaWidth { get; private set; }
-        public List<SizedPoint> Walls { get; private set; }
-        public List<PngBehavior> Pngs { get; private set; }
+        public List<Wall> Walls { get; private set; }
+        public List<Wall> ConcreteWalls { get { return Walls.Where(w => w.Concrete).ToList(); } }
+        public List<Enemy> Enemies { get; private set; }
+        public List<WallTrigger> WallTriggers { get; private set; }
         public bool MeCollideToPng { get; set; }
+        public bool MeCollideToWall { get; set; }
         public bool IsKicking { get { return _kickTickCount >= 0; } }
 
-        public AbstractEngine(PlayerBehavior player, dynamic screenJsonDatas)
+        public AbstractEngine(Player player, dynamic screenJsonDatas)
         {
             Player = player;
             AreaHeight = screenJsonDatas.AreaHeight;
             AreaWidth = screenJsonDatas.AreaWidth;
-            Walls = new List<SizedPoint>();
-            Pngs = new List<PngBehavior>();
+            Walls = new List<Wall>();
+            Enemies = new List<Enemy>();
+            WallTriggers = new List<WallTrigger>();
             _kickTickCount = -1;
 
             foreach (dynamic wallJson in screenJsonDatas.Walls)
             {
-                Walls.Add(SizedPoint.FromDynamic(wallJson));
+                Walls.Add(new Wall(wallJson));
             }
             foreach (dynamic pngJson in screenJsonDatas.Pngs)
             {
-                Pngs.Add(PngBehavior.FromDynamic(pngJson));
+                Enemies.Add(new Enemy(pngJson));
+            }
+            foreach (dynamic walltriggerJson in screenJsonDatas.WallTriggers)
+            {
+                WallTriggers.Add(new WallTrigger(walltriggerJson));
             }
         }
 
@@ -52,23 +60,30 @@ namespace RPG4.Abstractions
                 _kickTickCount = 0;
             }
 
-            Player.ComputeNewPositionAtTick(this, keys);
+            Player.ComputeBehaviorAtTick(this, keys);
             
-            foreach (var png in Pngs)
+            foreach (var enemy in Enemies)
             {
-                png.ComputeNewPositionAtTick(this, null);
+                enemy.ComputeBehaviorAtTick(this, null);
             }
 
-            MeCollideToPng = Pngs.Any(p => p.Overlap(Player));
+            MeCollideToPng = Enemies.Any(p => p.Overlap(Player));
+            MeCollideToWall = ConcreteWalls.Any(w => w.Overlap(Player));
+            Enemies.RemoveAll(p => ConcreteWalls.Any(w => w.Overlap(p)));
 
             // contrôle le kick
-            if (!MeCollideToPng && IsKicking)
+            if (!MeCollideToPng && !MeCollideToWall && IsKicking)
             {
-                var pngsKicked = Pngs.Where(png => Player.CheckKick(png)).ToList();
+                var pngsKicked = Enemies.Where(enemy => Player.CheckKick(enemy)).ToList();
 
                 pngsKicked.ForEach(p => p.ApplyKick());
 
-                Pngs.RemoveAll(p => p.KickCount >= p.KickTolerance);
+                Enemies.RemoveAll(p => p.KickCount >= p.KickTolerance);
+            }
+
+            foreach (var wt in WallTriggers)
+            {
+                wt.ComputeBehaviorAtTick(this, keys);
             }
         }
     }
