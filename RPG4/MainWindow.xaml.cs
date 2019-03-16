@@ -49,16 +49,16 @@ namespace RPG4
 
             var pngs = new List<PngBehavior>();
             pngs.Add(new PngBehavior(PNG_INITIAL_X_Y, PNG_INITIAL_X_Y, SPRITE_SIZE_X, SPRITE_SIZE_Y, DISTANCE_BY_SECOND / 2,
-                new RectByPoint(PNG_INITIAL_X_Y, PNG_INITIAL_X_Y, 600, 450), true, PNG_KICK_TOLERANCE));
+                new SizedPoint(PNG_INITIAL_X_Y, PNG_INITIAL_X_Y, 600 - PNG_INITIAL_X_Y, 450 - PNG_INITIAL_X_Y), true, PNG_KICK_TOLERANCE));
 
             // experimental
-            var wall1 = new RectByPoint(50, 300, 300, 350);
-            var wall2 = new RectByPoint(100, 260, 150, 400);
+            var wall1 = new SizedPoint(50, 300, 300 - 50, 350 - 300);
+            var wall2 = new SizedPoint(100, 260, 150 - 100, 400 - 260);
 
             _model = new AbstractEngine(
                 new PlayerBehavior(initialCanvasLeft, initialCanvasTop, SPRITE_SIZE_X, SPRITE_SIZE_Y,
                     DISTANCE_BY_SECOND * (DISTANCE_BY_SECOND / (double)1000), KICK_SIZE_RATIO),
-                CANVAS_WIDTH, CANVAS_HEIGHT, new List<RectByPoint> { wall1, wall2 }, pngs);
+                CANVAS_WIDTH, CANVAS_HEIGHT, new List<SizedPoint> { wall1, wall2 }, pngs);
 
             cvsMain.Height = CANVAS_HEIGHT;
             cvsMain.Width = CANVAS_WIDTH;
@@ -186,16 +186,16 @@ namespace RPG4
             }
         }
 
-        private void DrawWall(RectByPoint rectPt)
+        private void DrawWall(SizedPoint rectPt)
         {
             Rectangle rctWall = new Rectangle
             {
                 Fill = Brushes.Black,
-                Width = rectPt.BottomRight.X - rectPt.TopLeft.X,
-                Height = rectPt.BottomRight.Y - rectPt.TopLeft.Y
+                Width = rectPt.BottomRightX - rectPt.X,
+                Height = rectPt.BottomRightY - rectPt.Y
             };
-            rctWall.SetValue(Canvas.TopProperty, rectPt.TopLeft.Y);
-            rctWall.SetValue(Canvas.LeftProperty, rectPt.TopLeft.X);
+            rctWall.SetValue(Canvas.TopProperty, rectPt.Y);
+            rctWall.SetValue(Canvas.LeftProperty, rectPt.X);
             cvsMain.Children.Add(rctWall);
         }
 

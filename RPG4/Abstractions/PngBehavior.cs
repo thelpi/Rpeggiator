@@ -6,12 +6,12 @@ namespace RPG4.Abstractions
     public class PngBehavior : SizedPoint
     {
         public double DistanceByTick { get; private set; }
-        public RectByPoint MovePattern { get; private set; }
+        public SizedPoint MovePattern { get; private set; }
         public bool HourRotation { get; private set; }
         public int KickCount { get; private set; }
         public int KickTolerance { get; private set; }
 
-        public PngBehavior(double x, double y, double width, double height, double distanceByTick, RectByPoint movePattern, bool hourRotation, int kickTolerance)
+        public PngBehavior(double x, double y, double width, double height, double distanceByTick, SizedPoint movePattern, bool hourRotation, int kickTolerance)
             : base (x, y, width, height)
         {
             DistanceByTick = distanceByTick;
@@ -25,10 +25,10 @@ namespace RPG4.Abstractions
             double nextX = X;
             double nextY = Y;
 
-            bool isRight = X + Width >= MovePattern.BottomRight.X;
-            bool isDown = Y + Height >= MovePattern.BottomRight.Y;
-            bool isLeft = X <= MovePattern.TopLeft.X;
-            bool isUp = Y <= MovePattern.TopLeft.Y;
+            bool isRight = X + Width >= MovePattern.BottomRightX;
+            bool isDown = Y + Height >= MovePattern.BottomRightY;
+            bool isLeft = X <= MovePattern.X;
+            bool isUp = Y <= MovePattern.Y;
 
             // si à droite
             if (isRight)
@@ -78,24 +78,24 @@ namespace RPG4.Abstractions
             }
 
             // ajustement au bord (pertinence ?)
-            if (nextX < MovePattern.TopLeft.X)
+            if (nextX < MovePattern.X)
             {
-                nextX = MovePattern.TopLeft.X;
+                nextX = MovePattern.X;
             }
-            else if (nextX + Width > MovePattern.BottomRight.X)
+            else if (nextX + Width > MovePattern.BottomRightX)
             {
-                nextX = MovePattern.BottomRight.X - Width;
+                nextX = MovePattern.BottomRightX - Width;
             }
-            if (nextY < MovePattern.TopLeft.Y)
+            if (nextY < MovePattern.Y)
             {
-                nextY = MovePattern.TopLeft.Y;
+                nextY = MovePattern.Y;
             }
-            else if (nextY + Height > MovePattern.BottomRight.Y)
+            else if (nextY + Height > MovePattern.BottomRightY)
             {
-                nextY = MovePattern.BottomRight.Y - Height;
+                nextY = MovePattern.BottomRightY - Height;
             }
 
-            if (engine.Walls.Any(w => w.Collide(Copy(nextX, nextY))))
+            if (engine.Walls.Any(w => w.CollideWith(Copy(nextX, nextY))))
             {
                 HourRotation = !HourRotation;
             }

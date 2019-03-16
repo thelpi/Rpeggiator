@@ -101,7 +101,7 @@ namespace RPG4.Abstractions
                 {
                     var currentPt = Copy(newLeft, newTop);
                     loop = false;
-                    foreach (RectByPoint rect in engine.Walls)
+                    foreach (SizedPoint rect in engine.Walls)
                     {
                         Point pToMove = rect.CheckCollide(currentPt, this,
                             keys.PressLeft ? true : (keys.PressRight ? false : (bool?)null),

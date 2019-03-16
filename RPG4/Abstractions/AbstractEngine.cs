@@ -8,17 +8,17 @@ namespace RPG4.Abstractions
         public PlayerBehavior Player { get; private set; }
         public double AreaHeight { get; private set; }
         public double AreaWidth { get; private set; }
-        public List<RectByPoint> Walls { get; private set; }
+        public List<SizedPoint> Walls { get; private set; }
         public List<PngBehavior> Pngs { get; private set; }
         public bool MeCollideToPng { get; set; }
 
         public AbstractEngine(PlayerBehavior player, double areaWidth, double areaHeight,
-            List<RectByPoint> walls, List<PngBehavior> pngs)
+            List<SizedPoint> walls, List<PngBehavior> pngs)
         {
             Player = player;
             AreaHeight = areaHeight;
             AreaWidth = areaWidth;
-            Walls = walls ?? new List<RectByPoint>();
+            Walls = walls ?? new List<SizedPoint>();
             Pngs = pngs ?? new List<PngBehavior>();
         }
 

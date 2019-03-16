@@ -50,7 +50,6 @@
     </ApplicationDefinition>
     <Compile Include="Abstractions\PlayerBehavior.cs" />
     <Compile Include="Abstractions\PngBehavior.cs" />
-    <Compile Include="Abstractions\RectByPoint.cs" />
     <Compile Include="Abstractions\SizedPoint.cs" />
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
