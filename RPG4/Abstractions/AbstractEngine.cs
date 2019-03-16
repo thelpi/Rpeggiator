@@ -17,15 +17,23 @@ namespace RPG4.Abstractions
         public bool MeCollideToPng { get; set; }
         public bool IsKicking { get { return _kickTickCount >= 0; } }
 
-        public AbstractEngine(PlayerBehavior player, double areaWidth, double areaHeight,
-            List<SizedPoint> walls, List<PngBehavior> pngs)
+        public AbstractEngine(PlayerBehavior player, dynamic screenJsonDatas)
         {
             Player = player;
-            AreaHeight = areaHeight;
-            AreaWidth = areaWidth;
-            Walls = walls ?? new List<SizedPoint>();
-            Pngs = pngs ?? new List<PngBehavior>();
+            AreaHeight = screenJsonDatas.AreaHeight;
+            AreaWidth = screenJsonDatas.AreaWidth;
+            Walls = new List<SizedPoint>();
+            Pngs = new List<PngBehavior>();
             _kickTickCount = -1;
+
+            foreach (dynamic wallJson in screenJsonDatas.Walls)
+            {
+                Walls.Add(SizedPoint.FromDynamic(wallJson));
+            }
+            foreach (dynamic pngJson in screenJsonDatas.Pngs)
+            {
+                Pngs.Add(PngBehavior.FromDynamic(pngJson));
+            }
         }
 
         public void CheckEngineAtTick(KeyPress keys)
@@ -51,7 +59,7 @@ namespace RPG4.Abstractions
                 png.ComputeNewPositionAtTick(this, null);
             }
 
-            MeCollideToPng = Pngs.Any(p => p.CollideWith(Player));
+            MeCollideToPng = Pngs.Any(p => p.Overlap(Player));
 
             // contrôle le kick
             if (!MeCollideToPng && IsKicking)

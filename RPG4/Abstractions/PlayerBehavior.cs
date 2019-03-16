@@ -10,18 +10,17 @@ namespace RPG4.Abstractions
         private const int MOVE_HISTORY_COUNT = 50;
         private Queue<Point> _moveHistory = new Queue<Point>(MOVE_HISTORY_COUNT);
 
-        public double DistanceByTick { get; private set; }
+        // distance in pixels by tick
+        public double Speed { get; private set; } 
         public double KickReachRatio { get; private set; }
-        public double DiagonaleMoveSideDistance { get; private set; }
+        // inverse de pythagore pour la distance parcourue dans chaque sens (top et left) lors d'un mouvement en diagonale
+        public double DiagonaleMoveSideDistance { get { return Math.Sqrt((Speed * Speed) / 2); } }
 
         public PlayerBehavior(double x, double y, double width, double height, double distanceByTick, double kickReachRatio)
             : base(x, y, width, height)
         {
-            DistanceByTick = distanceByTick;
+            Speed = distanceByTick;
             KickReachRatio = kickReachRatio;
-
-            // inverse de pythagore pour la distance parcourue dans chaque sens (top et left) lors d'un mouvement en diagonale
-            DiagonaleMoveSideDistance = Math.Sqrt((DistanceByTick * DistanceByTick) / 2);
         }
 
         public override void ComputeNewPositionAtTick(AbstractEngine engine, KeyPress keys)
@@ -43,7 +42,7 @@ namespace RPG4.Abstractions
                 }
                 else
                 {
-                    newTop -= DistanceByTick;
+                    newTop -= Speed;
                 }
             }
             else if (keys.PressDown)
@@ -61,16 +60,16 @@ namespace RPG4.Abstractions
                 }
                 else
                 {
-                    newTop += DistanceByTick;
+                    newTop += Speed;
                 }
             }
             else if (keys.PressLeft)
             {
-                newLeft -= DistanceByTick;
+                newLeft -= Speed;
             }
             else if (keys.PressRight)
             {
-                newLeft += DistanceByTick;
+                newLeft += Speed;
             }
 
             // si mouvement pour moi
@@ -103,7 +102,7 @@ namespace RPG4.Abstractions
                     loop = false;
                     foreach (SizedPoint rect in engine.Walls)
                     {
-                        Point pToMove = rect.CheckCollide(currentPt, this,
+                        Point pToMove = rect.CheckOverlapAndAdjustPosition(currentPt, this,
                             keys.PressLeft ? true : (keys.PressRight ? false : (bool?)null),
                             keys.PressUp ? true : (keys.PressDown ? false : (bool?)null));
 
@@ -137,7 +136,7 @@ namespace RPG4.Abstractions
             var kickHaloX = X - (((KickReachRatio - 1) / 2) * Width);
             var kickHaloY = Y - (((KickReachRatio - 1) / 2) * Height);
 
-            return png.CollideWith(new SizedPoint(kickHaloX, kickHaloY, Width * KickReachRatio, Height * KickReachRatio));
+            return png.Overlap(new SizedPoint(kickHaloX, kickHaloY, Width * KickReachRatio, Height * KickReachRatio));
         }
     }
 }

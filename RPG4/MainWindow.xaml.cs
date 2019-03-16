@@ -1,6 +1,9 @@
-﻿using RPG4.Abstractions;
+﻿using Newtonsoft.Json;
+using RPG4.Abstractions;
 using System;
 using System.Collections.Generic;
+using System.IO;
+using System.Reflection;
 using System.Timers;
 using System.Windows;
 using System.Windows.Controls;
@@ -21,8 +24,6 @@ namespace RPG4
         private const int DISTANCE_BY_SECOND = 100;
         private const int SPRITE_SIZE_X = 40;
         private const int SPRITE_SIZE_Y = 40;
-        private const int CANVAS_HEIGHT = 480;
-        private const int CANVAS_WIDTH = 640;
         private const double KICK_SIZE_RATIO = 2;
         private const string KICK_TAG = "KICK";
         private const string PNG_TAG = "PNG";
@@ -38,36 +39,24 @@ namespace RPG4
         public MainWindow()
         {
             InitializeComponent();
-            
-            double initialCanvasTop = (CANVAS_HEIGHT / 2) - (SPRITE_SIZE_Y / 2);
-            double initialCanvasLeft = (CANVAS_WIDTH / 2) - (SPRITE_SIZE_X / 2);
 
-            // à gérer différemment
-            const double PNG_INITIAL_X_Y = 50;
-            const int PNG_KICK_TOLERANCE = 3;
+            dynamic modelJson = JsonConvert.DeserializeObject(Properties.Resources.Screen1);
 
-            var pngs = new List<PngBehavior>();
-            pngs.Add(new PngBehavior(PNG_INITIAL_X_Y, PNG_INITIAL_X_Y, SPRITE_SIZE_X, SPRITE_SIZE_Y, DISTANCE_BY_SECOND / 2,
-                new SizedPoint(PNG_INITIAL_X_Y, PNG_INITIAL_X_Y, 600 - PNG_INITIAL_X_Y, 450 - PNG_INITIAL_X_Y), true, PNG_KICK_TOLERANCE));
-
-            // experimental
-            var wall1 = new SizedPoint(50, 300, 300 - 50, 350 - 300);
-            var wall2 = new SizedPoint(100, 260, 150 - 100, 400 - 260);
+            double initialCanvasTop = (modelJson.AreaHeight / 2) - (SPRITE_SIZE_Y / 2);
+            double initialCanvasLeft = (modelJson.AreaWidth / 2) - (SPRITE_SIZE_X / 2);
 
             _model = new AbstractEngine(
                 new PlayerBehavior(initialCanvasLeft, initialCanvasTop, SPRITE_SIZE_X, SPRITE_SIZE_Y,
-                    DISTANCE_BY_SECOND * (DISTANCE_BY_SECOND / (double)1000), KICK_SIZE_RATIO),
-                CANVAS_WIDTH, CANVAS_HEIGHT, new List<SizedPoint> { wall1, wall2 }, pngs);
+                    DISTANCE_BY_SECOND * (DISTANCE_BY_SECOND / (double)1000), KICK_SIZE_RATIO), modelJson);
 
-            cvsMain.Height = CANVAS_HEIGHT;
-            cvsMain.Width = CANVAS_WIDTH;
+            cvsMain.Height = modelJson.AreaHeight;
+            cvsMain.Width = modelJson.AreaWidth;
             rctMe.Height = SPRITE_SIZE_Y;
             rctMe.Width = SPRITE_SIZE_X;
 
             RedrawMeSprite(initialCanvasTop, initialCanvasLeft, false);
-            RedrawPngSprite(pngs);
-            DrawWall(wall1);
-            DrawWall(wall2);
+            RedrawPngSprite(_model.Pngs);
+            _model.Walls.ForEach(DrawWall);
 
             _timer = new Timer(REFRESH_DELAY_MS);
             _timer.Elapsed += OnTick;
@@ -187,13 +176,5 @@ namespace RPG4
             rctWall.SetValue(Canvas.LeftProperty, rectPt.X);
             cvsMain.Children.Add(rctWall);
         }
-
-        /*private void Window_KeyDown(object sender, KeyEventArgs e)
-        {
-            if (e.Key == Key.Space && _kickTimeCumulMs < 0)
-            {
-                _kickTimeCumulMs = 0;
-            }
-        }*/
     }
 }

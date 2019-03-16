@@ -1,0 +1,35 @@
+{
+  "AreaWidth": 640,
+  "AreaHeight": 480,
+  "Walls": [
+    {
+      "X": 50,
+      "Y": 300,
+      "Width": 250,
+      "Height": 50
+    },
+    {
+      "X": 100,
+      "Y": 260,
+      "Width": 50,
+      "Height": 140
+    }
+  ],
+  "Pngs": [
+    {
+      "X": 50,
+      "Y": 50,
+      "Width": 40,
+      "Height": 40,
+      "Speed": 50,
+      "HourRotation": true,
+      "KickTolerance": 3,
+      "Pattern": {
+        "X": 50,
+        "Y": 50,
+        "Width": 550,
+        "Height": 400
+      }
+    }
+  ]
+}

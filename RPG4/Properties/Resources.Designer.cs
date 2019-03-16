@@ -8,10 +8,10 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace RPG4.Properties
-{
-
-
+namespace RPG4.Properties {
+    using System;
+    
+    
     /// <summary>
     ///   Une classe de ressource fortement typée destinée, entre autres, à la consultation des chaînes localisées.
     /// </summary>
@@ -19,52 +19,83 @@ namespace RPG4.Properties
     // à l'aide d'un outil, tel que ResGen ou Visual Studio.
     // Pour ajouter ou supprimer un membre, modifiez votre fichier .ResX, puis réexécutez ResGen
     // avec l'option /str ou régénérez votre projet VS.
-    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "4.0.0.0")]
+    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "15.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
-    internal class Resources
-    {
-
+    internal class Resources {
+        
         private static global::System.Resources.ResourceManager resourceMan;
-
+        
         private static global::System.Globalization.CultureInfo resourceCulture;
-
+        
         [global::System.Diagnostics.CodeAnalysis.SuppressMessageAttribute("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
-        internal Resources()
-        {
+        internal Resources() {
         }
-
+        
         /// <summary>
         ///   Retourne l'instance ResourceManager mise en cache utilisée par cette classe.
         /// </summary>
         [global::System.ComponentModel.EditorBrowsableAttribute(global::System.ComponentModel.EditorBrowsableState.Advanced)]
-        internal static global::System.Resources.ResourceManager ResourceManager
-        {
-            get
-            {
-                if ((resourceMan == null))
-                {
+        internal static global::System.Resources.ResourceManager ResourceManager {
+            get {
+                if (object.ReferenceEquals(resourceMan, null)) {
                     global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("RPG4.Properties.Resources", typeof(Resources).Assembly);
                     resourceMan = temp;
                 }
                 return resourceMan;
             }
         }
-
+        
         /// <summary>
         ///   Remplace la propriété CurrentUICulture du thread actuel pour toutes
         ///   les recherches de ressources à l'aide de cette classe de ressource fortement typée.
         /// </summary>
         [global::System.ComponentModel.EditorBrowsableAttribute(global::System.ComponentModel.EditorBrowsableState.Advanced)]
-        internal static global::System.Globalization.CultureInfo Culture
-        {
-            get
-            {
+        internal static global::System.Globalization.CultureInfo Culture {
+            get {
                 return resourceCulture;
             }
-            set
-            {
+            set {
                 resourceCulture = value;
+            }
+        }
+        
+        /// <summary>
+        ///   Recherche une chaîne localisée semblable à {
+        ///  &quot;AreaWidth&quot;: 640,
+        ///  &quot;AreaHeight&quot;: 480,
+        ///  &quot;Walls&quot;: [
+        ///    {
+        ///      &quot;X&quot;: 50,
+        ///      &quot;Y&quot;: 300,
+        ///      &quot;Width&quot;: 250,
+        ///      &quot;Height&quot;: 50
+        ///    },
+        ///    {
+        ///      &quot;X&quot;: 100,
+        ///      &quot;Y&quot;: 260,
+        ///      &quot;Width&quot;: 50,
+        ///      &quot;Height&quot;: 140
+        ///    }
+        ///  ],
+        ///  &quot;Pngs&quot;: [
+        ///    {
+        ///      &quot;X&quot;: 50,
+        ///      &quot;Y&quot;: 50,
+        ///      &quot;Width&quot;: 40,
+        ///      &quot;Height&quot;: 40,
+        ///      &quot;Speed&quot;: 50,
+        ///      &quot;HourRotation&quot;: true,
+        ///      &quot;KickTolerance&quot;: 3,
+        ///      &quot;Pattern&quot;: {
+        ///        &quot;x&quot;: 50,
+        ///        &quot;y&quot;: 50,
+        ///        &quot;width&quot;: 550,
+        ///        &quot;height&quot;: 40 [le reste de la chaîne a été tronqué]&quot;;.
+        /// </summary>
+        internal static string Screen1 {
+            get {
+                return ResourceManager.GetString("Screen1", resourceCulture);
             }
         }
     }
