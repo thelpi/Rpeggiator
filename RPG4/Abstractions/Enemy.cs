@@ -2,31 +2,72 @@
 
 namespace RPG4.Abstractions
 {
+    /// <summary>
+    /// Represents an enemy.
+    /// </summary>
+    /// <seealso cref="SizedPoint"/>
     public class Enemy : SizedPoint
     {
-        public double Speed { get; private set; } // distance in pixels by tick
+        /// <summary>
+        /// Distance in pixels by tick.
+        /// </summary>
+        public double Speed { get; private set; }
+        /// <summary>
+        /// Movement pattern.
+        /// </summary>
         public SizedPoint Pattern { get; private set; }
+        /// <summary>
+        /// Indicates the current rotation on <see cref="Pattern"/>.
+        /// </summary>
         public bool HourRotation { get; private set; }
-        public int KickTolerance { get; private set; }
-        public int KickCount { get; private set; }
+        /// <summary>
+        /// Initial number of life points.
+        /// </summary>
+        public int BaseLifePoints { get; private set; }
+        /// <summary>
+        /// Current number of life points.
+        /// </summary>
+        public int CurrentLifePoints { get; private set; }
 
-        public Enemy(double x, double y, double width, double height, double distanceByTick, SizedPoint movePattern, bool hourRotation, int kickTolerance)
+        /// <summary>
+        /// Constructor.
+        /// </summary>
+        /// <param name="x"><see cref="base.X"/></param>
+        /// <param name="y"><see cref="base.Y"/></param>
+        /// <param name="width"><see cref="base.Width"/></param>
+        /// <param name="height"><see cref="base.Height"/></param>
+        /// <param name="speed"><see cref="Speed"/></param>
+        /// <param name="pattern"><see cref="Pattern"/></param>
+        /// <param name="hourRotation"><see cref="HourRotation"/></param>
+        /// <param name="baseLifePoints"><see cref="BaseLifePoints"/></param>
+        public Enemy(double x, double y, double width, double height, double speed, SizedPoint pattern, bool hourRotation, int baseLifePoints)
             : base (x, y, width, height)
         {
-            Speed = distanceByTick;
-            Pattern = movePattern;
+            Speed = speed;
+            Pattern = pattern;
             HourRotation = hourRotation;
-            KickTolerance = kickTolerance;
+            BaseLifePoints = baseLifePoints;
+            CurrentLifePoints = BaseLifePoints;
         }
 
+        /// <summary>
+        /// Constructor.
+        /// </summary>
+        /// <param name="pngJson">The json dynamic object.</param>
         public Enemy(dynamic pngJson) : base((object)pngJson)
         {
             Speed = pngJson.Speed;
             HourRotation = pngJson.HourRotation;
-            KickTolerance = pngJson.KickTolerance;
+            BaseLifePoints = pngJson.BaseLifePoints;
             Pattern = new SizedPoint(pngJson.Pattern);
+            CurrentLifePoints = BaseLifePoints;
         }
 
+        /// <summary>
+        /// Behavior of the instance at ticking.
+        /// </summary>
+        /// <param name="engine"><see cref="AbstractEngine"/></param>
+        /// <param name="keys"><see cref="KeyPress"/></param>
         public override void ComputeBehaviorAtTick(AbstractEngine engine, KeyPress keys)
         {
             double nextX = X;
@@ -113,10 +154,20 @@ namespace RPG4.Abstractions
             }
         }
 
-        public void ApplyKick()
+        /// <summary>
+        /// Checks if the instance has been hit and remaining life points.
+        /// </summary>
+        /// <param name="engine"><see cref="AbstractEngine"/></param>
+        /// <returns><c>True</c> if the instance has no life points remaining; otherwise <c>False</c></returns>
+        public bool CheckHitAndHealthStatus(AbstractEngine engine)
         {
-            HourRotation = !HourRotation;
-            KickCount++;
+            if (engine.Player.CheckHitReachEnemy(this))
+            {
+                HourRotation = !HourRotation;
+                CurrentLifePoints -= engine.Player.HitLifePointCost;
+            }
+
+            return CurrentLifePoints <= 0;
         }
     }
 }

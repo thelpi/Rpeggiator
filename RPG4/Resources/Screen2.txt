@@ -43,7 +43,7 @@
 	  "Concrete": true
     }
   ],
-  "Pngs": [
+  "Enemies": [
   ],
   "WallTriggers": [
 	{
@@ -53,7 +53,7 @@
 		"Height": 20,
 		"ActionDelayMaxTickCount": 100,
 		"WallIndex": 5,
-		"ShowOnAction": false
+		"AppearOnActivation": false
 	},
 	{
 		"X": 160,
@@ -62,7 +62,7 @@
 		"Height": 20,
 		"ActionDelayMaxTickCount": 80,
 		"WallIndex": 5,
-		"ShowOnAction": false
+		"AppearOnActivation": false
 	}
   ],
   "AdjacentScreens": {

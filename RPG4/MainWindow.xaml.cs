@@ -26,8 +26,7 @@ namespace RPG4
 
         private Timer _timer;
         private volatile bool _timerIsIn;
-        private AbstractEngine _model;
-        //private volatile int _kickTimeCumulMs = -1;
+        private AbstractEngine _engine;
 
         public MainWindow()
         {
@@ -39,7 +38,7 @@ namespace RPG4
             Player player = new Player(initialCanvasLeft, initialCanvasTop, Constants.SPRITE_SIZE_X, Constants.SPRITE_SIZE_Y,
                 Constants.PLAYER_SPEED * (Constants.PLAYER_SPEED / (double)1000), Constants.KICK_SIZE_RATIO);
 
-            _model = new AbstractEngine(player, 1);
+            _engine = new AbstractEngine(player, 1);
 
             cvsMain.Height = Constants.AREA_HEIGHT;
             cvsMain.Width = Constants.AREA_WIDTH;
@@ -47,10 +46,10 @@ namespace RPG4
             rctMe.Width = Constants.SPRITE_SIZE_X;
 
             RedrawMeSprite(initialCanvasTop, initialCanvasLeft, false);
-            RedrawPngSprite(_model.Enemies);
-            _model.ConcreteWalls.ForEach(DrawWall);
+            RedrawPngSprite(_engine.Enemies);
+            _engine.ConcreteWalls.ForEach(DrawWall);
 
-            _model.WallTriggers.ForEach(DrawWallTrigger);
+            _engine.WallTriggers.ForEach(DrawWallTrigger);
 
             _timer = new Timer(Constants.REFRESH_DELAY_MS);
             _timer.Elapsed += OnTick;
@@ -80,34 +79,27 @@ namespace RPG4
 
             // recalcule les positions joueur + pngs
             // actionne aussi le kick
-            _model.CheckEngineAtTick(pressedKeys);
+            _engine.CheckEngineAtTick(pressedKeys);
 
-            // dessine le sprite joueur
-            Dispatcher.Invoke(new Action<SizedPoint, bool>(delegate(SizedPoint pt, bool kick) { RedrawMeSprite(pt.Y, pt.X, kick); }), _model.Player, _model.IsKicking);
-
-            // dessine les sprites enemies
-            Dispatcher.Invoke(new Action<List<Enemy>>(delegate (List<Enemy> pngs) { RedrawPngSprite(pngs); }), _model.Enemies);
-
-            // contrôle le contact joueur / enemies
-            if (_model.MeCollideToPng || _model.MeCollideToWall)
+            Dispatcher.Invoke((delegate()
             {
-                Dispatcher.Invoke(new Action(delegate() { MessageBox.Show("You die !"); }));
-                _timer.Stop();
-            }
-
-            // redessine les murs
-            Dispatcher.Invoke(new Action<List<Wall>>(delegate (List<Wall> walls)
-            {
+                // dessine le sprite joueur
+                RedrawMeSprite(_engine.Player.Y, _engine.Player.X, _engine.Player.IsHitting);
+                // dessine les sprites enemies
+                RedrawPngSprite(_engine.Enemies);
+                // contrôle le contact joueur / enemies
+                if (_engine.MeCollideToPng || _engine.MeCollideToWall)
+                {
+                    MessageBox.Show("You die !");
+                    _timer.Stop();
+                }
+                // redessine les murs
                 ClearCanvasByTag(WALL_TAG);
-                walls.ForEach(DrawWall);
-            }), _model.ConcreteWalls);
-
-            // redessine les triggers
-            Dispatcher.Invoke(new Action<List<WallTrigger>>(delegate (List<WallTrigger> tw)
-            {
+                _engine.ConcreteWalls.ForEach(DrawWall);
+                // redessine les triggers
                 ClearCanvasByTag(WALL_TRIGGER_TAG);
-                tw.ForEach(DrawWallTrigger);
-            }), _model.WallTriggers);
+                _engine.WallTriggers.ForEach(DrawWallTrigger);
+            }));
 
             _timerIsIn = false;
         }
@@ -152,7 +144,7 @@ namespace RPG4
 
         private void DrawWallTrigger(WallTrigger wt)
         {
-            DrawSizedPoint(wt, wt.CurrentlyOn ? Brushes.Yellow : Brushes.Orange, WALL_TRIGGER_TAG);
+            DrawSizedPoint(wt, wt.IsActivated ? Brushes.Yellow : Brushes.Orange, WALL_TRIGGER_TAG);
         }
 
         /// <summary>

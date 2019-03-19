@@ -22,7 +22,7 @@
 	  "Concrete": true
     }
   ],
-  "Pngs": [
+  "Enemies": [
     {
       "X": 50,
       "Y": 50,
@@ -30,7 +30,7 @@
       "Height": 40,
       "Speed": 50,
       "HourRotation": true,
-      "KickTolerance": 3,
+      "BaseLifePoints": 3,
       "Pattern": {
         "X": 50,
         "Y": 50,
@@ -47,7 +47,7 @@
 		"Height": 10,
 		"ActionDelayMaxTickCount": 60,
 		"WallIndex": 2,
-		"ShowOnAction": false
+		"AppearOnActivation": false
 	}
   ],
   "AdjacentScreens": {

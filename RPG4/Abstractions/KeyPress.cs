@@ -1,29 +1,55 @@
 ﻿namespace RPG4.Abstractions
 {
+    /// <summary>
+    /// Represents the keayboard input for a tick inside the <see cref="AbstractEngine"/>
+    /// </summary>
     public class KeyPress
     {
+        /// <summary>
+        /// Indicates if the up button is pressed.
+        /// </summary>
         public bool PressUp { get; private set; }
+        /// <summary>
+        /// Indicates if the down button is pressed.
+        /// </summary>
         public bool PressDown { get; private set; }
+        /// <summary>
+        /// Indicates if the right button is pressed.
+        /// </summary>
         public bool PressRight { get; private set; }
+        /// <summary>
+        /// Indicates if the left button is pressed.
+        /// </summary>
         public bool PressLeft { get; private set; }
-        public bool PressKick { get; private set; }
+        /// <summary>
+        /// Indicates if the hit button is pressed.
+        /// </summary>
+        public bool PressHit { get; private set; }
 
-        public KeyPress(bool up, bool down, bool right, bool left, bool kick)
+        /// <summary>
+        /// Constructor.
+        /// </summary>
+        /// <param name="up"><see cref="PressUp"/></param>
+        /// <param name="down"><see cref="PressDown"/></param>
+        /// <param name="right"><see cref="PressRight"/></param>
+        /// <param name="left"><see cref="PressLeft"/></param>
+        /// <param name="hit"><see cref="PressHit"/></param>
+        public KeyPress(bool up, bool down, bool right, bool left, bool hit)
         {
             PressUp = up;
             PressDown = down;
             PressRight = right;
             PressLeft = left;
-            PressKick = kick;
+            PressHit = hit;
 
-            // haut et bas s'annulent
+            // up and down both pressed cancel each other
             if (PressUp && PressDown)
             {
                 PressDown = false;
                 PressUp = false;
             }
 
-            // droite et gauche s'annulent
+            // right and left both pressed cancel each other
             if (PressRight && PressLeft)
             {
                 PressRight = false;

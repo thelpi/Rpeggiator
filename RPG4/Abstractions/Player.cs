@@ -5,30 +5,78 @@ using System.Windows;
 
 namespace RPG4.Abstractions
 {
+    /// <summary>
+    /// Represents the player.
+    /// </summary>
+    /// <seealso cref="SizedPoint"/>
     public class Player : SizedPoint
     {
-        private const int MOVE_HISTORY_COUNT = 50;
-        private Queue<Point> _moveHistory = new Queue<Point>(MOVE_HISTORY_COUNT);
+        // ticks count while kicking
+        private int _hitKickCount;
+        // history of movements
+        private Queue<Point> _moveHistory = new Queue<Point>(Constants.MOVE_HISTORY_COUNT);
 
         /// <summary>
         /// Speed (i.e. distance, in pixels, by tick)
         /// </summary>
         public double Speed { get; private set; }
-        public double KickReachRatio { get; private set; }
-        // inverse de pythagore pour la distance parcourue dans chaque sens (top et left) lors d'un mouvement en diagonale
-        public double DiagonaleMoveSideDistance { get { return Math.Sqrt((Speed * Speed) / 2); } }
+        /// <summary>
+        /// Ratio of hit reach depending to the player size.
+        /// </summary>
+        public double HitReachRatio { get; private set; }
+        /// <summary>
+        /// Inferred; Speed by side while moving in diagonal. (Pythagore reversal)
+        /// </summary>
+        /// <remarks>Assumes that <see cref="base.X"/> and <see cref="base.Y"/> have the same value.</remarks>
+        public double DiagonalSpeedBySize { get { return Math.Sqrt((Speed * Speed) / 2); } }
+        /// <summary>
+        /// When coming into a new screen, indicates the direction relative to the former screen.
+        /// </summary>
         public Directions? NewScreenEntrance { get; private set; }
+        /// <summary>
+        /// Inferred; indicates if currently kicking.
+        /// </summary>
+        public bool IsHitting { get { return _hitKickCount >= 0; } }
+        /// <summary>
+        /// When kicking, indicates the life-points cost on the enemy.
+        /// </summary>
+        public int HitLifePointCost { get; private set; }
 
-        public Player(double x, double y, double width, double height, double distanceByTick, double kickReachRatio)
+        /// <summary>
+        /// Constructor.
+        /// </summary>
+        /// <param name="x"><see cref="base.X"/></param>
+        /// <param name="y"><see cref="base.Y"/></param>
+        /// <param name="width"><see cref="base.Width"/></param>
+        /// <param name="height"><see cref="base.Height"/></param>
+        /// <param name="speed"><see cref="Speed"/></param>
+        /// <param name="hitReachRatio"><see cref="HitReachRatio"/></param>
+        public Player(double x, double y, double width, double height, double speed, double hitReachRatio)
             : base(x, y, width, height)
         {
-            Speed = distanceByTick;
-            KickReachRatio = kickReachRatio;
+            Speed = speed;
+            HitReachRatio = hitReachRatio;
             NewScreenEntrance = null;
+            HitLifePointCost = Constants.HIT_LIFE_POINT_COST;
+            _hitKickCount = -1;
         }
 
         public override void ComputeBehaviorAtTick(AbstractEngine engine, KeyPress keys)
         {
+            // gère le temps d'effet du kick
+            if (_hitKickCount >= Constants.KICK_TICK_MAX_COUNT)
+            {
+                _hitKickCount = -1;
+            }
+            else if (_hitKickCount >= 0)
+            {
+                _hitKickCount += 1;
+            }
+            else if (keys.PressHit)
+            {
+                _hitKickCount = 0;
+            }
+
             NewScreenEntrance = null;
             double newTop = Y;
             double newLeft = X;
@@ -37,13 +85,13 @@ namespace RPG4.Abstractions
             {
                 if (keys.PressLeft)
                 {
-                    newTop -= DiagonaleMoveSideDistance;
-                    newLeft -= DiagonaleMoveSideDistance;
+                    newTop -= DiagonalSpeedBySize;
+                    newLeft -= DiagonalSpeedBySize;
                 }
                 else if (keys.PressRight)
                 {
-                    newTop -= DiagonaleMoveSideDistance;
-                    newLeft += DiagonaleMoveSideDistance;
+                    newTop -= DiagonalSpeedBySize;
+                    newLeft += DiagonalSpeedBySize;
                 }
                 else
                 {
@@ -55,13 +103,13 @@ namespace RPG4.Abstractions
                 if (keys.PressLeft)
                 {
 
-                    newTop += DiagonaleMoveSideDistance;
-                    newLeft -= DiagonaleMoveSideDistance;
+                    newTop += DiagonalSpeedBySize;
+                    newLeft -= DiagonalSpeedBySize;
                 }
                 else if (keys.PressRight)
                 {
-                    newTop += DiagonaleMoveSideDistance;
-                    newLeft += DiagonaleMoveSideDistance;
+                    newTop += DiagonalSpeedBySize;
+                    newLeft += DiagonalSpeedBySize;
                 }
                 else
                 {
@@ -157,7 +205,8 @@ namespace RPG4.Abstractions
                                 newTop = pToMove.Y;
                                 if (forbiddens.Any(pt => pt.X == newLeft && pt.Y == newTop))
                                 {
-                                    throw new InvalidProgramException("Collide check infinite loop !");
+                                    // TODO : logger to implement
+                                    return;
                                 }
                                 loop = true;
                             }
@@ -167,7 +216,7 @@ namespace RPG4.Abstractions
                 }
 
                 _moveHistory.Enqueue(new Point(X, Y));
-                if (_moveHistory.Count > MOVE_HISTORY_COUNT)
+                if (_moveHistory.Count > Constants.MOVE_HISTORY_COUNT)
                 {
                     _moveHistory.Dequeue();
                 }
@@ -176,12 +225,21 @@ namespace RPG4.Abstractions
             }
         }
 
-        public bool CheckKick(Enemy enemy)
+        /// <summary>
+        /// Checks if the instance currently hit an enemy.
+        /// </summary>
+        /// <param name="enemy"><see cref="Enemy"/></param>
+        /// <returns><c>True</c> if the enemy has been hit; otherwise <c>False</c>.</returns>
+        public bool CheckHitReachEnemy(Enemy enemy)
         {
-            var kickHaloX = X - (((KickReachRatio - 1) / 2) * Width);
-            var kickHaloY = Y - (((KickReachRatio - 1) / 2) * Height);
+            if (IsHitting)
+            {
+                var kickHaloX = X - (((HitReachRatio - 1) / 2) * Width);
+                var kickHaloY = Y - (((HitReachRatio - 1) / 2) * Height);
 
-            return enemy.Overlap(new SizedPoint(kickHaloX, kickHaloY, Width * KickReachRatio, Height * KickReachRatio));
+                return enemy.Overlap(new SizedPoint(kickHaloX, kickHaloY, Width * HitReachRatio, Height * HitReachRatio));
+            }
+            return false;
         }
     }
 }

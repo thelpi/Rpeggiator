@@ -5,7 +5,6 @@ namespace RPG4.Abstractions
 {
     public class AbstractEngine
     {
-        private int _kickTickCount;
         private Dictionary<Directions, int> _adjacentScreens;
 
         public Player Player { get; private set; }
@@ -15,7 +14,6 @@ namespace RPG4.Abstractions
         public List<WallTrigger> WallTriggers { get; private set; }
         public bool MeCollideToPng { get; set; }
         public bool MeCollideToWall { get; set; }
-        public bool IsKicking { get { return _kickTickCount >= 0; } }
 
         public AbstractEngine(Player player, int screenIndex)
         {
@@ -31,7 +29,6 @@ namespace RPG4.Abstractions
             Walls = new List<Wall>();
             Enemies = new List<Enemy>();
             WallTriggers = new List<WallTrigger>();
-            _kickTickCount = -1;
             MeCollideToWall = false;
             MeCollideToPng = false;
 
@@ -39,9 +36,9 @@ namespace RPG4.Abstractions
             {
                 Walls.Add(new Wall(wallJson));
             }
-            foreach (dynamic pngJson in screenJsonDatas.Pngs)
+            foreach (dynamic enemyJson in screenJsonDatas.Enemies)
             {
-                Enemies.Add(new Enemy(pngJson));
+                Enemies.Add(new Enemy(enemyJson));
             }
             foreach (dynamic walltriggerJson in screenJsonDatas.WallTriggers)
             {
@@ -63,20 +60,6 @@ namespace RPG4.Abstractions
 
         public void CheckEngineAtTick(KeyPress keys)
         {
-            // gère le temps d'effet du kick
-            if (_kickTickCount >= Constants.KICK_TICK_MAX_COUNT)
-            {
-                _kickTickCount = -1;
-            }
-            else if (_kickTickCount >= 0)
-            {
-                _kickTickCount += 1;
-            }
-            else if (keys.PressKick)
-            {
-                _kickTickCount = 0;
-            }
-
             Player.ComputeBehaviorAtTick(this, keys);
             
             foreach (var enemy in Enemies)
@@ -89,18 +72,18 @@ namespace RPG4.Abstractions
             Enemies.RemoveAll(p => ConcreteWalls.Any(w => w.Overlap(p)));
 
             // contrôle le kick
-            if (!MeCollideToPng && !MeCollideToWall && IsKicking)
+            if (!MeCollideToPng && !MeCollideToWall)
             {
-                var pngsKicked = Enemies.Where(enemy => Player.CheckKick(enemy)).ToList();
-
-                pngsKicked.ForEach(p => p.ApplyKick());
-
-                Enemies.RemoveAll(p => p.KickCount >= p.KickTolerance);
+                Enemies.RemoveAll(p => p.CheckHitAndHealthStatus(this));
             }
 
             foreach (var wt in WallTriggers)
             {
                 wt.ComputeBehaviorAtTick(this, keys);
+            }
+            foreach (var w in Walls)
+            {
+                w.ComputeBehaviorAtTick(this, keys);
             }
 
             if (!MeCollideToPng && !MeCollideToWall && Player.NewScreenEntrance.HasValue)

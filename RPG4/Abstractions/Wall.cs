@@ -1,4 +1,7 @@
-﻿namespace RPG4.Abstractions
+﻿using System.Collections.Generic;
+using System.Linq;
+
+namespace RPG4.Abstractions
 {
     /// <summary>
     /// Represents a wall.
@@ -6,6 +9,11 @@
     /// <seealso cref="SizedPoint"/>
     public class Wall : SizedPoint
     {
+        /// <summary>
+        /// Indicates the value of <see cref="Concrete"/> when no active trigger.
+        /// </summary>
+        private readonly bool _defaultConcrete;
+
         /// <summary>
         /// Indicates if the wall is currently concrete.
         /// </summary>
@@ -23,6 +31,7 @@
             : base(x, y, width, height)
         {
             Concrete = concrete;
+            _defaultConcrete = concrete;
         }
 
         /// <summary>
@@ -32,18 +41,27 @@
         public Wall(dynamic wallJson) : base((object)wallJson)
         {
             Concrete = wallJson.Concrete;
+            _defaultConcrete = wallJson.Concrete;
         }
 
         /// <summary>
-        /// Checks the <see cref="Concrete"/> value.
+        /// Behavior of the instance at ticking.
         /// </summary>
-        /// <param name="engine">The <see cref="AbstractEngine"/>, which contains the current instance.</param>
-        /// <param name="trigger">The <see cref="WallTrigger"/> which allegedly triggers the concrete status change.</param>
-        public void SetConcrete(AbstractEngine engine, WallTrigger trigger)
+        /// <param name="engine">The <see cref="AbstractEngine"/>.</param>
+        /// <param name="keys">Keys pressed at ticking.</param>
+        public override void ComputeBehaviorAtTick(AbstractEngine engine, KeyPress keys)
         {
-            if (engine.Walls[trigger.WallIndex] == this)
+            IEnumerable<WallTrigger> triggersOn = engine.WallTriggers.Where(wt => wt.WallIndex == engine.Walls.IndexOf(this) && wt.IsActivated);
+
+            if (triggersOn.Any())
             {
-                Concrete = trigger.ShowOnAction == trigger.CurrentlyOn;
+                // when several triggers activate the same wall, the most frequent value of "AppearOnActivation" is considered
+                Concrete = triggersOn.GroupBy(wt => wt.AppearOnActivation).OrderByDescending(wtGroup => wtGroup.Count()).First().Key;
+            }
+            else
+            {
+                // reset to default if no active trigger
+                Concrete = _defaultConcrete;
             }
         }
     }

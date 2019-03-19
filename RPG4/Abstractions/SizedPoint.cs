@@ -117,7 +117,7 @@ namespace RPG4.Abstractions
         /// <param name="keys">Keys pressed at ticking.</param>
         public virtual void ComputeBehaviorAtTick(AbstractEngine engine, KeyPress keys)
         {
-            // is there a default behavior to implement ?
+            // no default behavior to implement
         }
 
         /// <summary>
