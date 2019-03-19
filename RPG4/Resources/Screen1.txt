@@ -1,4 +1,6 @@
 {
+	"AreaWidth": 640,
+	"AreaHeight": 480,
   "Walls": [
     {
       "X": 50,

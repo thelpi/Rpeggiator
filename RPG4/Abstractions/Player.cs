@@ -41,30 +41,46 @@ namespace RPG4.Abstractions
         /// When kicking, indicates the life-points cost on the enemy.
         /// </summary>
         public int HitLifePointCost { get; private set; }
+        /// <summary>
+        /// Inferred; the X-axis size of an hit reach depending on <see cref="base.Width"/>.
+        /// </summary>
+        public double HitWidth { get { return ((HitReachRatio - 1) / 2) * Width; } }
+        /// <summary>
+        /// Inferred; the Y-axis size of an hit reach depending on <see cref="base.Height"/>.
+        /// </summary>
+        public double HitHeight { get { return ((HitReachRatio - 1) / 2) * Height; } }
+        /// <summary>
+        /// Tick count before the effect of a hit ends.
+        /// </summary>
+        public int HitTickMaxCount { get; private set; }
 
         /// <summary>
         /// Constructor.
         /// </summary>
-        /// <param name="x"><see cref="base.X"/></param>
-        /// <param name="y"><see cref="base.Y"/></param>
-        /// <param name="width"><see cref="base.Width"/></param>
-        /// <param name="height"><see cref="base.Height"/></param>
-        /// <param name="speed"><see cref="Speed"/></param>
-        /// <param name="hitReachRatio"><see cref="HitReachRatio"/></param>
-        public Player(double x, double y, double width, double height, double speed, double hitReachRatio)
-            : base(x, y, width, height)
+        /// <remarks>Every initial values come from <see cref="InitialPlayerStatus"/>.</remarks>
+        public Player() : base(
+            InitialPlayerStatus.INITIAL_PLAYER_X,
+            InitialPlayerStatus.INITIAL_PLAYER_Y,
+            InitialPlayerStatus.SPRITE_SIZE_X,
+            InitialPlayerStatus.SPRITE_SIZE_Y)
         {
-            Speed = speed;
-            HitReachRatio = hitReachRatio;
+            Speed = InitialPlayerStatus.INITIAL_PLAYER_SPEED;
+            HitReachRatio = InitialPlayerStatus.INITIAL_HIT_SIZE_RATIO;
             NewScreenEntrance = null;
-            HitLifePointCost = Constants.HIT_LIFE_POINT_COST;
+            HitLifePointCost = InitialPlayerStatus.HIT_LIFE_POINT_COST;
             _hitKickCount = -1;
+            HitTickMaxCount = InitialPlayerStatus.HIT_TICK_MAX_COUNT;
         }
 
+        /// <summary>
+        /// Behavior of the instance at tick.
+        /// </summary>
+        /// <param name="engine"><see cref="AbstractEngine"/></param>
+        /// <param name="keys"><see cref="KeyPress"/></param>
         public override void ComputeBehaviorAtTick(AbstractEngine engine, KeyPress keys)
         {
             // gère le temps d'effet du kick
-            if (_hitKickCount >= Constants.KICK_TICK_MAX_COUNT)
+            if (_hitKickCount >= HitTickMaxCount)
             {
                 _hitKickCount = -1;
             }
@@ -131,17 +147,17 @@ namespace RPG4.Abstractions
                 // correction des trajectoires au bord
                 bool goLeft = newLeft < 0;
                 bool goUp = newTop < 0;
-                bool goRight = newLeft + Width > Constants.AREA_WIDTH;
-                bool goDown = newTop + Height > Constants.AREA_HEIGHT;
+                bool goRight = newLeft + Width > engine.AreaWidth;
+                bool goDown = newTop + Height > engine.AreaHeight;
                 if (goLeft || goUp || goRight || goDown)
                 {
                     if (goLeft)
                     {
-                        newLeft = Constants.AREA_WIDTH - Width;
+                        newLeft = engine.AreaWidth - Width;
                         if (goUp)
                         {
                             NewScreenEntrance = Directions.top_left;
-                            newTop = Constants.AREA_HEIGHT - Height;
+                            newTop = engine.AreaHeight - Height;
                         }
                         else if (goDown)
                         {
@@ -159,7 +175,7 @@ namespace RPG4.Abstractions
                         if (goUp)
                         {
                             NewScreenEntrance = Directions.top_right;
-                            newTop = Constants.AREA_HEIGHT - Height;
+                            newTop = engine.AreaHeight - Height;
                         }
                         else if (goDown)
                         {
@@ -174,7 +190,7 @@ namespace RPG4.Abstractions
                     else if (goUp)
                     {
                         NewScreenEntrance = Directions.top;
-                        newTop = Constants.AREA_HEIGHT - Height;
+                        newTop = engine.AreaHeight - Height;
                     }
                     else
                     {

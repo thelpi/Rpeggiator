@@ -63,6 +63,7 @@
     <Compile Include="Abstractions\Player.cs" />
     <Compile Include="Abstractions\Enemy.cs" />
     <Compile Include="Abstractions\SizedPoint.cs" />
+    <Compile Include="InitialPlayerStatus.cs" />
     <Compile Include="Tools.cs" />
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>

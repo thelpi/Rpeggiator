@@ -32,26 +32,21 @@ namespace RPG4
         {
             InitializeComponent();
 
-            double initialCanvasTop = (Constants.AREA_HEIGHT / 2) - (Constants.SPRITE_SIZE_Y / 2);
-            double initialCanvasLeft = (Constants.AREA_WIDTH / 2) - (Constants.SPRITE_SIZE_X / 2);
+            _engine = new AbstractEngine(1);
 
-            Player player = new Player(initialCanvasLeft, initialCanvasTop, Constants.SPRITE_SIZE_X, Constants.SPRITE_SIZE_Y,
-                Constants.PLAYER_SPEED * (Constants.PLAYER_SPEED / (double)1000), Constants.KICK_SIZE_RATIO);
+            cvsMain.Height = _engine.AreaHeight;
+            cvsMain.Width = _engine.AreaWidth;
 
-            _engine = new AbstractEngine(player, 1);
+            // size of the player never change
+            rctMe.Height = _engine.Player.Height;
+            rctMe.Width = _engine.Player.Width;
 
-            cvsMain.Height = Constants.AREA_HEIGHT;
-            cvsMain.Width = Constants.AREA_WIDTH;
-            rctMe.Height = Constants.SPRITE_SIZE_Y;
-            rctMe.Width = Constants.SPRITE_SIZE_X;
+            DrawPlayer();
+            DrawEnemies();
+            DrawWalls();
+            DrawWallTriggers();
 
-            RedrawMeSprite(initialCanvasTop, initialCanvasLeft, false);
-            RedrawPngSprite(_engine.Enemies);
-            _engine.ConcreteWalls.ForEach(DrawWall);
-
-            _engine.WallTriggers.ForEach(DrawWallTrigger);
-
-            _timer = new Timer(Constants.REFRESH_DELAY_MS);
+            _timer = new Timer(1000 / Constants.FPS);
             _timer.Elapsed += OnTick;
             _timer.Start();
         }
@@ -65,7 +60,7 @@ namespace RPG4
 
             _timerIsIn = true;
 
-            // détecte la direction courante du joueur
+            // check pressed keys
             var pressedKeys = (KeyPress)Dispatcher.Invoke(new KeyPressHandler(delegate()
             {
                 return new KeyPress(
@@ -77,83 +72,86 @@ namespace RPG4
                 );
             }));
 
-            // recalcule les positions joueur + pngs
-            // actionne aussi le kick
+            // recompute everything
             _engine.CheckEngineAtTick(pressedKeys);
 
             Dispatcher.Invoke((delegate()
             {
-                // dessine le sprite joueur
-                RedrawMeSprite(_engine.Player.Y, _engine.Player.X, _engine.Player.IsHitting);
-                // dessine les sprites enemies
-                RedrawPngSprite(_engine.Enemies);
-                // contrôle le contact joueur / enemies
-                if (_engine.MeCollideToPng || _engine.MeCollideToWall)
+                // manage death prior to everything else
+                if (_engine.PlayerOverlapEnemy || _engine.PlayerOverlapWall)
                 {
                     MessageBox.Show("You die !");
                     _timer.Stop();
                 }
-                // redessine les murs
-                ClearCanvasByTag(WALL_TAG);
-                _engine.ConcreteWalls.ForEach(DrawWall);
-                // redessine les triggers
-                ClearCanvasByTag(WALL_TRIGGER_TAG);
-                _engine.WallTriggers.ForEach(DrawWallTrigger);
+
+                if (_engine.Player.NewScreenEntrance.HasValue)
+                {
+                    cvsMain.Height = _engine.AreaHeight;
+                    cvsMain.Width = _engine.AreaWidth;
+                }
+
+                DrawPlayer();
+                DrawEnemies();
+                DrawWalls();
+                DrawWallTriggers();
             }));
 
             _timerIsIn = false;
         }
 
-        private void RedrawMeSprite(double top, double left, bool kick)
+        // draws the player
+        private void DrawPlayer()
         {
-            rctMe.SetValue(Canvas.TopProperty, top);
-            rctMe.SetValue(Canvas.LeftProperty, left);
+            rctMe.SetValue(Canvas.TopProperty, _engine.Player.Y);
+            rctMe.SetValue(Canvas.LeftProperty, _engine.Player.X);
 
             Panel.SetZIndex(rctMe, 0);
 
             // cleans previous kick
             ClearCanvasByTag(KICK_TAG);
 
-            if (kick)
+            if (_engine.Player.IsHitting)
             {
-                var sp = new SizedPoint(left - Constants.KICK_THICK_X,
-                    top - Constants.KICK_THICK_Y,
-                    Constants.SPRITE_SIZE_X * Constants.KICK_SIZE_RATIO,
-                    Constants.SPRITE_SIZE_Y * Constants.KICK_SIZE_RATIO);
+                var sp = new SizedPoint(_engine.Player.X - _engine.Player.HitWidth,
+                    _engine.Player.Y - _engine.Player.HitHeight,
+                    _engine.Player.Width * _engine.Player.HitReachRatio,
+                    _engine.Player.Height * _engine.Player.HitReachRatio);
 
                 DrawSizedPoint(sp, Brushes.DarkViolet, KICK_TAG, 1);
             }
         }
 
-        private void RedrawPngSprite(List<Enemy> enemies)
+        // draws enemies
+        private void DrawEnemies()
         {
             ClearCanvasByTag(ENEMY_TAG);
-            foreach (Enemy enemy in enemies)
+            foreach (Enemy enemy in _engine.Enemies)
             {
                 DrawSizedPoint(enemy, Brushes.Blue, ENEMY_TAG);
             }
         }
 
-        private void DrawWall(Wall wall)
+        // draws walls
+        private void DrawWalls()
         {
-            if (wall.Concrete)
+            ClearCanvasByTag(WALL_TAG);
+            foreach (var w in _engine.ConcreteWalls)
             {
-                DrawSizedPoint(wall, Brushes.Black, WALL_TAG);
+                DrawSizedPoint(w, Brushes.Black, WALL_TAG);
             }
         }
 
-        private void DrawWallTrigger(WallTrigger wt)
+        // draws wall triggers
+        private void DrawWallTriggers()
         {
-            DrawSizedPoint(wt, wt.IsActivated ? Brushes.Yellow : Brushes.Orange, WALL_TRIGGER_TAG);
+            ClearCanvasByTag(WALL_TRIGGER_TAG);
+            foreach (var wt in _engine.WallTriggers)
+            {
+                DrawSizedPoint(wt, wt.IsActivated ? Brushes.Yellow : Brushes.Orange, WALL_TRIGGER_TAG);
+            }
         }
 
-        /// <summary>
-        /// Draws a <see cref="SizedPoint"/> inside the main canvas
-        /// </summary>
-        /// <param name="sp"><see cref="SizedPoint"/></param>
-        /// <param name="b"><see cref="Brush"/></param>
-        /// <param name="tag">The tag, which depends on the subtype.</param>
-        /// <param name="zIndex">Optionnal; Z index value.</param>
+        // draws a SizedPoint inside the main canvas
         private void DrawSizedPoint(SizedPoint sp, Brush b, string tag, int? zIndex = null)
         {
             Rectangle rct = new Rectangle
