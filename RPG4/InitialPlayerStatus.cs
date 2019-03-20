@@ -1,4 +1,6 @@
-﻿namespace RPG4
+﻿using RPG4.Abstractions;
+
+namespace RPG4
 {
     /// <summary>
     /// Set of constants to indicate player initial status (position, speed, and so forth).
@@ -37,5 +39,17 @@
         /// When kicking, indicates the life-points cost on the enemy.
         /// </summary>
         public const int HIT_LIFE_POINT_COST = 1;
+        /// <summary>
+        /// Initial size of the inventory.
+        /// </summary>
+        public const int INVENTORY_SIZE = 8;
+        /// <summary>
+        /// Initial list of items in the inventory.
+        /// </summary>
+        public static readonly InventoryItem[] INVENTORY_ITEMS = new InventoryItem[]
+        {
+            new InventoryItem(Item.SWORD_ID, 1),
+            new InventoryItem(Item.SMALL_LIFE_POTION_ID, 3)
+        };
     }
 }

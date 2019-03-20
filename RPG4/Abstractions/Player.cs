@@ -53,6 +53,10 @@ namespace RPG4.Abstractions
         /// Tick count before the effect of a hit ends.
         /// </summary>
         public int HitTickMaxCount { get; private set; }
+        /// <summary>
+        /// Inventory.
+        /// </summary>
+        public Inventory Inventory { get; private set; }
 
         /// <summary>
         /// Constructor.
@@ -70,6 +74,7 @@ namespace RPG4.Abstractions
             HitLifePointCost = InitialPlayerStatus.HIT_LIFE_POINT_COST;
             _hitKickCount = -1;
             HitTickMaxCount = InitialPlayerStatus.HIT_TICK_MAX_COUNT;
+            Inventory = new Inventory();
         }
 
         /// <summary>
@@ -198,7 +203,6 @@ namespace RPG4.Abstractions
                         newTop = 0;
                     }
                 }
-
                 else
                 {
                     // correction des trajectoires au bord d'un obstacle

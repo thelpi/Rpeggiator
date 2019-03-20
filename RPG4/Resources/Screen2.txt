@@ -76,5 +76,15 @@
 	"bottom": 1,
 	"bottom_left": 1,
 	"left": 1
+  },
+  "Items":[
+  {
+	"X": 310,
+	"Y": 230,
+	"Width": 20,
+	"Height": 20,
+	"ItemId": 1,
+	"Quantity": 10
   }
+  ]
 }

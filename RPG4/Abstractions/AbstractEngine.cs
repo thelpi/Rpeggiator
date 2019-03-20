@@ -13,6 +13,7 @@ namespace RPG4.Abstractions
         private List<Wall> _walls;
         private List<Enemy> _enemies;
         private List<WallTrigger> _wallTriggers;
+        private List<FloorItem> _items;
 
         /// <summary>
         /// Current screen width.
@@ -43,6 +44,10 @@ namespace RPG4.Abstractions
         /// </summary>
         public ReadOnlyCollection<WallTrigger> WallTriggers { get { return _wallTriggers.AsReadOnly(); } }
         /// <summary>
+        /// List of <see cref="FloorItem"/>.
+        /// </summary>
+        public ReadOnlyCollection<FloorItem> Items { get { return _items.AsReadOnly(); } }
+        /// <summary>
         /// Inferred; indicates it the player overlaps an enemy.
         /// </summary>
         public bool PlayerOverlapEnemy { get { return Enemies.Any(p => p.Overlap(Player)); } }
@@ -70,6 +75,7 @@ namespace RPG4.Abstractions
             _walls = new List<Wall>();
             _enemies = new List<Enemy>();
             _wallTriggers = new List<WallTrigger>();
+            _items = new List<FloorItem>();
             AreaWidth = screenJsonDatas.AreaWidth;
             AreaHeight = screenJsonDatas.AreaHeight;
 
@@ -84,6 +90,10 @@ namespace RPG4.Abstractions
             foreach (dynamic walltriggerJson in screenJsonDatas.WallTriggers)
             {
                 _wallTriggers.Add(new WallTrigger(walltriggerJson));
+            }
+            foreach (dynamic itemJson in screenJsonDatas.Items)
+            {
+                _items.Add(new FloorItem(itemJson));
             }
             dynamic adjacentScreens = screenJsonDatas.AdjacentScreens;
             _adjacentScreens = new Dictionary<Directions, int>
@@ -106,7 +116,17 @@ namespace RPG4.Abstractions
         public void CheckEngineAtTick(KeyPress keys)
         {
             Player.ComputeBehaviorAtTick(this, keys);
-            
+
+            // checks for items on the new position
+            var items = Items.Where(it => it.Overlap(Player)).ToList();
+            foreach (var item in items)
+            {
+                if (Player.Inventory.TryAdd(item.ItemId, item.Quantity))
+                {
+                    _items.Remove(item);
+                }
+            }
+
             foreach (var enemy in Enemies)
             {
                 enemy.ComputeBehaviorAtTick(this, null);

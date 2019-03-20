@@ -70,6 +70,14 @@ namespace RPG4.Abstractions
             return new SizedPoint(x, y, Width, Height);
         }
 
+        private bool SideOverlap(double a1, double a2, double b1, double b2)
+        {
+            return (a1 < b1 && a2 >= b1)
+                || (b1 < a1 && b2 >= a1)
+                || (a1 <= b1 && a2 > b1)
+                || (b1 <= a1 && b2 > a1);
+        }
+
         /// <summary>
         /// Checks if the instance horizontally overlaps another instance.
         /// </summary>
@@ -77,12 +85,7 @@ namespace RPG4.Abstractions
         /// <returns><c>True</c> if overlaps; <c>False</c> otherwise.</returns>
         private bool HorizontalOverlap(SizedPoint other)
         {
-            bool xCase1 = X < other.X && X + Width > other.X;
-            bool xCase2 = X < other.X + other.Width && X + Width > other.X + other.Width;
-            bool xCase3 = X > other.X && X + Width < other.X + other.Width;
-            bool xCase4 = X < other.X && X + Width > other.X + other.Width;
-
-            return xCase1 || xCase2 || xCase3 || xCase4;
+            return SideOverlap(X, BottomRightX, other.X, other.BottomRightX);
         }
 
         /// <summary>
@@ -92,12 +95,7 @@ namespace RPG4.Abstractions
         /// <returns><c>True</c> if overlaps; <c>False</c> otherwise.</returns>
         private bool VerticalOverlap(SizedPoint other)
         {
-            bool yCase1 = Y < other.Y && Y + Height > other.Y;
-            bool yCase2 = Y < other.Y + other.Height && Y + Height > other.Y + other.Height;
-            bool yCase3 = Y > other.Y && Y + Height < other.Y + other.Height;
-            bool yCase4 = Y < other.Y && Y + Height > other.Y + other.Height;
-
-            return yCase1 || yCase2 || yCase3 || yCase4;
+            return SideOverlap(Y, BottomRightY, other.Y, other.BottomRightY);
         }
 
         /// <summary>

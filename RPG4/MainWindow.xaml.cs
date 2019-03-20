@@ -1,7 +1,5 @@
-﻿using Newtonsoft.Json;
-using RPG4.Abstractions;
+﻿using RPG4.Abstractions;
 using System;
-using System.Collections.Generic;
 using System.Timers;
 using System.Windows;
 using System.Windows.Controls;
@@ -22,6 +20,7 @@ namespace RPG4
         private const string ENEMY_TAG = "ENEMY";
         private const string WALL_TAG = "WALL";
         private const string WALL_TRIGGER_TAG = "WALL_TRIGGER";
+        private const string ITEM_TAG = "ITEM";
         private const string UNIQUE_TIMESTAMP_PATTERN = "fffffff";
 
         private Timer _timer;
@@ -45,6 +44,7 @@ namespace RPG4
             DrawEnemies();
             DrawWalls();
             DrawWallTriggers();
+            DrawItems();
 
             _timer = new Timer(1000 / Constants.FPS);
             _timer.Elapsed += OnTick;
@@ -94,6 +94,7 @@ namespace RPG4
                 DrawEnemies();
                 DrawWalls();
                 DrawWallTriggers();
+                DrawItems();
             }));
 
             _timerIsIn = false;
@@ -148,6 +149,16 @@ namespace RPG4
             foreach (var wt in _engine.WallTriggers)
             {
                 DrawSizedPoint(wt, wt.IsActivated ? Brushes.Yellow : Brushes.Orange, WALL_TRIGGER_TAG);
+            }
+        }
+
+        // draws items
+        private void DrawItems()
+        {
+            ClearCanvasByTag(ITEM_TAG);
+            foreach (var it in _engine.Items)
+            {
+                DrawSizedPoint(it, Brushes.LightBlue, ITEM_TAG);
             }
         }
 

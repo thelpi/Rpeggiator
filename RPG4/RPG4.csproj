@@ -58,6 +58,10 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="Abstractions\Directions.cs" />
+    <Compile Include="Abstractions\FloorItem.cs" />
+    <Compile Include="Abstractions\Inventory.cs" />
+    <Compile Include="Abstractions\InventoryItem.cs" />
+    <Compile Include="Abstractions\Item.cs" />
     <Compile Include="Abstractions\WallTrigger.cs" />
     <Compile Include="Abstractions\FloorTrigger.cs" />
     <Compile Include="Abstractions\Player.cs" />
