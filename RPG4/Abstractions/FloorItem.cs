@@ -20,10 +20,10 @@
         /// </summary>
         /// <param name="itemId"><see cref="Item"/> identifier.</param>
         /// <param name="quantity"><see cref="Quantity"/></param>
-        /// <param name="x"><see cref="base.X"/></param>
-        /// <param name="y"><see cref="base.Y"/></param>
-        /// <param name="width"><see cref="base.Width"/></param>
-        /// <param name="height"><see cref="base.Height"/></param>
+        /// <param name="x"><see cref="SizedPoint.X"/></param>
+        /// <param name="y"><see cref="SizedPoint.Y"/></param>
+        /// <param name="width"><see cref="SizedPoint.Width"/></param>
+        /// <param name="height"><see cref="SizedPoint.Height"/></param>
         public FloorItem(int itemId, int quantity, double x, double y, double width, double height)
             : base(x, y, width, height)
         {

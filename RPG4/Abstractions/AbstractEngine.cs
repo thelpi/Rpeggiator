@@ -14,6 +14,7 @@ namespace RPG4.Abstractions
         private List<Enemy> _enemies;
         private List<WallTrigger> _wallTriggers;
         private List<FloorItem> _items;
+        private List<Bomb> _bombs;
 
         /// <summary>
         /// Current screen width.
@@ -76,6 +77,7 @@ namespace RPG4.Abstractions
             _enemies = new List<Enemy>();
             _wallTriggers = new List<WallTrigger>();
             _items = new List<FloorItem>();
+            _bombs = new List<Bomb>();
             AreaWidth = screenJsonDatas.AreaWidth;
             AreaHeight = screenJsonDatas.AreaHeight;
 
@@ -118,7 +120,7 @@ namespace RPG4.Abstractions
             Player.ComputeBehaviorAtTick(this, keys);
 
             // checks for items on the new position
-            var items = Items.Where(it => it.Overlap(Player)).ToList();
+            var items = _items.Where(it => it.Overlap(Player)).ToList();
             foreach (var item in items)
             {
                 if (Player.Inventory.TryAdd(item.ItemId, item.Quantity))
@@ -127,7 +129,7 @@ namespace RPG4.Abstractions
                 }
             }
 
-            foreach (var enemy in Enemies)
+            foreach (var enemy in _enemies)
             {
                 enemy.ComputeBehaviorAtTick(this, null);
             }
@@ -139,13 +141,19 @@ namespace RPG4.Abstractions
                 _enemies.RemoveAll(p => p.CheckHitAndHealthStatus(this));
             }
 
-            foreach (var wt in WallTriggers)
+            foreach (var wt in _wallTriggers)
             {
                 wt.ComputeBehaviorAtTick(this, keys);
             }
-            foreach (var w in Walls)
+            foreach (var w in _walls)
             {
                 w.ComputeBehaviorAtTick(this, keys);
+            }
+
+            _bombs.RemoveAll(b => !b.IsPending && !b.DisplayHalo);
+            foreach (var b in _bombs)
+            {
+                b.ComputeBehaviorAtTick(this);
             }
 
             if (!PlayerOverlapEnemy && !PlayerOverlapWall && Player.NewScreenEntrance.HasValue)

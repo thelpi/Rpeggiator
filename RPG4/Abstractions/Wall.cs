@@ -22,10 +22,10 @@ namespace RPG4.Abstractions
         /// <summary>
         /// Constructor.
         /// </summary>
-        /// <param name="x"><see cref="base.X"/></param>
-        /// <param name="y"><see cref="base.Y"/></param>
-        /// <param name="width"><see cref="base.Width"/></param>
-        /// <param name="height"><see cref="base.Height"/></param>
+        /// <param name="x"><see cref="SizedPoint.X"/></param>
+        /// <param name="y"><see cref="SizedPoint.Y"/></param>
+        /// <param name="width"><see cref="SizedPoint.Width"/></param>
+        /// <param name="height"><see cref="SizedPoint.Height"/></param>
         /// <param name="concrete"><see cref="Concrete"/></param>
         public Wall(double x, double y, double width, double height, bool concrete)
             : base(x, y, width, height)
@@ -48,8 +48,8 @@ namespace RPG4.Abstractions
         /// Behavior of the instance at ticking.
         /// </summary>
         /// <param name="engine">The <see cref="AbstractEngine"/>.</param>
-        /// <param name="keys">Keys pressed at ticking.</param>
-        public override void ComputeBehaviorAtTick(AbstractEngine engine, KeyPress keys)
+        /// <param name="args">Other arguments.</param>
+        public override void ComputeBehaviorAtTick(AbstractEngine engine, params object[] args)
         {
             IEnumerable<WallTrigger> triggersOn = engine.WallTriggers.Where(wt => wt.WallIndex == engine.Walls.IndexOf(this) && wt.IsActivated);
 

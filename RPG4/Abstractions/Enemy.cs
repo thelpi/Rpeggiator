@@ -32,10 +32,10 @@ namespace RPG4.Abstractions
         /// <summary>
         /// Constructor.
         /// </summary>
-        /// <param name="x"><see cref="base.X"/></param>
-        /// <param name="y"><see cref="base.Y"/></param>
-        /// <param name="width"><see cref="base.Width"/></param>
-        /// <param name="height"><see cref="base.Height"/></param>
+        /// <param name="x"><see cref="SizedPoint.X"/></param>
+        /// <param name="y"><see cref="SizedPoint.Y"/></param>
+        /// <param name="width"><see cref="SizedPoint.Width"/></param>
+        /// <param name="height"><see cref="SizedPoint.Height"/></param>
         /// <param name="speed"><see cref="Speed"/></param>
         /// <param name="pattern"><see cref="Pattern"/></param>
         /// <param name="hourRotation"><see cref="HourRotation"/></param>
@@ -67,8 +67,8 @@ namespace RPG4.Abstractions
         /// Behavior of the instance at ticking.
         /// </summary>
         /// <param name="engine"><see cref="AbstractEngine"/></param>
-        /// <param name="keys"><see cref="KeyPress"/></param>
-        public override void ComputeBehaviorAtTick(AbstractEngine engine, KeyPress keys)
+        /// <param name="args">Other arguments.</param>
+        public override void ComputeBehaviorAtTick(AbstractEngine engine, params object[] args)
         {
             double nextX = X;
             double nextY = Y;

@@ -17,10 +17,10 @@
         /// <summary>
         /// Constructor.
         /// </summary>
-        /// <param name="x"><see cref="base.X"/></param>
-        /// <param name="y"><see cref="base.Y"/></param>
-        /// <param name="width"><see cref="base.Width"/></param>
-        /// <param name="height"><see cref="base.Height"/></param>
+        /// <param name="x"><see cref="SizedPoint.X"/></param>
+        /// <param name="y"><see cref="SizedPoint.Y"/></param>
+        /// <param name="width"><see cref="SizedPoint.Width"/></param>
+        /// <param name="height"><see cref="SizedPoint.Height"/></param>
         /// <param name="actionDelayMaxTickCount">Number of ticks before the activation ends.</param>
         /// <param name="wallIndex"><see cref="WallIndex"/></param>
         /// <param name="appearOnActivation"><see cref="AppearOnActivation"/></param>

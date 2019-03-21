@@ -13,5 +13,17 @@
         /// Player's moves history max count.
         /// </summary>
         public const int MOVE_HISTORY_COUNT = 50;
+        /// <summary>
+        /// Ticks count before a bomb explodes.
+        /// </summary>
+        public static readonly int BOMB_PENDING_TICK_COUNT = FPS * 2;
+        /// <summary>
+        /// Ticks count while a bomb explodes.
+        /// </summary>
+        public static readonly int BOMB_EXPLODING_TICK_COUNT = FPS;
+        /// <summary>
+        /// When exploding, indicates the ratio size of the halo (compared to the bomb itself).
+        /// </summary>
+        public const double BOMB_HALO_SIZE_RATIO = 3;
     }
 }

@@ -114,8 +114,8 @@ namespace RPG4.Abstractions
         /// Overridden; behavior of the instance at ticking.
         /// </summary>
         /// <param name="engine">The <see cref="AbstractEngine"/>.</param>
-        /// <param name="keys">Keys pressed at ticking.</param>
-        public virtual void ComputeBehaviorAtTick(AbstractEngine engine, KeyPress keys)
+        /// <param name="args">Other arguments.</param>
+        public virtual void ComputeBehaviorAtTick(AbstractEngine engine, params object[] args)
         {
             // no default behavior to implement
         }

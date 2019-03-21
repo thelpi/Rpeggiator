@@ -9,6 +9,10 @@ using System.Windows.Shapes;
 
 namespace RPG4
 {
+    /// <summary>
+    /// Delegate to pass the pressed keys of the keayboard to the engine.
+    /// </summary>
+    /// <returns>A method which returns pressed keyboard's keys.</returns>
     public delegate KeyPress KeyPressHandler();
 
     /// <summary>
@@ -27,6 +31,9 @@ namespace RPG4
         private volatile bool _timerIsIn;
         private AbstractEngine _engine;
 
+        /// <summary>
+        /// Constructor.
+        /// </summary>
         public MainWindow()
         {
             InitializeComponent();
@@ -111,14 +118,9 @@ namespace RPG4
             // cleans previous kick
             ClearCanvasByTag(KICK_TAG);
 
-            if (_engine.Player.IsHitting)
+            if (_engine.Player.DisplayHalo)
             {
-                var sp = new SizedPoint(_engine.Player.X - _engine.Player.HitWidth,
-                    _engine.Player.Y - _engine.Player.HitHeight,
-                    _engine.Player.Width * _engine.Player.HitReachRatio,
-                    _engine.Player.Height * _engine.Player.HitReachRatio);
-
-                DrawSizedPoint(sp, Brushes.DarkViolet, KICK_TAG, 1);
+                DrawSizedPoint(_engine.Player.Halo, Brushes.DarkViolet, KICK_TAG, 1);
             }
         }
 

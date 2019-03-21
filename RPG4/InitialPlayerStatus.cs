@@ -28,9 +28,9 @@ namespace RPG4
         /// </summary>
         public const int SPRITE_SIZE_Y = 40;
         /// <summary>
-        /// When kicking, indicates the life-points cost on the enemy.
+        /// When kicking, indicates the ratio size of the halo (compared to the player).
         /// </summary>
-        public const double INITIAL_HIT_SIZE_RATIO = 2;
+        public const double INITIAL_HIT_HALO_SIZE_RATIO = 2;
         /// <summary>
         /// Tick count before the effect of a hit ends.
         /// </summary>

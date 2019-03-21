@@ -54,7 +54,7 @@ namespace RPG4.Abstractions
         /// Sets a unique use of the item.
         /// </summary>
         /// <param name="itemId">The <see cref="Item"/> identifier used.</param>
-        /// <returns><c>True</c> if the item ; <c>False</c> otherwise.</returns>
+        /// <returns><c>True</c> if the item is out of quantity; <c>False</c> otherwise.</returns>
         public bool UseItem(int itemId)
         {
             var item = _items.Find(it => it.ItemId == itemId);
