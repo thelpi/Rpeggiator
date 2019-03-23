@@ -131,9 +131,9 @@ namespace RPG4
             // cleans previous kick
             ClearCanvasByTag(KICK_TAG);
 
-            if (_engine.Player.DisplayHalo)
+            if (_engine.Player.HitHalo.DisplayHalo)
             {
-                DrawSizedPoint(_engine.Player.Halo, Brushes.DarkViolet, KICK_TAG, 1);
+                DrawSizedPoint(_engine.Player.HitHalo.Halo, Brushes.DarkViolet, KICK_TAG, 1);
             }
         }
 

@@ -21,13 +21,17 @@ namespace RPG4.Abstractions
         /// </summary>
         public bool HourRotation { get; private set; }
         /// <summary>
-        /// Initial number of life points.
+        /// Macimal number of life points.
         /// </summary>
-        public int BaseLifePoints { get; private set; }
+        public int MaximalLifePoints { get; private set; }
         /// <summary>
         /// Current number of life points.
         /// </summary>
         public int CurrentLifePoints { get; private set; }
+        /// <summary>
+        /// When kicking, indicates the life-points cost on the enemy.
+        /// </summary>
+        public int HitLifePointCost { get; private set; }
 
         /// <summary>
         /// Constructor.
@@ -39,15 +43,15 @@ namespace RPG4.Abstractions
         /// <param name="speed"><see cref="Speed"/></param>
         /// <param name="pattern"><see cref="Pattern"/></param>
         /// <param name="hourRotation"><see cref="HourRotation"/></param>
-        /// <param name="baseLifePoints"><see cref="BaseLifePoints"/></param>
-        public Enemy(double x, double y, double width, double height, double speed, Sprite pattern, bool hourRotation, int baseLifePoints)
+        /// <param name="maximalLifePoints"><see cref="MaximalLifePoints"/></param>
+        public Enemy(double x, double y, double width, double height, double speed, Sprite pattern, bool hourRotation, int maximalLifePoints)
             : base (x, y, width, height)
         {
             Speed = speed;
             Pattern = pattern;
             HourRotation = hourRotation;
-            BaseLifePoints = baseLifePoints;
-            CurrentLifePoints = BaseLifePoints;
+            MaximalLifePoints = maximalLifePoints;
+            CurrentLifePoints = maximalLifePoints;
         }
 
         /// <summary>
@@ -58,9 +62,9 @@ namespace RPG4.Abstractions
         {
             Speed = pngJson.Speed;
             HourRotation = pngJson.HourRotation;
-            BaseLifePoints = pngJson.BaseLifePoints;
+            MaximalLifePoints = pngJson.MaximalLifePoints;
             Pattern = new Sprite(pngJson.Pattern);
-            CurrentLifePoints = BaseLifePoints;
+            CurrentLifePoints = MaximalLifePoints;
         }
 
         /// <summary>

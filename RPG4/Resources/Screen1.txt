@@ -24,7 +24,7 @@
       "Height": 40,
       "Speed": 50,
       "HourRotation": true,
-      "BaseLifePoints": 3,
+      "MaximalLifePoints": 3,
       "Pattern": {
         "X": 50,
         "Y": 50,

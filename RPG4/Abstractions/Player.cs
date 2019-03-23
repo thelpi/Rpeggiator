@@ -8,8 +8,8 @@ namespace RPG4.Abstractions
     /// <summary>
     /// Represents the player.
     /// </summary>
-    /// <seealso cref="HaloSprite"/>
-    public class Player : HaloSprite
+    /// <seealso cref="Sprite"/>
+    public class Player : Sprite
     {
         // history of movements
         private Queue<Point> _moveHistory = new Queue<Point>(Constants.MOVE_HISTORY_COUNT);
@@ -35,6 +35,10 @@ namespace RPG4.Abstractions
         /// Inventory.
         /// </summary>
         public Inventory Inventory { get; private set; }
+        /// <summary>
+        /// Hit halo.
+        /// </summary>
+        public HaloSprite HitHalo { get; private set; }
 
         /// <summary>
         /// Constructor.
@@ -44,14 +48,13 @@ namespace RPG4.Abstractions
             InitialPlayerStatus.INITIAL_PLAYER_X,
             InitialPlayerStatus.INITIAL_PLAYER_Y,
             InitialPlayerStatus.SPRITE_SIZE_X,
-            InitialPlayerStatus.SPRITE_SIZE_Y,
-            InitialPlayerStatus.INITIAL_HIT_HALO_SIZE_RATIO,
-            InitialPlayerStatus.HIT_TICK_MAX_COUNT)
+            InitialPlayerStatus.SPRITE_SIZE_Y)
         {
             Speed = InitialPlayerStatus.INITIAL_PLAYER_SPEED;
             NewScreenEntrance = null;
             HitLifePointCost = InitialPlayerStatus.HIT_LIFE_POINT_COST;
             Inventory = new Inventory();
+            HitHalo = new HaloSprite(X, Y, Width, Height, InitialPlayerStatus.INITIAL_HIT_HALO_SIZE_RATIO, InitialPlayerStatus.HIT_TICK_MAX_COUNT);
         }
 
         /// <summary>
@@ -62,8 +65,6 @@ namespace RPG4.Abstractions
         public override void ComputeBehaviorAtTick(AbstractEngine engine, params object[] args)
         {
             var keys = args[0] as KeyPress;
-
-            base.ComputeBehaviorAtTick(engine, keys.PressHit);
 
             NewScreenEntrance = null;
             double newTop = Y;
@@ -209,7 +210,10 @@ namespace RPG4.Abstractions
                 }
                 X = newLeft;
                 Y = newTop;
+                HitHalo.AdjustToPlayer(this);
             }
+
+            HitHalo.ComputeBehaviorAtTick(engine, keys.PressHit);
         }
 
         /// <summary>
@@ -219,7 +223,7 @@ namespace RPG4.Abstractions
         /// <returns><c>True</c> if the enemy has been hit; otherwise <c>False</c>.</returns>
         public bool CheckHitReachEnemy(Enemy enemy)
         {
-            return DisplayHalo && enemy.Overlap(Halo);
+            return HitHalo.DisplayHalo && enemy.Overlap(HitHalo.Halo);
         }
     }
 }

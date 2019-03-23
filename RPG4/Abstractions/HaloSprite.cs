@@ -85,5 +85,15 @@
                 _haloTickCount = 0;
             }
         }
+
+        /// <summary>
+        /// Adjust the halo position, based on <see cref="Player"/> position.
+        /// </summary>
+        /// <param name="player">The player.</param>
+        public void AdjustToPlayer(Player player)
+        {
+            X = player.X;
+            Y = player.Y;
+        }
     }
 }
