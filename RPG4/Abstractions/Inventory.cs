@@ -66,5 +66,15 @@ namespace RPG4.Abstractions
             }
             return false;
         }
+
+        /// <summary>
+        /// Gets the slot associated to an item identifier.
+        /// </summary>
+        /// <param name="itemId">The item identifier.</param>
+        /// <returns>The index in <see cref="Items"/>; -1 if not found.</returns>
+        public int GetSlotByItemId(int itemId)
+        {
+            return _items.FindIndex(it => it.ItemId == itemId);
+        }
     }
 }

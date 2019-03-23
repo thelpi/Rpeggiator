@@ -17,6 +17,10 @@ namespace RPG4.Abstractions
         /// Small life potion identifier.
         /// </summary>
         public const int SMALL_LIFE_POTION_ID = 3;
+        /// <summary>
+        /// Bomb item identifier.
+        /// </summary>
+        public const int BOMB_ID = 1;
 
         #endregion
 
@@ -69,7 +73,7 @@ namespace RPG4.Abstractions
             _items = new List<Item>();
             _items.Add(new Item
             {
-                Id = 1,
+                Id = BOMB_ID,
                 //Lifetime = 0,
                 Name = "Bomb",
                 Unique = false,

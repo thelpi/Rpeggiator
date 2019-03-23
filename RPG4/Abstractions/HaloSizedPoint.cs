@@ -1,9 +1,9 @@
 ﻿namespace RPG4.Abstractions
 {
     /// <summary>
-    /// Represents a <see cref="SizedPoint"/> with an halo around it.
+    /// Represents a <see cref="Sprite"/> with an halo around it.
     /// </summary>
-    public class HaloSizedPoint : SizedPoint
+    public class HaloSizedPoint : Sprite
     {
         // ticks count with halo
         private int _haloTickCount;
@@ -13,11 +13,11 @@
         /// </summary>
         public double HaloReachRatio { get; private set; }
         /// <summary>
-        /// Inferred; the X-axis size of an halo reach depending on <see cref="SizedPoint.Width"/>.
+        /// Inferred; the X-axis size of an halo reach depending on <see cref="Sprite.Width"/>.
         /// </summary>
         public double HaloWidth { get { return ((HaloReachRatio - 1) / 2) * Width; } }
         /// <summary>
-        /// Inferred; the Y-axis size of an halo reach depending on <see cref="SizedPoint.Height"/>.
+        /// Inferred; the Y-axis size of an halo reach depending on <see cref="Sprite.Height"/>.
         /// </summary>
         public double HaloHeight { get { return ((HaloReachRatio - 1) / 2) * Height; } }
         /// <summary>
@@ -32,7 +32,7 @@
         /// Inferred; represents the halo itself.
         /// </summary>
         /// <remarks><c>Null</c> if <see cref="DisplayHalo"/> is <c>False</c>.</remarks>
-        public SizedPoint Halo
+        public Sprite Halo
         {
             get
             {
@@ -44,24 +44,21 @@
                 var haloX = X - (((HaloReachRatio - 1) / 2) * Width);
                 var haloY = Y - (((HaloReachRatio - 1) / 2) * Height);
 
-                return !DisplayHalo ? null : new SizedPoint(haloX, haloY, Width * HaloReachRatio, Height * HaloReachRatio);
+                return !DisplayHalo ? null : new Sprite(haloX, haloY, Width * HaloReachRatio, Height * HaloReachRatio);
             }
         }
 
         /// <summary>
         /// Constructor.
         /// </summary>
-        /// <param name="x"><see cref="SizedPoint.X"/></param>
-        /// <param name="y"><see cref="SizedPoint.Y"/></param>
-        /// <param name="width"><see cref="SizedPoint.Width"/></param>
-        /// <param name="height"><see cref="SizedPoint.Height"/></param>
+        /// <param name="x"><see cref="Sprite.X"/></param>
+        /// <param name="y"><see cref="Sprite.Y"/></param>
+        /// <param name="width"><see cref="Sprite.Width"/></param>
+        /// <param name="height"><see cref="Sprite.Height"/></param>
         /// <param name="haloReachRatio"><see cref="HaloReachRatio"/></param>
         /// <param name="haloTickMaxCount"><see cref="HaloTickMaxCount"/></param>
-        public HaloSizedPoint(double x, double y, double width, double height, double haloReachRatio, int haloTickMaxCount) : base(
-            InitialPlayerStatus.INITIAL_PLAYER_X,
-            InitialPlayerStatus.INITIAL_PLAYER_Y,
-            InitialPlayerStatus.SPRITE_SIZE_X,
-            InitialPlayerStatus.SPRITE_SIZE_Y)
+        public HaloSizedPoint(double x, double y, double width, double height, double haloReachRatio, int haloTickMaxCount)
+            : base(x, y, width, height)
         {
             HaloReachRatio = InitialPlayerStatus.INITIAL_HIT_HALO_SIZE_RATIO;
             _haloTickCount = -1;

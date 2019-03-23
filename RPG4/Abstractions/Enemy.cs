@@ -5,8 +5,8 @@ namespace RPG4.Abstractions
     /// <summary>
     /// Represents an enemy.
     /// </summary>
-    /// <seealso cref="SizedPoint"/>
-    public class Enemy : SizedPoint
+    /// <seealso cref="Sprite"/>
+    public class Enemy : Sprite
     {
         /// <summary>
         /// Distance in pixels by tick.
@@ -15,7 +15,7 @@ namespace RPG4.Abstractions
         /// <summary>
         /// Movement pattern.
         /// </summary>
-        public SizedPoint Pattern { get; private set; }
+        public Sprite Pattern { get; private set; }
         /// <summary>
         /// Indicates the current rotation on <see cref="Pattern"/>.
         /// </summary>
@@ -32,15 +32,15 @@ namespace RPG4.Abstractions
         /// <summary>
         /// Constructor.
         /// </summary>
-        /// <param name="x"><see cref="SizedPoint.X"/></param>
-        /// <param name="y"><see cref="SizedPoint.Y"/></param>
-        /// <param name="width"><see cref="SizedPoint.Width"/></param>
-        /// <param name="height"><see cref="SizedPoint.Height"/></param>
+        /// <param name="x"><see cref="Sprite.X"/></param>
+        /// <param name="y"><see cref="Sprite.Y"/></param>
+        /// <param name="width"><see cref="Sprite.Width"/></param>
+        /// <param name="height"><see cref="Sprite.Height"/></param>
         /// <param name="speed"><see cref="Speed"/></param>
         /// <param name="pattern"><see cref="Pattern"/></param>
         /// <param name="hourRotation"><see cref="HourRotation"/></param>
         /// <param name="baseLifePoints"><see cref="BaseLifePoints"/></param>
-        public Enemy(double x, double y, double width, double height, double speed, SizedPoint pattern, bool hourRotation, int baseLifePoints)
+        public Enemy(double x, double y, double width, double height, double speed, Sprite pattern, bool hourRotation, int baseLifePoints)
             : base (x, y, width, height)
         {
             Speed = speed;
@@ -59,7 +59,7 @@ namespace RPG4.Abstractions
             Speed = pngJson.Speed;
             HourRotation = pngJson.HourRotation;
             BaseLifePoints = pngJson.BaseLifePoints;
-            Pattern = new SizedPoint(pngJson.Pattern);
+            Pattern = new Sprite(pngJson.Pattern);
             CurrentLifePoints = BaseLifePoints;
         }
 

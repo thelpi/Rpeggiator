@@ -21,7 +21,7 @@ namespace RPG4.Abstractions
         /// <summary>
         /// Inferred; Speed by side while moving in diagonal. (Pythagore reversal)
         /// </summary>
-        /// <remarks>Assumes that <see cref="SizedPoint.X"/> and <see cref="SizedPoint.Y"/> have the same value.</remarks>
+        /// <remarks>Assumes that <see cref="Sprite.X"/> and <see cref="Sprite.Y"/> have the same value.</remarks>
         public double DiagonalSpeedBySize { get { return Math.Sqrt((Speed * Speed) / 2); } }
         /// <summary>
         /// When coming into a new screen, indicates the direction relative to the former screen.
@@ -173,13 +173,13 @@ namespace RPG4.Abstractions
                 else
                 {
                     // correction des trajectoires au bord d'un obstacle
-                    var forbiddens = new List<SizedPoint>();
+                    var forbiddens = new List<Sprite>();
                     bool loop = true;
                     do
                     {
                         var currentPt = Copy(newLeft, newTop);
                         loop = false;
-                        foreach (SizedPoint rect in engine.ConcreteWalls)
+                        foreach (Sprite rect in engine.ConcreteWalls)
                         {
                             Point pToMove = rect.CheckOverlapAndAdjustPosition(currentPt, this,
                                 keys.PressLeft ? true : (keys.PressRight ? false : (bool?)null),

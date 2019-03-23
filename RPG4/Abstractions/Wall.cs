@@ -6,8 +6,8 @@ namespace RPG4.Abstractions
     /// <summary>
     /// Represents a wall.
     /// </summary>
-    /// <seealso cref="SizedPoint"/>
-    public class Wall : SizedPoint
+    /// <seealso cref="Sprite"/>
+    public class Wall : Sprite
     {
         /// <summary>
         /// Indicates the value of <see cref="Concrete"/> when no active trigger.
@@ -22,10 +22,10 @@ namespace RPG4.Abstractions
         /// <summary>
         /// Constructor.
         /// </summary>
-        /// <param name="x"><see cref="SizedPoint.X"/></param>
-        /// <param name="y"><see cref="SizedPoint.Y"/></param>
-        /// <param name="width"><see cref="SizedPoint.Width"/></param>
-        /// <param name="height"><see cref="SizedPoint.Height"/></param>
+        /// <param name="x"><see cref="Sprite.X"/></param>
+        /// <param name="y"><see cref="Sprite.Y"/></param>
+        /// <param name="width"><see cref="Sprite.Width"/></param>
+        /// <param name="height"><see cref="Sprite.Height"/></param>
         /// <param name="concrete"><see cref="Concrete"/></param>
         public Wall(double x, double y, double width, double height, bool concrete)
             : base(x, y, width, height)

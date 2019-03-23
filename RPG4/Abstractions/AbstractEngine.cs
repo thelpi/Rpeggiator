@@ -49,6 +49,10 @@ namespace RPG4.Abstractions
         /// </summary>
         public ReadOnlyCollection<FloorItem> Items { get { return _items.AsReadOnly(); } }
         /// <summary>
+        /// List of <see cref="Bomb"/>.
+        /// </summary>
+        public ReadOnlyCollection<Bomb> Bombs { get { return _bombs.AsReadOnly(); } }
+        /// <summary>
         /// Inferred; indicates it the player overlaps an enemy.
         /// </summary>
         public bool PlayerOverlapEnemy { get { return Enemies.Any(p => p.Overlap(Player)); } }
@@ -129,6 +133,17 @@ namespace RPG4.Abstractions
                 }
             }
 
+            // checks for bombs dropped on the new position
+            if (keys.InventorySlotId.HasValue)
+            {
+                int indexId = Player.Inventory.GetSlotByItemId(Item.BOMB_ID);
+                if (keys.InventorySlotId.Value == indexId)
+                {
+                    _bombs.Add(new Bomb(Player.X, Player.Y, Constants.BOMB_WIDTH, Constants.BOMB_HEIGHT));
+                    Player.Inventory.UseItem(Item.BOMB_ID);
+                }
+            }
+
             foreach (var enemy in _enemies)
             {
                 enemy.ComputeBehaviorAtTick(this, null);
@@ -150,7 +165,7 @@ namespace RPG4.Abstractions
                 w.ComputeBehaviorAtTick(this, keys);
             }
 
-            _bombs.RemoveAll(b => !b.IsPending && !b.DisplayHalo);
+            _bombs.RemoveAll(b => (!b.IsPending && !b.DisplayHalo) || ConcreteWalls.Any(cw => cw.Overlap(b)));
             foreach (var b in _bombs)
             {
                 b.ComputeBehaviorAtTick(this);

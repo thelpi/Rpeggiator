@@ -3,8 +3,8 @@
     /// <summary>
     /// Represents a <see cref="Item"/> when pickable on the floor.
     /// </summary>
-    /// <seealso cref="SizedPoint"/>
-    public class FloorItem : SizedPoint
+    /// <seealso cref="Sprite"/>
+    public class FloorItem : Sprite
     {
         /// <summary>
         /// The underlying <see cref="Item"/> identifier
@@ -20,10 +20,10 @@
         /// </summary>
         /// <param name="itemId"><see cref="Item"/> identifier.</param>
         /// <param name="quantity"><see cref="Quantity"/></param>
-        /// <param name="x"><see cref="SizedPoint.X"/></param>
-        /// <param name="y"><see cref="SizedPoint.Y"/></param>
-        /// <param name="width"><see cref="SizedPoint.Width"/></param>
-        /// <param name="height"><see cref="SizedPoint.Height"/></param>
+        /// <param name="x"><see cref="Sprite.X"/></param>
+        /// <param name="y"><see cref="Sprite.Y"/></param>
+        /// <param name="width"><see cref="Sprite.Width"/></param>
+        /// <param name="height"><see cref="Sprite.Height"/></param>
         public FloorItem(int itemId, int quantity, double x, double y, double width, double height)
             : base(x, y, width, height)
         {

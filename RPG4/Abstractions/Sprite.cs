@@ -3,9 +3,9 @@
 namespace RPG4.Abstractions
 {
     /// <summary>
-    /// Represents a two-dimensional point (i.e. a rectangle).
+    /// Represents a two-dimensional point (i.e. a rectangle) which evolves in time.
     /// </summary>
-    public class SizedPoint
+    public class Sprite
     {
         /// <summary>
         /// X
@@ -39,7 +39,7 @@ namespace RPG4.Abstractions
         /// <param name="y"><see cref="Y"/></param>
         /// <param name="width"><see cref="Width"/></param>
         /// <param name="height"><see cref="Height"/></param>
-        public SizedPoint(double x, double y, double width, double height)
+        public Sprite(double x, double y, double width, double height)
         {
             X = x;
             Y = y;
@@ -51,7 +51,7 @@ namespace RPG4.Abstractions
         /// Constructor.
         /// </summary>
         /// <param name="sizedPointJson">The json dynamic object.</param>
-        public SizedPoint(dynamic sizedPointJson)
+        public Sprite(dynamic sizedPointJson)
         {
             X = sizedPointJson.X;
             Y = sizedPointJson.Y;
@@ -65,39 +65,32 @@ namespace RPG4.Abstractions
         /// <param name="x">New value for <see cref="X"/>.</param>
         /// <param name="y">New value for <see cref="Y"/>.</param>
         /// <returns>The new instance.</returns>
-        public SizedPoint Copy(double x, double y)
+        public Sprite Copy(double x, double y)
         {
-            return new SizedPoint(x, y, Width, Height);
+            return new Sprite(x, y, Width, Height);
         }
 
-        /// <summary>
-        /// Checks if the instance horizontally overlaps another instance.
-        /// </summary>
-        /// <param name="other">The second instance.</param>
-        /// <returns><c>True</c> if overlaps; <c>False</c> otherwise.</returns>
-        private bool HorizontalOverlap(SizedPoint other)
+        // Checks if the instance overlaps another instance on one dimension.
+        private bool OndeDimensionOverlap(double d1, double d2, double od1, double od2)
         {
-            bool xCase1 = X < other.X && X + Width > other.X;
-            bool xCase2 = X < other.X + other.Width && X + Width > other.X + other.Width;
-            bool xCase3 = X > other.X && X + Width < other.X + other.Width;
-            bool xCase4 = X < other.X && X + Width > other.X + other.Width;
+            // 2 cases should be enough
+            bool xCase1 = d1 < od1 && d2 > od1;
+            bool xCase2 = d1 < od2 && d2 > od2;
+            bool xCase3 = d1 > od1 && d2 < od2;
 
-            return xCase1 || xCase2 || xCase3 || xCase4;
+            return xCase1 || xCase2 || xCase3;
         }
 
-        /// <summary>
-        /// Checks if the instance vertically overlaps another instance.
-        /// </summary>
-        /// <param name="other">The second instance.</param>
-        /// <returns><c>True</c> if overlaps; <c>False</c> otherwise.</returns>
-        private bool VerticalOverlap(SizedPoint other)
+        // Checks if the instance horizontally overlaps another instance.
+        private bool HorizontalOverlap(Sprite other)
         {
-            bool yCase1 = Y < other.Y && Y + Height > other.Y;
-            bool yCase2 = Y < other.Y + other.Height && Y + Height > other.Y + other.Height;
-            bool yCase3 = Y > other.Y && Y + Height < other.Y + other.Height;
-            bool yCase4 = Y < other.Y && Y + Height > other.Y + other.Height;
+            return OndeDimensionOverlap(X, BottomRightX, other.X, other.BottomRightX);
+        }
 
-            return yCase1 || yCase2 || yCase3 || yCase4;
+        // Checks if the instance vertically overlaps another instance.
+        private bool VerticalOverlap(Sprite other)
+        {
+            return OndeDimensionOverlap(Y, BottomRightY, other.Y, other.BottomRightY);
         }
 
         /// <summary>
@@ -105,7 +98,7 @@ namespace RPG4.Abstractions
         /// </summary>
         /// <param name="other">The second instance.</param>
         /// <returns><c>True</c> if overlaps; <c>False</c> otherwise.</returns>
-        public bool Overlap(SizedPoint other)
+        public bool Overlap(Sprite other)
         {
             return HorizontalOverlap(other) && VerticalOverlap(other);
         }
@@ -128,7 +121,7 @@ namespace RPG4.Abstractions
         /// <param name="goLeft">Indicates if the second instance is going to the left.</param>
         /// <param name="goUp">Indicates if the second instance is going up.</param>
         /// <returns>A <see cref="Point"/> indicating the new position for the second instance if overlapping; A fake <see cref="Point"/> otherwise.</returns>
-        public Point CheckOverlapAndAdjustPosition(SizedPoint currentPt, SizedPoint originalPt, bool? goLeft, bool? goUp)
+        public Point CheckOverlapAndAdjustPosition(Sprite currentPt, Sprite originalPt, bool? goLeft, bool? goUp)
         {
             if (Overlap(currentPt))
             {

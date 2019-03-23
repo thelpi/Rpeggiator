@@ -25,5 +25,13 @@
         /// When exploding, indicates the ratio size of the halo (compared to the bomb itself).
         /// </summary>
         public const double BOMB_HALO_SIZE_RATIO = 3;
+        /// <summary>
+        /// Bomb item width.
+        /// </summary>
+        public static readonly double BOMB_WIDTH = InitialPlayerStatus.SPRITE_SIZE_X / 2;
+        /// <summary>
+        /// Bomb item height.
+        /// </summary>
+        public static readonly double BOMB_HEIGHT = InitialPlayerStatus.SPRITE_SIZE_Y / 2;
     }
 }

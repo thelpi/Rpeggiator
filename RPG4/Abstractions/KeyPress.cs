@@ -1,4 +1,6 @@
-﻿namespace RPG4.Abstractions
+﻿using System.Collections.Generic;
+
+namespace RPG4.Abstractions
 {
     /// <summary>
     /// Represents the keayboard input for a tick inside the <see cref="AbstractEngine"/>
@@ -25,6 +27,10 @@
         /// Indicates if the hit button is pressed.
         /// </summary>
         public bool PressHit { get; private set; }
+        /// <summary>
+        /// Indicates the inventory slot pressed.
+        /// </summary>
+        public int? InventorySlotId { get; private set; }
 
         /// <summary>
         /// Constructor.
@@ -34,13 +40,15 @@
         /// <param name="right"><see cref="PressRight"/></param>
         /// <param name="left"><see cref="PressLeft"/></param>
         /// <param name="hit"><see cref="PressHit"/></param>
-        public KeyPress(bool up, bool down, bool right, bool left, bool hit)
+        /// <param name="inventorySlotId"><see cref="InventorySlotId"/></param>
+        public KeyPress(bool up, bool down, bool right, bool left, bool hit, int? inventorySlotId)
         {
             PressUp = up;
             PressDown = down;
             PressRight = right;
             PressLeft = left;
             PressHit = hit;
+            InventorySlotId = inventorySlotId;
 
             // up and down both pressed cancel each other
             if (PressUp && PressDown)

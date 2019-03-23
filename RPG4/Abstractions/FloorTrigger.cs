@@ -6,8 +6,8 @@ namespace RPG4.Abstractions
     /// Represents a trigger which can be activated by walking on it.
     /// </summary>
     /// <remarks>This kind of trigger might be activated by <see cref="Enemy"/>.</remarks>
-    /// <seealso cref="SizedPoint"/>
-    public class FloorTrigger : SizedPoint
+    /// <seealso cref="Sprite"/>
+    public class FloorTrigger : Sprite
     {
         // current number of ticks while activated
         private int _actionDelayCurrentCountTick;
@@ -22,10 +22,10 @@ namespace RPG4.Abstractions
         /// <summary>
         /// Constructor.
         /// </summary>
-        /// <param name="x"><see cref="SizedPoint.X"/></param>
-        /// <param name="y"><see cref="SizedPoint.Y"/></param>
-        /// <param name="width"><see cref="SizedPoint.Width"/></param>
-        /// <param name="height"><see cref="SizedPoint.Height"/></param>
+        /// <param name="x"><see cref="Sprite.X"/></param>
+        /// <param name="y"><see cref="Sprite.Y"/></param>
+        /// <param name="width"><see cref="Sprite.Width"/></param>
+        /// <param name="height"><see cref="Sprite.Height"/></param>
         /// <param name="actionDelayMaxTickCount">Number of ticks before the activation ends.</param>
         public FloorTrigger(double x, double y, double width, double height, int actionDelayMaxTickCount)
             : base(x, y, width, height)

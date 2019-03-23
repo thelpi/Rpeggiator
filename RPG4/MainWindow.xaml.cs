@@ -25,6 +25,8 @@ namespace RPG4
         private const string WALL_TAG = "WALL";
         private const string WALL_TRIGGER_TAG = "WALL_TRIGGER";
         private const string ITEM_TAG = "ITEM";
+        private const string BOMB_TAG = "BOMB";
+        private const string BOMB_HALO_TAG = "BOMB_HALO_TAG";
         private const string UNIQUE_TIMESTAMP_PATTERN = "fffffff";
 
         private Timer _timer;
@@ -70,12 +72,22 @@ namespace RPG4
             // check pressed keys
             var pressedKeys = (KeyPress)Dispatcher.Invoke(new KeyPressHandler(delegate()
             {
+                int? inventorySlotId = null;
+                for (int i = 0; i < 10; i++)
+                {
+                    if (Keyboard.IsKeyDown((Key)Enum.Parse(typeof(Key), string.Format("D{0}", i))))
+                    {
+                        inventorySlotId = i;
+                        break;
+                    }
+                }
                 return new KeyPress(
                     Keyboard.IsKeyDown(Key.Up),
                     Keyboard.IsKeyDown(Key.Down),
                     Keyboard.IsKeyDown(Key.Right),
                     Keyboard.IsKeyDown(Key.Left),
-                    Keyboard.IsKeyDown(Key.Space)
+                    Keyboard.IsKeyDown(Key.Space),
+                    inventorySlotId
                 );
             }));
 
@@ -102,6 +114,7 @@ namespace RPG4
                 DrawWalls();
                 DrawWallTriggers();
                 DrawItems();
+                DrawBombs();
             }));
 
             _timerIsIn = false;
@@ -164,8 +177,22 @@ namespace RPG4
             }
         }
 
+        private void DrawBombs()
+        {
+            ClearCanvasByTag(BOMB_TAG);
+            foreach (var bo in _engine.Bombs)
+            {
+                DrawSizedPoint(bo, Brushes.LightBlue, BOMB_TAG);
+
+                if (bo.DisplayHalo)
+                {
+                    DrawSizedPoint(bo.Halo, Brushes.SandyBrown, BOMB_HALO_TAG, 1);
+                }
+            }
+        }
+
         // draws a SizedPoint inside the main canvas
-        private void DrawSizedPoint(SizedPoint sp, Brush b, string tag, int? zIndex = null)
+        private void DrawSizedPoint(Sprite sp, Brush b, string tag, int? zIndex = null)
         {
             Rectangle rct = new Rectangle
             {

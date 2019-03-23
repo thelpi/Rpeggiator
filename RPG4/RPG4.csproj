@@ -84,7 +84,7 @@
     <Compile Include="Abstractions\FloorTrigger.cs" />
     <Compile Include="Abstractions\Player.cs" />
     <Compile Include="Abstractions\Enemy.cs" />
-    <Compile Include="Abstractions\SizedPoint.cs" />
+    <Compile Include="Abstractions\Sprite.cs" />
     <Compile Include="InitialPlayerStatus.cs" />
     <Compile Include="Tools.cs" />
     <Page Include="MainWindow.xaml">

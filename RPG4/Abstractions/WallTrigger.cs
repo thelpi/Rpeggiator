@@ -17,10 +17,10 @@
         /// <summary>
         /// Constructor.
         /// </summary>
-        /// <param name="x"><see cref="SizedPoint.X"/></param>
-        /// <param name="y"><see cref="SizedPoint.Y"/></param>
-        /// <param name="width"><see cref="SizedPoint.Width"/></param>
-        /// <param name="height"><see cref="SizedPoint.Height"/></param>
+        /// <param name="x"><see cref="Sprite.X"/></param>
+        /// <param name="y"><see cref="Sprite.Y"/></param>
+        /// <param name="width"><see cref="Sprite.Width"/></param>
+        /// <param name="height"><see cref="Sprite.Height"/></param>
         /// <param name="actionDelayMaxTickCount">Number of ticks before the activation ends.</param>
         /// <param name="wallIndex"><see cref="WallIndex"/></param>
         /// <param name="appearOnActivation"><see cref="AppearOnActivation"/></param>
