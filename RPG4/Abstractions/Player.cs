@@ -8,9 +8,11 @@ namespace RPG4.Abstractions
     /// <summary>
     /// Represents the player.
     /// </summary>
-    /// <seealso cref="Sprite"/>
-    public class Player : Sprite
+    /// <seealso cref="LifeSprite"/>
+    public class Player : LifeSprite
     {
+        // current ticks count while recovering
+        private int _currentRecoveryTickCount;
         // history of movements
         private Queue<Point> _moveHistory = new Queue<Point>(Constants.MOVE_HISTORY_COUNT);
 
@@ -28,10 +30,6 @@ namespace RPG4.Abstractions
         /// </summary>
         public Directions? NewScreenEntrance { get; private set; }
         /// <summary>
-        /// When kicking, indicates the life-points cost on the enemy.
-        /// </summary>
-        public int HitLifePointCost { get; private set; }
-        /// <summary>
         /// Inventory.
         /// </summary>
         public Inventory Inventory { get; private set; }
@@ -39,6 +37,10 @@ namespace RPG4.Abstractions
         /// Hit halo.
         /// </summary>
         public HaloSprite HitHalo { get; private set; }
+        /// <summary>
+        /// Indicates the player is currently recovering from an hit.
+        /// </summary>
+        public bool IsRecovering { get { return _currentRecoveryTickCount >= 0 && _currentRecoveryTickCount <= Constants.RECOVERY_TICK_COUNT; } }
 
         /// <summary>
         /// Constructor.
@@ -48,13 +50,15 @@ namespace RPG4.Abstractions
             InitialPlayerStatus.INITIAL_PLAYER_X,
             InitialPlayerStatus.INITIAL_PLAYER_Y,
             InitialPlayerStatus.SPRITE_SIZE_X,
-            InitialPlayerStatus.SPRITE_SIZE_Y)
+            InitialPlayerStatus.SPRITE_SIZE_Y,
+            InitialPlayerStatus.MAXIMAL_LIFE_POINTS,
+            InitialPlayerStatus.HIT_LIFE_POINT_COST)
         {
             Speed = InitialPlayerStatus.INITIAL_PLAYER_SPEED;
             NewScreenEntrance = null;
-            HitLifePointCost = InitialPlayerStatus.HIT_LIFE_POINT_COST;
             Inventory = new Inventory();
             HitHalo = new HaloSprite(X, Y, Width, Height, InitialPlayerStatus.INITIAL_HIT_HALO_SIZE_RATIO, InitialPlayerStatus.HIT_TICK_MAX_COUNT);
+            _currentRecoveryTickCount = -1;
         }
 
         /// <summary>
@@ -217,13 +221,40 @@ namespace RPG4.Abstractions
         }
 
         /// <summary>
-        /// Checks if the instance currently hit an enemy.
+        /// Checks if the instance has been hit.
         /// </summary>
-        /// <param name="enemy"><see cref="Enemy"/></param>
-        /// <returns><c>True</c> if the enemy has been hit; otherwise <c>False</c>.</returns>
-        public bool CheckHitReachEnemy(Enemy enemy)
+        /// <param name="engine"><see cref="AbstractEngine"/></param>
+        public void CheckIfHasBeenHit(AbstractEngine engine)
         {
-            return HitHalo.DisplayHalo && enemy.Overlap(HitHalo.Halo);
+            // currently recovering ?
+            if (IsRecovering)
+            {
+                _currentRecoveryTickCount++;
+                if (_currentRecoveryTickCount > Constants.RECOVERY_TICK_COUNT)
+                {
+                    // end of recovery
+                    _currentRecoveryTickCount = -1;
+                }
+            }
+
+            if (_currentRecoveryTickCount < 0)
+            {
+                // checks hit (for each enemy, life points lost is cumulable)
+                int cumuledLifePoints = 0;
+                foreach (var enemy in engine.Enemies)
+                {
+                    if (Overlap(enemy))
+                    {
+                        cumuledLifePoints += enemy.HitLifePointCost;
+                    }
+                }
+
+                if (cumuledLifePoints > 0)
+                {
+                    // beginning of recovery
+                    _currentRecoveryTickCount = 0;
+                }
+            }
         }
     }
 }

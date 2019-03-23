@@ -33,5 +33,9 @@
         /// Bomb item height.
         /// </summary>
         public static readonly double BOMB_HEIGHT = InitialPlayerStatus.SPRITE_SIZE_Y / 2;
+        /// <summary>
+        /// Ticks count while recovering from a hit.
+        /// </summary>
+        public static readonly int RECOVERY_TICK_COUNT = (int)(Constants.FPS * 0.5);
     }
 }

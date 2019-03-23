@@ -96,13 +96,6 @@ namespace RPG4
 
             Dispatcher.Invoke((delegate()
             {
-                // manage death prior to everything else
-                if (_engine.PlayerOverlapEnemy || _engine.PlayerOverlapSolidStructure)
-                {
-                    MessageBox.Show("You die !");
-                    _timer.Stop();
-                }
-
                 if (_engine.Player.NewScreenEntrance.HasValue)
                 {
                     cvsMain.Height = _engine.AreaHeight;
@@ -115,6 +108,12 @@ namespace RPG4
                 DrawWallTriggers();
                 DrawItems();
                 DrawBombs();
+                
+                if (_engine.Player.CheckDeath(_engine))
+                {
+                    MessageBox.Show("You die !");
+                    _timer.Stop();
+                }
             }));
 
             _timerIsIn = false;
@@ -125,6 +124,8 @@ namespace RPG4
         {
             rctMe.SetValue(Canvas.TopProperty, _engine.Player.Y);
             rctMe.SetValue(Canvas.LeftProperty, _engine.Player.X);
+
+            rctMe.Fill = _engine.Player.IsRecovering ? Brushes.Brown : Brushes.Red;
 
             Panel.SetZIndex(rctMe, 0);
 

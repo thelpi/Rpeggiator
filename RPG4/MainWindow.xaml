@@ -7,6 +7,6 @@
         mc:Ignorable="d" Background="Gainsboro"
         Title="MainWindow" Height="600" Width="800">
     <Canvas Name="cvsMain" Background="White">
-        <Rectangle Fill="Red" Name="rctMe" />
+        <Rectangle Name="rctMe" />
     </Canvas>
 </Window>

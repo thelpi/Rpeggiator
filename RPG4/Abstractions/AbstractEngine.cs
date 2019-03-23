@@ -57,14 +57,6 @@ namespace RPG4.Abstractions
         /// List of <see cref="Bomb"/>.
         /// </summary>
         public ReadOnlyCollection<Bomb> Bombs { get { return _bombs.AsReadOnly(); } }
-        /// <summary>
-        /// Inferred; indicates it the player overlaps an enemy.
-        /// </summary>
-        public bool PlayerOverlapEnemy { get { return Enemies.Any(p => p.Overlap(Player)); } }
-        /// <summary>
-        /// Inferred; indicates it the player overlaps a solid structure.
-        /// </summary>
-        public bool PlayerOverlapSolidStructure { get { return SolidStructures.Any(s => s.Overlap(Player)); } }
 
         /// <summary>
         /// Constructor.
@@ -153,18 +145,15 @@ namespace RPG4.Abstractions
                     Player.Inventory.UseItem(Item.BOMB_ID);
                 }
             }
-
+            
+            // enemies management must be done after player management
             foreach (var enemy in _enemies)
             {
                 enemy.ComputeBehaviorAtTick(this, null);
             }
-
-            _enemies.RemoveAll(p => SolidStructures.Any(s => s.Overlap(p)));
+            _enemies.RemoveAll(e => e.CheckDeath(this));
             
-            if (!PlayerOverlapEnemy && !PlayerOverlapSolidStructure)
-            {
-                _enemies.RemoveAll(p => p.CheckHitAndHealthStatus(this));
-            }
+            Player.CheckIfHasBeenHit(this);
 
             foreach (var gt in _gateTriggers)
             {
@@ -182,7 +171,7 @@ namespace RPG4.Abstractions
                 b.ComputeBehaviorAtTick(this);
             }
 
-            if (!PlayerOverlapEnemy && !PlayerOverlapSolidStructure && Player.NewScreenEntrance.HasValue)
+            if (Player.NewScreenEntrance.HasValue)
             {
                 SetEnginePropertiesFromScreenDatas(_adjacentScreens[Player.NewScreenEntrance.Value]);
             }

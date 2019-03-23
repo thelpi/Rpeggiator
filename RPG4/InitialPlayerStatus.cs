@@ -51,5 +51,9 @@ namespace RPG4
             new InventoryItem(Item.SWORD_ID, 1),
             new InventoryItem(Item.SMALL_LIFE_POTION_ID, 3)
         };
+        /// <summary>
+        /// Initial life points.
+        /// </summary>
+        public const int MAXIMAL_LIFE_POINTS = 10;
     }
 }

@@ -5,8 +5,8 @@ namespace RPG4.Abstractions
     /// <summary>
     /// Represents an enemy.
     /// </summary>
-    /// <seealso cref="Sprite"/>
-    public class Enemy : Sprite
+    /// <seealso cref="LifeSprite"/>
+    public class Enemy : LifeSprite
     {
         /// <summary>
         /// Distance in pixels by tick.
@@ -20,18 +20,6 @@ namespace RPG4.Abstractions
         /// Indicates the current rotation on <see cref="Pattern"/>.
         /// </summary>
         public bool HourRotation { get; private set; }
-        /// <summary>
-        /// Macimal number of life points.
-        /// </summary>
-        public int MaximalLifePoints { get; private set; }
-        /// <summary>
-        /// Current number of life points.
-        /// </summary>
-        public int CurrentLifePoints { get; private set; }
-        /// <summary>
-        /// When kicking, indicates the life-points cost on the enemy.
-        /// </summary>
-        public int HitLifePointCost { get; private set; }
 
         /// <summary>
         /// Constructor.
@@ -43,28 +31,25 @@ namespace RPG4.Abstractions
         /// <param name="speed"><see cref="Speed"/></param>
         /// <param name="pattern"><see cref="Pattern"/></param>
         /// <param name="hourRotation"><see cref="HourRotation"/></param>
-        /// <param name="maximalLifePoints"><see cref="MaximalLifePoints"/></param>
-        public Enemy(double x, double y, double width, double height, double speed, Sprite pattern, bool hourRotation, int maximalLifePoints)
-            : base (x, y, width, height)
+        /// <param name="maximalLifePoints"><see cref="LifeSprite.MaximalLifePoints"/></param>
+        /// <param name="hitLifePointCost"><see cref="LifeSprite.HitLifePointCost"/></param>
+        public Enemy(double x, double y, double width, double height, double speed, Sprite pattern, bool hourRotation, int maximalLifePoints, int hitLifePointCost)
+            : base (x, y, width, height, maximalLifePoints, hitLifePointCost)
         {
             Speed = speed;
             Pattern = pattern;
             HourRotation = hourRotation;
-            MaximalLifePoints = maximalLifePoints;
-            CurrentLifePoints = maximalLifePoints;
         }
 
         /// <summary>
         /// Constructor.
         /// </summary>
-        /// <param name="pngJson">The json dynamic object.</param>
-        public Enemy(dynamic pngJson) : base((object)pngJson)
+        /// <param name="enemyJson">The json dynamic object.</param>
+        public Enemy(dynamic enemyJson) : base((object)enemyJson)
         {
-            Speed = pngJson.Speed;
-            HourRotation = pngJson.HourRotation;
-            MaximalLifePoints = pngJson.MaximalLifePoints;
-            Pattern = new Sprite(pngJson.Pattern);
-            CurrentLifePoints = MaximalLifePoints;
+            Speed = enemyJson.Speed;
+            HourRotation = enemyJson.HourRotation;
+            Pattern = new Sprite(enemyJson.Pattern);
         }
 
         /// <summary>
@@ -156,22 +141,13 @@ namespace RPG4.Abstractions
                 X = nextX;
                 Y = nextY;
             }
-        }
 
-        /// <summary>
-        /// Checks if the instance has been hit and remaining life points.
-        /// </summary>
-        /// <param name="engine"><see cref="AbstractEngine"/></param>
-        /// <returns><c>True</c> if the instance has no life points remaining; otherwise <c>False</c></returns>
-        public bool CheckHitAndHealthStatus(AbstractEngine engine)
-        {
-            if (engine.Player.CheckHitReachEnemy(this))
+            // hit by player ?
+            if (engine.Player.HitHalo.DisplayHalo && Overlap(engine.Player.HitHalo.Halo))
             {
+                Hit(engine.Player.HitLifePointCost);
                 HourRotation = !HourRotation;
-                CurrentLifePoints -= engine.Player.HitLifePointCost;
             }
-
-            return CurrentLifePoints <= 0;
         }
     }
 }

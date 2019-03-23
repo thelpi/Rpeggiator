@@ -25,6 +25,7 @@
       "Speed": 50,
       "HourRotation": true,
       "MaximalLifePoints": 3,
+	  "HitLifePointCost": 5,
       "Pattern": {
         "X": 50,
         "Y": 50,
