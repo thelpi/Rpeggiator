@@ -23,7 +23,7 @@ namespace RPG4
         private const string KICK_TAG = "KICK";
         private const string ENEMY_TAG = "ENEMY";
         private const string WALL_TAG = "WALL";
-        private const string WALL_TRIGGER_TAG = "WALL_TRIGGER";
+        private const string GATE_TRIGGER_TAG = "GATE_TRIGGER";
         private const string ITEM_TAG = "ITEM";
         private const string BOMB_TAG = "BOMB";
         private const string BOMB_HALO_TAG = "BOMB_HALO_TAG";
@@ -97,7 +97,7 @@ namespace RPG4
             Dispatcher.Invoke((delegate()
             {
                 // manage death prior to everything else
-                if (_engine.PlayerOverlapEnemy || _engine.PlayerOverlapWall)
+                if (_engine.PlayerOverlapEnemy || _engine.PlayerOverlapSolidStructure)
                 {
                     MessageBox.Show("You die !");
                     _timer.Stop();
@@ -151,19 +151,19 @@ namespace RPG4
         private void DrawWalls()
         {
             ClearCanvasByTag(WALL_TAG);
-            foreach (var w in _engine.ConcreteWalls)
+            foreach (var s in _engine.SolidStructures)
             {
-                DrawSizedPoint(w, Brushes.Black, WALL_TAG);
+                DrawSizedPoint(s, Brushes.Black, WALL_TAG);
             }
         }
 
         // draws wall triggers
         private void DrawWallTriggers()
         {
-            ClearCanvasByTag(WALL_TRIGGER_TAG);
-            foreach (var wt in _engine.WallTriggers)
+            ClearCanvasByTag(GATE_TRIGGER_TAG);
+            foreach (var gt in _engine.GateTriggers)
             {
-                DrawSizedPoint(wt, wt.IsActivated ? Brushes.Yellow : Brushes.Orange, WALL_TRIGGER_TAG);
+                DrawSizedPoint(gt, gt.IsActivated ? Brushes.Yellow : Brushes.Orange, GATE_TRIGGER_TAG);
             }
         }
 

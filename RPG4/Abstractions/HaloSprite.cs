@@ -3,7 +3,7 @@
     /// <summary>
     /// Represents a <see cref="Sprite"/> with an halo around it.
     /// </summary>
-    public class HaloSizedPoint : Sprite
+    public class HaloSprite : Sprite
     {
         // ticks count with halo
         private int _haloTickCount;
@@ -57,7 +57,7 @@
         /// <param name="height"><see cref="Sprite.Height"/></param>
         /// <param name="haloReachRatio"><see cref="HaloReachRatio"/></param>
         /// <param name="haloTickMaxCount"><see cref="HaloTickMaxCount"/></param>
-        public HaloSizedPoint(double x, double y, double width, double height, double haloReachRatio, int haloTickMaxCount)
+        public HaloSprite(double x, double y, double width, double height, double haloReachRatio, int haloTickMaxCount)
             : base(x, y, width, height)
         {
             HaloReachRatio = InitialPlayerStatus.INITIAL_HIT_HALO_SIZE_RATIO;

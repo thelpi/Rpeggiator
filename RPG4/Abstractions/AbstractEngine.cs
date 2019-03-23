@@ -10,9 +10,10 @@ namespace RPG4.Abstractions
     public class AbstractEngine
     {
         private Dictionary<Directions, int> _adjacentScreens;
-        private List<Wall> _walls;
+        private List<Sprite> _walls;
+        private List<Gate> _gates;
         private List<Enemy> _enemies;
-        private List<WallTrigger> _wallTriggers;
+        private List<GateTrigger> _gateTriggers;
         private List<FloorItem> _items;
         private List<Bomb> _bombs;
 
@@ -29,21 +30,25 @@ namespace RPG4.Abstractions
         /// </summary>
         public Player Player { get; private set; }
         /// <summary>
-        /// List of <see cref="Wall"/> (concrete or not).
+        /// List of walls.
         /// </summary>
-        public ReadOnlyCollection<Wall> Walls { get { return _walls.AsReadOnly(); } }
+        public ReadOnlyCollection<Sprite> Walls { get { return _walls.AsReadOnly(); } }
         /// <summary>
-        /// Inferred; list of concrete <see cref="Wall"/>.
+        /// List of <see cref="Gate"/>.
         /// </summary>
-        public ReadOnlyCollection<Wall> ConcreteWalls { get { return _walls.Where(w => w.Concrete).ToList().AsReadOnly(); } }
+        public ReadOnlyCollection<Gate> Gates { get { return _gates.AsReadOnly(); } }
+        /// <summary>
+        /// Inferred; list of <see cref="Sprite"/> which can't be crossed.
+        /// </summary>
+        public ReadOnlyCollection<Sprite> SolidStructures { get { return _walls.Concat(_gates.Where(g => g.Activated)).ToList().AsReadOnly(); } }
         /// <summary>
         /// List of <see cref="Enemy"/>.
         /// </summary>
         public ReadOnlyCollection<Enemy> Enemies { get { return _enemies.AsReadOnly(); } }
         /// <summary>
-        /// List of <see cref="WallTrigger"/>.
+        /// List of <see cref="GateTrigger"/>.
         /// </summary>
-        public ReadOnlyCollection<WallTrigger> WallTriggers { get { return _wallTriggers.AsReadOnly(); } }
+        public ReadOnlyCollection<GateTrigger> GateTriggers { get { return _gateTriggers.AsReadOnly(); } }
         /// <summary>
         /// List of <see cref="FloorItem"/>.
         /// </summary>
@@ -57,9 +62,9 @@ namespace RPG4.Abstractions
         /// </summary>
         public bool PlayerOverlapEnemy { get { return Enemies.Any(p => p.Overlap(Player)); } }
         /// <summary>
-        /// Inferred; indicates it the player overlaps a wall.
+        /// Inferred; indicates it the player overlaps a solid structure.
         /// </summary>
-        public bool PlayerOverlapWall { get { return ConcreteWalls.Any(w => w.Overlap(Player)); } }
+        public bool PlayerOverlapSolidStructure { get { return SolidStructures.Any(s => s.Overlap(Player)); } }
 
         /// <summary>
         /// Constructor.
@@ -77,9 +82,10 @@ namespace RPG4.Abstractions
         {
             dynamic screenJsonDatas = Tools.GetScreenDatasFromIndex(screenIndex);
 
-            _walls = new List<Wall>();
+            _walls = new List<Sprite>();
             _enemies = new List<Enemy>();
-            _wallTriggers = new List<WallTrigger>();
+            _gateTriggers = new List<GateTrigger>();
+            _gates = new List<Gate>();
             _items = new List<FloorItem>();
             _bombs = new List<Bomb>();
             AreaWidth = screenJsonDatas.AreaWidth;
@@ -87,15 +93,19 @@ namespace RPG4.Abstractions
 
             foreach (dynamic wallJson in screenJsonDatas.Walls)
             {
-                _walls.Add(new Wall(wallJson));
+                _walls.Add(new Sprite(wallJson));
+            }
+            foreach (dynamic gateJson in screenJsonDatas.Gates)
+            {
+                _gates.Add(new Gate(gateJson));
             }
             foreach (dynamic enemyJson in screenJsonDatas.Enemies)
             {
                 _enemies.Add(new Enemy(enemyJson));
             }
-            foreach (dynamic walltriggerJson in screenJsonDatas.WallTriggers)
+            foreach (dynamic gatetriggerJson in screenJsonDatas.GateTriggers)
             {
-                _wallTriggers.Add(new WallTrigger(walltriggerJson));
+                _gateTriggers.Add(new GateTrigger(gatetriggerJson));
             }
             foreach (dynamic itemJson in screenJsonDatas.Items)
             {
@@ -149,29 +159,30 @@ namespace RPG4.Abstractions
                 enemy.ComputeBehaviorAtTick(this, null);
             }
 
-            _enemies.RemoveAll(p => ConcreteWalls.Any(w => w.Overlap(p)));
+            _enemies.RemoveAll(p => SolidStructures.Any(s => s.Overlap(p)));
             
-            if (!PlayerOverlapEnemy && !PlayerOverlapWall)
+            if (!PlayerOverlapEnemy && !PlayerOverlapSolidStructure)
             {
                 _enemies.RemoveAll(p => p.CheckHitAndHealthStatus(this));
             }
 
-            foreach (var wt in _wallTriggers)
+            foreach (var gt in _gateTriggers)
             {
-                wt.ComputeBehaviorAtTick(this, keys);
+                gt.ComputeBehaviorAtTick(this, keys);
             }
-            foreach (var w in _walls)
+            foreach (var g in _gates)
             {
-                w.ComputeBehaviorAtTick(this, keys);
+                g.ComputeBehaviorAtTick(this, keys);
             }
 
-            _bombs.RemoveAll(b => (!b.IsPending && !b.DisplayHalo) || ConcreteWalls.Any(cw => cw.Overlap(b)));
+            // bombs disappear when they overlap a structure
+            _bombs.RemoveAll(b => (!b.IsPending && !b.DisplayHalo) || SolidStructures.Any(cw => cw.Overlap(b)));
             foreach (var b in _bombs)
             {
                 b.ComputeBehaviorAtTick(this);
             }
 
-            if (!PlayerOverlapEnemy && !PlayerOverlapWall && Player.NewScreenEntrance.HasValue)
+            if (!PlayerOverlapEnemy && !PlayerOverlapSolidStructure && Player.NewScreenEntrance.HasValue)
             {
                 SetEnginePropertiesFromScreenDatas(_adjacentScreens[Player.NewScreenEntrance.Value]);
             }

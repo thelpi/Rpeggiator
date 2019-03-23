@@ -76,22 +76,22 @@
     <Compile Include="Abstractions\Bomb.cs" />
     <Compile Include="Abstractions\Directions.cs" />
     <Compile Include="Abstractions\FloorItem.cs" />
-    <Compile Include="Abstractions\HaloSizedPoint.cs" />
+    <Compile Include="Abstractions\HaloSprite.cs" />
     <Compile Include="Abstractions\Inventory.cs" />
     <Compile Include="Abstractions\InventoryItem.cs" />
     <Compile Include="Abstractions\Item.cs" />
-    <Compile Include="Abstractions\WallTrigger.cs" />
+    <Compile Include="Abstractions\GateTrigger.cs" />
     <Compile Include="Abstractions\FloorTrigger.cs" />
     <Compile Include="Abstractions\Player.cs" />
     <Compile Include="Abstractions\Enemy.cs" />
     <Compile Include="Abstractions\Sprite.cs" />
+    <Compile Include="Abstractions\Gate.cs" />
     <Compile Include="InitialPlayerStatus.cs" />
     <Compile Include="Tools.cs" />
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Compile Include="Abstractions\Wall.cs" />
     <Compile Include="App.xaml.cs">
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>

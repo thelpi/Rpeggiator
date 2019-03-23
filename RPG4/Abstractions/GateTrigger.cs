@@ -1,16 +1,16 @@
 ﻿namespace RPG4.Abstractions
 {
     /// <summary>
-    /// Represents a <see cref="FloorTrigger"/> which make appears or disappear <see cref="Wall"/>.
+    /// Represents a <see cref="FloorTrigger"/> which make appears or disappear <see cref="Gate"/>.
     /// </summary>
-    public class WallTrigger : FloorTrigger
+    public class GateTrigger : FloorTrigger
     {
         /// <summary>
-        /// Indicates the index of the wall linked to this trigger in the <see cref="AbstractEngine.Walls"/>.
+        /// Indicates the index of the gate linked to this trigger in the <see cref="AbstractEngine.Gates"/>.
         /// </summary>
-        public int WallIndex { get; private set; }
+        public int GateIndex { get; private set; }
         /// <summary>
-        /// Indicates if the <see cref="Wall"/> appears when the trigger is activated; otherwise, it disappear.
+        /// Indicates if the <see cref="Gate"/> appears when the trigger is activated; otherwise, it disappear.
         /// </summary>
         public bool AppearOnActivation { get; private set; }
 
@@ -22,23 +22,23 @@
         /// <param name="width"><see cref="Sprite.Width"/></param>
         /// <param name="height"><see cref="Sprite.Height"/></param>
         /// <param name="actionDelayMaxTickCount">Number of ticks before the activation ends.</param>
-        /// <param name="wallIndex"><see cref="WallIndex"/></param>
+        /// <param name="gateIndex"><see cref="GateIndex"/></param>
         /// <param name="appearOnActivation"><see cref="AppearOnActivation"/></param>
-        public WallTrigger(double x, double y, double width, double height, int actionDelayMaxTickCount, int wallIndex, bool appearOnActivation)
+        public GateTrigger(double x, double y, double width, double height, int actionDelayMaxTickCount, int gateIndex, bool appearOnActivation)
             : base(x, y, width, height, actionDelayMaxTickCount)
         {
-            WallIndex = wallIndex;
+            GateIndex = gateIndex;
             AppearOnActivation = appearOnActivation;
         }
 
         /// <summary>
         /// Constructor.
         /// </summary>
-        /// <param name="walltriggerJson">The json dynamic object.</param>
-        public WallTrigger(dynamic walltriggerJson) : base((object)walltriggerJson)
+        /// <param name="gatetriggerJson">The json dynamic object.</param>
+        public GateTrigger(dynamic gatetriggerJson) : base((object)gatetriggerJson)
         {
-            WallIndex = walltriggerJson.WallIndex;
-            AppearOnActivation = walltriggerJson.AppearOnActivation;
+            GateIndex = gatetriggerJson.GateIndex;
+            AppearOnActivation = gatetriggerJson.AppearOnActivation;
         }
     }
 }

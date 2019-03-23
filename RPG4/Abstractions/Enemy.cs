@@ -143,7 +143,7 @@ namespace RPG4.Abstractions
                 nextY = Pattern.BottomRightY - Height;
             }
 
-            if (engine.ConcreteWalls.Any(w => w.Overlap(Copy(nextX, nextY))))
+            if (engine.SolidStructures.Any(s => s.Overlap(Copy(nextX, nextY))))
             {
                 HourRotation = !HourRotation;
             }

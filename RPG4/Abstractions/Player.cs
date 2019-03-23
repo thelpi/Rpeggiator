@@ -8,8 +8,8 @@ namespace RPG4.Abstractions
     /// <summary>
     /// Represents the player.
     /// </summary>
-    /// <seealso cref="HaloSizedPoint"/>
-    public class Player : HaloSizedPoint
+    /// <seealso cref="HaloSprite"/>
+    public class Player : HaloSprite
     {
         // history of movements
         private Queue<Point> _moveHistory = new Queue<Point>(Constants.MOVE_HISTORY_COUNT);
@@ -179,9 +179,9 @@ namespace RPG4.Abstractions
                     {
                         var currentPt = Copy(newLeft, newTop);
                         loop = false;
-                        foreach (Sprite rect in engine.ConcreteWalls)
+                        foreach (Sprite sprite in engine.SolidStructures)
                         {
-                            Point pToMove = rect.CheckOverlapAndAdjustPosition(currentPt, this,
+                            Point pToMove = sprite.CheckOverlapAndAdjustPosition(currentPt, this,
                                 keys.PressLeft ? true : (keys.PressRight ? false : (bool?)null),
                                 keys.PressUp ? true : (keys.PressDown ? false : (bool?)null));
 

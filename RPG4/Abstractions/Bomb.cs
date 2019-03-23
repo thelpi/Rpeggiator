@@ -3,9 +3,9 @@
     /// <summary>
     /// Represents the bomb item when dropped on the floor.
     /// </summary>
-    /// <seealso cref="HaloSizedPoint"/>
+    /// <seealso cref="HaloSprite"/>
     /// <seealso cref="Item"/>
-    public class Bomb : HaloSizedPoint
+    public class Bomb : HaloSprite
     {
         // ticks count before exploding
         private int _pendingTickCount;

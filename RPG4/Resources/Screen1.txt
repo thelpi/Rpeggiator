@@ -6,24 +6,16 @@
       "X": 50,
       "Y": 300,
       "Width": 250,
-      "Height": 50,
-	  "Concrete": true
+      "Height": 50
     },
     {
       "X": 100,
       "Y": 260,
       "Width": 50,
-      "Height": 140,
-	  "Concrete": true
-    },
-    {
-      "X": 500,
-      "Y": 300,
-      "Width": 30,
-      "Height": 50,
-	  "Concrete": true
+      "Height": 140
     }
   ],
+  "Gates":[],
   "Enemies": [
     {
       "X": 50,
@@ -41,17 +33,7 @@
       }
     }
   ],
-  "WallTriggers": [
-	{
-		"X": 200,
-		"Y": 200,
-		"Width": 10,
-		"Height": 10,
-		"ActionDelayMaxTickCount": 60,
-		"WallIndex": 2,
-		"AppearOnActivation": false
-	}
-  ],
+  "GateTriggers": [],
   "AdjacentScreens": {
 	"top_left": 2,
 	"top": 2,
