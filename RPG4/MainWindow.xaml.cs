@@ -49,13 +49,9 @@ namespace RPG4
             // size of the player never change
             rctMe.Height = _engine.Player.Height;
             rctMe.Width = _engine.Player.Width;
-
-            DrawPlayer();
-            DrawEnemies();
+            
             DrawWalls();
-            DrawGates();
-            DrawWallTriggers();
-            DrawItems();
+            RefreshSprites();
 
             _timer = new Timer(1000 / Constants.FPS);
             _timer.Elapsed += OnTick;
@@ -105,13 +101,8 @@ namespace RPG4
                     DrawWalls();
                 }
 
-                DrawPlayer();
-                DrawEnemies();
-                DrawGates();
-                DrawWallTriggers();
-                DrawItems();
-                DrawBombs();
-                
+                RefreshSprites();
+
                 if (_engine.Player.CheckDeath(_engine))
                 {
                     MessageBox.Show("You die !");
@@ -141,16 +132,6 @@ namespace RPG4
             }
         }
 
-        // draws enemies
-        private void DrawEnemies()
-        {
-            ClearCanvasByTag(ENEMY_TAG);
-            foreach (Enemy enemy in _engine.Enemies)
-            {
-                DrawSizedPoint(enemy, Brushes.Blue, ENEMY_TAG);
-            }
-        }
-
         // draws walls
         private void DrawWalls()
         {
@@ -158,50 +139,6 @@ namespace RPG4
             foreach (var s in _engine.Walls)
             {
                 DrawSizedPoint(s, Brushes.Black, WALL_TAG);
-            }
-        }
-
-        // draws gates
-        private void DrawGates()
-        {
-            ClearCanvasByTag(GATE_TAG);
-            foreach (var ag in _engine.ActivatedGates)
-            {
-                DrawSizedPoint(ag, Brushes.DarkGray, GATE_TAG);
-            }
-        }
-
-        // draws wall triggers
-        private void DrawWallTriggers()
-        {
-            ClearCanvasByTag(GATE_TRIGGER_TAG);
-            foreach (var gt in _engine.GateTriggers)
-            {
-                DrawSizedPoint(gt, gt.IsActivated ? Brushes.Yellow : Brushes.Orange, GATE_TRIGGER_TAG);
-            }
-        }
-
-        // draws items
-        private void DrawItems()
-        {
-            ClearCanvasByTag(ITEM_TAG);
-            foreach (var it in _engine.Items)
-            {
-                DrawSizedPoint(it, Brushes.LightBlue, ITEM_TAG);
-            }
-        }
-
-        private void DrawBombs()
-        {
-            ClearCanvasByTag(BOMB_TAG);
-            foreach (var bo in _engine.Bombs)
-            {
-                DrawSizedPoint(bo, Brushes.LightBlue, BOMB_TAG);
-
-                if (bo.DisplayHalo)
-                {
-                    DrawSizedPoint(bo.Halo, Brushes.SandyBrown, BOMB_HALO_TAG, 1);
-                }
             }
         }
 
@@ -234,6 +171,60 @@ namespace RPG4
                 if (cvsMain.Children[i].Uid.StartsWith(tag))
                 {
                     cvsMain.Children.RemoveAt(i);
+                }
+            }
+        }
+
+        private void RefreshSprites()
+        {
+            DrawPlayer();
+
+            ClearCanvasByTag(ITEM_TAG);
+            ClearCanvasByTag(GATE_TRIGGER_TAG);
+            ClearCanvasByTag(ENEMY_TAG);
+            ClearCanvasByTag(BOMB_TAG);
+            ClearCanvasByTag(GATE_TAG);
+            foreach (var sprite in _engine.Sprites)
+            {
+                string tag = null;
+                Brush brush = null;
+                HaloSprite halo = null;
+                string haloTag = null;
+                Brush haloBrush = null;
+
+                if (sprite.GetType() == typeof(Enemy))
+                {
+                    tag = ENEMY_TAG;
+                    brush = Brushes.Blue;
+                }
+                else if (sprite.GetType() == typeof(Bomb))
+                {
+                    tag = BOMB_TAG;
+                    brush = Brushes.LightBlue;
+                    halo = (sprite as HaloSprite);
+                    haloTag = BOMB_HALO_TAG;
+                    haloBrush = Brushes.SandyBrown;
+                }
+                else if (sprite.GetType() == typeof(Gate))
+                {
+                    tag = GATE_TAG;
+                    brush = Brushes.DarkGray;
+                }
+                else if (sprite.GetType() == typeof(GateTrigger))
+                {
+                    tag = GATE_TRIGGER_TAG;
+                    brush = (sprite as GateTrigger).IsActivated ? Brushes.Yellow : Brushes.Orange;
+                }
+                else if (sprite.GetType() == typeof(FloorItem))
+                {
+                    tag = ITEM_TAG;
+                    brush = Brushes.LightBlue;
+                }
+
+                DrawSizedPoint(sprite, brush, tag);
+                if (halo != null && halo.DisplayHalo)
+                {
+                    DrawSizedPoint(halo.Halo, haloBrush, haloTag, 1);
                 }
             }
         }

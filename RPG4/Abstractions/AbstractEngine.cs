@@ -32,35 +32,22 @@ namespace RPG4.Abstractions
         /// <summary>
         /// List of walls.
         /// </summary>
-        public ReadOnlyCollection<Sprite> Walls { get { return _walls.AsReadOnly(); } }
-        /// <summary>
-        /// List of <see cref="Gate"/>.
-        /// </summary>
-        public ReadOnlyCollection<Gate> Gates { get { return _gates.AsReadOnly(); } }
-        /// <summary>
-        /// Inferred; list of <see cref="Gate"/> currently activated.
-        /// </summary>
-        public ReadOnlyCollection<Gate> ActivatedGates { get { return _gates.Where(g => g.Activated).ToList().AsReadOnly(); } }
+        public IReadOnlyCollection<Sprite> Walls { get { return _walls; } }
         /// <summary>
         /// Inferred; list of <see cref="Sprite"/> which can't be crossed.
         /// </summary>
-        public ReadOnlyCollection<Sprite> SolidStructures { get { return _walls.Concat(_gates.Where(g => g.Activated)).ToList().AsReadOnly(); } }
+        public IReadOnlyCollection<Sprite> SolidStructures { get { return _walls.Concat(_gates.Where(g => g.Activated)).ToList(); } }
         /// <summary>
-        /// List of <see cref="Enemy"/>.
+        /// List of every <see cref="Sprite"/> which requires a display management at each tick.
         /// </summary>
-        public ReadOnlyCollection<Enemy> Enemies { get { return _enemies.AsReadOnly(); } }
-        /// <summary>
-        /// List of <see cref="GateTrigger"/>.
-        /// </summary>
-        public ReadOnlyCollection<GateTrigger> GateTriggers { get { return _gateTriggers.AsReadOnly(); } }
-        /// <summary>
-        /// List of <see cref="FloorItem"/>.
-        /// </summary>
-        public ReadOnlyCollection<FloorItem> Items { get { return _items.AsReadOnly(); } }
-        /// <summary>
-        /// List of <see cref="Bomb"/>.
-        /// </summary>
-        public ReadOnlyCollection<Bomb> Bombs { get { return _bombs.AsReadOnly(); } }
+        /// <remarks>Doesn't include <see cref="Walls"/>.</remarks>
+        public IReadOnlyCollection<Sprite> Sprites
+        {
+            get
+            {
+                return _bombs.Concat<Sprite>(_items).Concat(_gateTriggers).Concat(_enemies).Concat(_gates.Where(g => g.Activated)).ToList();
+            }
+        }
 
         /// <summary>
         /// Constructor.
@@ -179,6 +166,44 @@ namespace RPG4.Abstractions
             {
                 SetEnginePropertiesFromScreenDatas(_adjacentScreens[Player.NewScreenEntrance.Value]);
             }
+        }
+
+        /// <summary>
+        /// Gets a list of <see cref="GateTrigger"/> associated to the specified <see cref="Gate"/>.
+        /// </summary>
+        /// <param name="gate"><see cref="Gate"/></param>
+        /// <returns>List of <see cref="GateTrigger"/>.</returns>
+        public IReadOnlyCollection<GateTrigger> GetTriggersForSpecifiedGate(Gate gate)
+        {
+            return _gateTriggers.Where(gt => gt.GateIndex == _gates.IndexOf(gate) && gt.IsActivated).ToList();
+        }
+
+        /// <summary>
+        /// Checks if the specified <see cref="FloorTrigger"/> has been triggered by the environnement.
+        /// </summary>
+        /// <param name="trigger"><see cref="FloorTrigger"/></param>
+        /// <returns><c>True</c> if triggered; <c>False</c> otherwise.</returns>
+        public bool IsTriggered(FloorTrigger trigger)
+        {
+            return trigger.Overlap(Player) || _enemies.Any(e => trigger.Overlap(e));
+        }
+
+        /// <summary>
+        /// Checks hit(s) made by enemies on player.
+        /// </summary>
+        /// <returns>Potential cost in life points.</returns>
+        public int CheckHitByEnemiesOnPlayer()
+        {
+            // checks hit (for each enemy, life points lost is cumulable)
+            int cumuledLifePoints = 0;
+            foreach (var enemy in _enemies)
+            {
+                if (Player.Overlap(enemy))
+                {
+                    cumuledLifePoints += enemy.HitLifePointCost;
+                }
+            }
+            return cumuledLifePoints;
         }
     }
 }

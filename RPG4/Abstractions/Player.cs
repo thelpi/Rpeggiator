@@ -239,18 +239,14 @@ namespace RPG4.Abstractions
 
             if (_currentRecoveryTickCount < 0)
             {
-                // checks hit (for each enemy, life points lost is cumulable)
-                int cumuledLifePoints = 0;
-                foreach (var enemy in engine.Enemies)
-                {
-                    if (Overlap(enemy))
-                    {
-                        cumuledLifePoints += enemy.HitLifePointCost;
-                    }
-                }
+                // checks hit
+                int cumuledLifePoints = engine.CheckHitByEnemiesOnPlayer();
 
                 if (cumuledLifePoints > 0)
                 {
+                    // sets hit points
+                    Hit(cumuledLifePoints);
+
                     // beginning of recovery
                     _currentRecoveryTickCount = 0;
                 }

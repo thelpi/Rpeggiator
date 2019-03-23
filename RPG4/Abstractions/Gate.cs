@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Linq;
+﻿using System.Linq;
 
 namespace RPG4.Abstractions
 {
@@ -51,7 +50,7 @@ namespace RPG4.Abstractions
         /// <param name="args">Other arguments.</param>
         public override void ComputeBehaviorAtTick(AbstractEngine engine, params object[] args)
         {
-            IEnumerable<GateTrigger> triggersOn = engine.GateTriggers.Where(gt => gt.GateIndex == engine.Gates.IndexOf(this) && gt.IsActivated);
+            var triggersOn = engine.GetTriggersForSpecifiedGate(this);
 
             if (triggersOn.Any())
             {

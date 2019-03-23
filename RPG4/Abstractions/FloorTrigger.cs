@@ -51,7 +51,7 @@ namespace RPG4.Abstractions
         /// <param name="args">Other arguments.</param>
         public override void ComputeBehaviorAtTick(AbstractEngine engine, params object[] args)
         {
-            if (Overlap(engine.Player) || engine.Enemies.Any(e => Overlap(e)))
+            if (engine.IsTriggered(this))
             {
                 _actionDelayCurrentCountTick = 0;
             }
