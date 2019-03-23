@@ -38,6 +38,10 @@ namespace RPG4.Abstractions
         /// </summary>
         public ReadOnlyCollection<Gate> Gates { get { return _gates.AsReadOnly(); } }
         /// <summary>
+        /// Inferred; list of <see cref="Gate"/> currently activated.
+        /// </summary>
+        public ReadOnlyCollection<Gate> ActivatedGates { get { return _gates.Where(g => g.Activated).ToList().AsReadOnly(); } }
+        /// <summary>
         /// Inferred; list of <see cref="Sprite"/> which can't be crossed.
         /// </summary>
         public ReadOnlyCollection<Sprite> SolidStructures { get { return _walls.Concat(_gates.Where(g => g.Activated)).ToList().AsReadOnly(); } }

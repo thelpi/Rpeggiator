@@ -23,6 +23,7 @@ namespace RPG4
         private const string KICK_TAG = "KICK";
         private const string ENEMY_TAG = "ENEMY";
         private const string WALL_TAG = "WALL";
+        private const string GATE_TAG = "GATE";
         private const string GATE_TRIGGER_TAG = "GATE_TRIGGER";
         private const string ITEM_TAG = "ITEM";
         private const string BOMB_TAG = "BOMB";
@@ -52,6 +53,7 @@ namespace RPG4
             DrawPlayer();
             DrawEnemies();
             DrawWalls();
+            DrawGates();
             DrawWallTriggers();
             DrawItems();
 
@@ -100,11 +102,12 @@ namespace RPG4
                 {
                     cvsMain.Height = _engine.AreaHeight;
                     cvsMain.Width = _engine.AreaWidth;
+                    DrawWalls();
                 }
 
                 DrawPlayer();
                 DrawEnemies();
-                DrawWalls();
+                DrawGates();
                 DrawWallTriggers();
                 DrawItems();
                 DrawBombs();
@@ -152,9 +155,19 @@ namespace RPG4
         private void DrawWalls()
         {
             ClearCanvasByTag(WALL_TAG);
-            foreach (var s in _engine.SolidStructures)
+            foreach (var s in _engine.Walls)
             {
                 DrawSizedPoint(s, Brushes.Black, WALL_TAG);
+            }
+        }
+
+        // draws gates
+        private void DrawGates()
+        {
+            ClearCanvasByTag(GATE_TAG);
+            foreach (var ag in _engine.ActivatedGates)
+            {
+                DrawSizedPoint(ag, Brushes.DarkGray, GATE_TAG);
             }
         }
 
