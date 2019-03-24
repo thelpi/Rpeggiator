@@ -210,10 +210,9 @@ namespace RPG4.Abstractions
                 }
                 X = newLeft;
                 Y = newTop;
-                HitHalo.AdjustToPlayer(this);
             }
-
-            HitHalo.BehaviorAtNewFrame(engine, keys.PressHit);
+            
+            HitHalo.BehaviorAtNewFrame(engine, keys.PressHit, this);
         }
 
         /// <summary>

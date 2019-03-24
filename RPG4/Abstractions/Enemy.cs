@@ -141,7 +141,7 @@ namespace RPG4.Abstractions
             }
 
             // hit by player ?
-            if (engine.Player.HitHalo.DisplayHalo && Overlap(engine.Player.HitHalo.Halo))
+            if (engine.Player.HitHalo.Active && Overlap(engine.Player.HitHalo))
             {
                 Hit(engine.Player.HitLifePointCost);
                 HourRotation = !HourRotation;

@@ -43,7 +43,7 @@
         /// <inheritdoc />
         public override void BehaviorAtNewFrame(AbstractEngine engine, params object[] args)
         {
-            ExplosionHalo.BehaviorAtNewFrame(engine, _pendingFrameCount == 0);
+            ExplosionHalo.BehaviorAtNewFrame(engine, _pendingFrameCount == 0, this);
             // we continue to decrease after the explosion starts to avoid that the condition above, which triggers the explosion, would be always TRUE
             _pendingFrameCount--;
         }

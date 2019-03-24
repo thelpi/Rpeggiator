@@ -124,14 +124,17 @@ namespace RPG4
 
             rctPlayer.Fill = _engine.Player.IsRecovering ? Brushes.Brown : Brushes.Red;
 
-            Panel.SetZIndex(rctPlayer, 0);
-
             // cleans previous kick
             ClearCanvasByTag(KICK_TAG);
 
-            if (_engine.Player.HitHalo.DisplayHalo)
+            if (_engine.Player.HitHalo.Active)
             {
-                DrawSizedPoint(_engine.Player.HitHalo.Halo, Brushes.DarkViolet, KICK_TAG, 1);
+                Panel.SetZIndex(rctPlayer, 1);
+                DrawSizedPoint(_engine.Player.HitHalo, Brushes.DarkViolet, KICK_TAG, 0);
+            }
+            else
+            {
+                Panel.SetZIndex(rctPlayer, 0);
             }
         }
 
@@ -146,7 +149,7 @@ namespace RPG4
         }
 
         // draws a SizedPoint inside the main canvas
-        private void DrawSizedPoint(Sprite sp, Brush b, string tag, int? zIndex = null)
+        private void DrawSizedPoint(Sprite sp, Brush b, string tag, int zIndex = 0)
         {
             Rectangle rct = new Rectangle
             {
@@ -158,10 +161,7 @@ namespace RPG4
             rct.SetValue(Canvas.TopProperty, sp.Y);
             rct.SetValue(Canvas.LeftProperty, sp.X);
 
-            if (zIndex.HasValue)
-            {
-                Panel.SetZIndex(rctPlayer, zIndex.Value);
-            }
+            Panel.SetZIndex(rct, zIndex);
 
             cvsMain.Children.Add(rct);
         }
@@ -224,10 +224,10 @@ namespace RPG4
                     brush = Brushes.LightBlue;
                 }
 
-                DrawSizedPoint(sprite, brush, tag);
-                if (halo != null && halo.DisplayHalo)
+                DrawSizedPoint(sprite, brush, tag, halo != null && halo.Active ? 1 : 0);
+                if (halo != null && halo.Active)
                 {
-                    DrawSizedPoint(halo.Halo, haloBrush, haloTag, 1);
+                    DrawSizedPoint(halo, haloBrush, haloTag, 0);
                 }
             }
         }

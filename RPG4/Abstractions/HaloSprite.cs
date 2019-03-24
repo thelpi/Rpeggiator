@@ -7,68 +7,40 @@
     {
         // Frames count with halo.
         private int _haloFrameCount;
+        // Frames count before the effect of a halo ends.
+        private int _haloFrameMaxCount;
+        // Ratio of halo reach depending to the instance size.
+        private double _haloReachRatio;
 
         /// <summary>
-        /// Ratio of halo reach depending to the instance size.
+        /// Inferred; indicates if the halo is currently active.
         /// </summary>
-        public double HaloReachRatio { get; private set; }
-        /// <summary>
-        /// Inferred; the X-axis size of an halo reach depending on <see cref="Sprite.Width"/>.
-        /// </summary>
-        public double HaloWidth { get { return ((HaloReachRatio - 1) / 2) * Width; } }
-        /// <summary>
-        /// Inferred; the Y-axis size of an halo reach depending on <see cref="Sprite.Height"/>.
-        /// </summary>
-        public double HaloHeight { get { return ((HaloReachRatio - 1) / 2) * Height; } }
-        /// <summary>
-        /// Inferred; indicates if currently displaying halo.
-        /// </summary>
-        public bool DisplayHalo { get { return _haloFrameCount >= 0; } }
-        /// <summary>
-        /// Frames count before the effect of a halo ends.
-        /// </summary>
-        public int HaloFrameMaxCount { get; private set; }
-        /// <summary>
-        /// Inferred; represents the halo itself.
-        /// </summary>
-        /// <remarks><c>Null</c> if <see cref="DisplayHalo"/> is <c>False</c>.</remarks>
-        public Sprite Halo
-        {
-            get
-            {
-                if (!DisplayHalo)
-                {
-                    return null;
-                }
-
-                var haloX = X - (((HaloReachRatio - 1) / 2) * Width);
-                var haloY = Y - (((HaloReachRatio - 1) / 2) * Height);
-
-                return !DisplayHalo ? null : new Sprite(haloX, haloY, Width * HaloReachRatio, Height * HaloReachRatio);
-            }
-        }
+        public bool Active { get { return _haloFrameCount >= 0; } }
 
         /// <summary>
         /// Constructor.
         /// </summary>
-        /// <param name="x"><see cref="Sprite.X"/></param>
-        /// <param name="y"><see cref="Sprite.Y"/></param>
-        /// <param name="width"><see cref="Sprite.Width"/></param>
-        /// <param name="height"><see cref="Sprite.Height"/></param>
-        /// <param name="haloReachRatio"><see cref="HaloReachRatio"/></param>
-        /// <param name="haloFrameMaxCount"><see cref="HaloFrameMaxCount"/></param>
+        /// <param name="x"><see cref="Sprite.X"/> of the carrier.</param>
+        /// <param name="y"><see cref="Sprite.Y"/> of the carrier.</param>
+        /// <param name="width"><see cref="Sprite.Width"/> of the carrier.</param>
+        /// <param name="height"><see cref="Sprite.Height"/> of the carrier.</param>
+        /// <param name="haloReachRatio"><see cref="_haloReachRatio"/></param>
+        /// <param name="haloFrameMaxCount"><see cref="_haloFrameMaxCount"/></param>
         public HaloSprite(double x, double y, double width, double height, double haloReachRatio, int haloFrameMaxCount)
-            : base(x, y, width, height)
+            : base(x - (((haloReachRatio - 1) / 2) * width),
+                  y - (((haloReachRatio - 1) / 2) * height),
+                  width * haloReachRatio,
+                  height * haloReachRatio)
         {
-            HaloReachRatio = InitialPlayerStatus.INITIAL_HIT_HALO_SIZE_RATIO;
+            _haloReachRatio = haloReachRatio;
             _haloFrameCount = -1;
-            HaloFrameMaxCount = haloFrameMaxCount;
+            _haloFrameMaxCount = haloFrameMaxCount;
         }
 
         /// <inheritdoc />
         public override void BehaviorAtNewFrame(AbstractEngine engine, params object[] args)
         {
-            if (_haloFrameCount >= HaloFrameMaxCount)
+            if (_haloFrameCount >= _haloFrameMaxCount)
             {
                 _haloFrameCount = -1;
             }
@@ -80,16 +52,13 @@
             {
                 _haloFrameCount = 0;
             }
-        }
 
-        /// <summary>
-        /// Adjust the halo position, based on <see cref="Player"/> position.
-        /// </summary>
-        /// <param name="player">The player.</param>
-        public void AdjustToPlayer(Player player)
-        {
-            X = player.X;
-            Y = player.Y;
+            // Adjust the halo position and size, based on the <see cref="Sprite"/> current position and size.
+            Sprite sprite = args[1] as Sprite;
+            X = sprite.X - (((_haloReachRatio - 1) / 2) * sprite.Width);
+            Y = sprite.Y - (((_haloReachRatio - 1) / 2) * sprite.Height);
+            Width = sprite.Width * _haloReachRatio;
+            Height = sprite.Height * _haloReachRatio;
         }
     }
 }
