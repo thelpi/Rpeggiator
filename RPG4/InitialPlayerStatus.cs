@@ -51,5 +51,9 @@ namespace RPG4
         /// Initial life points.
         /// </summary>
         public const double MAXIMAL_LIFE_POINTS = 10;
+        /// <summary>
+        /// Indicates the life points cost when a bomb explodes nearby.
+        /// </summary>
+        public const double EXPLOSION_LIFE_POINT_COST = 3;
     }
 }

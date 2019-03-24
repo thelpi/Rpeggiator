@@ -9,7 +9,8 @@ namespace RPG4.Abstractions
     /// Represents the player.
     /// </summary>
     /// <seealso cref="LifeSprite"/>
-    public class Player : LifeSprite
+    /// <see cref="IExplodable"/>
+    public class Player : LifeSprite, IExplodable
     {
         // Current frames count while recovering.
         private int _currentRecoveryFrameCount;
@@ -53,6 +54,8 @@ namespace RPG4.Abstractions
         /// Indicates the sprite direction.
         /// </summary>
         public Directions LastDirection { get; private set; }
+        /// <inheritdoc />
+        public double ExplosionLifePointCost { get { return InitialPlayerStatus.EXPLOSION_LIFE_POINT_COST; } }
 
         /// <summary>
         /// Constructor.

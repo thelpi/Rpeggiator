@@ -223,9 +223,10 @@ namespace RPG4.Abstractions
         /// <summary>
         /// Checks if a bomb (or several) is currently exploding near to a <see cref="Sprite"/>.
         /// </summary>
+        /// <typeparam name="T">Type of sprite requirement (must inherit from <see cref="IExplodable"/>).</typeparam>
         /// <param name="sprite"><see cref="Sprite"/></param>
         /// <returns>Life points lost.</returns>
-        public double OverlapAnExplodingBomb(Sprite sprite)
+        public double OverlapAnExplodingBomb<T>(T sprite) where T : Sprite, IExplodable
         {
             return _bombs.Sum(b => b.GetLifePointCost(sprite));
         }

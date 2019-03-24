@@ -7,8 +7,12 @@ namespace RPG4.Abstractions
     /// Represents an enemy.
     /// </summary>
     /// <seealso cref="LifeSprite"/>
-    public class Enemy : LifeSprite
+    /// <see cref="IExplodable"/>
+    public class Enemy : LifeSprite, IExplodable
     {
+        // Indicates the life points cost when a bomb explodes nearby.
+        private const double EXPLOSION_LIFE_POINT_COST = 2;
+
         /// <summary>
         /// Distance by frame, in pixels.
         /// </summary>
@@ -21,6 +25,8 @@ namespace RPG4.Abstractions
         /// Indicates the current rotation on <see cref="Pattern"/>.
         /// </summary>
         public bool HourRotation { get; private set; }
+        /// <inheritdoc />
+        public double ExplosionLifePointCost { get { return EXPLOSION_LIFE_POINT_COST; } }
 
         /// <summary>
         /// Constructor.

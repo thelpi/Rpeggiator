@@ -19,13 +19,6 @@ namespace RPG4.Abstractions
         private static readonly int PENDING_FRAME_COUNT = Constants.FPS * 2;
         // Frames count while exploding.
         private static readonly int EXPLODING_FRAME_COUNT = Constants.FPS;
-        // Life points cost when exploding nearby something.
-        private static readonly Dictionary<Type, double> LIFE_POINT_COST = new Dictionary<Type, double>
-        {
-            { typeof(Player), 3 },
-            { typeof(Enemy), 2 },
-            { typeof(Rift), 5 },
-        };
 
         // Frames count before exploding.
         private int _pendingExplosionFrameCount;
@@ -86,11 +79,12 @@ namespace RPG4.Abstractions
         /// <summary>
         /// Gets the life points nearby the specified instance, at the specific frame (not global).
         /// </summary>
-        /// <param name="sprite"><see cref="Sprite"/> (<see cref="Enemy"/>, <see cref="Player"/> or <see cref="Rift"/>).</param>
+        /// <typeparam name="T">Type of sprite requirement (must inherit from <see cref="IExplodable"/>).</typeparam>
+        /// <param name="sprite"><see cref="Sprite"/>.</param>
         /// <returns>Life points cost.</returns>
-        public double GetLifePointCost(Sprite sprite)
+        public double GetLifePointCost<T>(T sprite) where T : Sprite, IExplodable
         {
-            return IsExploding && ExplosionSprite.Overlap(sprite) ? LIFE_POINT_COST[sprite.GetType()] : 0;
+            return IsExploding && ExplosionSprite.Overlap(sprite) ? sprite.ExplosionLifePointCost : 0;
         }
     }
 }
