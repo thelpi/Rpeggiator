@@ -235,7 +235,7 @@ namespace RPG4.Abstractions
             if (_currentRecoveryFrameCount < 0)
             {
                 // checks hits by enemies
-                int cumuledLifePoints = engine.CheckHitByEnemiesOnPlayer();
+                double cumuledLifePoints = engine.CheckHitByEnemiesOnPlayer();
                 if (cumuledLifePoints > 0)
                 {
                     Hit(cumuledLifePoints);
@@ -258,7 +258,7 @@ namespace RPG4.Abstractions
         /// <param name="potionType"><see cref="ItemIdEnum"/>; ignored if not a life potion.</param>
         public void DrinkLifePotion(ItemIdEnum potionType)
         {
-            int recoveryPoints = 0;
+            double recoveryPoints = 0;
             switch (potionType)
             {
                 case ItemIdEnum.SmallLifePotion:

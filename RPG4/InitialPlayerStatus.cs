@@ -38,11 +38,11 @@ namespace RPG4
         /// <summary>
         /// When kicking, indicates the life-points cost on the enemy.
         /// </summary>
-        public const int HIT_LIFE_POINT_COST = 1;
+        public const double HIT_LIFE_POINT_COST = 1;
         /// <summary>
         /// Initial size of the inventory.
         /// </summary>
-        public const int INVENTORY_SIZE = 8;
+        public const int INVENTORY_SIZE = 10;
         /// <summary>
         /// Initial list of items in the inventory.
         /// </summary>
@@ -53,6 +53,6 @@ namespace RPG4
         /// <summary>
         /// Initial life points.
         /// </summary>
-        public const int MAXIMAL_LIFE_POINTS = 10;
+        public const double MAXIMAL_LIFE_POINTS = 10;
     }
 }

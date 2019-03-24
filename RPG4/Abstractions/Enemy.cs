@@ -34,7 +34,7 @@ namespace RPG4.Abstractions
         /// <param name="hourRotation"><see cref="HourRotation"/></param>
         /// <param name="maximalLifePoints"><see cref="LifeSprite.MaximalLifePoints"/></param>
         /// <param name="hitLifePointCost"><see cref="LifeSprite.HitLifePointCost"/></param>
-        public Enemy(double x, double y, double width, double height, double speed, Sprite pattern, bool hourRotation, int maximalLifePoints, int hitLifePointCost)
+        public Enemy(double x, double y, double width, double height, double speed, Sprite pattern, bool hourRotation, double maximalLifePoints, double hitLifePointCost)
             : base (x, y, width, height, maximalLifePoints, hitLifePointCost)
         {
             Speed = speed;
@@ -150,7 +150,7 @@ namespace RPG4.Abstractions
             }
 
             // hit by a bomb ?
-            int lifePointCostByBomb = engine.OverlapAnExplodingBomb(this);
+            double lifePointCostByBomb = engine.OverlapAnExplodingBomb(this);
             if (lifePointCostByBomb > 0)
             {
                 Hit(lifePointCostByBomb);

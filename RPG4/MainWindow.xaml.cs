@@ -28,6 +28,7 @@ namespace RPG4
         private const string GATE_TRIGGER_TAG = "GATE_TRIGGER";
         private const string ITEM_TAG = "ITEM";
         private const string BOMB_TAG = "BOMB";
+        private const string RIFT_TAG = "RIFT";
         private const string BOMB_HALO_TAG = "BOMB_HALO_TAG";
         private const string UNIQUE_TIMESTAMP_PATTERN = "fffffff";
 
@@ -187,6 +188,7 @@ namespace RPG4
             ClearCanvasByTag(ENEMY_TAG);
             ClearCanvasByTag(BOMB_TAG);
             ClearCanvasByTag(GATE_TAG);
+            ClearCanvasByTag(RIFT_TAG);
             foreach (var sprite in _engine.Sprites)
             {
                 string tag = null;
@@ -222,6 +224,11 @@ namespace RPG4
                 {
                     tag = ITEM_TAG;
                     brush = Brushes.LightBlue;
+                }
+                else if (sprite.GetType() == typeof(Rift))
+                {
+                    tag = RIFT_TAG;
+                    brush = Brushes.DarkBlue;
                 }
 
                 DrawSizedPoint(sprite, brush, tag, halo != null && halo.Active ? 1 : 0);

@@ -75,13 +75,14 @@
 	"left": 1
   },
   "Items":[
-  {
-	"X": 310,
-	"Y": 230,
-	"Width": 20,
-	"Height": 20,
-	"ItemId": "Bomb",
-	"Quantity": 10
-  }
-  ]
+	  {
+		"X": 310,
+		"Y": 230,
+		"Width": 20,
+		"Height": 20,
+		"ItemId": "Bomb",
+		"Quantity": 10
+	  }
+  ],
+  "Rifts":[]
 }

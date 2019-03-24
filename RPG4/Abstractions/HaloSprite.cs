@@ -7,8 +7,6 @@
     {
         // Frames count with halo.
         private int _haloFrameCount;
-        // Frames count before the effect of a halo ends.
-        private int _haloFrameMaxCount;
         // Ratio of halo reach depending to the instance size.
         private double _haloReachRatio;
 
@@ -16,6 +14,10 @@
         /// Inferred; indicates if the halo is currently active.
         /// </summary>
         public bool Active { get { return _haloFrameCount >= 0; } }
+        /// <summary>
+        /// Frames count before the effect of a halo ends.
+        /// </summary>
+        public double HaloFrameMaxCount { get; private set; }
 
         /// <summary>
         /// Constructor.
@@ -25,7 +27,7 @@
         /// <param name="width"><see cref="Sprite.Width"/> of the carrier.</param>
         /// <param name="height"><see cref="Sprite.Height"/> of the carrier.</param>
         /// <param name="haloReachRatio"><see cref="_haloReachRatio"/></param>
-        /// <param name="haloFrameMaxCount"><see cref="_haloFrameMaxCount"/></param>
+        /// <param name="haloFrameMaxCount"><see cref="HaloFrameMaxCount"/></param>
         public HaloSprite(double x, double y, double width, double height, double haloReachRatio, int haloFrameMaxCount)
             : base(x - (((haloReachRatio - 1) / 2) * width),
                   y - (((haloReachRatio - 1) / 2) * height),
@@ -34,13 +36,13 @@
         {
             _haloReachRatio = haloReachRatio;
             _haloFrameCount = -1;
-            _haloFrameMaxCount = haloFrameMaxCount;
+            HaloFrameMaxCount = haloFrameMaxCount;
         }
 
         /// <inheritdoc />
         public override void BehaviorAtNewFrame(AbstractEngine engine, params object[] args)
         {
-            if (_haloFrameCount >= _haloFrameMaxCount)
+            if (_haloFrameCount >= HaloFrameMaxCount)
             {
                 _haloFrameCount = -1;
             }

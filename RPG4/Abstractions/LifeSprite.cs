@@ -11,15 +11,15 @@ namespace RPG4.Abstractions
         /// <summary>
         /// Maximal number of life points.
         /// </summary>
-        public int MaximalLifePoints { get; private set; }
+        public double MaximalLifePoints { get; private set; }
         /// <summary>
         /// Current number of life points.
         /// </summary>
-        public int CurrentLifePoints { get; private set; }
+        public double CurrentLifePoints { get; private set; }
         /// <summary>
         /// When hitting, indicates the life points cost on the enemy.
         /// </summary>
-        public int HitLifePointCost { get; private set; }
+        public double HitLifePointCost { get; private set; }
 
         /// <summary>
         /// Constructor.
@@ -30,7 +30,7 @@ namespace RPG4.Abstractions
         /// <param name="height"><see cref="Sprite.Height"/></param>
         /// <param name="maximalLifePoints"><see cref="MaximalLifePoints"/></param>
         /// <param name="hitLifePointCost"><see cref="HitLifePointCost"/></param>
-        public LifeSprite(double x, double y, double width, double height, int maximalLifePoints, int hitLifePointCost)
+        public LifeSprite(double x, double y, double width, double height, double maximalLifePoints, double hitLifePointCost)
             : base(x, y, width, height)
         {
             MaximalLifePoints = maximalLifePoints;
@@ -53,7 +53,7 @@ namespace RPG4.Abstractions
         /// Recomputes <see cref="CurrentLifePoints"/> after an hit.
         /// </summary>
         /// <param name="lifePoints">Life points lost in the process.</param>
-        protected void Hit(int lifePoints)
+        protected void Hit(double lifePoints)
         {
             CurrentLifePoints -= lifePoints;
         }
@@ -77,7 +77,7 @@ namespace RPG4.Abstractions
         /// Regenerate instance life points.
         /// </summary>
         /// <param name="lifePoints">Life points gained count.</param>
-        protected void RegenerateLifePoints(int lifePoints)
+        protected void RegenerateLifePoints(double lifePoints)
         {
             if (lifePoints > 0)
             {

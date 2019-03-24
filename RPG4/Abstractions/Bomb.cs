@@ -1,4 +1,7 @@
-﻿namespace RPG4.Abstractions
+﻿using System;
+using System.Collections.Generic;
+
+namespace RPG4.Abstractions
 {
     /// <summary>
     /// Represents the bomb item when dropped on the floor.
@@ -12,18 +15,17 @@
         private const double HEIGHT = 20;
         // When exploding, indicates the ratio size of the halo (compared to the bomb itself).
         private const double HALO_SIZE_RATIO = 3;
-        /// <summary>
-        /// Life points cost when exploding near an enemy.
-        /// </summary>
-        public const int ENEMY_LIFE_POINT_COST = 2;
-        /// <summary>
-        /// Life points cost when exploding near the player.
-        /// </summary>
-        public const int PLAYER_LIFE_POINT_COST = 2;
         // Frames count before exploding.
         private static readonly int PENDING_FRAME_COUNT = Constants.FPS * 2;
         // Frames count while exploding.
         private static readonly int EXPLODING_FRAME_COUNT = Constants.FPS;
+        // Life points cost when exploding nearby something.
+        private static readonly Dictionary<Type, double> LIFE_POINT_COST = new Dictionary<Type, double>
+        {
+            { typeof(Player), 3 },
+            { typeof(Enemy), 2 },
+            { typeof(Rift), 5 },
+        };
 
         // Frames count before exploding.
         private int _pendingFrameCount;
@@ -54,6 +56,18 @@
             ExplosionHalo.BehaviorAtNewFrame(engine, _pendingFrameCount == 0, this);
             // we continue to decrease after the explosion starts to avoid that the condition above, which triggers the explosion, would be always TRUE
             _pendingFrameCount--;
+        }
+
+        /// <summary>
+        /// Gets the life points nearby the specified instance, at the specific frame (not global).
+        /// </summary>
+        /// <param name="sprite"><see cref="Sprite"/> (<see cref="Enemy"/>, <see cref="Player"/> or <see cref="Rift"/>).</param>
+        /// <returns>Life points cost.</returns>
+        public double GetLifePointCost(Sprite sprite)
+        {
+            var tmp = ExplosionHalo.Active && ExplosionHalo.Overlap(sprite) ?
+                LIFE_POINT_COST[sprite.GetType()] / ExplosionHalo.HaloFrameMaxCount : 0;
+            return tmp;
         }
     }
 }

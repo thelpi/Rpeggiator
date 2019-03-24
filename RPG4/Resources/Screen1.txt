@@ -46,5 +46,14 @@
 	"left": 2
   },
   "Items":[
+  ],
+  "Rifts":[
+	  {
+		  "X": 700,
+		  "Y": 400,
+		  "Width": 20,
+		  "Height": 100,
+		  "LifePoints": 8
+	  }
   ]
 }

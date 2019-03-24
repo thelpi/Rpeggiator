@@ -27,14 +27,14 @@ namespace RPG4
         /// <summary>
         /// Recovered life points by drinking small life potion.
         /// </summary>
-        public const int SMALL_LIFE_POTION_RECOVERY_LIFE_POINTS = 2;
+        public const double SMALL_LIFE_POTION_RECOVERY_LIFE_POINTS = 2;
         /// <summary>
         /// Recovered life points by drinking medium life potion.
         /// </summary>
-        public const int MEDIUM_LIFE_POTION_RECOVERY_LIFE_POINTS = 5;
+        public const double MEDIUM_LIFE_POTION_RECOVERY_LIFE_POINTS = 5;
         /// <summary>
         /// Recovered life points by drinking large life potion.
         /// </summary>
-        public const int LARGE_LIFE_POTION_RECOVERY_LIFE_POINTS = 10;
+        public const double LARGE_LIFE_POTION_RECOVERY_LIFE_POINTS = 10;
     }
 }

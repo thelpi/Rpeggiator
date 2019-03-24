@@ -11,6 +11,7 @@ namespace RPG4.Abstractions
         private Dictionary<Directions, int> _adjacentScreens;
         private List<Sprite> _walls;
         private List<Gate> _gates;
+        private List<Rift> _rifts;
         private List<Enemy> _enemies;
         private List<GateTrigger> _gateTriggers;
         private List<FloorItem> _items;
@@ -38,7 +39,7 @@ namespace RPG4.Abstractions
         /// <summary>
         /// Inferred; list of <see cref="Sprite"/> which can't be crossed.
         /// </summary>
-        public IReadOnlyCollection<Sprite> SolidStructures { get { return _walls.Concat(_gates.Where(g => g.Activated)).ToList(); } }
+        public IReadOnlyCollection<Sprite> SolidStructures { get { return _walls.Concat(_rifts).Concat(_gates.Where(g => g.Activated)).ToList(); } }
         /// <summary>
         /// List of every <see cref="Sprite"/> which requires a display management at each frame.
         /// </summary>
@@ -47,7 +48,7 @@ namespace RPG4.Abstractions
         {
             get
             {
-                return _droppedItems.Concat<Sprite>(_items).Concat(_gateTriggers).Concat(_enemies).Concat(_gates.Where(g => g.Activated)).ToList();
+                return _droppedItems.Concat(_rifts).Concat(_items).Concat(_gateTriggers).Concat(_enemies).Concat(_gates.Where(g => g.Activated)).ToList();
             }
         }
 
@@ -71,6 +72,7 @@ namespace RPG4.Abstractions
             _enemies = new List<Enemy>();
             _gateTriggers = new List<GateTrigger>();
             _gates = new List<Gate>();
+            _rifts = new List<Rift>();
             _items = new List<FloorItem>();
             _droppedItems = new List<Sprite>();
             AreaWidth = screenJsonDatas.AreaWidth;
@@ -83,6 +85,10 @@ namespace RPG4.Abstractions
             foreach (dynamic gateJson in screenJsonDatas.Gates)
             {
                 _gates.Add(new Gate(gateJson));
+            }
+            foreach (dynamic riftJson in screenJsonDatas.Rifts)
+            {
+                _rifts.Add(new Rift(riftJson));
             }
             foreach (dynamic enemyJson in screenJsonDatas.Enemies)
             {
@@ -137,24 +143,29 @@ namespace RPG4.Abstractions
                     _droppedItems.Add(itemDropped);
                 }
             }
-            
+
             // enemies management must be done after player management
             foreach (var enemy in _enemies)
             {
-                enemy.BehaviorAtNewFrame(this, null);
+                enemy.BehaviorAtNewFrame(this);
             }
             _enemies.RemoveAll(e => e.CheckDeath(this));
-            
+
             Player.CheckIfHasBeenHit(this);
 
             foreach (var gt in _gateTriggers)
             {
-                gt.BehaviorAtNewFrame(this, keys);
+                gt.BehaviorAtNewFrame(this);
             }
             foreach (var g in _gates)
             {
-                g.BehaviorAtNewFrame(this, keys);
+                g.BehaviorAtNewFrame(this);
             }
+            foreach (var r in _rifts)
+            {
+                r.BehaviorAtNewFrame(this);
+            }
+            _rifts.RemoveAll(r => r.LifePoints <= 0);
 
             // bombs disappear when they overlap a structure
             //_droppedItems.RemoveAll(b => (b is Bomb) &&  (!(b as Bomb).IsPending && !(b as Bomb).ExplosionHalo.Active) || SolidStructures.Any(cw => cw.Overlap(b)));
@@ -196,10 +207,10 @@ namespace RPG4.Abstractions
         /// Checks hit(s) made by enemies on player.
         /// </summary>
         /// <returns>Potential cost in life points.</returns>
-        public int CheckHitByEnemiesOnPlayer()
+        public double CheckHitByEnemiesOnPlayer()
         {
             // checks hit (for each enemy, life points lost is cumulable)
-            int cumuledLifePoints = 0;
+            double cumuledLifePoints = 0;
             foreach (var enemy in _enemies)
             {
                 if (Player.Overlap(enemy))
@@ -211,15 +222,13 @@ namespace RPG4.Abstractions
         }
 
         /// <summary>
-        /// Checks if a bomb (or several) is currently exploding near to a <see cref="LifeSprite"/>.
+        /// Checks if a bomb (or several) is currently exploding near to a <see cref="Sprite"/>.
         /// </summary>
-        /// <param name="sprite"><see cref="LifeSprite"/></param>
+        /// <param name="sprite"><see cref="Sprite"/></param>
         /// <returns>Life points lost.</returns>
-        public int OverlapAnExplodingBomb(LifeSprite sprite)
+        public double OverlapAnExplodingBomb(Sprite sprite)
         {
-            return _bombs.Sum(b => b.ExplosionHalo.Active && b.ExplosionHalo.Overlap(sprite) ? (
-                sprite is Player ? Bomb.PLAYER_LIFE_POINT_COST : Bomb.ENEMY_LIFE_POINT_COST
-            ) : 0);
+            return _bombs.Sum(b => b.GetLifePointCost(sprite));
         }
     }
 }
