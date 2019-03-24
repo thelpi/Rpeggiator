@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.Linq;
 
 namespace RPG4.Abstractions
@@ -15,7 +14,7 @@ namespace RPG4.Abstractions
         private List<Enemy> _enemies;
         private List<GateTrigger> _gateTriggers;
         private List<FloorItem> _items;
-        private List<Bomb> _bombs;
+        private List<Sprite> _droppedItems;
 
         /// <summary>
         /// Current screen width.
@@ -45,7 +44,7 @@ namespace RPG4.Abstractions
         {
             get
             {
-                return _bombs.Concat<Sprite>(_items).Concat(_gateTriggers).Concat(_enemies).Concat(_gates.Where(g => g.Activated)).ToList();
+                return _droppedItems.Concat<Sprite>(_items).Concat(_gateTriggers).Concat(_enemies).Concat(_gates.Where(g => g.Activated)).ToList();
             }
         }
 
@@ -70,7 +69,7 @@ namespace RPG4.Abstractions
             _gateTriggers = new List<GateTrigger>();
             _gates = new List<Gate>();
             _items = new List<FloorItem>();
-            _bombs = new List<Bomb>();
+            _droppedItems = new List<Sprite>();
             AreaWidth = screenJsonDatas.AreaWidth;
             AreaHeight = screenJsonDatas.AreaHeight;
 
@@ -129,19 +128,10 @@ namespace RPG4.Abstractions
             // check inventory use
             if (keys.InventorySlotId.HasValue)
             {
-                // checks for bombs dropped on the new position
-                int indexId = Player.Inventory.GetSlotByItemId(ItemIdEnum.Bomb);
-                if (keys.InventorySlotId.Value == indexId)
+                var itemDropped = Player.Inventory.UseItem(this, keys.InventorySlotId.Value);
+                if (itemDropped != null)
                 {
-                    _bombs.Add(new Bomb(Player.X, Player.Y));
-                    Player.Inventory.UseItem(ItemIdEnum.Bomb);
-                }
-                // checks for small life potions
-                indexId = Player.Inventory.GetSlotByItemId(ItemIdEnum.SmallLifePotion);
-                if (keys.InventorySlotId.Value == indexId)
-                {
-                    Player.DrinkLifePotion(ItemIdEnum.SmallLifePotion);
-                    Player.Inventory.UseItem(ItemIdEnum.SmallLifePotion);
+                    _droppedItems.Add(itemDropped);
                 }
             }
             
@@ -164,10 +154,11 @@ namespace RPG4.Abstractions
             }
 
             // bombs disappear when they overlap a structure
-            _bombs.RemoveAll(b => (!b.IsPending && !b.DisplayHalo) || SolidStructures.Any(cw => cw.Overlap(b)));
-            foreach (var b in _bombs)
+            _droppedItems.RemoveAll(b => (b is Bomb) &&  (!(b as Bomb).IsPending && !(b as Bomb).DisplayHalo) || SolidStructures.Any(cw => cw.Overlap(b)));
+
+            foreach (var di in _droppedItems)
             {
-                b.BehaviorAtNewFrame(this);
+                di.BehaviorAtNewFrame(this);
             }
 
             if (Player.NewScreenEntrance.HasValue)

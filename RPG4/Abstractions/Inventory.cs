@@ -49,12 +49,8 @@ namespace RPG4.Abstractions
             return false;
         }
 
-        /// <summary>
-        /// Sets a unique use of the item.
-        /// </summary>
-        /// <param name="itemId">The <see cref="ItemIdEnum"/> used.</param>
-        /// <returns><c>True</c> if the item is out of quantity; <c>False</c> otherwise.</returns>
-        public bool UseItem(ItemIdEnum itemId)
+        // Sets a unique use of the item.
+        private bool MarkItemAsUsed(ItemIdEnum itemId)
         {
             var item = _items.Find(it => it.ItemId == itemId);
             item.DecreaseQuantity();
@@ -66,14 +62,37 @@ namespace RPG4.Abstractions
             return false;
         }
 
-        /// <summary>
-        /// Gets the slot associated to an item identifier.
-        /// </summary>
-        /// <param name="itemId"><see cref="ItemIdEnum"/></param>
-        /// <returns>The index in <see cref="Items"/>; -1 if not found.</returns>
-        public int GetSlotByItemId(ItemIdEnum itemId)
+        // Gets the slot associated to an item identifier.
+        private int GetSlotByItemId(ItemIdEnum itemId)
         {
             return _items.FindIndex(it => it.ItemId == itemId);
+        }
+
+        /// <summary>
+        /// Uses an item of the inventory.
+        /// </summary>
+        /// <param name="engine"><see cref="AbstractEngine"/></param>
+        /// <param name="inventorySlotId">Inventory slot index.</param>
+        /// <returns>Item dropped; <c>Null</c> if item dropped.</returns>
+        public Sprite UseItem(AbstractEngine engine, int inventorySlotId)
+        {
+            // checks for bombs dropped on the new position
+            int indexId = GetSlotByItemId(ItemIdEnum.Bomb);
+            if (inventorySlotId == indexId)
+            {
+                MarkItemAsUsed(ItemIdEnum.Bomb);
+                return new Bomb(engine.Player.X, engine.Player.Y);
+            }
+
+            // checks for small life potions
+            indexId = GetSlotByItemId(ItemIdEnum.SmallLifePotion);
+            if (inventorySlotId == indexId)
+            {
+                engine.Player.DrinkLifePotion(ItemIdEnum.SmallLifePotion);
+                MarkItemAsUsed(ItemIdEnum.SmallLifePotion);
+            }
+
+            return null;
         }
     }
 }
