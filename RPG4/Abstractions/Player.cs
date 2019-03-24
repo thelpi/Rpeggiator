@@ -15,6 +15,10 @@ namespace RPG4.Abstractions
         private int _currentRecoveryFrameCount;
         // History of movements.
         private Queue<Point> _moveHistory = new Queue<Point>(Constants.MOVE_HISTORY_COUNT);
+        // Hit frames count.
+        private int _hitDisplayFrameCount;
+        // Frames count before ability to hit again.
+        private int _hitFrameMaxCount;
 
         /// <summary>
         /// Speed (i.e. distance, in pixels, by frame)
@@ -34,13 +38,21 @@ namespace RPG4.Abstractions
         /// </summary>
         public Inventory Inventory { get; private set; }
         /// <summary>
-        /// Hit halo.
-        /// </summary>
-        public HaloSprite HitHalo { get; private set; }
-        /// <summary>
         /// Indicates the player is currently recovering from an hit.
         /// </summary>
         public bool IsRecovering { get { return _currentRecoveryFrameCount >= 0 && _currentRecoveryFrameCount <= Constants.RECOVERY_FRAME_COUNT; } }
+        /// <summary>
+        /// Indicates if the player is currently hitting.
+        /// </summary>
+        public bool IsHitting { get { return _hitDisplayFrameCount == 0; } }
+        /// <summary>
+        /// Hit <see cref="Sprite"/>.
+        /// </summary>
+        public Sprite HitSprite { get; private set; }
+        /// <summary>
+        /// Indicates the sprite direction.
+        /// </summary>
+        public Directions LastDirection { get; private set; }
 
         /// <summary>
         /// Constructor.
@@ -57,8 +69,11 @@ namespace RPG4.Abstractions
             Speed = InitialPlayerStatus.INITIAL_PLAYER_SPEED;
             NewScreenEntrance = null;
             Inventory = new Inventory();
-            HitHalo = new HaloSprite(X, Y, Width, Height, InitialPlayerStatus.INITIAL_HIT_HALO_SIZE_RATIO, InitialPlayerStatus.HIT_FRAME_MAX_COUNT);
+            HitSprite = null;
             _currentRecoveryFrameCount = -1;
+            _hitDisplayFrameCount = -1;
+            _hitFrameMaxCount = InitialPlayerStatus.HIT_FRAME_MAX_COUNT;
+            LastDirection = Directions.right;
         }
 
         /// <inheritdoc />
@@ -208,11 +223,110 @@ namespace RPG4.Abstractions
                 {
                     _moveHistory.Dequeue();
                 }
+
+                // Sets direction.
+                if (NewScreenEntrance.HasValue)
+                {
+                    LastDirection = NewScreenEntrance.Value;
+                }
+                else
+                {
+                    if (newLeft < X)
+                    {
+                        if (newTop > Y)
+                        {
+                            LastDirection = Directions.bottom_left;
+                        }
+                        else if (newTop < Y)
+                        {
+                            LastDirection = Directions.top_left;
+                        }
+                        else
+                        {
+                            LastDirection = Directions.left;
+                        }
+                    }
+                    else if (newLeft > X)
+                    {
+                        if (newTop > Y)
+                        {
+                            LastDirection = Directions.bottom_right;
+                        }
+                        else if (newTop < Y)
+                        {
+                            LastDirection = Directions.top_right;
+                        }
+                        else
+                        {
+                            LastDirection = Directions.right;
+                        }
+                    }
+                    else
+                    {
+                        if (newTop > Y)
+                        {
+                            LastDirection = Directions.bottom;
+                        }
+                        else if (newTop < Y)
+                        {
+                            LastDirection = Directions.top;
+                        }
+                    }
+                }
                 X = newLeft;
                 Y = newTop;
             }
-            
-            HitHalo.BehaviorAtNewFrame(engine, keys.PressHit, this);
+
+            if (keys.PressHit && _hitDisplayFrameCount == -1)
+            {
+                _hitDisplayFrameCount = 0;
+                double hitX = X;
+                double hitY = Y;
+                switch (LastDirection)
+                {
+                    case Directions.bottom:
+                        hitY += Height;
+                        break;
+                    case Directions.bottom_left:
+                        hitY += Height;
+                        hitX -= Width;
+                        break;
+                    case Directions.bottom_right:
+                        hitY += Height;
+                        hitX += Width;
+                        break;
+                    case Directions.left:
+                        hitX -= Width;
+                        break;
+                    case Directions.right:
+                        hitX += Width;
+                        break;
+                    case Directions.top_right:
+                        hitY -= Height;
+                        hitX += Width;
+                        break;
+                    case Directions.top_left:
+                        hitY -= Height;
+                        hitX -= Width;
+                        break;
+                    case Directions.top:
+                        hitY -= Height;
+                        break;
+                }
+                HitSprite = new Sprite(hitX, hitY, Width, Height);
+            }
+            else if (_hitDisplayFrameCount >= 0)
+            {
+                _hitDisplayFrameCount++;
+                if (_hitDisplayFrameCount > InitialPlayerStatus.HIT_FRAME_MAX_COUNT)
+                {
+                    _hitDisplayFrameCount = -1;
+                }
+            }
+            if (_hitFrameMaxCount < 0)
+            {
+                HitSprite = null;
+            }
         }
 
         /// <summary>

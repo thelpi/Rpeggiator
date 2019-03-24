@@ -143,7 +143,7 @@ namespace RPG4.Abstractions
             bool hasBeenHit = false;
 
             // hit by player ?
-            if (engine.Player.HitHalo.Active && Overlap(engine.Player.HitHalo))
+            if (engine.Player.IsHitting && Overlap(engine.Player.HitSprite))
             {
                 Hit(engine.Player.HitLifePointCost);
                 hasBeenHit = true;

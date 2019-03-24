@@ -21,7 +21,7 @@ namespace RPG4
     /// </summary>
     public partial class MainWindow : Window
     {
-        private const string KICK_TAG = "KICK";
+        private const string PLAYER_HIT_TAG = "PLAYER_HIT";
         private const string ENEMY_TAG = "ENEMY";
         private const string WALL_TAG = "WALL";
         private const string GATE_TAG = "GATE";
@@ -126,12 +126,12 @@ namespace RPG4
             rctPlayer.Fill = _engine.Player.IsRecovering ? Brushes.Brown : Brushes.Red;
 
             // cleans previous kick
-            ClearCanvasByTag(KICK_TAG);
+            ClearCanvasByTag(PLAYER_HIT_TAG);
 
-            if (_engine.Player.HitHalo.Active)
+            if (_engine.Player.IsHitting)
             {
                 Panel.SetZIndex(rctPlayer, 1);
-                DrawSizedPoint(_engine.Player.HitHalo, Brushes.DarkViolet, KICK_TAG, 0);
+                DrawSizedPoint(_engine.Player.HitSprite, Brushes.DarkViolet, PLAYER_HIT_TAG, 0);
             }
             else
             {
