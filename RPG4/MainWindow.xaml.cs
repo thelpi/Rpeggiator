@@ -193,7 +193,7 @@ namespace RPG4
             {
                 string tag = null;
                 Brush brush = null;
-                HaloSprite halo = null;
+                Sprite halo = null;
                 string haloTag = null;
                 Brush haloBrush = null;
 
@@ -206,7 +206,7 @@ namespace RPG4
                 {
                     tag = BOMB_TAG;
                     brush = Brushes.LightBlue;
-                    halo = (sprite as Bomb).ExplosionHalo;
+                    halo = (sprite as Bomb).ExplosionSprite;
                     haloTag = BOMB_HALO_TAG;
                     haloBrush = Brushes.SandyBrown;
                 }
@@ -231,8 +231,8 @@ namespace RPG4
                     brush = Brushes.DarkBlue;
                 }
 
-                DrawSizedPoint(sprite, brush, tag, halo != null && halo.Active ? 1 : 0);
-                if (halo != null && halo.Active)
+                DrawSizedPoint(sprite, brush, tag, halo != null ? 1 : 0);
+                if (halo != null)
                 {
                     DrawSizedPoint(halo, haloBrush, haloTag, 0);
                 }

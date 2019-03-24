@@ -44,7 +44,8 @@ namespace RPG4
         /// </summary>
         public static readonly InventoryItem[] INVENTORY_ITEMS = new InventoryItem[]
         {
-            new InventoryItem(ItemIdEnum.SmallLifePotion, 3)
+            new InventoryItem(ItemIdEnum.SmallLifePotion, 3),
+            new InventoryItem(ItemIdEnum.Bomb, 10),
         };
         /// <summary>
         /// Initial life points.

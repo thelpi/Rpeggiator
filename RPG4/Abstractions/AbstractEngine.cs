@@ -168,8 +168,7 @@ namespace RPG4.Abstractions
             _rifts.RemoveAll(r => r.LifePoints <= 0);
 
             // bombs disappear when they overlap a structure
-            //_droppedItems.RemoveAll(b => (b is Bomb) &&  (!(b as Bomb).IsPending && !(b as Bomb).ExplosionHalo.Active) || SolidStructures.Any(cw => cw.Overlap(b)));
-            var bombsToRemove = _bombs.Where(b => (!b.IsPending && !b.ExplosionHalo.Active) || SolidStructures.Any(cw => cw.Overlap(b))).Cast<Sprite>().ToList();
+            var bombsToRemove = _bombs.Where(b => b.IsDone || SolidStructures.Any(cw => cw.Overlap(b))).Cast<Sprite>().ToList();
             _droppedItems.RemoveAll(di => bombsToRemove.Contains(di));
 
             foreach (var di in _droppedItems)

@@ -76,7 +76,6 @@
     <Compile Include="Abstractions\Bomb.cs" />
     <Compile Include="Abstractions\Directions.cs" />
     <Compile Include="Abstractions\FloorItem.cs" />
-    <Compile Include="Abstractions\HaloSprite.cs" />
     <Compile Include="Abstractions\Inventory.cs" />
     <Compile Include="Abstractions\InventoryItem.cs" />
     <Compile Include="Abstractions\Item.cs" />

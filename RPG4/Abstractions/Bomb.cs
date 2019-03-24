@@ -28,16 +28,22 @@ namespace RPG4.Abstractions
         };
 
         // Frames count before exploding.
-        private int _pendingFrameCount;
+        private int _pendingExplosionFrameCount;
+        // Frames count while exploding.
+        private int _explosionFrameCount;
 
         /// <summary>
-        /// Indicates if the bomb is pending for explosion.
+        /// Explosion <see cref="Sprite"/>.
         /// </summary>
-        public bool IsPending { get { return _pendingFrameCount >= 0; } }
+        public Sprite ExplosionSprite { get; private set; }
         /// <summary>
-        /// Explosion halo.
+        /// Inferred; Indicates the bomb explodes now.
         /// </summary>
-        public HaloSprite ExplosionHalo { get; private set; }
+        public bool IsExploding { get { return _explosionFrameCount == 0; } }
+        /// <summary>
+        /// Inferred; Indicates the bomb's explosion is done.
+        /// </summary>
+        public bool IsDone { get { return _explosionFrameCount > EXPLODING_FRAME_COUNT; } }
 
         /// <summary>
         /// Constructor.
@@ -46,16 +52,35 @@ namespace RPG4.Abstractions
         /// <param name="y"><see cref="Sprite.Y"/></param>
         public Bomb(double x, double y) : base(x, y, WIDTH, HEIGHT)
         {
-            _pendingFrameCount = PENDING_FRAME_COUNT;
-            ExplosionHalo = new HaloSprite(X, Y, Width, Height, HALO_SIZE_RATIO, EXPLODING_FRAME_COUNT);
+            _pendingExplosionFrameCount = PENDING_FRAME_COUNT;
+            ExplosionSprite = null;
+            _explosionFrameCount = -1;
         }
 
         /// <inheritdoc />
         public override void BehaviorAtNewFrame(AbstractEngine engine, params object[] args)
         {
-            ExplosionHalo.BehaviorAtNewFrame(engine, _pendingFrameCount == 0, this);
-            // we continue to decrease after the explosion starts to avoid that the condition above, which triggers the explosion, would be always TRUE
-            _pendingFrameCount--;
+            // Explosion beginning.
+            if (_pendingExplosionFrameCount == 0)
+            {
+                _pendingExplosionFrameCount = -1;
+                _explosionFrameCount = 0;
+                ExplosionSprite = new Sprite(X - Width, Y - Height, Width * HALO_SIZE_RATIO, Height * HALO_SIZE_RATIO);
+            }
+            // Explosion pending.
+            else if (_pendingExplosionFrameCount > 0 && _pendingExplosionFrameCount <= PENDING_FRAME_COUNT)
+            {
+                _pendingExplosionFrameCount--;
+            }
+            // Post-explosion.
+            else
+            {
+                _explosionFrameCount++;
+                if (_explosionFrameCount > EXPLODING_FRAME_COUNT)
+                {
+                    ExplosionSprite = null;
+                }
+            }
         }
 
         /// <summary>
@@ -65,9 +90,7 @@ namespace RPG4.Abstractions
         /// <returns>Life points cost.</returns>
         public double GetLifePointCost(Sprite sprite)
         {
-            var tmp = ExplosionHalo.Active && ExplosionHalo.Overlap(sprite) ?
-                LIFE_POINT_COST[sprite.GetType()] / ExplosionHalo.HaloFrameMaxCount : 0;
-            return tmp;
+            return IsExploding && ExplosionSprite.Overlap(sprite) ? LIFE_POINT_COST[sprite.GetType()] : 0;
         }
     }
 }
