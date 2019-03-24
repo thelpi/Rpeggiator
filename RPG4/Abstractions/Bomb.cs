@@ -3,9 +3,8 @@
     /// <summary>
     /// Represents the bomb item when dropped on the floor.
     /// </summary>
-    /// <seealso cref="HaloSprite"/>
-    /// <seealso cref="Item"/>
-    public class Bomb : HaloSprite
+    /// <seealso cref="Sprite"/>
+    public class Bomb : Sprite
     {
         // Width.
         private const double WIDTH = 20;
@@ -25,22 +24,26 @@
         /// Indicates if the bomb is pending for explosion.
         /// </summary>
         public bool IsPending { get { return _pendingFrameCount >= 0; } }
+        /// <summary>
+        /// Explosion halo.
+        /// </summary>
+        public HaloSprite ExplosionHalo { get; private set; }
 
         /// <summary>
         /// Constructor.
         /// </summary>
         /// <param name="x"><see cref="Sprite.X"/></param>
         /// <param name="y"><see cref="Sprite.Y"/></param>
-        public Bomb(double x, double y)
-            : base(x, y, WIDTH, HEIGHT, HALO_SIZE_RATIO, EXPLODING_FRAME_COUNT)
+        public Bomb(double x, double y) : base(x, y, WIDTH, HEIGHT)
         {
             _pendingFrameCount = PENDING_FRAME_COUNT;
+            ExplosionHalo = new HaloSprite(X, Y, Width, Height, HALO_SIZE_RATIO, EXPLODING_FRAME_COUNT);
         }
 
         /// <inheritdoc />
         public override void BehaviorAtNewFrame(AbstractEngine engine, params object[] args)
         {
-            base.BehaviorAtNewFrame(engine, _pendingFrameCount == 0);
+            ExplosionHalo.BehaviorAtNewFrame(engine, _pendingFrameCount == 0);
             // we continue to decrease after the explosion starts to avoid that the condition above, which triggers the explosion, would be always TRUE
             _pendingFrameCount--;
         }

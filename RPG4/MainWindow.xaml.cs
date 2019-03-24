@@ -204,7 +204,7 @@ namespace RPG4
                 {
                     tag = BOMB_TAG;
                     brush = Brushes.LightBlue;
-                    halo = (sprite as HaloSprite);
+                    halo = (sprite as Bomb).ExplosionHalo;
                     haloTag = BOMB_HALO_TAG;
                     haloBrush = Brushes.SandyBrown;
                 }

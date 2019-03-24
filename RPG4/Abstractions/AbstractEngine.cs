@@ -154,7 +154,7 @@ namespace RPG4.Abstractions
             }
 
             // bombs disappear when they overlap a structure
-            _droppedItems.RemoveAll(b => (b is Bomb) &&  (!(b as Bomb).IsPending && !(b as Bomb).DisplayHalo) || SolidStructures.Any(cw => cw.Overlap(b)));
+            _droppedItems.RemoveAll(b => (b is Bomb) &&  (!(b as Bomb).IsPending && !(b as Bomb).ExplosionHalo.DisplayHalo) || SolidStructures.Any(cw => cw.Overlap(b)));
 
             foreach (var di in _droppedItems)
             {
