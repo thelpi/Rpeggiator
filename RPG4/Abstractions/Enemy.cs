@@ -140,10 +140,25 @@ namespace RPG4.Abstractions
                 Y = nextY;
             }
 
+            bool hasBeenHit = false;
+
             // hit by player ?
             if (engine.Player.HitHalo.Active && Overlap(engine.Player.HitHalo))
             {
                 Hit(engine.Player.HitLifePointCost);
+                hasBeenHit = true;
+            }
+
+            // hit by a bomb ?
+            int lifePointCostByBomb = engine.OverlapAnExplodingBomb(this);
+            if (lifePointCostByBomb > 0)
+            {
+                Hit(lifePointCostByBomb);
+                hasBeenHit = true;
+            }
+
+            if (hasBeenHit)
+            {
                 HourRotation = !HourRotation;
             }
         }

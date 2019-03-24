@@ -234,15 +234,19 @@ namespace RPG4.Abstractions
 
             if (_currentRecoveryFrameCount < 0)
             {
-                // checks hit
+                // checks hits by enemies
                 int cumuledLifePoints = engine.CheckHitByEnemiesOnPlayer();
-
                 if (cumuledLifePoints > 0)
                 {
-                    // sets hit points
                     Hit(cumuledLifePoints);
+                    _currentRecoveryFrameCount = 0;
+                }
 
-                    // beginning of recovery
+                // checks hits by bombs
+                cumuledLifePoints = engine.OverlapAnExplodingBomb(this);
+                if (cumuledLifePoints > 0)
+                {
+                    Hit(cumuledLifePoints);
                     _currentRecoveryFrameCount = 0;
                 }
             }

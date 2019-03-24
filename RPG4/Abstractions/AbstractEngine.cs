@@ -16,6 +16,9 @@ namespace RPG4.Abstractions
         private List<FloorItem> _items;
         private List<Sprite> _droppedItems;
 
+        // Shortcuts access to dropped bombs.
+        private IEnumerable<Bomb> _bombs { get { return _droppedItems.Where(di => di is Bomb).Cast<Bomb>(); } }
+
         /// <summary>
         /// Current screen width.
         /// </summary>
@@ -154,7 +157,9 @@ namespace RPG4.Abstractions
             }
 
             // bombs disappear when they overlap a structure
-            _droppedItems.RemoveAll(b => (b is Bomb) &&  (!(b as Bomb).IsPending && !(b as Bomb).ExplosionHalo.Active) || SolidStructures.Any(cw => cw.Overlap(b)));
+            //_droppedItems.RemoveAll(b => (b is Bomb) &&  (!(b as Bomb).IsPending && !(b as Bomb).ExplosionHalo.Active) || SolidStructures.Any(cw => cw.Overlap(b)));
+            var bombsToRemove = _bombs.Where(b => (!b.IsPending && !b.ExplosionHalo.Active) || SolidStructures.Any(cw => cw.Overlap(b))).Cast<Sprite>().ToList();
+            _droppedItems.RemoveAll(di => bombsToRemove.Contains(di));
 
             foreach (var di in _droppedItems)
             {
@@ -203,6 +208,18 @@ namespace RPG4.Abstractions
                 }
             }
             return cumuledLifePoints;
+        }
+
+        /// <summary>
+        /// Checks if a bomb (or several) is currently exploding near to a <see cref="LifeSprite"/>.
+        /// </summary>
+        /// <param name="sprite"><see cref="LifeSprite"/></param>
+        /// <returns>Life points lost.</returns>
+        public int OverlapAnExplodingBomb(LifeSprite sprite)
+        {
+            return _bombs.Sum(b => b.ExplosionHalo.Active && b.ExplosionHalo.Overlap(sprite) ? (
+                sprite is Player ? Bomb.PLAYER_LIFE_POINT_COST : Bomb.ENEMY_LIFE_POINT_COST
+            ) : 0);
         }
     }
 }

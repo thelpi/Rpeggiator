@@ -12,6 +12,14 @@
         private const double HEIGHT = 20;
         // When exploding, indicates the ratio size of the halo (compared to the bomb itself).
         private const double HALO_SIZE_RATIO = 3;
+        /// <summary>
+        /// Life points cost when exploding near an enemy.
+        /// </summary>
+        public const int ENEMY_LIFE_POINT_COST = 2;
+        /// <summary>
+        /// Life points cost when exploding near the player.
+        /// </summary>
+        public const int PLAYER_LIFE_POINT_COST = 2;
         // Frames count before exploding.
         private static readonly int PENDING_FRAME_COUNT = Constants.FPS * 2;
         // Frames count while exploding.
