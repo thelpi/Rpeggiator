@@ -7,30 +7,13 @@ namespace RPG4.Abstractions
     /// </summary>
     public class Item
     {
-        #region Common item identifiers
-
-        /// <summary>
-        /// Sword item identifier.
-        /// </summary>
-        public const int SWORD_ID = 2;
-        /// <summary>
-        /// Small life potion identifier.
-        /// </summary>
-        public const int SMALL_LIFE_POTION_ID = 3;
-        /// <summary>
-        /// Bomb item identifier.
-        /// </summary>
-        public const int BOMB_ID = 1;
-
-        #endregion
-
         // list of every items
         private static List<Item> _items = null;
 
         /// <summary>
-        /// Unique identifier.
+        /// <see cref="ItemIdEnum"/>
         /// </summary>
-        public int Id { get; private set; }
+        public ItemIdEnum Id { get; private set; }
         /// <summary>
         /// Name.
         /// </summary>
@@ -43,21 +26,16 @@ namespace RPG4.Abstractions
         /// Indicates if the item can be stored without limit.
         /// </summary>
         public bool Unlimited { get; private set; }
-        /*/// <summary>
-        /// Indicates if the item's lifetime, in ticks.
-        /// </summary>
-        /// <remarks>-1 equals no lifetime.</remarks>
-        public int Lifetime { get; private set; }*/
 
         // private constructor
         private Item() { }
 
         /// <summary>
-        /// Gets an <see cref="Item"/> by its identifier.
+        /// Gets an <see cref="Item"/> by its <see cref="ItemIdEnum"/>.
         /// </summary>
-        /// <param name="itemId">Item identifier.</param>
+        /// <param name="itemId"><see cref="ItemIdEnum"/></param>
         /// <returns><see cref="Item"/></returns>
-        public static Item GetItem(int itemId)
+        public static Item GetItem(ItemIdEnum itemId)
         {
             if (_items == null)
             {
@@ -73,40 +51,28 @@ namespace RPG4.Abstractions
             _items = new List<Item>();
             _items.Add(new Item
             {
-                Id = BOMB_ID,
-                //Lifetime = 0,
+                Id = ItemIdEnum.Bomb,
                 Name = "Bomb",
                 Unique = false,
                 Unlimited = false
             });
             _items.Add(new Item
             {
-                Id = SWORD_ID,
-                //Lifetime = 0,
-                Name = "Sword",
-                Unique = true,
-                Unlimited = false
-            });
-            _items.Add(new Item
-            {
-                Id = 3,
-                //Lifetime = 0,
+                Id = ItemIdEnum.SmallLifePotion,
                 Name = "Life potion (small)",
                 Unique = false,
                 Unlimited = false
             });
             _items.Add(new Item
             {
-                Id = SMALL_LIFE_POTION_ID,
-                //Lifetime = 0,
+                Id = ItemIdEnum.MediumLifePotion,
                 Name = "Life potion (medium)",
                 Unique = false,
                 Unlimited = false
             });
             _items.Add(new Item
             {
-                Id = 5,
-                //Lifetime = 0,
+                Id = ItemIdEnum.LargeLifePotion,
                 Name = "Life potion (large)",
                 Unique = false,
                 Unlimited = false

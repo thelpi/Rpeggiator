@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 
 namespace RPG4.Abstractions
 {
@@ -40,7 +41,8 @@ namespace RPG4.Abstractions
         /// <param name="triggerJson">The json dynamic object.</param>
         public FloorTrigger(dynamic triggerJson) : base((object)triggerJson)
         {
-            _actionDelayMaxTickCount = triggerJson.ActionDelayMaxTickCount;
+            string jsonFormula = triggerJson.ActionDelayMaxTickCount;
+            _actionDelayMaxTickCount = Tools.ComputeFormulaResult<int>(jsonFormula, Constants.SUBSTITUTE_FORMULA_FPS);
             _actionDelayCurrentCountTick = -1;
         }
 

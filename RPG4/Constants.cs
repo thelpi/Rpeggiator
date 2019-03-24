@@ -1,4 +1,6 @@
-﻿namespace RPG4
+﻿using System;
+
+namespace RPG4
 {
     /// <summary>
     /// Set of constants
@@ -28,14 +30,18 @@
         /// <summary>
         /// Bomb item width.
         /// </summary>
-        public static readonly double BOMB_WIDTH = InitialPlayerStatus.SPRITE_SIZE_X / 2;
+        public const double BOMB_WIDTH = 20;
         /// <summary>
         /// Bomb item height.
         /// </summary>
-        public static readonly double BOMB_HEIGHT = InitialPlayerStatus.SPRITE_SIZE_Y / 2;
+        public const double BOMB_HEIGHT = 20;
         /// <summary>
         /// Ticks count while recovering from a hit.
         /// </summary>
-        public static readonly int RECOVERY_TICK_COUNT = (int)(Constants.FPS * 0.5);
+        public static readonly int RECOVERY_TICK_COUNT = (int)(FPS * 0.5);
+        /// <summary>
+        /// Substitution parameters for <see cref="FPS"/> in formulas.
+        /// </summary>
+        public static readonly Tuple<string, object> SUBSTITUTE_FORMULA_FPS = new Tuple<string, object>("{FPS}", FPS);
     }
 }

@@ -1,6 +1,6 @@
 {
-	"AreaWidth": 640,
-	"AreaHeight": 480,
+	"AreaWidth": 800,
+	"AreaHeight": 600,
   "Walls": [
     {
       "X": 80,
@@ -50,7 +50,7 @@
 		"Y": 20,
 		"Width": 20,
 		"Height": 20,
-		"ActionDelayMaxTickCount": 100,
+		"ActionDelayMaxTickCount": "{FPS} * 5",
 		"GateIndex": 0,
 		"AppearOnActivation": false
 	},
@@ -59,7 +59,7 @@
 		"Y": 220,
 		"Width": 20,
 		"Height": 20,
-		"ActionDelayMaxTickCount": 80,
+		"ActionDelayMaxTickCount": "{FPS} * 4",
 		"GateIndex": 0,
 		"AppearOnActivation": false
 	}
@@ -80,7 +80,7 @@
 	"Y": 230,
 	"Width": 20,
 	"Height": 20,
-	"ItemId": 1,
+	"ItemId": "Bomb",
 	"Quantity": 10
   }
   ]

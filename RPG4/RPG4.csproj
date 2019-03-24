@@ -82,6 +82,7 @@
     <Compile Include="Abstractions\Item.cs" />
     <Compile Include="Abstractions\GateTrigger.cs" />
     <Compile Include="Abstractions\FloorTrigger.cs" />
+    <Compile Include="Abstractions\ItemIdEnum.cs" />
     <Compile Include="Abstractions\LifeSprite.cs" />
     <Compile Include="Abstractions\Player.cs" />
     <Compile Include="Abstractions\Enemy.cs" />

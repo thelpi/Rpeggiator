@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 
 namespace RPG4.Abstractions
 {
@@ -47,7 +48,8 @@ namespace RPG4.Abstractions
         /// <param name="enemyJson">The json dynamic object.</param>
         public Enemy(dynamic enemyJson) : base((object)enemyJson)
         {
-            Speed = enemyJson.Speed;
+            string jsonFormula = enemyJson.Speed;
+            Speed = Tools.ComputeFormulaResult<double>(jsonFormula, Constants.SUBSTITUTE_FORMULA_FPS);
             HourRotation = enemyJson.HourRotation;
             Pattern = new Sprite(enemyJson.Pattern);
         }

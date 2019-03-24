@@ -18,7 +18,7 @@ namespace RPG4
         /// <summary>
         /// Intial player's speed, in pixels by tick.
         /// </summary>
-        public const int INITIAL_PLAYER_SPEED = 10;
+        public static readonly int INITIAL_PLAYER_SPEED = Constants.FPS / 2;
         /// <summary>
         /// Size of the player on X-axis.
         /// </summary>
@@ -34,7 +34,7 @@ namespace RPG4
         /// <summary>
         /// Tick count before the effect of a hit ends.
         /// </summary>
-        public const int HIT_TICK_MAX_COUNT = 2;
+        public static readonly int HIT_TICK_MAX_COUNT = Constants.FPS / 10;
         /// <summary>
         /// When kicking, indicates the life-points cost on the enemy.
         /// </summary>
@@ -48,8 +48,7 @@ namespace RPG4
         /// </summary>
         public static readonly InventoryItem[] INVENTORY_ITEMS = new InventoryItem[]
         {
-            new InventoryItem(Item.SWORD_ID, 1),
-            new InventoryItem(Item.SMALL_LIFE_POTION_ID, 3)
+            new InventoryItem(ItemIdEnum.SmallLifePotion, 3)
         };
         /// <summary>
         /// Initial life points.

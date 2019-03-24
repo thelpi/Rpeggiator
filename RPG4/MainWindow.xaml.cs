@@ -47,8 +47,8 @@ namespace RPG4
             cvsMain.Width = _engine.AreaWidth;
 
             // size of the player never change
-            rctMe.Height = _engine.Player.Height;
-            rctMe.Width = _engine.Player.Width;
+            rctPlayer.Height = _engine.Player.Height;
+            rctPlayer.Width = _engine.Player.Width;
             
             DrawWalls();
             RefreshSprites();
@@ -116,12 +116,12 @@ namespace RPG4
         // draws the player
         private void DrawPlayer()
         {
-            rctMe.SetValue(Canvas.TopProperty, _engine.Player.Y);
-            rctMe.SetValue(Canvas.LeftProperty, _engine.Player.X);
+            rctPlayer.SetValue(Canvas.TopProperty, _engine.Player.Y);
+            rctPlayer.SetValue(Canvas.LeftProperty, _engine.Player.X);
 
-            rctMe.Fill = _engine.Player.IsRecovering ? Brushes.Brown : Brushes.Red;
+            rctPlayer.Fill = _engine.Player.IsRecovering ? Brushes.Brown : Brushes.Red;
 
-            Panel.SetZIndex(rctMe, 0);
+            Panel.SetZIndex(rctPlayer, 0);
 
             // cleans previous kick
             ClearCanvasByTag(KICK_TAG);
@@ -157,7 +157,7 @@ namespace RPG4
 
             if (zIndex.HasValue)
             {
-                Panel.SetZIndex(rctMe, zIndex.Value);
+                Panel.SetZIndex(rctPlayer, zIndex.Value);
             }
 
             cvsMain.Children.Add(rct);

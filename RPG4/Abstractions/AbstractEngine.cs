@@ -129,11 +129,11 @@ namespace RPG4.Abstractions
             // checks for bombs dropped on the new position
             if (keys.InventorySlotId.HasValue)
             {
-                int indexId = Player.Inventory.GetSlotByItemId(Item.BOMB_ID);
+                int indexId = Player.Inventory.GetSlotByItemId(ItemIdEnum.Bomb);
                 if (keys.InventorySlotId.Value == indexId)
                 {
                     _bombs.Add(new Bomb(Player.X, Player.Y, Constants.BOMB_WIDTH, Constants.BOMB_HEIGHT));
-                    Player.Inventory.UseItem(Item.BOMB_ID);
+                    Player.Inventory.UseItem(ItemIdEnum.Bomb);
                 }
             }
             

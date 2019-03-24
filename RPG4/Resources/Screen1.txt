@@ -1,6 +1,6 @@
 {
-	"AreaWidth": 640,
-	"AreaHeight": 480,
+	"AreaWidth": 800,
+	"AreaHeight": 600,
   "Walls": [
     {
       "X": 50,
@@ -22,9 +22,9 @@
       "Y": 50,
       "Width": 40,
       "Height": 40,
-      "Speed": 50,
+      "Speed": "{FPS} * 2.5",
       "HourRotation": true,
-      "MaximalLifePoints": 3,
+      "MaximalLifePoints": 2,
 	  "HitLifePointCost": 5,
       "Pattern": {
         "X": 50,
