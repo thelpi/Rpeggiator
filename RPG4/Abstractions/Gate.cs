@@ -43,12 +43,8 @@ namespace RPG4.Abstractions
             _defaultActivated = gateJson.Activated;
         }
 
-        /// <summary>
-        /// Behavior of the instance at tick.
-        /// </summary>
-        /// <param name="engine">The <see cref="AbstractEngine"/>.</param>
-        /// <param name="args">Other arguments.</param>
-        public override void ComputeBehaviorAtTick(AbstractEngine engine, params object[] args)
+        /// <inheritdoc />
+        public override void BehaviorAtNewFrame(AbstractEngine engine, params object[] args)
         {
             var triggersOn = engine.GetTriggersForSpecifiedGate(this);
 

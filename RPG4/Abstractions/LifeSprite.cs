@@ -72,5 +72,18 @@ namespace RPG4.Abstractions
 
             return CurrentLifePoints <= 0;
         }
+
+        /// <summary>
+        /// Regenerate instance life points.
+        /// </summary>
+        /// <param name="lifePoints">Life points gained count.</param>
+        protected void RegenerateLifePoints(int lifePoints)
+        {
+            if (lifePoints > 0)
+            {
+                CurrentLifePoints += lifePoints;
+                CurrentLifePoints = CurrentLifePoints > MaximalLifePoints ? MaximalLifePoints : CurrentLifePoints;
+            }
+        }
     }
 }

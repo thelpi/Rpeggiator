@@ -10,7 +10,7 @@ namespace RPG4.Abstractions
     public class Enemy : LifeSprite
     {
         /// <summary>
-        /// Distance in pixels by tick.
+        /// Distance by frame, in pixels.
         /// </summary>
         public double Speed { get; private set; }
         /// <summary>
@@ -54,12 +54,8 @@ namespace RPG4.Abstractions
             Pattern = new Sprite(enemyJson.Pattern);
         }
 
-        /// <summary>
-        /// Behavior of the instance at ticking.
-        /// </summary>
-        /// <param name="engine"><see cref="AbstractEngine"/></param>
-        /// <param name="args">Other arguments.</param>
-        public override void ComputeBehaviorAtTick(AbstractEngine engine, params object[] args)
+        /// <inheritdoc />
+        public override void BehaviorAtNewFrame(AbstractEngine engine, params object[] args)
         {
             double nextX = X;
             double nextY = Y;

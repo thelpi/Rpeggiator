@@ -38,7 +38,7 @@ namespace RPG4.Abstractions
         /// </summary>
         public IReadOnlyCollection<Sprite> SolidStructures { get { return _walls.Concat(_gates.Where(g => g.Activated)).ToList(); } }
         /// <summary>
-        /// List of every <see cref="Sprite"/> which requires a display management at each tick.
+        /// List of every <see cref="Sprite"/> which requires a display management at each frame.
         /// </summary>
         /// <remarks>Doesn't include <see cref="Walls"/>.</remarks>
         public IReadOnlyCollection<Sprite> Sprites
@@ -109,12 +109,12 @@ namespace RPG4.Abstractions
         }
 
         /// <summary>
-        /// Refresh the status of every components at tick.
+        /// Refresh the status of every components at new frame.
         /// </summary>
         /// <param name="keys"><see cref="KeyPress"/></param>
-        public void CheckEngineAtTick(KeyPress keys)
+        public void CheckEngineAtNewFrame(KeyPress keys)
         {
-            Player.ComputeBehaviorAtTick(this, keys);
+            Player.BehaviorAtNewFrame(this, keys);
 
             // checks for items on the new position
             var items = _items.Where(it => it.Overlap(Player)).ToList();
@@ -126,21 +126,29 @@ namespace RPG4.Abstractions
                 }
             }
 
-            // checks for bombs dropped on the new position
+            // check inventory use
             if (keys.InventorySlotId.HasValue)
             {
+                // checks for bombs dropped on the new position
                 int indexId = Player.Inventory.GetSlotByItemId(ItemIdEnum.Bomb);
                 if (keys.InventorySlotId.Value == indexId)
                 {
-                    _bombs.Add(new Bomb(Player.X, Player.Y, Constants.BOMB_WIDTH, Constants.BOMB_HEIGHT));
+                    _bombs.Add(new Bomb(Player.X, Player.Y));
                     Player.Inventory.UseItem(ItemIdEnum.Bomb);
+                }
+                // checks for small life potions
+                indexId = Player.Inventory.GetSlotByItemId(ItemIdEnum.SmallLifePotion);
+                if (keys.InventorySlotId.Value == indexId)
+                {
+                    Player.DrinkLifePotion(ItemIdEnum.SmallLifePotion);
+                    Player.Inventory.UseItem(ItemIdEnum.SmallLifePotion);
                 }
             }
             
             // enemies management must be done after player management
             foreach (var enemy in _enemies)
             {
-                enemy.ComputeBehaviorAtTick(this, null);
+                enemy.BehaviorAtNewFrame(this, null);
             }
             _enemies.RemoveAll(e => e.CheckDeath(this));
             
@@ -148,18 +156,18 @@ namespace RPG4.Abstractions
 
             foreach (var gt in _gateTriggers)
             {
-                gt.ComputeBehaviorAtTick(this, keys);
+                gt.BehaviorAtNewFrame(this, keys);
             }
             foreach (var g in _gates)
             {
-                g.ComputeBehaviorAtTick(this, keys);
+                g.BehaviorAtNewFrame(this, keys);
             }
 
             // bombs disappear when they overlap a structure
             _bombs.RemoveAll(b => (!b.IsPending && !b.DisplayHalo) || SolidStructures.Any(cw => cw.Overlap(b)));
             foreach (var b in _bombs)
             {
-                b.ComputeBehaviorAtTick(this);
+                b.BehaviorAtNewFrame(this);
             }
 
             if (Player.NewScreenEntrance.HasValue)

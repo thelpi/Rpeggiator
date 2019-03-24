@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.Linq;
 
 namespace RPG4.Abstractions
@@ -18,7 +17,7 @@ namespace RPG4.Abstractions
         /// <summary>
         /// List of <see cref="InventoryItem"/>
         /// </summary>
-        public ReadOnlyCollection<InventoryItem> Items { get { return _items.AsReadOnly(); } }
+        public IReadOnlyCollection<InventoryItem> Items { get { return _items; } }
 
         /// <summary>
         /// Constructor.

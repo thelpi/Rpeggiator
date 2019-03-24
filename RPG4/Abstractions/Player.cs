@@ -11,13 +11,13 @@ namespace RPG4.Abstractions
     /// <seealso cref="LifeSprite"/>
     public class Player : LifeSprite
     {
-        // current ticks count while recovering
-        private int _currentRecoveryTickCount;
-        // history of movements
+        // Current frames count while recovering.
+        private int _currentRecoveryFrameCount;
+        // History of movements.
         private Queue<Point> _moveHistory = new Queue<Point>(Constants.MOVE_HISTORY_COUNT);
 
         /// <summary>
-        /// Speed (i.e. distance, in pixels, by tick)
+        /// Speed (i.e. distance, in pixels, by frame)
         /// </summary>
         public double Speed { get; private set; }
         /// <summary>
@@ -40,7 +40,7 @@ namespace RPG4.Abstractions
         /// <summary>
         /// Indicates the player is currently recovering from an hit.
         /// </summary>
-        public bool IsRecovering { get { return _currentRecoveryTickCount >= 0 && _currentRecoveryTickCount <= Constants.RECOVERY_TICK_COUNT; } }
+        public bool IsRecovering { get { return _currentRecoveryFrameCount >= 0 && _currentRecoveryFrameCount <= Constants.RECOVERY_FRAME_COUNT; } }
 
         /// <summary>
         /// Constructor.
@@ -57,16 +57,12 @@ namespace RPG4.Abstractions
             Speed = InitialPlayerStatus.INITIAL_PLAYER_SPEED;
             NewScreenEntrance = null;
             Inventory = new Inventory();
-            HitHalo = new HaloSprite(X, Y, Width, Height, InitialPlayerStatus.INITIAL_HIT_HALO_SIZE_RATIO, InitialPlayerStatus.HIT_TICK_MAX_COUNT);
-            _currentRecoveryTickCount = -1;
+            HitHalo = new HaloSprite(X, Y, Width, Height, InitialPlayerStatus.INITIAL_HIT_HALO_SIZE_RATIO, InitialPlayerStatus.HIT_FRAME_MAX_COUNT);
+            _currentRecoveryFrameCount = -1;
         }
 
-        /// <summary>
-        /// Behavior of the instance at tick.
-        /// </summary>
-        /// <param name="engine"><see cref="AbstractEngine"/></param>
-        /// <param name="args">Other arguments; in this case, the first one is <see cref="KeyPress"/>.</param>
-        public override void ComputeBehaviorAtTick(AbstractEngine engine, params object[] args)
+        /// <inheritdoc />
+        public override void BehaviorAtNewFrame(AbstractEngine engine, params object[] args)
         {
             var keys = args[0] as KeyPress;
 
@@ -217,7 +213,7 @@ namespace RPG4.Abstractions
                 HitHalo.AdjustToPlayer(this);
             }
 
-            HitHalo.ComputeBehaviorAtTick(engine, keys.PressHit);
+            HitHalo.BehaviorAtNewFrame(engine, keys.PressHit);
         }
 
         /// <summary>
@@ -229,15 +225,15 @@ namespace RPG4.Abstractions
             // currently recovering ?
             if (IsRecovering)
             {
-                _currentRecoveryTickCount++;
-                if (_currentRecoveryTickCount > Constants.RECOVERY_TICK_COUNT)
+                _currentRecoveryFrameCount++;
+                if (_currentRecoveryFrameCount > Constants.RECOVERY_FRAME_COUNT)
                 {
                     // end of recovery
-                    _currentRecoveryTickCount = -1;
+                    _currentRecoveryFrameCount = -1;
                 }
             }
 
-            if (_currentRecoveryTickCount < 0)
+            if (_currentRecoveryFrameCount < 0)
             {
                 // checks hit
                 int cumuledLifePoints = engine.CheckHitByEnemiesOnPlayer();
@@ -248,9 +244,31 @@ namespace RPG4.Abstractions
                     Hit(cumuledLifePoints);
 
                     // beginning of recovery
-                    _currentRecoveryTickCount = 0;
+                    _currentRecoveryFrameCount = 0;
                 }
             }
+        }
+
+        /// <summary>
+        /// Drinks a life potion.
+        /// </summary>
+        /// <param name="potionType"><see cref="ItemIdEnum"/>; ignored if not a life potion.</param>
+        public void DrinkLifePotion(ItemIdEnum potionType)
+        {
+            int recoveryPoints = 0;
+            switch (potionType)
+            {
+                case ItemIdEnum.SmallLifePotion:
+                    recoveryPoints = Constants.SMALL_LIFE_POTION_RECOVERY_LIFE_POINTS;
+                    break;
+                case ItemIdEnum.MediumLifePotion:
+                    recoveryPoints = Constants.MEDIUM_LIFE_POTION_RECOVERY_LIFE_POINTS;
+                    break;
+                case ItemIdEnum.LargeLifePotion:
+                    recoveryPoints = Constants.LARGE_LIFE_POTION_RECOVERY_LIFE_POINTS;
+                    break;
+            }
+            RegenerateLifePoints(recoveryPoints);
         }
     }
 }

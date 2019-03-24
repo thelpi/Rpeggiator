@@ -3,7 +3,7 @@
 namespace RPG4.Abstractions
 {
     /// <summary>
-    /// Represents the keayboard input for a tick inside the <see cref="AbstractEngine"/>
+    /// Represents the keayboard input for a frame inside the <see cref="AbstractEngine"/>
     /// </summary>
     public class KeyPress
     {

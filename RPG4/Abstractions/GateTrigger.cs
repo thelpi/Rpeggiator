@@ -21,11 +21,11 @@
         /// <param name="y"><see cref="Sprite.Y"/></param>
         /// <param name="width"><see cref="Sprite.Width"/></param>
         /// <param name="height"><see cref="Sprite.Height"/></param>
-        /// <param name="actionDelayMaxTickCount">Number of ticks before the activation ends.</param>
+        /// <param name="actionDelayMaxFrameCount">Number of frames before the activation ends.</param>
         /// <param name="gateIndex"><see cref="GateIndex"/></param>
         /// <param name="appearOnActivation"><see cref="AppearOnActivation"/></param>
-        public GateTrigger(double x, double y, double width, double height, int actionDelayMaxTickCount, int gateIndex, bool appearOnActivation)
-            : base(x, y, width, height, actionDelayMaxTickCount)
+        public GateTrigger(double x, double y, double width, double height, int actionDelayMaxFrameCount, int gateIndex, bool appearOnActivation)
+            : base(x, y, width, height, actionDelayMaxFrameCount)
         {
             GateIndex = gateIndex;
             AppearOnActivation = appearOnActivation;

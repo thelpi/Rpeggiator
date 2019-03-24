@@ -16,32 +16,25 @@ namespace RPG4
         /// </summary>
         public const int MOVE_HISTORY_COUNT = 50;
         /// <summary>
-        /// Ticks count before a bomb explodes.
+        /// Frames count while recovering from a hit.
         /// </summary>
-        public static readonly int BOMB_PENDING_TICK_COUNT = FPS * 2;
-        /// <summary>
-        /// Ticks count while a bomb explodes.
-        /// </summary>
-        public static readonly int BOMB_EXPLODING_TICK_COUNT = FPS;
-        /// <summary>
-        /// When exploding, indicates the ratio size of the halo (compared to the bomb itself).
-        /// </summary>
-        public const double BOMB_HALO_SIZE_RATIO = 3;
-        /// <summary>
-        /// Bomb item width.
-        /// </summary>
-        public const double BOMB_WIDTH = 20;
-        /// <summary>
-        /// Bomb item height.
-        /// </summary>
-        public const double BOMB_HEIGHT = 20;
-        /// <summary>
-        /// Ticks count while recovering from a hit.
-        /// </summary>
-        public static readonly int RECOVERY_TICK_COUNT = (int)(FPS * 0.5);
+        public static readonly int RECOVERY_FRAME_COUNT = (int)(FPS * 0.5);
         /// <summary>
         /// Substitution parameters for <see cref="FPS"/> in formulas.
         /// </summary>
         public static readonly Tuple<string, object> SUBSTITUTE_FORMULA_FPS = new Tuple<string, object>("{FPS}", FPS);
+
+        /// <summary>
+        /// Recovered life points by drinking small life potion.
+        /// </summary>
+        public const int SMALL_LIFE_POTION_RECOVERY_LIFE_POINTS = 2;
+        /// <summary>
+        /// Recovered life points by drinking medium life potion.
+        /// </summary>
+        public const int MEDIUM_LIFE_POTION_RECOVERY_LIFE_POINTS = 5;
+        /// <summary>
+        /// Recovered life points by drinking large life potion.
+        /// </summary>
+        public const int LARGE_LIFE_POTION_RECOVERY_LIFE_POINTS = 10;
     }
 }

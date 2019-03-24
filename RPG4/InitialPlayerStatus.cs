@@ -16,7 +16,7 @@ namespace RPG4
         /// </summary>
         public const double INITIAL_PLAYER_Y = 220;
         /// <summary>
-        /// Intial player's speed, in pixels by tick.
+        /// Intial player's speed, in pixels by frame.
         /// </summary>
         public static readonly int INITIAL_PLAYER_SPEED = Constants.FPS / 2;
         /// <summary>
@@ -32,9 +32,9 @@ namespace RPG4
         /// </summary>
         public const double INITIAL_HIT_HALO_SIZE_RATIO = 2;
         /// <summary>
-        /// Tick count before the effect of a hit ends.
+        /// Frames count before the effect of a hit ends.
         /// </summary>
-        public static readonly int HIT_TICK_MAX_COUNT = Constants.FPS / 10;
+        public static readonly int HIT_FRAME_MAX_COUNT = Constants.FPS / 10;
         /// <summary>
         /// When kicking, indicates the life-points cost on the enemy.
         /// </summary>

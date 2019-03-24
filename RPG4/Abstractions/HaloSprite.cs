@@ -5,8 +5,8 @@
     /// </summary>
     public class HaloSprite : Sprite
     {
-        // ticks count with halo
-        private int _haloTickCount;
+        // Frames count with halo.
+        private int _haloFrameCount;
 
         /// <summary>
         /// Ratio of halo reach depending to the instance size.
@@ -23,11 +23,11 @@
         /// <summary>
         /// Inferred; indicates if currently displaying halo.
         /// </summary>
-        public bool DisplayHalo { get { return _haloTickCount >= 0; } }
+        public bool DisplayHalo { get { return _haloFrameCount >= 0; } }
         /// <summary>
-        /// Tick count before the effect of a halo ends.
+        /// Frames count before the effect of a halo ends.
         /// </summary>
-        public int HaloTickMaxCount { get; private set; }
+        public int HaloFrameMaxCount { get; private set; }
         /// <summary>
         /// Inferred; represents the halo itself.
         /// </summary>
@@ -56,33 +56,29 @@
         /// <param name="width"><see cref="Sprite.Width"/></param>
         /// <param name="height"><see cref="Sprite.Height"/></param>
         /// <param name="haloReachRatio"><see cref="HaloReachRatio"/></param>
-        /// <param name="haloTickMaxCount"><see cref="HaloTickMaxCount"/></param>
-        public HaloSprite(double x, double y, double width, double height, double haloReachRatio, int haloTickMaxCount)
+        /// <param name="haloFrameMaxCount"><see cref="HaloFrameMaxCount"/></param>
+        public HaloSprite(double x, double y, double width, double height, double haloReachRatio, int haloFrameMaxCount)
             : base(x, y, width, height)
         {
             HaloReachRatio = InitialPlayerStatus.INITIAL_HIT_HALO_SIZE_RATIO;
-            _haloTickCount = -1;
-            HaloTickMaxCount = haloTickMaxCount;
+            _haloFrameCount = -1;
+            HaloFrameMaxCount = haloFrameMaxCount;
         }
 
-        /// <summary>
-        /// Instance behavior at tick.
-        /// </summary>
-        /// <param name="engine"><see cref="AbstractEngine"/></param>
-        /// <param name="args">Other arguments; in this case a boolean which indicates if the halo should start.</param>
-        public override void ComputeBehaviorAtTick(AbstractEngine engine, params object[] args)
+        /// <inheritdoc />
+        public override void BehaviorAtNewFrame(AbstractEngine engine, params object[] args)
         {
-            if (_haloTickCount >= HaloTickMaxCount)
+            if (_haloFrameCount >= HaloFrameMaxCount)
             {
-                _haloTickCount = -1;
+                _haloFrameCount = -1;
             }
-            else if (_haloTickCount >= 0)
+            else if (_haloFrameCount >= 0)
             {
-                _haloTickCount += 1;
+                _haloFrameCount += 1;
             }
             else if ((bool)args[0])
             {
-                _haloTickCount = 0;
+                _haloFrameCount = 0;
             }
         }
 

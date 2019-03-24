@@ -50,7 +50,7 @@
 		"Y": 20,
 		"Width": 20,
 		"Height": 20,
-		"ActionDelayMaxTickCount": "{FPS} * 5",
+		"ActionDelayMaxFrameCount": "{FPS} * 5",
 		"GateIndex": 0,
 		"AppearOnActivation": false
 	},
@@ -59,7 +59,7 @@
 		"Y": 220,
 		"Width": 20,
 		"Height": 20,
-		"ActionDelayMaxTickCount": "{FPS} * 4",
+		"ActionDelayMaxFrameCount": "{FPS} * 4",
 		"GateIndex": 0,
 		"AppearOnActivation": false
 	}

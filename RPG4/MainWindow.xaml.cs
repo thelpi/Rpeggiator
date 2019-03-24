@@ -1,5 +1,6 @@
 ﻿using RPG4.Abstractions;
 using System;
+using System.Linq;
 using System.Timers;
 using System.Windows;
 using System.Windows.Controls;
@@ -52,13 +53,14 @@ namespace RPG4
             
             DrawWalls();
             RefreshSprites();
+            RefreshMenu();
 
             _timer = new Timer(1000 / Constants.FPS);
-            _timer.Elapsed += OnTick;
+            _timer.Elapsed += NewFrame;
             _timer.Start();
         }
 
-        private void OnTick(object sender, ElapsedEventArgs e)
+        private void NewFrame(object sender, ElapsedEventArgs e)
         {
             if (_timerIsIn)
             {
@@ -90,7 +92,7 @@ namespace RPG4
             }));
 
             // recompute everything
-            _engine.CheckEngineAtTick(pressedKeys);
+            _engine.CheckEngineAtNewFrame(pressedKeys);
 
             Dispatcher.Invoke((delegate()
             {
@@ -102,6 +104,7 @@ namespace RPG4
                 }
 
                 RefreshSprites();
+                RefreshMenu();
 
                 if (_engine.Player.CheckDeath(_engine))
                 {
@@ -225,6 +228,36 @@ namespace RPG4
                 if (halo != null && halo.DisplayHalo)
                 {
                     DrawSizedPoint(halo.Halo, haloBrush, haloTag, 1);
+                }
+            }
+        }
+
+        private void RefreshMenu()
+        {
+            pgbPlayerLifePoints.Maximum = _engine.Player.MaximalLifePoints;
+            pgbPlayerLifePoints.Value = _engine.Player.CurrentLifePoints;
+            for (int i = 0; i < 10; i++)
+            {
+                var itemSlotRct = (Rectangle)FindName(string.Format("rctItem{0}", i));
+                var itemSlotTxt = (TextBlock)FindName(string.Format("txbItem{0}", i));
+                if (_engine.Player.Inventory.Items.Count < (i + 1))
+                {
+                    itemSlotRct.Fill = Brushes.AliceBlue;
+                    itemSlotTxt.Text = "000";
+                }
+                else
+                {
+                    var item = _engine.Player.Inventory.Items.ElementAt(i);
+                    itemSlotTxt.Text = item.Quantity.ToString().PadLeft(3, '0');
+                    switch (item.ItemId)
+                    {
+                        case ItemIdEnum.Bomb:
+                            itemSlotRct.Fill = Brushes.LightBlue;
+                            break;
+                        case ItemIdEnum.SmallLifePotion:
+                            itemSlotRct.Fill = Brushes.LightGoldenrodYellow;
+                            break;
+                    }
                 }
             }
         }
