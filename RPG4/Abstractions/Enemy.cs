@@ -145,7 +145,13 @@ namespace RPG4.Abstractions
                 X = nextX;
                 Y = nextY;
             }
+        }
 
+        /// <summary>
+        /// Checks if the instance has been hit.
+        /// </summary>
+        public void CheckIfHasBeenHit(AbstractEngine engine)
+        {
             bool hasBeenHit = false;
 
             // hit by player ?

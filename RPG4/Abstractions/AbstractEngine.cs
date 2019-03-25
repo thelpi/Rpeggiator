@@ -42,7 +42,7 @@ namespace RPG4.Abstractions
         /// List of every <see cref="Sprite"/> which requires a display management at each frame.
         /// </summary>
         /// <remarks>Doesn't include <see cref="Walls"/>.</remarks>
-        public IReadOnlyCollection<Sprite> Sprites
+        public IReadOnlyCollection<Sprite> AnimatedSprites
         {
             get
             {
@@ -127,42 +127,29 @@ namespace RPG4.Abstractions
         /// <param name="keys"><see cref="KeyPress"/></param>
         public void CheckEngineAtNewFrame(KeyPress keys)
         {
+            // 1 - Player.
             Player.BehaviorAtNewFrame(this, keys);
-
+            // 2 - Enemies.
+            _enemies.ForEach(enemy => enemy.BehaviorAtNewFrame(this));
+            // 3 - Items pick.
             CheckItemsToPick();
-            
+            // 4 - Items use.
             CheckInventoryUse(keys);
-
-            // enemies management must be done after player management
-            foreach (var enemy in _enemies)
-            {
-                enemy.BehaviorAtNewFrame(this);
-            }
-            _enemies.RemoveAll(e => e.CheckDeath(this));
-
+            // 5 - Gate triggers.
+            _gateTriggers.ForEach(gt => gt.BehaviorAtNewFrame(this));
+            // 6 - Gates.
+            _gates.ForEach(g => g.BehaviorAtNewFrame(this));
+            // 7 - Rifts.
+            _rifts.ForEach(r => r.BehaviorAtNewFrame(this));
+            // 8 - Actionned items.
+            _actionnedItems.ForEach(di => di.BehaviorAtNewFrame(this));
+            // 9 - Check hit and death on each instances where it's applicable.
             Player.CheckIfHasBeenHit(this);
-
-            foreach (var gt in _gateTriggers)
-            {
-                gt.BehaviorAtNewFrame(this);
-            }
-            foreach (var g in _gates)
-            {
-                g.BehaviorAtNewFrame(this);
-            }
-            foreach (var r in _rifts)
-            {
-                r.BehaviorAtNewFrame(this);
-            }
+            _enemies.ForEach(e => e.CheckIfHasBeenHit(this));
+            _enemies.RemoveAll(e => e.CheckDeath(this));
             _rifts.RemoveAll(r => r.LifePoints <= 0);
-
-            // dropped items disappear when they overlap a structure
             _actionnedItems.RemoveAll(di => di.IsDone || SolidStructures.Any(cw => cw.Overlap(di)));
-            foreach (var di in _actionnedItems)
-            {
-                di.BehaviorAtNewFrame(this);
-            }
-
+            // 10 - New screen.
             if (Player.NewScreenEntrance.HasValue)
             {
                 SetEnginePropertiesFromScreenDatas(_adjacentScreens[Player.NewScreenEntrance.Value]);

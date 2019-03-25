@@ -190,7 +190,7 @@ namespace RPG4
             ClearCanvasByTag(BOMB_TAG);
             ClearCanvasByTag(GATE_TAG);
             ClearCanvasByTag(RIFT_TAG);
-            foreach (var sprite in _engine.Sprites)
+            foreach (var sprite in _engine.AnimatedSprites)
             {
                 string tag = null;
                 Brush brush = null;
