@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace RPG4.Abstractions
@@ -14,11 +15,8 @@ namespace RPG4.Abstractions
         private List<Rift> _rifts;
         private List<Enemy> _enemies;
         private List<GateTrigger> _gateTriggers;
-        private List<FloorItem> _items;
-        private List<Sprite> _droppedItems;
-
-        // Shortcuts access to dropped bombs.
-        private IEnumerable<Bomb> _bombs { get { return _droppedItems.Where(di => di is Bomb).Cast<Bomb>(); } }
+        private List<PickableItem> _pickableItems;
+        private List<ActionnedItem> _actionnedItems;
 
         /// <summary>
         /// Current screen width.
@@ -48,7 +46,14 @@ namespace RPG4.Abstractions
         {
             get
             {
-                return _droppedItems.Concat(_rifts).Concat(_items).Concat(_gateTriggers).Concat(_enemies).Concat(_gates.Where(g => g.Activated)).ToList();
+                List<Sprite> sprites = new List<Sprite>();
+                sprites.AddRange(_pickableItems);
+                sprites.AddRange(_rifts);
+                sprites.AddRange(_actionnedItems);
+                sprites.AddRange(_gateTriggers);
+                sprites.AddRange(_enemies);
+                sprites.AddRange(_gates.Where(g => g.Activated));
+                return sprites;
             }
         }
 
@@ -73,8 +78,8 @@ namespace RPG4.Abstractions
             _gateTriggers = new List<GateTrigger>();
             _gates = new List<Gate>();
             _rifts = new List<Rift>();
-            _items = new List<FloorItem>();
-            _droppedItems = new List<Sprite>();
+            _pickableItems = new List<PickableItem>();
+            _actionnedItems = new List<ActionnedItem>();
             AreaWidth = screenJsonDatas.AreaWidth;
             AreaHeight = screenJsonDatas.AreaHeight;
 
@@ -100,7 +105,7 @@ namespace RPG4.Abstractions
             }
             foreach (dynamic itemJson in screenJsonDatas.Items)
             {
-                _items.Add(new FloorItem(itemJson));
+                _pickableItems.Add(new PickableItem(itemJson));
             }
             dynamic adjacentScreens = screenJsonDatas.AdjacentScreens;
             _adjacentScreens = new Dictionary<Directions, int>
@@ -124,25 +129,9 @@ namespace RPG4.Abstractions
         {
             Player.BehaviorAtNewFrame(this, keys);
 
-            // checks for items on the new position
-            var items = _items.Where(it => it.Overlap(Player)).ToList();
-            foreach (var item in items)
-            {
-                if (Player.Inventory.TryAdd(item.ItemId, item.Quantity))
-                {
-                    _items.Remove(item);
-                }
-            }
-
-            // check inventory use
-            if (keys.InventorySlotId.HasValue)
-            {
-                var itemDropped = Player.Inventory.UseItem(this, keys.InventorySlotId.Value);
-                if (itemDropped != null)
-                {
-                    _droppedItems.Add(itemDropped);
-                }
-            }
+            CheckItemsToPick();
+            
+            CheckInventoryUse(keys);
 
             // enemies management must be done after player management
             foreach (var enemy in _enemies)
@@ -167,11 +156,9 @@ namespace RPG4.Abstractions
             }
             _rifts.RemoveAll(r => r.LifePoints <= 0);
 
-            // bombs disappear when they overlap a structure
-            var bombsToRemove = _bombs.Where(b => b.IsDone || SolidStructures.Any(cw => cw.Overlap(b))).Cast<Sprite>().ToList();
-            _droppedItems.RemoveAll(di => bombsToRemove.Contains(di));
-
-            foreach (var di in _droppedItems)
+            // dropped items disappear when they overlap a structure
+            _actionnedItems.RemoveAll(di => di.IsDone || SolidStructures.Any(cw => cw.Overlap(di)));
+            foreach (var di in _actionnedItems)
             {
                 di.BehaviorAtNewFrame(this);
             }
@@ -179,6 +166,33 @@ namespace RPG4.Abstractions
             if (Player.NewScreenEntrance.HasValue)
             {
                 SetEnginePropertiesFromScreenDatas(_adjacentScreens[Player.NewScreenEntrance.Value]);
+            }
+        }
+
+        // Checks inventory use.
+        private void CheckInventoryUse(KeyPress keys)
+        {
+            if (keys.InventorySlotId.HasValue)
+            {
+                var itemDropped = Player.Inventory.UseItem(this, keys.InventorySlotId.Value);
+                if (itemDropped != null)
+                {
+                    _actionnedItems.Add(itemDropped);
+                }
+            }
+        }
+
+        // Checks for items to pick on the current position.
+        private void CheckItemsToPick()
+        {
+            var items = _pickableItems.Where(it => it.Overlap(Player)).ToList();
+            foreach (var item in items)
+            {
+                item.Pick(this);
+                if (item.Quantity == 0)
+                {
+                    _pickableItems.Remove(item);
+                }
             }
         }
 
@@ -228,7 +242,7 @@ namespace RPG4.Abstractions
         /// <returns>Life points lost.</returns>
         public double OverlapAnExplodingBomb<T>(T sprite) where T : Sprite, IExplodable
         {
-            return _bombs.Sum(b => b.GetLifePointCost(sprite));
+            return _actionnedItems.Where(di => di is ActionnedBomb).Sum(b => (b as ActionnedBomb).GetLifePointCost(sprite));
         }
     }
 }

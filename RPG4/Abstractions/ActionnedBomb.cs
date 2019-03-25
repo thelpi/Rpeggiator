@@ -6,8 +6,8 @@ namespace RPG4.Abstractions
     /// <summary>
     /// Represents the bomb item when dropped on the floor.
     /// </summary>
-    /// <seealso cref="Sprite"/>
-    public class Bomb : Sprite
+    /// <seealso cref="ActionnedItem"/>
+    public class ActionnedBomb : ActionnedItem
     {
         // Width.
         private const double WIDTH = 20;
@@ -36,14 +36,14 @@ namespace RPG4.Abstractions
         /// <summary>
         /// Inferred; Indicates the bomb's explosion is done.
         /// </summary>
-        public bool IsDone { get { return _explosionFrameCount > EXPLODING_FRAME_COUNT; } }
+        public override bool IsDone { get { return _explosionFrameCount > EXPLODING_FRAME_COUNT; } }
 
         /// <summary>
         /// Constructor.
         /// </summary>
         /// <param name="x"><see cref="Sprite.X"/></param>
         /// <param name="y"><see cref="Sprite.Y"/></param>
-        public Bomb(double x, double y) : base(x, y, WIDTH, HEIGHT)
+        public ActionnedBomb(double x, double y) : base(x, y, WIDTH, HEIGHT)
         {
             _pendingExplosionFrameCount = PENDING_FRAME_COUNT;
             ExplosionSprite = null;

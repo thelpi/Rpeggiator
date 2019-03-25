@@ -22,10 +22,6 @@ namespace RPG4.Abstractions
         /// Indicates if the item is unique.
         /// </summary>
         public bool Unique { get; private set; }
-        /// <summary>
-        /// Indicates if the item can be stored without limit.
-        /// </summary>
-        public bool Unlimited { get; private set; }
 
         // private constructor
         private Item() { }
@@ -53,29 +49,25 @@ namespace RPG4.Abstractions
             {
                 Id = ItemIdEnum.Bomb,
                 Name = "Bomb",
-                Unique = false,
-                Unlimited = false
+                Unique = false
             });
             _items.Add(new Item
             {
                 Id = ItemIdEnum.SmallLifePotion,
                 Name = "Life potion (small)",
-                Unique = false,
-                Unlimited = false
+                Unique = false
             });
             _items.Add(new Item
             {
                 Id = ItemIdEnum.MediumLifePotion,
                 Name = "Life potion (medium)",
-                Unique = false,
-                Unlimited = false
+                Unique = false
             });
             _items.Add(new Item
             {
                 Id = ItemIdEnum.LargeLifePotion,
                 Name = "Life potion (large)",
-                Unique = false,
-                Unlimited = false
+                Unique = false
             });
         }
     }

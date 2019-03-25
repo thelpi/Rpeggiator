@@ -1,7 +1,7 @@
 ﻿namespace RPG4.Abstractions
 {
     /// <summary>
-    /// Represents a wall which can be destroyed by a <see cref="Bomb"/>.
+    /// Represents a wall which can be destroyed by a <see cref="ActionnedBomb"/>.
     /// </summary>
     /// <seealso cref="Sprite"/>
     /// <seealso cref="IExplodable"/>

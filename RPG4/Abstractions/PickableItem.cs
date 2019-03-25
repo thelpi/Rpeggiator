@@ -6,7 +6,7 @@ namespace RPG4.Abstractions
     /// Represents a <see cref="Item"/> when pickable on the floor.
     /// </summary>
     /// <seealso cref="Sprite"/>
-    public class FloorItem : Sprite
+    public class PickableItem : Sprite
     {
         /// <summary>
         /// <see cref="ItemIdEnum"/>
@@ -26,7 +26,7 @@ namespace RPG4.Abstractions
         /// <param name="y"><see cref="Sprite.Y"/></param>
         /// <param name="width"><see cref="Sprite.Width"/></param>
         /// <param name="height"><see cref="Sprite.Height"/></param>
-        public FloorItem(ItemIdEnum itemId, int quantity, double x, double y, double width, double height)
+        public PickableItem(ItemIdEnum itemId, int quantity, double x, double y, double width, double height)
             : base(x, y, width, height)
         {
             ItemId = itemId;
@@ -37,12 +37,21 @@ namespace RPG4.Abstractions
         /// Constructor.
         /// </summary>
         /// <param name="floorItemJson">The json dynamic object.</param>
-        public FloorItem(dynamic floorItemJson) : base((object)floorItemJson)
+        public PickableItem(dynamic floorItemJson) : base((object)floorItemJson)
         {
             string realJsonValue = floorItemJson.ItemId;
 
             ItemId = (ItemIdEnum)Enum.Parse(typeof(ItemIdEnum), realJsonValue);
             Quantity = floorItemJson.Quantity;
+        }
+
+        /// <summary>
+        /// Picks the item.
+        /// </summary>
+        /// <param name="engine"><see cref="AbstractEngine"/></param>
+        public void Pick(AbstractEngine engine)
+        {
+            Quantity = engine.Player.Inventory.TryAdd(ItemId, Quantity);
         }
     }
 }

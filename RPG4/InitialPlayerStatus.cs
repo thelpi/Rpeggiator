@@ -36,16 +36,12 @@ namespace RPG4
         /// </summary>
         public const double HIT_LIFE_POINT_COST = 1;
         /// <summary>
-        /// Initial size of the inventory.
-        /// </summary>
-        public const int INVENTORY_SIZE = 10;
-        /// <summary>
         /// Initial list of items in the inventory.
         /// </summary>
         public static readonly InventoryItem[] INVENTORY_ITEMS = new InventoryItem[]
         {
-            new InventoryItem(ItemIdEnum.SmallLifePotion, 3),
-            new InventoryItem(ItemIdEnum.Bomb, 10),
+            new InventoryItem(ItemIdEnum.SmallLifePotion, 3, Inventory.MAX_QUANTITY_BY_ITEM[ItemIdEnum.SmallLifePotion]),
+            new InventoryItem(ItemIdEnum.Bomb, 10, Inventory.MAX_QUANTITY_BY_ITEM[ItemIdEnum.Bomb]),
         };
         /// <summary>
         /// Initial life points.

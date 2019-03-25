@@ -17,8 +17,9 @@ namespace RPG4
     public delegate KeyPress KeyPressHandler();
 
     /// <summary>
-    /// Logique d'interaction pour MainWindow.xaml
+    /// Logic interaction for the main window.
     /// </summary>
+    /// <seealso cref="Window"/>
     public partial class MainWindow : Window
     {
         private const string PLAYER_HIT_TAG = "PLAYER_HIT";
@@ -43,12 +44,12 @@ namespace RPG4
         {
             InitializeComponent();
 
-            _engine = new AbstractEngine(1);
+            _engine = new AbstractEngine(Constants.FIRST_SCREEN_INDEX);
 
             cvsMain.Height = _engine.AreaHeight;
             cvsMain.Width = _engine.AreaWidth;
 
-            // size of the player never change
+            // Size of the player never changes.
             rctPlayer.Height = _engine.Player.Height;
             rctPlayer.Width = _engine.Player.Width;
             
@@ -74,11 +75,11 @@ namespace RPG4
             var pressedKeys = (KeyPress)Dispatcher.Invoke(new KeyPressHandler(delegate()
             {
                 int? inventorySlotId = null;
-                for (int i = 0; i < 10; i++)
+                for (int i = 0; i < Constants.INVENTORY_SIZE; i++)
                 {
                     if (Keyboard.IsKeyDown((Key)Enum.Parse(typeof(Key), string.Format("D{0}", i))))
                     {
-                        inventorySlotId = i;
+                        inventorySlotId = i == 0 ? Constants.INVENTORY_SIZE : (i - 1);
                         break;
                     }
                 }
@@ -202,11 +203,11 @@ namespace RPG4
                     tag = ENEMY_TAG;
                     brush = Brushes.Blue;
                 }
-                else if (sprite.GetType() == typeof(Bomb))
+                else if (sprite.GetType() == typeof(ActionnedBomb))
                 {
                     tag = BOMB_TAG;
                     brush = Brushes.LightBlue;
-                    halo = (sprite as Bomb).ExplosionSprite;
+                    halo = (sprite as ActionnedBomb).ExplosionSprite;
                     haloTag = BOMB_HALO_TAG;
                     haloBrush = Brushes.SandyBrown;
                 }
@@ -220,7 +221,7 @@ namespace RPG4
                     tag = GATE_TRIGGER_TAG;
                     brush = (sprite as GateTrigger).IsActivated ? Brushes.Yellow : Brushes.Orange;
                 }
-                else if (sprite.GetType() == typeof(FloorItem))
+                else if (sprite.GetType() == typeof(PickableItem))
                 {
                     tag = ITEM_TAG;
                     brush = Brushes.LightBlue;
@@ -243,7 +244,7 @@ namespace RPG4
         {
             pgbPlayerLifePoints.Maximum = _engine.Player.MaximalLifePoints;
             pgbPlayerLifePoints.Value = _engine.Player.CurrentLifePoints;
-            for (int i = 0; i < 10; i++)
+            for (int i = 0; i < Constants.INVENTORY_SIZE; i++)
             {
                 var itemSlotRct = (Rectangle)FindName(string.Format("rctItem{0}", i));
                 var itemSlotTxt = (TextBlock)FindName(string.Format("txbItem{0}", i));

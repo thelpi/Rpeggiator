@@ -8,12 +8,23 @@ namespace RPG4.Abstractions
     /// </summary>
     public class Inventory
     {
+        /// <summary>
+        /// Quantity
+        /// </summary>
+        /// <remarks>
+        /// Move somewhere else when ready.
+        /// If <see cref="Item.Unique"/> is set on the item, the value here should be ignored.
+        /// </remarks>
+        public static readonly IReadOnlyDictionary<ItemIdEnum, int> MAX_QUANTITY_BY_ITEM = new Dictionary<ItemIdEnum, int>
+        {
+            { ItemIdEnum.Bomb, 20 },
+            { ItemIdEnum.SmallLifePotion, 20 },
+            { ItemIdEnum.MediumLifePotion, 20 },
+            { ItemIdEnum.LargeLifePotion, 20 },
+        };
+
         private List<InventoryItem> _items;
 
-        /// <summary>
-        /// Maximal size of the inventory.
-        /// </summary>
-        public int Size { get; private set; }
         /// <summary>
         /// List of <see cref="InventoryItem"/>
         /// </summary>
@@ -25,7 +36,6 @@ namespace RPG4.Abstractions
         public Inventory()
         {
             _items = InitialPlayerStatus.INVENTORY_ITEMS.ToList();
-            Size = InitialPlayerStatus.INVENTORY_SIZE;
         }
 
         /// <summary>
@@ -33,39 +43,24 @@ namespace RPG4.Abstractions
         /// </summary>
         /// <param name="itemId"><see cref="ItemIdEnum"/></param>
         /// <param name="quantity">Quantity.</param>
-        /// <param name="removalItemId">Optionnal; <see cref="ItemIdEnum"/> to substitute.</param>
         /// <returns><c>True</c> if the item has been added; <c>False</c> otherwise.</returns>
-        public bool TryAdd(ItemIdEnum itemId, int quantity, ItemIdEnum? removalItemId = null)
+        public int TryAdd(ItemIdEnum itemId, int quantity)
         {
-            if (removalItemId.HasValue && _items.Any(item => item.ItemId == removalItemId.Value))
-            {
-                _items.RemoveAll(item => item.ItemId == removalItemId.Value);
-            }
-            if (_items.Count < Size)
-            {
-                _items.Add(new InventoryItem(itemId, quantity));
-                return true;
-            }
-            return false;
-        }
+            int remaining = 0;
 
-        // Sets a unique use of the item.
-        private bool MarkItemAsUsed(ItemIdEnum itemId)
-        {
-            var item = _items.Find(it => it.ItemId == itemId);
-            item.DecreaseQuantity();
-            if (item.Quantity == 0)
+            if (_items.Any(item => item.ItemId == itemId))
             {
-                _items.Remove(item);
-                return true;
+                remaining = _items.First(item => item.ItemId == itemId).TryIncreaseQuantity(quantity);
             }
-            return false;
-        }
-
-        // Gets the slot associated to an item identifier.
-        private int GetSlotByItemId(ItemIdEnum itemId)
-        {
-            return _items.FindIndex(it => it.ItemId == itemId);
+            else if (_items.Count < Constants.INVENTORY_SIZE)
+            {
+                _items.Add(new InventoryItem(itemId, quantity, MAX_QUANTITY_BY_ITEM[itemId]));
+            }
+            else
+            {
+                remaining = quantity;
+            }
+            return remaining;
         }
 
         /// <summary>
@@ -73,26 +68,36 @@ namespace RPG4.Abstractions
         /// </summary>
         /// <param name="engine"><see cref="AbstractEngine"/></param>
         /// <param name="inventorySlotId">Inventory slot index.</param>
-        /// <returns>Item dropped; <c>Null</c> if item dropped.</returns>
-        public Sprite UseItem(AbstractEngine engine, int inventorySlotId)
+        /// <returns><see cref="ActionnedItem"/>; <c>Null</c> if item dropped.</returns>
+        public ActionnedItem UseItem(AbstractEngine engine, int inventorySlotId)
         {
-            // checks for bombs dropped on the new position
-            int indexId = GetSlotByItemId(ItemIdEnum.Bomb);
-            if (inventorySlotId == indexId)
+            if (inventorySlotId >= _items.Count)
             {
-                MarkItemAsUsed(ItemIdEnum.Bomb);
-                return new Bomb(engine.Player.X, engine.Player.Y);
+                return null;
             }
 
-            // checks for small life potions
-            indexId = GetSlotByItemId(ItemIdEnum.SmallLifePotion);
-            if (inventorySlotId == indexId)
+            var item = _items.ElementAt(inventorySlotId);
+            ActionnedItem droppedItem = null;
+
+            switch (item.ItemId)
             {
-                engine.Player.DrinkLifePotion(ItemIdEnum.SmallLifePotion);
-                MarkItemAsUsed(ItemIdEnum.SmallLifePotion);
+                case ItemIdEnum.Bomb:
+                    droppedItem = new ActionnedBomb(engine.Player.X, engine.Player.Y);
+                    break;
+                case ItemIdEnum.SmallLifePotion:
+                case ItemIdEnum.MediumLifePotion:
+                case ItemIdEnum.LargeLifePotion:
+                    engine.Player.DrinkLifePotion(item.ItemId);
+                    break;
             }
 
-            return null;
+            item.DecreaseQuantity();
+            if (item.Quantity == 0)
+            {
+                _items.Remove(item);
+            }
+
+            return droppedItem;
         }
     }
 }
