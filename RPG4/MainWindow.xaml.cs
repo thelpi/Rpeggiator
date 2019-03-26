@@ -30,12 +30,14 @@ namespace RPG4
         private const string ITEM_TAG = "ITEM";
         private const string BOMB_TAG = "BOMB";
         private const string RIFT_TAG = "RIFT";
+        private const string PIT_TAG = "PIT";
         private const string BOMB_HALO_TAG = "BOMB_HALO_TAG";
         private const string UNIQUE_TIMESTAMP_PATTERN = "fffffff";
 
         private Timer _timer;
         private volatile bool _timerIsIn;
         private AbstractEngine _engine;
+        private int _currentScreenIndex;
 
         /// <summary>
         /// Constructor.
@@ -46,16 +48,9 @@ namespace RPG4
 
             _engine = new AbstractEngine(Constants.FIRST_SCREEN_INDEX);
 
-            cvsMain.Height = _engine.AreaHeight;
-            cvsMain.Width = _engine.AreaWidth;
-
             // Size of the player never changes.
             rctPlayer.Height = _engine.Player.Height;
             rctPlayer.Width = _engine.Player.Width;
-            
-            DrawWalls();
-            RefreshSprites();
-            RefreshMenu();
 
             _timer = new Timer(1000 / Constants.FPS);
             _timer.Elapsed += NewFrame;
@@ -98,8 +93,9 @@ namespace RPG4
 
             Dispatcher.Invoke((delegate()
             {
-                if (_engine.Player.NewScreenEntrance.HasValue)
+                if (_engine.CurrentScreenId != _currentScreenIndex)
                 {
+                    _currentScreenIndex = _engine.CurrentScreenId;
                     cvsMain.Height = _engine.AreaHeight;
                     cvsMain.Width = _engine.AreaWidth;
                     DrawWalls();
@@ -190,6 +186,7 @@ namespace RPG4
             ClearCanvasByTag(BOMB_TAG);
             ClearCanvasByTag(GATE_TAG);
             ClearCanvasByTag(RIFT_TAG);
+            ClearCanvasByTag(PIT_TAG);
             foreach (var sprite in _engine.AnimatedSprites)
             {
                 string tag = null;
@@ -230,6 +227,11 @@ namespace RPG4
                 {
                     tag = RIFT_TAG;
                     brush = Brushes.DarkBlue;
+                }
+                else if (sprite.GetType() == typeof(Pit))
+                {
+                    tag = PIT_TAG;
+                    brush = Brushes.Gray;
                 }
 
                 DrawSizedPoint(sprite, brush, tag, halo != null ? 1 : 0);

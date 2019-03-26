@@ -76,6 +76,7 @@
     <Compile Include="Abstractions\ActionnedBomb.cs" />
     <Compile Include="Abstractions\Directions.cs" />
     <Compile Include="Abstractions\ActionnedItem.cs" />
+    <Compile Include="Abstractions\Pit.cs" />
     <Compile Include="Abstractions\PickableItem.cs" />
     <Compile Include="Abstractions\IExplodable.cs" />
     <Compile Include="Abstractions\Inventory.cs" />

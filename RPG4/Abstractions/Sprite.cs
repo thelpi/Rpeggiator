@@ -31,6 +31,10 @@ namespace RPG4.Abstractions
         /// Inferred; BottomRightY
         /// </summary>
         public double BottomRightY { get { return Y + Height; } }
+        /// <summary>
+        /// Inferred; surface, in pixels square.
+        /// </summary>
+        public double Surface { get { return Width * Height; } }
 
         /// <summary>
         /// Constructor.
@@ -101,6 +105,44 @@ namespace RPG4.Abstractions
         public bool Overlap(Sprite other)
         {
             return HorizontalOverlap(other) && VerticalOverlap(other);
+        }
+
+        /// <summary>
+        /// Checks if the instance overlaps another instance.
+        /// </summary>
+        /// <param name="other">The second instance.</param>
+        /// <param name="overlapMinimalRatio">The minimal ratio of this instance's surface which overlap the second instance.</param>
+        /// <returns><c>True</c> if overlaps; <c>False</c> otherwise.</returns>
+        public virtual bool Overlap(Sprite other, double overlapMinimalRatio)
+        {
+            double overlapX = ComputeOneDimensionOverlap(X, BottomRightX, other.X, other.BottomRightX);
+            double overlapY = ComputeOneDimensionOverlap(Y, BottomRightY, other.Y, other.BottomRightY);
+            double surfaceCovered = overlapX * overlapY;
+            double surfaceExpectedCovered = overlapMinimalRatio * other.Surface;
+            return surfaceCovered >= surfaceExpectedCovered;
+        }
+
+        // Computes a one-dimensional overlap (width / height)
+        private double ComputeOneDimensionOverlap(double i1Start, double i1End, double i2Start, double i2End)
+        {
+            if (i1Start <= i2Start && i1End >= i2End)
+            {
+                return i2End - i2Start;
+            }
+            else if (i2Start <= i1Start && i2End >= i1End)
+            {
+                return i1End - i1Start;
+            }
+            else if (i1Start <= i2Start && i2Start <= i1End)
+            {
+                return i1End - i2Start;
+            }
+            else if (i1Start <= i2End && i1End >= i2End)
+            {
+                return i2End - i1Start;
+            }
+
+            return 0;
         }
 
         /// <summary>

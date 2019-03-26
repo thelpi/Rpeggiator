@@ -65,7 +65,8 @@ namespace RPG4.Abstractions
         /// <returns><c>True</c> if death; <c>False</c> otherwise.</returns>
         public bool CheckDeath(AbstractEngine engine)
         {
-            if (engine.SolidStructures.Any(ss => ss.Overlap(this)))
+            if (engine.SolidStructures.Any(ss => ss.Overlap(this))
+                || engine.Pits.Any(r => r.Overlap(this) && (GetType() == typeof(Enemy) || r.Deadly)))
             {
                 CurrentLifePoints = 0;
             }

@@ -84,5 +84,14 @@
 		"Quantity": 10
 	  }
   ],
-  "Rifts":[]
+  "Rifts":[],
+  "Pits":[
+	{
+		"X": "600",
+		"Y": "400",
+		"Width": "50",
+		"Height": "50",
+		"ScreenIndexEntrance": 1,
+	}
+  ]
 }

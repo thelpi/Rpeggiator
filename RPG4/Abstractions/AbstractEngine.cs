@@ -17,6 +17,7 @@ namespace RPG4.Abstractions
         private List<GateTrigger> _gateTriggers;
         private List<PickableItem> _pickableItems;
         private List<ActionnedItem> _actionnedItems;
+        private List<Pit> _pits;
 
         /// <summary>
         /// Current screen width.
@@ -39,6 +40,10 @@ namespace RPG4.Abstractions
         /// </summary>
         public IReadOnlyCollection<Sprite> SolidStructures { get { return _walls.Concat(_rifts).Concat(_gates.Where(g => g.Activated)).ToList(); } }
         /// <summary>
+        /// List of <see cref="Pit"/>.
+        /// </summary>
+        public IReadOnlyCollection<Pit> Pits { get { return _pits; } }
+        /// <summary>
         /// List of every <see cref="Sprite"/> which requires a display management at each frame.
         /// </summary>
         /// <remarks>Doesn't include <see cref="Walls"/>.</remarks>
@@ -49,6 +54,7 @@ namespace RPG4.Abstractions
                 List<Sprite> sprites = new List<Sprite>();
                 sprites.AddRange(_pickableItems);
                 sprites.AddRange(_rifts);
+                sprites.AddRange(_pits);
                 sprites.AddRange(_actionnedItems);
                 sprites.AddRange(_gateTriggers);
                 sprites.AddRange(_enemies);
@@ -56,6 +62,10 @@ namespace RPG4.Abstractions
                 return sprites;
             }
         }
+        /// <summary>
+        /// Current screen identifier..
+        /// </summary>
+        public int CurrentScreenId { get; private set; }
 
         /// <summary>
         /// Constructor.
@@ -69,15 +79,18 @@ namespace RPG4.Abstractions
         }
 
         // proceeds to every changes implied by a new screen
-        private void SetEnginePropertiesFromScreenDatas(int screenIndex)
+        private void SetEnginePropertiesFromScreenDatas(int screenId)
         {
-            dynamic screenJsonDatas = Tools.GetScreenDatasFromIndex(screenIndex);
+            CurrentScreenId = screenId;
+
+            dynamic screenJsonDatas = Tools.GetScreenDatasFromIndex(screenId);
 
             _walls = new List<Sprite>();
             _enemies = new List<Enemy>();
             _gateTriggers = new List<GateTrigger>();
             _gates = new List<Gate>();
             _rifts = new List<Rift>();
+            _pits = new List<Pit>();
             _pickableItems = new List<PickableItem>();
             _actionnedItems = new List<ActionnedItem>();
             AreaWidth = screenJsonDatas.AreaWidth;
@@ -94,6 +107,10 @@ namespace RPG4.Abstractions
             foreach (dynamic riftJson in screenJsonDatas.Rifts)
             {
                 _rifts.Add(new Rift(riftJson));
+            }
+            foreach (dynamic pitJson in screenJsonDatas.Pits)
+            {
+                _pits.Add(new Pit(pitJson));
             }
             foreach (dynamic enemyJson in screenJsonDatas.Enemies)
             {
@@ -153,6 +170,15 @@ namespace RPG4.Abstractions
             if (Player.NewScreenEntrance.HasValue)
             {
                 SetEnginePropertiesFromScreenDatas(_adjacentScreens[Player.NewScreenEntrance.Value]);
+            }
+            else
+            {
+                // 11 - Checks for pits
+                Pit pit = _pits.FirstOrDefault(p => p.ScreenIndexEntrance.HasValue && p.Overlap(Player));
+                if (pit != null)
+                {
+                    SetEnginePropertiesFromScreenDatas(pit.ScreenIndexEntrance.Value);
+                }
             }
         }
 
