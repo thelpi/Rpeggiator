@@ -41,9 +41,9 @@
         /// </summary>
         /// <param name="other">The second instance.</param>
         /// <returns><c>True</c> if overlaps; <c>False</c> otherwise.</returns>
-        public new bool Overlap(Sprite other)
+        public bool Overlap(Sprite other)
         {
-            return base.Overlap(other, FALL_IN_OVERLAP_RATIO);
+            return Overlap(other, FALL_IN_OVERLAP_RATIO);
         }
     }
 }

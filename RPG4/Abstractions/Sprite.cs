@@ -74,52 +74,39 @@ namespace RPG4.Abstractions
             return new Sprite(x, y, Width, Height);
         }
 
-        // Checks if the instance overlaps another instance on one dimension.
-        private bool OndeDimensionOverlap(double d1, double d2, double od1, double od2)
-        {
-            // 2 cases should be enough
-            bool xCase1 = d1 < od1 && d2 > od1;
-            bool xCase2 = d1 < od2 && d2 > od2;
-            bool xCase3 = d1 > od1 && d2 < od2;
-
-            return xCase1 || xCase2 || xCase3;
-        }
-
-        // Checks if the instance horizontally overlaps another instance.
-        private bool HorizontalOverlap(Sprite other)
-        {
-            return OndeDimensionOverlap(X, BottomRightX, other.X, other.BottomRightX);
-        }
-
-        // Checks if the instance vertically overlaps another instance.
-        private bool VerticalOverlap(Sprite other)
-        {
-            return OndeDimensionOverlap(Y, BottomRightY, other.Y, other.BottomRightY);
-        }
-
         /// <summary>
         /// Checks if the instance overlaps another instance.
         /// </summary>
         /// <param name="other">The second instance.</param>
+        /// <param name="overlapMinimalRatio">Optionnal; The minimal ratio of this instance's surface which overlap the second instance.</param>
         /// <returns><c>True</c> if overlaps; <c>False</c> otherwise.</returns>
-        public bool Overlap(Sprite other)
-        {
-            return HorizontalOverlap(other) && VerticalOverlap(other);
-        }
-
-        /// <summary>
-        /// Checks if the instance overlaps another instance.
-        /// </summary>
-        /// <param name="other">The second instance.</param>
-        /// <param name="overlapMinimalRatio">The minimal ratio of this instance's surface which overlap the second instance.</param>
-        /// <returns><c>True</c> if overlaps; <c>False</c> otherwise.</returns>
-        public virtual bool Overlap(Sprite other, double overlapMinimalRatio)
+        public bool Overlap(Sprite other, double overlapMinimalRatio = 0)
         {
             double overlapX = ComputeOneDimensionOverlap(X, BottomRightX, other.X, other.BottomRightX);
             double overlapY = ComputeOneDimensionOverlap(Y, BottomRightY, other.Y, other.BottomRightY);
-            double surfaceCovered = overlapX * overlapY;
+
+            double surfaceCovered = ComputeHorizontalOverlap(other) * ComputeVerticalOverlap(other);
+
+            if (overlapMinimalRatio == 0)
+            {
+                return surfaceCovered > 0;
+            }
+
             double surfaceExpectedCovered = overlapMinimalRatio * other.Surface;
+
             return surfaceCovered >= surfaceExpectedCovered;
+        }
+
+        // Computes an horizontal overlap (width)
+        private double ComputeHorizontalOverlap(Sprite other)
+        {
+            return ComputeOneDimensionOverlap(X, BottomRightX, other.X, other.BottomRightX);
+        }
+
+        // Computes a vertival overlap (height)
+        private double ComputeVerticalOverlap(Sprite other)
+        {
+            return ComputeOneDimensionOverlap(Y, BottomRightY, other.Y, other.BottomRightY);
         }
 
         // Computes a one-dimensional overlap (width / height)
@@ -168,8 +155,8 @@ namespace RPG4.Abstractions
             if (Overlap(currentPt))
             {
                 return new Point(
-                    goLeft.HasValue && !HorizontalOverlap(originalPt) ? (goLeft == true ? BottomRightX : (X - originalPt.Width)) : currentPt.X,
-                    goUp.HasValue && !VerticalOverlap(originalPt) ? (goUp == true ? BottomRightY : (Y - originalPt.Height)) : currentPt.Y
+                    goLeft.HasValue && ComputeHorizontalOverlap(originalPt) == 0 ? (goLeft == true ? BottomRightX : (X - originalPt.Width)) : currentPt.X,
+                    goUp.HasValue && ComputeVerticalOverlap(originalPt) == 0 ? (goUp == true ? BottomRightY : (Y - originalPt.Height)) : currentPt.Y
                 );
             }
 
