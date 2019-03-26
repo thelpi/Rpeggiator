@@ -22,6 +22,10 @@ namespace RPG4.Abstractions
         /// Indicates if the item is unique.
         /// </summary>
         public bool Unique { get; private set; }
+        /// <summary>
+        /// Frames count delay between two use.
+        /// </summary>
+        public int DelayBetweenUse { get; private set; }
 
         // private constructor
         private Item() { }
@@ -49,25 +53,29 @@ namespace RPG4.Abstractions
             {
                 Id = ItemIdEnum.Bomb,
                 Name = "Bomb",
-                Unique = false
+                Unique = false,
+                DelayBetweenUse = Constants.FPS
             });
             _items.Add(new Item
             {
                 Id = ItemIdEnum.SmallLifePotion,
                 Name = "Life potion (small)",
-                Unique = false
+                Unique = false,
+                DelayBetweenUse = Constants.FPS * 2
             });
             _items.Add(new Item
             {
                 Id = ItemIdEnum.MediumLifePotion,
                 Name = "Life potion (medium)",
-                Unique = false
+                Unique = false,
+                DelayBetweenUse = Constants.FPS * 2
             });
             _items.Add(new Item
             {
                 Id = ItemIdEnum.LargeLifePotion,
                 Name = "Life potion (large)",
-                Unique = false
+                Unique = false,
+                DelayBetweenUse = Constants.FPS * 2
             });
         }
     }

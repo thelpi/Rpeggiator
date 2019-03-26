@@ -1,19 +1,16 @@
-﻿using System.Collections.Generic;
-
-namespace RPG4.Abstractions
+﻿namespace RPG4.Abstractions
 {
     /// <summary>
     /// Represents an <see cref="Item"/> in the player inventory.
     /// </summary>
     public class InventoryItem
     {
-        // Indicates if the item is unique.
-        private bool _unique;
+        private ulong _engineFrameCountFlag;
 
         /// <summary>
-        /// Item identifier.
+        /// base item.
         /// </summary>
-        public ItemIdEnum ItemId { get; private set; }
+        public Item BaseItem { get; private set; }
         /// <summary>
         /// Remaining quantity.
         /// </summary>
@@ -27,25 +24,25 @@ namespace RPG4.Abstractions
         /// Constructor.
         /// </summary>
         /// <remarks>If <paramref name="quantity"/> is greater than <paramref name="maxQuantity"/>, the second is used for <see cref="Quantity"/>.</remarks>
-        /// <param name="idemId"><see cref="ItemId"/></param>
+        /// <param name="idemId"><see cref="BaseItem"/> identifier.</param>
         /// <param name="quantity"><see cref="Quantity"/>; ignored if the item is marked as unique.</param>
         /// <param name="maxQuantity"><see cref="MaxQuantity"/>; ignored if the item is marked as unique.</param>
         public InventoryItem(ItemIdEnum idemId, int quantity, int maxQuantity)
         {
-            Item item = Item.GetItem(idemId);
-
-            ItemId = idemId;
-            MaxQuantity = item.Unique ? 1 : maxQuantity;
-            Quantity = item.Unique ? 1 : (quantity > maxQuantity ? maxQuantity : quantity);
-            _unique = item.Unique;
+            BaseItem = Item.GetItem(idemId);
+            MaxQuantity = BaseItem.Unique ? 1 : maxQuantity;
+            Quantity = BaseItem.Unique ? 1 : (quantity > maxQuantity ? maxQuantity : quantity);
+            _engineFrameCountFlag = 0;
         }
 
         /// <summary>
         /// Decreases the quantity when used.
         /// </summary>
-        public void DecreaseQuantity()
+        /// <param name="engineFrameCountFlag">The current engine <see cref="AbstractEngine.FramesCount"/> value.</param>
+        public void DecreaseQuantity(ulong engineFrameCountFlag)
         {
-            if (Quantity > 0 && !_unique)
+            _engineFrameCountFlag = engineFrameCountFlag;
+            if (Quantity > 0 && !BaseItem.Unique)
             {
                 Quantity--;
             }
@@ -58,7 +55,7 @@ namespace RPG4.Abstractions
         /// <returns>Remaining quantity if limit reached.</returns>
         public int TryIncreaseQuantity(int newQuantity)
         {
-            if (_unique)
+            if (BaseItem.Unique)
             {
                 return newQuantity;
             }
@@ -73,6 +70,16 @@ namespace RPG4.Abstractions
             }
 
             return remaining;
+        }
+
+        /// <summary>
+        /// Indicates if the item is alreayd in use.
+        /// </summary>
+        /// <param name="engineFrameCount">The current engine <see cref="AbstractEngine.FramesCount"/> value.</param>
+        /// <returns><c>True</c> if in use; <c>False</c> otherwise.</returns>
+        public bool IsCurrentlyUsed(ulong engineFrameCount)
+        {
+            return _engineFrameCountFlag > 0 && (int)(engineFrameCount - _engineFrameCountFlag) <= BaseItem.DelayBetweenUse;
         }
     }
 }

@@ -66,6 +66,10 @@ namespace RPG4.Abstractions
         /// Current screen identifier..
         /// </summary>
         public int CurrentScreenId { get; private set; }
+        /// <summary>
+        /// Frames count.
+        /// </summary>
+        public ulong FramesCount { get; private set; }
 
         /// <summary>
         /// Constructor.
@@ -144,6 +148,9 @@ namespace RPG4.Abstractions
         /// <param name="keys"><see cref="KeyPress"/></param>
         public void CheckEngineAtNewFrame(KeyPress keys)
         {
+            // 0 - Frames count.
+            FramesCount++;
+
             // 1 - Player.
             Player.BehaviorAtNewFrame(this, keys);
             // 2 - Enemies.

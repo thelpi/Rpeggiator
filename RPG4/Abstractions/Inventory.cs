@@ -48,9 +48,9 @@ namespace RPG4.Abstractions
         {
             int remaining = 0;
 
-            if (_items.Any(item => item.ItemId == itemId))
+            if (_items.Any(item => item.BaseItem.Id == itemId))
             {
-                remaining = _items.First(item => item.ItemId == itemId).TryIncreaseQuantity(quantity);
+                remaining = _items.First(item => item.BaseItem.Id == itemId).TryIncreaseQuantity(quantity);
             }
             else if (_items.Count < Constants.INVENTORY_SIZE)
             {
@@ -77,9 +77,15 @@ namespace RPG4.Abstractions
             }
 
             var item = _items.ElementAt(inventorySlotId);
+
+            if (item.IsCurrentlyUsed(engine.FramesCount))
+            {
+                return null;
+            }
+
             ActionnedItem droppedItem = null;
 
-            switch (item.ItemId)
+            switch (item.BaseItem.Id)
             {
                 case ItemIdEnum.Bomb:
                     droppedItem = new ActionnedBomb(engine.Player.X, engine.Player.Y);
@@ -87,11 +93,11 @@ namespace RPG4.Abstractions
                 case ItemIdEnum.SmallLifePotion:
                 case ItemIdEnum.MediumLifePotion:
                 case ItemIdEnum.LargeLifePotion:
-                    engine.Player.DrinkLifePotion(item.ItemId);
+                    engine.Player.DrinkLifePotion(item.BaseItem.Id);
                     break;
             }
 
-            item.DecreaseQuantity();
+            item.DecreaseQuantity(engine.FramesCount);
             if (item.Quantity == 0)
             {
                 _items.Remove(item);

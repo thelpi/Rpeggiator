@@ -259,7 +259,7 @@ namespace RPG4
                 {
                     var item = _engine.Player.Inventory.Items.ElementAt(i);
                     itemSlotTxt.Text = item.Quantity.ToString().PadLeft(3, '0');
-                    switch (item.ItemId)
+                    switch (item.BaseItem.Id)
                     {
                         case ItemIdEnum.Bomb:
                             itemSlotRct.Fill = Brushes.LightBlue;
