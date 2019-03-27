@@ -181,7 +181,7 @@ namespace RPG4.Abstractions
             else
             {
                 // 11 - Checks for pits
-                Pit pit = _pits.FirstOrDefault(p => p.ScreenIndexEntrance.HasValue && p.Overlap(Player));
+                Pit pit = _pits.FirstOrDefault(p => p.ScreenIndexEntrance.HasValue && p.CanFallIn(Player));
                 if (pit != null)
                 {
                     SetEnginePropertiesFromScreenDatas(pit.ScreenIndexEntrance.Value);

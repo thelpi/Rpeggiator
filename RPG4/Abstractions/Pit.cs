@@ -9,7 +9,7 @@
         /// <summary>
         /// Indicates the ratio of overlaping to fall into.
         /// </summary>
-        public const double FALL_IN_OVERLAP_RATIO = 0.25;
+        public const double FALL_IN_OVERLAP_RATIO = 0.5;
 
         /// <summary>
         /// Inferred; indicates if the pit is deadly (I.e. no scrren entrance).
@@ -30,20 +30,14 @@
             ScreenIndexEntrance = sizedPointJson.ScreenIndexEntrance;
         }
 
-        /// <inheritdoc />
-        public override void BehaviorAtNewFrame(AbstractEngine engine, params object[] args)
-        {
-            base.BehaviorAtNewFrame(engine, args);
-        }
-
         /// <summary>
-        /// Checks if the instance overlaps another instance.
+        /// Checks if <paramref name="other"/> can fall in the current instance.
         /// </summary>
-        /// <param name="other">The second instance.</param>
-        /// <returns><c>True</c> if overlaps; <c>False</c> otherwise.</returns>
-        public bool Overlap(Sprite other)
+        /// <param name="other">The instance to check.</param>
+        /// <returns><c>True</c> if <paramref name="other"/> falls in; <c>False</c> otherwise.</returns>
+        public bool CanFallIn(Sprite other)
         {
-            return Overlap(other, FALL_IN_OVERLAP_RATIO);
+            return Width >= other.Width && Height >= other.Height && Overlap(other, FALL_IN_OVERLAP_RATIO);
         }
     }
 }
