@@ -1,7 +1,6 @@
-﻿using System;
-using System.Linq;
+﻿using System.Linq;
 
-namespace RPG4.Abstractions
+namespace RPG4.Abstraction.Sprites
 {
     /// <summary>
     /// Represents an enemy.

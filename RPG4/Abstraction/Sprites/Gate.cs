@@ -1,6 +1,6 @@
 ﻿using System.Linq;
 
-namespace RPG4.Abstractions
+namespace RPG4.Abstraction.Sprites
 {
     /// <summary>
     /// Represents a gate; basically, a wall with an activation state.

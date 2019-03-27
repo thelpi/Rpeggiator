@@ -1,4 +1,4 @@
-﻿namespace RPG4.Abstractions
+﻿namespace RPG4.Abstraction.Sprites
 {
     /// <summary>
     /// Represents a pit, which has two possible deadly for <see cref="Player"/> and <see cref="Enemy"/>

@@ -73,24 +73,24 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
-    <Compile Include="Abstractions\ActionnedBomb.cs" />
-    <Compile Include="Abstractions\Directions.cs" />
-    <Compile Include="Abstractions\ActionnedItem.cs" />
-    <Compile Include="Abstractions\Pit.cs" />
-    <Compile Include="Abstractions\PickableItem.cs" />
-    <Compile Include="Abstractions\IExplodable.cs" />
-    <Compile Include="Abstractions\Inventory.cs" />
-    <Compile Include="Abstractions\InventoryItem.cs" />
-    <Compile Include="Abstractions\Item.cs" />
-    <Compile Include="Abstractions\GateTrigger.cs" />
-    <Compile Include="Abstractions\FloorTrigger.cs" />
-    <Compile Include="Abstractions\ItemIdEnum.cs" />
-    <Compile Include="Abstractions\LifeSprite.cs" />
-    <Compile Include="Abstractions\Player.cs" />
-    <Compile Include="Abstractions\Enemy.cs" />
-    <Compile Include="Abstractions\Rift.cs" />
-    <Compile Include="Abstractions\Sprite.cs" />
-    <Compile Include="Abstractions\Gate.cs" />
+    <Compile Include="Abstraction\Sprites\ActionnedBomb.cs" />
+    <Compile Include="Abstraction\Directions.cs" />
+    <Compile Include="Abstraction\Sprites\ActionnedItem.cs" />
+    <Compile Include="Abstraction\Sprites\Pit.cs" />
+    <Compile Include="Abstraction\Sprites\PickableItem.cs" />
+    <Compile Include="Abstraction\IExplodable.cs" />
+    <Compile Include="Abstraction\Inventory.cs" />
+    <Compile Include="Abstraction\InventoryItem.cs" />
+    <Compile Include="Abstraction\Item.cs" />
+    <Compile Include="Abstraction\Sprites\GateTrigger.cs" />
+    <Compile Include="Abstraction\Sprites\FloorTrigger.cs" />
+    <Compile Include="Abstraction\ItemIdEnum.cs" />
+    <Compile Include="Abstraction\Sprites\LifeSprite.cs" />
+    <Compile Include="Abstraction\Sprites\Player.cs" />
+    <Compile Include="Abstraction\Sprites\Enemy.cs" />
+    <Compile Include="Abstraction\Sprites\Rift.cs" />
+    <Compile Include="Abstraction\Sprites\Sprite.cs" />
+    <Compile Include="Abstraction\Sprites\Gate.cs" />
     <Compile Include="InitialPlayerStatus.cs" />
     <Compile Include="Tools.cs" />
     <Page Include="MainWindow.xaml">
@@ -101,7 +101,7 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Abstractions\KeyPress.cs" />
+    <Compile Include="Abstraction\KeyPress.cs" />
     <Compile Include="Constants.cs" />
     <Compile Include="MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
@@ -109,7 +109,7 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Abstractions\AbstractEngine.cs" />
+    <Compile Include="Abstraction\AbstractEngine.cs" />
     <Compile Include="Properties\AssemblyInfo.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -147,6 +147,9 @@
       <ProductName>.NET Framework 3.5 SP1</ProductName>
       <Install>false</Install>
     </BootstrapperPackage>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Abstraction\Graphic\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

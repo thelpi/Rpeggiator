@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-
-namespace RPG4.Abstractions
+﻿namespace RPG4.Abstraction.Sprites
 {
     /// <summary>
     /// Represents the bomb item when dropped on the floor.

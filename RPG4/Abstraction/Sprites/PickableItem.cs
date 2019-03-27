@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace RPG4.Abstractions
+namespace RPG4.Abstraction.Sprites
 {
     /// <summary>
     /// Represents a <see cref="Item"/> when pickable on the floor.

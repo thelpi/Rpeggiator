@@ -1,6 +1,4 @@
-﻿using System.Collections.Generic;
-
-namespace RPG4.Abstractions
+﻿namespace RPG4.Abstraction
 {
     /// <summary>
     /// Represents the keayboard input for a frame inside the <see cref="AbstractEngine"/>

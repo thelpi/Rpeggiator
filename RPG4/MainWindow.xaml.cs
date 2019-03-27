@@ -1,4 +1,5 @@
-﻿using RPG4.Abstractions;
+﻿using RPG4.Abstraction;
+using RPG4.Abstraction.Sprites;
 using System;
 using System.Linq;
 using System.Timers;

@@ -1,4 +1,4 @@
-﻿namespace RPG4.Abstractions
+﻿namespace RPG4.Abstraction
 {
     /// <summary>
     /// Represents an <see cref="Item"/> in the player inventory.

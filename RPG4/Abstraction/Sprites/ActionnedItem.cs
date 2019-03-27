@@ -1,4 +1,4 @@
-﻿namespace RPG4.Abstractions
+﻿namespace RPG4.Abstraction.Sprites
 {
     /// <summary>
     /// Represents an item dropped on the floor.

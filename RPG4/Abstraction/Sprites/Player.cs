@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Windows;
 
-namespace RPG4.Abstractions
+namespace RPG4.Abstraction.Sprites
 {
     /// <summary>
     /// Represents the player.

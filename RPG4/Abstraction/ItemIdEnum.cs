@@ -1,4 +1,4 @@
-﻿namespace RPG4.Abstractions
+﻿namespace RPG4.Abstraction
 {
     /// <summary>
     /// Enumeration of item identifiers.

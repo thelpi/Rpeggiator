@@ -1,7 +1,7 @@
-﻿namespace RPG4.Abstractions
+﻿namespace RPG4.Abstraction
 {
     /// <summary>
-    /// Ths interface indicates a <see cref="Sprite"/> can be damages by <see cref="ActionnedBomb"/>.
+    /// Ths interface indicates a <see cref="Sprites.Sprite"/> can be damages by <see cref="Sprites.ActionnedBomb"/>.
     /// </summary>
     public interface IExplodable
     {

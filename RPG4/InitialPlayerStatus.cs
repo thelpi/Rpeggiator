@@ -1,4 +1,4 @@
-﻿using RPG4.Abstractions;
+﻿using RPG4.Abstraction;
 
 namespace RPG4
 {
