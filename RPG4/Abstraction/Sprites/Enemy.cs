@@ -30,31 +30,10 @@ namespace RPG4.Abstraction.Sprites
         /// <summary>
         /// Constructor.
         /// </summary>
-        /// <param name="x"><see cref="Sprite.X"/></param>
-        /// <param name="y"><see cref="Sprite.Y"/></param>
-        /// <param name="width"><see cref="Sprite.Width"/></param>
-        /// <param name="height"><see cref="Sprite.Height"/></param>
-        /// <param name="speed"><see cref="Speed"/></param>
-        /// <param name="pattern"><see cref="Pattern"/></param>
-        /// <param name="hourRotation"><see cref="HourRotation"/></param>
-        /// <param name="maximalLifePoints"><see cref="LifeSprite.MaximalLifePoints"/></param>
-        /// <param name="hitLifePointCost"><see cref="LifeSprite.HitLifePointCost"/></param>
-        public Enemy(double x, double y, double width, double height, double speed, Sprite pattern, bool hourRotation, double maximalLifePoints, double hitLifePointCost)
-            : base (x, y, width, height, maximalLifePoints, hitLifePointCost)
-        {
-            Speed = speed;
-            Pattern = pattern;
-            HourRotation = hourRotation;
-        }
-
-        /// <summary>
-        /// Constructor.
-        /// </summary>
         /// <param name="enemyJson">The json dynamic object.</param>
         public Enemy(dynamic enemyJson) : base((object)enemyJson)
         {
-            string jsonFormula = enemyJson.Speed;
-            Speed = Tools.ComputeFormulaResult<double>(jsonFormula, Constants.SUBSTITUTE_FORMULA_FPS);
+            Speed = Tools.ComputeFormulaResult<double>((string)enemyJson.Speed, Constants.SUBSTITUTE_FORMULA_FPS);
             HourRotation = enemyJson.HourRotation;
             Pattern = new Sprite(enemyJson.Pattern);
         }

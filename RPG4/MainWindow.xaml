@@ -6,7 +6,7 @@
         mc:Ignorable="d" Background="Gainsboro" ResizeMode="CanMinimize" Width="900" Height="700"
         Title="MainWindow" WindowStartupLocation="CenterScreen" >
     <DockPanel>
-        <Canvas DockPanel.Dock="Top" Name="cvsMain" Background="White">
+        <Canvas DockPanel.Dock="Top" Name="cvsMain">
             <Rectangle Name="rctPlayer" />
         </Canvas>
         <StackPanel DockPanel.Dock="Bottom" Orientation="Horizontal">

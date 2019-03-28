@@ -1,4 +1,5 @@
-﻿using System.Windows;
+﻿using RPG4.Abstraction.Graphic;
+using System.Windows;
 
 namespace RPG4.Abstraction.Sprites
 {
@@ -35,6 +36,10 @@ namespace RPG4.Abstraction.Sprites
         /// Inferred; surface, in pixels square.
         /// </summary>
         public double Surface { get { return Width * Height; } }
+        /// <summary>
+        /// Graphic rendering.
+        /// </summary>
+        public ISpriteGraphic Graphic { get; private set; }
 
         /// <summary>
         /// Constructor.
@@ -43,12 +48,14 @@ namespace RPG4.Abstraction.Sprites
         /// <param name="y"><see cref="Y"/></param>
         /// <param name="width"><see cref="Width"/></param>
         /// <param name="height"><see cref="Height"/></param>
-        public Sprite(double x, double y, double width, double height)
+        /// <param name="graphic"><see cref="Graphic"/></param>
+        public Sprite(double x, double y, double width, double height, ISpriteGraphic graphic)
         {
             X = x;
             Y = y;
             Width = width;
             Height = height;
+            Graphic = graphic;
         }
 
         /// <summary>
@@ -61,6 +68,16 @@ namespace RPG4.Abstraction.Sprites
             Y = sizedPointJson.Y;
             Width = sizedPointJson.Width;
             Height = sizedPointJson.Height;
+            switch ((string)sizedPointJson.GraphicType)
+            {
+                case nameof(ImageBrushGraphic):
+                    Graphic = new ImageBrushGraphic((string)sizedPointJson.ImagePath);
+                    break;
+                case nameof(PlainBrushGraphic):
+                    Graphic = new PlainBrushGraphic((string)sizedPointJson.HexColor);
+                    break;
+                    // TODO : other types of ISpriteGraphic must be implemented here.
+            }
         }
 
         /// <summary>
@@ -71,7 +88,7 @@ namespace RPG4.Abstraction.Sprites
         /// <returns>The new instance.</returns>
         public Sprite Copy(double x, double y)
         {
-            return new Sprite(x, y, Width, Height);
+            return new Sprite(x, y, Width, Height, Graphic);
         }
 
         /// <summary>

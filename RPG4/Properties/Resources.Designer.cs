@@ -61,40 +61,94 @@ namespace RPG4.Properties {
         }
         
         /// <summary>
+        ///   Recherche une ressource localisée de type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap Background2 {
+            get {
+                object obj = ResourceManager.GetObject("Background2", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Recherche une ressource localisée de type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap Bomb {
+            get {
+                object obj = ResourceManager.GetObject("Bomb", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Recherche une ressource localisée de type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap Enemy {
+            get {
+                object obj = ResourceManager.GetObject("Enemy", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Recherche une ressource localisée de type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap Pit {
+            get {
+                object obj = ResourceManager.GetObject("Pit", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Recherche une ressource localisée de type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap Player {
+            get {
+                object obj = ResourceManager.GetObject("Player", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Recherche une ressource localisée de type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap PlayerRecovery {
+            get {
+                object obj = ResourceManager.GetObject("PlayerRecovery", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
         ///   Recherche une chaîne localisée semblable à {
-        ///  &quot;AreaWidth&quot;: 640,
-        ///  &quot;AreaHeight&quot;: 480,
+        ///	&quot;AreaWidth&quot;: 800,
+        ///	&quot;AreaHeight&quot;: 600,
+        ///	  &quot;GraphicType&quot;: &quot;PlainBrushGraphic&quot;,
+        ///	  &quot;HexColor&quot;: &quot;#FFFFEFD5&quot;,
         ///  &quot;Walls&quot;: [
         ///    {
         ///      &quot;X&quot;: 50,
         ///      &quot;Y&quot;: 300,
         ///      &quot;Width&quot;: 250,
         ///      &quot;Height&quot;: 50,
-        ///	  &quot;Concrete&quot;: true
+        ///	  &quot;GraphicType&quot;: &quot;PlainBrushGraphic&quot;,
+        ///	  &quot;HexColor&quot;: &quot;#FF006400&quot;
         ///    },
         ///    {
         ///      &quot;X&quot;: 100,
         ///      &quot;Y&quot;: 260,
         ///      &quot;Width&quot;: 50,
         ///      &quot;Height&quot;: 140,
-        ///	  &quot;Concrete&quot;: true
-        ///    },
-        ///    {
-        ///      &quot;X&quot;: 500,
-        ///      &quot;Y&quot;: 300,
-        ///      &quot;Width&quot;: 30,
-        ///      &quot;Height&quot;: 50,
-        ///	  &quot;Concrete&quot;: true
+        ///	  &quot;GraphicType&quot;: &quot;PlainBrushGraphic&quot;,
+        ///	  &quot;HexColor&quot;: &quot;#FF006400&quot;
         ///    }
         ///  ],
-        ///  &quot;Pngs&quot;: [
+        ///  &quot;Gates&quot;:[],
+        ///  &quot;Enemies&quot;: [
         ///    {
         ///      &quot;X&quot;: 50,
-        ///      &quot;Y&quot;: 50,
-        ///      &quot;Width&quot;: 40,
-        ///      &quot;Height&quot;: 40,
-        ///      &quot;Speed&quot;: 50,
-        /// [le reste de la chaîne a été tronqué]&quot;;.
+        ///      &quot;Y&quot; [le reste de la chaîne a été tronqué]&quot;;.
         /// </summary>
         internal static string Screen1 {
             get {
@@ -104,43 +158,66 @@ namespace RPG4.Properties {
         
         /// <summary>
         ///   Recherche une chaîne localisée semblable à {
-        ///  &quot;AreaWidth&quot;: 640,
-        ///  &quot;AreaHeight&quot;: 480,
+        ///	&quot;AreaWidth&quot;: 800,
+        ///	&quot;AreaHeight&quot;: 600,
+        ///	  &quot;GraphicType&quot;: &quot;ImageBrushGraphic&quot;,
+        ///	  &quot;ImagePath&quot;: &quot;Background2&quot;,
         ///  &quot;Walls&quot;: [
         ///    {
-        ///      &quot;X&quot;: 50,
-        ///      &quot;Y&quot;: 50,
-        ///      &quot;Width&quot;: 550,
-        ///      &quot;Height&quot;: 20,
-        ///	  &quot;Concrete&quot;: true
+        ///      &quot;X&quot;: 80,
+        ///      &quot;Y&quot;: 80,
+        ///      &quot;Width&quot;: 480,
+        ///      &quot;Height&quot;: 40,
+        ///	  &quot;GraphicType&quot;: &quot;PlainBrushGraphic&quot;,
+        ///	  &quot;HexColor&quot;: &quot;#FF006400&quot;
         ///    },
         ///	{
-        ///      &quot;X&quot;: 530,
-        ///      &quot;Y&quot;: 50,
-        ///      &quot;Width&quot;: 20,
-        ///      &quot;Height&quot;: 400,
-        ///	  &quot;Concrete&quot;: true
+        ///      &quot;X&quot;: 80,
+        ///      &quot;Y&quot;: 80,
+        ///      &quot;Width&quot;: 40,
+        ///      &quot;Height&quot;: 320,
+        ///	  &quot;GraphicType&quot;: &quot;PlainBrushGraphic&quot;,
+        ///	  &quot;HexColor&quot;: &quot;#FF006400&quot;
         ///    },
         ///	{
-        ///      &quot;X&quot;: 50,
-        ///      &quot;Y&quot;: 430,
-        ///      &quot;Width&quot;: 200,
-        ///      &quot;Height&quot;: 20,
-        ///	  &quot;Concrete&quot;: true
-        ///    },
-        ///	{
-        ///      &quot;X&quot;: 300,
-        ///      &quot;Y&quot;: 430,
-        ///      &quot;Width&quot;: 300,
-        ///      &quot;Height&quot;: 20,
-        ///	  &quot;Concrete&quot;: true
-        ///    },
-        ///	{
-        ///      &quot;X&quot;: 50 [le reste de la chaîne a été tronqué]&quot;;.
+        ///      &quot;X&quot;: 520,
+        ///      &quot;Y&quot;: 80,
+        ///      &quot;Width&quot;: 40,
+        ///      &quot;Height&quot; [le reste de la chaîne a été tronqué]&quot;;.
         /// </summary>
         internal static string Screen2 {
             get {
                 return ResourceManager.GetString("Screen2", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Recherche une ressource localisée de type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap Sword {
+            get {
+                object obj = ResourceManager.GetObject("Sword", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Recherche une ressource localisée de type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap TriggerOff {
+            get {
+                object obj = ResourceManager.GetObject("TriggerOff", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Recherche une ressource localisée de type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap TriggerOn {
+            get {
+                object obj = ResourceManager.GetObject("TriggerOn", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
             }
         }
     }

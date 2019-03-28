@@ -1,4 +1,6 @@
-﻿namespace RPG4.Abstraction.Sprites
+﻿using RPG4.Abstraction.Graphic;
+
+namespace RPG4.Abstraction.Sprites
 {
     /// <summary>
     /// Represents the bomb item when dropped on the floor.
@@ -16,6 +18,10 @@
         private static readonly int PENDING_FRAME_COUNT = Constants.FPS * 2;
         // Frames count while exploding.
         private static readonly int EXPLODING_FRAME_COUNT = Constants.FPS;
+        // Halo graphic rendering.
+        private static readonly ISpriteGraphic HALO_GRAPHIC_RENDERING = new PlainBrushGraphic("#FFFF4500");
+        // Bomb graphic rendering.
+        private static readonly ISpriteGraphic GRAPHIC_RENDERING = new ImageBrushGraphic("Bomb");
 
         // Frames count before exploding.
         private int _pendingExplosionFrameCount;
@@ -40,7 +46,7 @@
         /// </summary>
         /// <param name="x"><see cref="Sprite.X"/></param>
         /// <param name="y"><see cref="Sprite.Y"/></param>
-        public ActionnedBomb(double x, double y) : base(x, y, WIDTH, HEIGHT)
+        public ActionnedBomb(double x, double y) : base(x, y, WIDTH, HEIGHT, GRAPHIC_RENDERING)
         {
             _pendingExplosionFrameCount = PENDING_FRAME_COUNT;
             ExplosionSprite = null;
@@ -55,7 +61,7 @@
             {
                 _pendingExplosionFrameCount = -1;
                 _explosionFrameCount = 0;
-                ExplosionSprite = new Sprite(X - Width, Y - Height, Width * HALO_SIZE_RATIO, Height * HALO_SIZE_RATIO);
+                ExplosionSprite = new Sprite(X - Width, Y - Height, Width * HALO_SIZE_RATIO, Height * HALO_SIZE_RATIO, HALO_GRAPHIC_RENDERING);
             }
             // Explosion pending.
             else if (_pendingExplosionFrameCount > 0 && _pendingExplosionFrameCount <= PENDING_FRAME_COUNT)

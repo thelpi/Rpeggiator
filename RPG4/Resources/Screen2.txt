@@ -1,36 +1,48 @@
 {
 	"AreaWidth": 800,
 	"AreaHeight": 600,
+	  "GraphicType": "ImageBrushGraphic",
+	  "ImagePath": "Background2",
   "Walls": [
     {
       "X": 80,
       "Y": 80,
       "Width": 480,
-      "Height": 40
+      "Height": 40,
+	  "GraphicType": "PlainBrushGraphic",
+	  "HexColor": "#FF006400"
     },
 	{
       "X": 80,
       "Y": 80,
       "Width": 40,
-      "Height": 320
+      "Height": 320,
+	  "GraphicType": "PlainBrushGraphic",
+	  "HexColor": "#FF006400"
     },
 	{
       "X": 520,
       "Y": 80,
       "Width": 40,
-      "Height": 320
+      "Height": 320,
+	  "GraphicType": "PlainBrushGraphic",
+	  "HexColor": "#FF006400"
     },
 	{
       "X": 80,
       "Y": 360,
       "Width": 300,
-      "Height": 40
+      "Height": 40,
+	  "GraphicType": "PlainBrushGraphic",
+	  "HexColor": "#FF006400"
     },
 	{
       "X": 480,
       "Y": 360,
       "Width": 80,
-      "Height": 40
+      "Height": 40,
+	  "GraphicType": "PlainBrushGraphic",
+	  "HexColor": "#FF006400"
     }
   ],
   "Gates":[
@@ -39,7 +51,9 @@
       "Y": 360,
       "Width": 100,
       "Height": 40,
-	  "Activated": true
+	  "Activated": true,
+	  "GraphicType": "PlainBrushGraphic",
+	  "HexColor": "#FFDCDCDC"
     }
   ],
   "Enemies": [
@@ -52,7 +66,10 @@
 		"Height": 20,
 		"ActionDelayMaxFrameCount": "{FPS} * 5",
 		"GateIndex": 0,
-		"AppearOnActivation": false
+		"AppearOnActivation": false,
+	  "GraphicType": "ImageBrushGraphic",
+	  "ImagePath": "TriggerOff",
+	  "GraphicValueActivated": "TriggerOn"
 	},
 	{
 		"X": 160,
@@ -61,7 +78,10 @@
 		"Height": 20,
 		"ActionDelayMaxFrameCount": "{FPS} * 4",
 		"GateIndex": 0,
-		"AppearOnActivation": false
+		"AppearOnActivation": false,
+	  "GraphicType": "ImageBrushGraphic",
+	  "ImagePath": "TriggerOff",
+	  "GraphicValueActivated": "TriggerOn"
 	}
   ],
   "AdjacentScreens": {
@@ -81,7 +101,9 @@
 		"Width": 20,
 		"Height": 20,
 		"ItemId": "Bomb",
-		"Quantity": 10
+		"Quantity": 10,
+		"GraphicType": "ImageBrushGraphic",
+		"ImagePath": "Bomb"
 	  }
   ],
   "Rifts":[],
@@ -92,6 +114,8 @@
 		"Width": "50",
 		"Height": "50",
 		"ScreenIndexEntrance": 1,
+	  "GraphicType": "ImageBrushGraphic",
+	  "ImagePath": "Pit"
 	}
   ]
 }

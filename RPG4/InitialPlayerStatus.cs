@@ -1,4 +1,5 @@
 ﻿using RPG4.Abstraction;
+using RPG4.Abstraction.Graphic;
 
 namespace RPG4
 {
@@ -51,5 +52,17 @@ namespace RPG4
         /// Indicates the life points cost when a bomb explodes nearby.
         /// </summary>
         public const double EXPLOSION_LIFE_POINT_COST = 3;
+        /// <summary>
+        /// Hit graphic rendering.
+        /// </summary>
+        public static readonly ISpriteGraphic HIT_GRAPHIC = new ImageBrushGraphic("Sword");
+        /// <summary>
+        /// Graphic rendering.
+        /// </summary>
+        public static readonly ISpriteGraphic GRAPHIC = new ImageBrushGraphic("Player");
+        /// <summary>
+        /// Recovery graphic rendering.
+        /// </summary>
+        public static readonly ISpriteGraphic RECOVERY_GRAPHIC = new ImageBrushGraphic("PlayerRecovery");
     }
 }

@@ -1,4 +1,6 @@
-﻿namespace RPG4.Abstraction.Sprites
+﻿using RPG4.Abstraction.Graphic;
+
+namespace RPG4.Abstraction.Sprites
 {
     /// <summary>
     /// Represents a trigger which can be activated by walking on it.
@@ -16,21 +18,10 @@
         /// Indicates if the trigger is currently activated.
         /// </summary>
         public bool IsActivated { get { return _actionDelayCurrentFrameCount >= 0; } }
-
         /// <summary>
-        /// Constructor.
+        /// Graphic rendering when activated.
         /// </summary>
-        /// <param name="x"><see cref="Sprite.X"/></param>
-        /// <param name="y"><see cref="Sprite.Y"/></param>
-        /// <param name="width"><see cref="Sprite.Width"/></param>
-        /// <param name="height"><see cref="Sprite.Height"/></param>
-        /// <param name="actionDelayMaxFrameCount">Number of frames before the activation ends.</param>
-        public FloorTrigger(double x, double y, double width, double height, int actionDelayMaxFrameCount)
-            : base(x, y, width, height)
-        {
-            _actionDelayMaxFrameCount = actionDelayMaxFrameCount;
-            _actionDelayCurrentFrameCount = -1;
-        }
+        public ISpriteGraphic ActivatedGraphic { get; private set; }
 
         /// <summary>
         /// Constructor.
@@ -38,9 +29,18 @@
         /// <param name="triggerJson">The json dynamic object.</param>
         public FloorTrigger(dynamic triggerJson) : base((object)triggerJson)
         {
-            string jsonFormula = triggerJson.ActionDelayMaxFrameCount;
-            _actionDelayMaxFrameCount = Tools.ComputeFormulaResult<int>(jsonFormula, Constants.SUBSTITUTE_FORMULA_FPS);
+            _actionDelayMaxFrameCount = Tools.ComputeFormulaResult<int>((string)triggerJson.ActionDelayMaxFrameCount, Constants.SUBSTITUTE_FORMULA_FPS);
             _actionDelayCurrentFrameCount = -1;
+            switch ((string)triggerJson.GraphicType)
+            {
+                case nameof(ImageBrushGraphic):
+                    ActivatedGraphic = new ImageBrushGraphic((string)triggerJson.GraphicValueActivated);
+                    break;
+                case nameof(PlainBrushGraphic):
+                    ActivatedGraphic = new PlainBrushGraphic((string)triggerJson.GraphicValueActivated);
+                    break;
+                    // TODO : other types of ISpriteGraphic must be implemented here.
+            }
         }
 
         /// <inheritdoc />

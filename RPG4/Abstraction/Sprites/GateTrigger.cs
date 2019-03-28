@@ -17,23 +17,6 @@
         /// <summary>
         /// Constructor.
         /// </summary>
-        /// <param name="x"><see cref="Sprite.X"/></param>
-        /// <param name="y"><see cref="Sprite.Y"/></param>
-        /// <param name="width"><see cref="Sprite.Width"/></param>
-        /// <param name="height"><see cref="Sprite.Height"/></param>
-        /// <param name="actionDelayMaxFrameCount">Number of frames before the activation ends.</param>
-        /// <param name="gateIndex"><see cref="GateIndex"/></param>
-        /// <param name="appearOnActivation"><see cref="AppearOnActivation"/></param>
-        public GateTrigger(double x, double y, double width, double height, int actionDelayMaxFrameCount, int gateIndex, bool appearOnActivation)
-            : base(x, y, width, height, actionDelayMaxFrameCount)
-        {
-            GateIndex = gateIndex;
-            AppearOnActivation = appearOnActivation;
-        }
-
-        /// <summary>
-        /// Constructor.
-        /// </summary>
         /// <param name="gatetriggerJson">The json dynamic object.</param>
         public GateTrigger(dynamic gatetriggerJson) : base((object)gatetriggerJson)
         {

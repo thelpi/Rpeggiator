@@ -21,21 +21,6 @@ namespace RPG4.Abstraction.Sprites
         /// <summary>
         /// Constructor.
         /// </summary>
-        /// <param name="x"><see cref="Sprite.X"/></param>
-        /// <param name="y"><see cref="Sprite.Y"/></param>
-        /// <param name="width"><see cref="Sprite.Width"/></param>
-        /// <param name="height"><see cref="Sprite.Height"/></param>
-        /// <param name="activated"><see cref="Activated"/></param>
-        public Gate(double x, double y, double width, double height, bool activated)
-            : base(x, y, width, height)
-        {
-            Activated = activated;
-            _defaultActivated = activated;
-        }
-
-        /// <summary>
-        /// Constructor.
-        /// </summary>
         /// <param name="gateJson">The json dynamic object.</param>
         public Gate(dynamic gateJson) : base((object)gateJson)
         {

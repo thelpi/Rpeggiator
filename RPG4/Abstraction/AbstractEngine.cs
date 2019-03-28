@@ -1,4 +1,5 @@
-﻿using RPG4.Abstraction.Sprites;
+﻿using RPG4.Abstraction.Graphic;
+using RPG4.Abstraction.Sprites;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -70,6 +71,10 @@ namespace RPG4.Abstraction
         /// Frames count.
         /// </summary>
         public ulong FramesCount { get; private set; }
+        /// <summary>
+        /// Screen graphic rendering.
+        /// </summary>
+        public ISpriteGraphic ScreenGraphic { get; private set; }
 
         /// <summary>
         /// Constructor.
@@ -99,6 +104,16 @@ namespace RPG4.Abstraction
             _actionnedItems = new List<ActionnedItem>();
             AreaWidth = screenJsonDatas.AreaWidth;
             AreaHeight = screenJsonDatas.AreaHeight;
+            switch ((string)screenJsonDatas.GraphicType)
+            {
+                case nameof(ImageBrushGraphic):
+                    ScreenGraphic = new ImageBrushGraphic((string)screenJsonDatas.ImagePath);
+                    break;
+                case nameof(PlainBrushGraphic):
+                    ScreenGraphic = new PlainBrushGraphic((string)screenJsonDatas.HexColor);
+                    break;
+                    // TODO : other types of ISpriteGraphic must be implemented here.
+            }
 
             foreach (dynamic wallJson in screenJsonDatas.Walls)
             {

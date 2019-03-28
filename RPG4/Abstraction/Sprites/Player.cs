@@ -1,4 +1,5 @@
-﻿using System;
+﻿using RPG4.Abstraction.Graphic;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Windows;
@@ -56,6 +57,10 @@ namespace RPG4.Abstraction.Sprites
         public Directions LastDirection { get; private set; }
         /// <inheritdoc />
         public double ExplosionLifePointCost { get { return InitialPlayerStatus.EXPLOSION_LIFE_POINT_COST; } }
+        /// <summary>
+        /// Graphic rendering when recovering.
+        /// </summary>
+        public ISpriteGraphic RecoveryGraphic { get { return InitialPlayerStatus.RECOVERY_GRAPHIC; } }
 
         /// <summary>
         /// Constructor.
@@ -66,6 +71,7 @@ namespace RPG4.Abstraction.Sprites
             InitialPlayerStatus.INITIAL_PLAYER_Y,
             InitialPlayerStatus.SPRITE_SIZE_X,
             InitialPlayerStatus.SPRITE_SIZE_Y,
+            InitialPlayerStatus.GRAPHIC,
             InitialPlayerStatus.MAXIMAL_LIFE_POINTS,
             InitialPlayerStatus.HIT_LIFE_POINT_COST)
         {
@@ -316,7 +322,7 @@ namespace RPG4.Abstraction.Sprites
                         hitY -= Height;
                         break;
                 }
-                HitSprite = new Sprite(hitX, hitY, Width, Height);
+                HitSprite = new Sprite(hitX, hitY, Width, Height, InitialPlayerStatus.HIT_GRAPHIC);
             }
             else if (_hitDisplayFrameCount >= 0)
             {

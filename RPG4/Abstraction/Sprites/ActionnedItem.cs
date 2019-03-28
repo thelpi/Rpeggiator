@@ -18,6 +18,7 @@
         /// <param name="y"><see cref="Sprite.Y"/></param>
         /// <param name="height"><see cref="Sprite.Height"/></param>
         /// <param name="width"><see cref="Sprite.Width"/></param>
-        public ActionnedItem(double x, double y, double width, double height) : base(x, y, width, height) { }
+        /// <param name="graphic"><see cref="Sprite.Graphic"/></param>
+        public ActionnedItem(double x, double y, double width, double height, Graphic.ISpriteGraphic graphic) : base(x, y, width, height, graphic) { }
     }
 }

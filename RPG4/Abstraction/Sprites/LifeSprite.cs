@@ -28,10 +28,11 @@ namespace RPG4.Abstraction.Sprites
         /// <param name="y"><see cref="Sprite.Y"/></param>
         /// <param name="width"><see cref="Sprite.Width"/></param>
         /// <param name="height"><see cref="Sprite.Height"/></param>
+        /// <param name="graphic"><see cref="Sprite.Graphic"/></param>
         /// <param name="maximalLifePoints"><see cref="MaximalLifePoints"/></param>
         /// <param name="hitLifePointCost"><see cref="HitLifePointCost"/></param>
-        public LifeSprite(double x, double y, double width, double height, double maximalLifePoints, double hitLifePointCost)
-            : base(x, y, width, height)
+        public LifeSprite(double x, double y, double width, double height, Graphic.ISpriteGraphic graphic, double maximalLifePoints, double hitLifePointCost)
+            : base(x, y, width, height, graphic)
         {
             MaximalLifePoints = maximalLifePoints;
             CurrentLifePoints = maximalLifePoints;
