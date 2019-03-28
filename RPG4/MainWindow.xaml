@@ -8,6 +8,7 @@
     <DockPanel>
         <Canvas DockPanel.Dock="Top" Name="cvsMain">
             <Rectangle Name="rctPlayer" />
+            <Rectangle Name="rctShadow" Panel.ZIndex="999" />
         </Canvas>
         <StackPanel DockPanel.Dock="Bottom" Orientation="Horizontal">
             <ProgressBar Margin="20, 0, 0, 0" Name="pgbPlayerLifePoints" Height="20" Width="200" />

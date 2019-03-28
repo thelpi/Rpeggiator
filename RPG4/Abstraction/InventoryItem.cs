@@ -15,23 +15,22 @@
         /// Remaining quantity.
         /// </summary>
         public int Quantity { get; private set; }
-        /// <summary>
-        /// Maximal quantity carriable.
-        /// </summary>
-        public int MaxQuantity { get; private set; }
 
         /// <summary>
         /// Constructor.
         /// </summary>
-        /// <remarks>If <paramref name="quantity"/> is greater than <paramref name="maxQuantity"/>, the second is used for <see cref="Quantity"/>.</remarks>
-        /// <param name="idemId"><see cref="BaseItem"/> identifier.</param>
+        /// <param name="itemId"><see cref="BaseItem"/> identifier.</param>
+        public InventoryItem(ItemIdEnum itemId) : this(itemId, 1) { }
+
+        /// <summary>
+        /// Constructor.
+        /// </summary>
+        /// <param name="itemId"><see cref="BaseItem"/> identifier.</param>
         /// <param name="quantity"><see cref="Quantity"/>; ignored if the item is marked as unique.</param>
-        /// <param name="maxQuantity"><see cref="MaxQuantity"/>; ignored if the item is marked as unique.</param>
-        public InventoryItem(ItemIdEnum idemId, int quantity, int maxQuantity)
+        public InventoryItem(ItemIdEnum itemId, int quantity)
         {
-            BaseItem = Item.GetItem(idemId);
-            MaxQuantity = BaseItem.Unique ? 1 : maxQuantity;
-            Quantity = BaseItem.Unique ? 1 : (quantity > maxQuantity ? maxQuantity : quantity);
+            BaseItem = Item.GetItem(itemId);
+            Quantity = BaseItem.Unique ? 1 : quantity;
             _engineFrameCountFlag = 0;
         }
 
@@ -52,8 +51,9 @@
         /// Tries to increase the quantity.
         /// </summary>
         /// <param name="newQuantity">Quantity to add.</param>
+        /// <param name="maxQuantity">Maximal quantity carriable for this item.</param>
         /// <returns>Remaining quantity if limit reached.</returns>
-        public int TryIncreaseQuantity(int newQuantity)
+        public int TryIncreaseQuantity(int newQuantity, int maxQuantity)
         {
             if (BaseItem.Unique)
             {
@@ -63,10 +63,10 @@
             int remaining = 0;
 
             Quantity += newQuantity;
-            if (Quantity > MaxQuantity)
+            if (Quantity > maxQuantity)
             {
-                remaining = Quantity - MaxQuantity;
-                Quantity = MaxQuantity;
+                remaining = Quantity - maxQuantity;
+                Quantity = maxQuantity;
             }
 
             return remaining;
@@ -79,7 +79,9 @@
         /// <returns><c>True</c> if in use; <c>False</c> otherwise.</returns>
         public bool IsCurrentlyUsed(ulong engineFrameCount)
         {
-            return _engineFrameCountFlag > 0 && (int)(engineFrameCount - _engineFrameCountFlag) <= BaseItem.DelayBetweenUse;
+            return _engineFrameCountFlag > 0
+                && (int)(engineFrameCount - _engineFrameCountFlag) <= BaseItem.DelayBetweenUse
+                && BaseItem.DelayBetweenUse >= 0;
         }
     }
 }

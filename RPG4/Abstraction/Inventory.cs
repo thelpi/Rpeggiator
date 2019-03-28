@@ -9,34 +9,34 @@ namespace RPG4.Abstraction
     /// </summary>
     public class Inventory
     {
-        /// <summary>
-        /// Quantity
-        /// </summary>
-        /// <remarks>
-        /// Move somewhere else when ready.
-        /// If <see cref="Item.Unique"/> is set on the item, the value here should be ignored.
-        /// </remarks>
-        public static readonly IReadOnlyDictionary<ItemIdEnum, int> MAX_QUANTITY_BY_ITEM = new Dictionary<ItemIdEnum, int>
-        {
-            { ItemIdEnum.Bomb, 20 },
-            { ItemIdEnum.SmallLifePotion, 20 },
-            { ItemIdEnum.MediumLifePotion, 20 },
-            { ItemIdEnum.LargeLifePotion, 20 },
-        };
-
         private List<InventoryItem> _items;
+        private Dictionary<ItemIdEnum, int> _maxQuantityByItem;
 
         /// <summary>
         /// List of <see cref="InventoryItem"/>
         /// </summary>
         public IReadOnlyCollection<InventoryItem> Items { get { return _items; } }
+        /// <summary>
+        /// Maximal quantity carriable for each item.
+        /// </summary>
+        public IReadOnlyDictionary<ItemIdEnum, int> MaxQuantityByItem { get { return _maxQuantityByItem; } }
+        /// <summary>
+        /// Indicates if the lamp item is currently used.
+        /// </summary>
+        public bool LampIsOn { get; private set; }
 
         /// <summary>
         /// Constructor.
         /// </summary>
         public Inventory()
         {
-            _items = InitialPlayerStatus.INVENTORY_ITEMS.ToList();
+            _items = new List<InventoryItem>();
+            _maxQuantityByItem = new Dictionary<ItemIdEnum, int>();
+            LampIsOn = false;
+            foreach (var itemId in InitialPlayerStatus.INVENTORY_ITEMS.Keys)
+            {
+                TryAdd(itemId, InitialPlayerStatus.INVENTORY_ITEMS[itemId]);
+            }
         }
 
         /// <summary>
@@ -51,11 +51,12 @@ namespace RPG4.Abstraction
 
             if (_items.Any(item => item.BaseItem.Id == itemId))
             {
-                remaining = _items.First(item => item.BaseItem.Id == itemId).TryIncreaseQuantity(quantity);
+                remaining = _items.First(item => item.BaseItem.Id == itemId).TryIncreaseQuantity(quantity, _maxQuantityByItem[itemId]);
             }
             else if (_items.Count < Constants.INVENTORY_SIZE)
             {
-                _items.Add(new InventoryItem(itemId, quantity, MAX_QUANTITY_BY_ITEM[itemId]));
+                _items.Add(new InventoryItem(itemId, quantity));
+                _maxQuantityByItem.Add(itemId, Item.GetItem(itemId).InitialMaximalQuantity);
             }
             else
             {
@@ -95,6 +96,9 @@ namespace RPG4.Abstraction
                 case ItemIdEnum.MediumLifePotion:
                 case ItemIdEnum.LargeLifePotion:
                     engine.Player.DrinkLifePotion(item.BaseItem.Id);
+                    break;
+                case ItemIdEnum.Lamp:
+                    LampIsOn = !LampIsOn;
                     break;
             }
 

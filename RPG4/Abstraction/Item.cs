@@ -23,9 +23,13 @@ namespace RPG4.Abstraction
         /// </summary>
         public bool Unique { get; private set; }
         /// <summary>
-        /// Frames count delay between two use.
+        /// Frames count delay between two use; -1 for no delay at all.
         /// </summary>
         public int DelayBetweenUse { get; private set; }
+        /// <summary>
+        /// Maximal quantity carriable at eh beginning.
+        /// </summary>
+        public int InitialMaximalQuantity { get; private set; }
 
         // private constructor
         private Item() { }
@@ -54,28 +58,39 @@ namespace RPG4.Abstraction
                 Id = ItemIdEnum.Bomb,
                 Name = "Bomb",
                 Unique = false,
-                DelayBetweenUse = Constants.FPS
+                DelayBetweenUse = Constants.FPS,
+                InitialMaximalQuantity = 20
             });
             _items.Add(new Item
             {
                 Id = ItemIdEnum.SmallLifePotion,
                 Name = "Life potion (small)",
                 Unique = false,
-                DelayBetweenUse = Constants.FPS * 2
+                DelayBetweenUse = Constants.FPS * 2,
+                InitialMaximalQuantity = 12
             });
             _items.Add(new Item
             {
                 Id = ItemIdEnum.MediumLifePotion,
                 Name = "Life potion (medium)",
                 Unique = false,
-                DelayBetweenUse = Constants.FPS * 2
+                DelayBetweenUse = Constants.FPS * 2,
+                InitialMaximalQuantity = 6
             });
             _items.Add(new Item
             {
                 Id = ItemIdEnum.LargeLifePotion,
                 Name = "Life potion (large)",
                 Unique = false,
-                DelayBetweenUse = Constants.FPS * 2
+                DelayBetweenUse = Constants.FPS * 2,
+                InitialMaximalQuantity = 3
+            });
+            _items.Add(new Item
+            {
+                Id = ItemIdEnum.Lamp,
+                Name = "Lamp",
+                Unique = true,
+                DelayBetweenUse = -1
             });
         }
     }

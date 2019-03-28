@@ -24,6 +24,7 @@ namespace RPG4
     public partial class MainWindow : Window
     {
         private const string _playerUid = "PlayerUid";
+        private const string _shadowUid = "ShadowUid";
         private const string UNIQUE_TIMESTAMP_PATTERN = "fffffff";
 
         private Timer _timer;
@@ -45,6 +46,8 @@ namespace RPG4
             rctPlayer.Height = _engine.Player.Height;
             rctPlayer.Width = _engine.Player.Width;
             rctPlayer.Uid = _playerUid;
+
+            rctShadow.Uid = _shadowUid;
 
             _missedFrames = 0;
             _timer = new Timer(1000 / Constants.FPS);
@@ -92,9 +95,15 @@ namespace RPG4
                 if (_engine.CurrentScreenId != _currentScreenIndex)
                 {
                     _currentScreenIndex = _engine.CurrentScreenId;
+
                     cvsMain.Background = (Brush)_engine.ScreenGraphic.GetRendering();
                     cvsMain.Height = _engine.AreaHeight;
                     cvsMain.Width = _engine.AreaWidth;
+
+                    rctShadow.Height = _engine.AreaHeight;
+                    rctShadow.Width = _engine.AreaWidth;
+                    rctShadow.Opacity = _engine.AreaShadowOpacity;
+
                     ClearUnfixedChildren(true);
                     DrawWalls();
                 }
@@ -124,9 +133,15 @@ namespace RPG4
         // Draws a sprite inside the main canvas.
         private void DrawSizedPoint(Sprite sp, int zIndex = 0, bool fixedId = false)
         {
+            Brush render = (Brush)sp.Graphic.GetRendering();
+            if (sp.GetType().IsSubclassOf(typeof(FloorTrigger)) && ((FloorTrigger)sp).IsActivated)
+            {
+                render = (Brush)((FloorTrigger)sp).ActivatedGraphic.GetRendering();
+            }
+
             Rectangle rct = new Rectangle
             {
-                Fill = (Brush)sp.Graphic.GetRendering(),
+                Fill = render,
                 Width = sp.Width,
                 Height = sp.Height
             };
@@ -143,12 +158,12 @@ namespace RPG4
         }
 
         // Remove every children of the canvas without fixed uid.
-        private void ClearUnfixedChildren(bool everythingExceptPlayer = false)
+        private void ClearUnfixedChildren(bool everythingExceptPlayerAndShadow = false)
         {
             for (int i = cvsMain.Children.Count - 1; i >= 0; i--)
             {
-                if (string.IsNullOrWhiteSpace(cvsMain.Children[i].Uid)
-                    || (everythingExceptPlayer  && cvsMain.Children[i].Uid != _playerUid))
+                string uid = cvsMain.Children[i].Uid;
+                if (string.IsNullOrWhiteSpace(uid) || (everythingExceptPlayerAndShadow && uid != _playerUid && uid != _shadowUid))
                 {
                     cvsMain.Children.RemoveAt(i);
                 }
@@ -200,6 +215,27 @@ namespace RPG4
 
                 DrawSizedPoint(sprite, zIndex: zIndex);
             }
+
+            #region Shadow
+
+            if (_engine.Player.Inventory.LampIsOn)
+            {
+                var pt = new Point(_engine.Player.CenterPoint.X / _engine.AreaWidth,
+                    _engine.Player.CenterPoint.Y / _engine.AreaHeight);
+
+                var lampBrush = new RadialGradientBrush(Colors.Transparent, Colors.Black);
+                lampBrush.Center = pt;
+                lampBrush.GradientOrigin = pt;
+                lampBrush.RadiusX = 0.2 * (_engine.AreaHeight / _engine.AreaWidth);
+                lampBrush.RadiusY = 0.2;
+                rctShadow.Fill = lampBrush;
+            }
+            else
+            {
+                rctShadow.Fill = Brushes.Black;
+            }
+
+            #endregion
         }
 
         // Refresh the menu status.
@@ -227,6 +263,9 @@ namespace RPG4
                             break;
                         case ItemIdEnum.SmallLifePotion:
                             itemSlotRct.Fill = Brushes.LightGoldenrodYellow;
+                            break;
+                        case ItemIdEnum.Lamp:
+                            itemSlotRct.Fill = Brushes.Yellow;
                             break;
                     }
                 }

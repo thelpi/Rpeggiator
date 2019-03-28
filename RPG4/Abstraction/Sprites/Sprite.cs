@@ -37,6 +37,10 @@ namespace RPG4.Abstraction.Sprites
         /// </summary>
         public double Surface { get { return Width * Height; } }
         /// <summary>
+        /// Center point.
+        /// </summary>
+        public Point CenterPoint { get { return new Point(X + (Width / 2), Y + (Height / 2)); } }
+        /// <summary>
         /// Graphic rendering.
         /// </summary>
         public ISpriteGraphic Graphic { get; private set; }

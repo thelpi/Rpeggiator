@@ -20,6 +20,10 @@
         /// <summary>
         /// Large life potion identifier.
         /// </summary>
-        LargeLifePotion
+        LargeLifePotion,
+        /// <summary>
+        /// Lamp.
+        /// </summary>
+        Lamp
     }
 }

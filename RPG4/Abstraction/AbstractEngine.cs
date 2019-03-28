@@ -29,6 +29,10 @@ namespace RPG4.Abstraction
         /// </summary>
         public double AreaHeight { get; private set; }
         /// <summary>
+        /// Current screen shadow.
+        /// </summary>
+        public double AreaShadowOpacity { get; private set; }
+        /// <summary>
         /// <see cref="Player"/>
         /// </summary>
         public Player Player { get; private set; }
@@ -104,6 +108,7 @@ namespace RPG4.Abstraction
             _actionnedItems = new List<ActionnedItem>();
             AreaWidth = screenJsonDatas.AreaWidth;
             AreaHeight = screenJsonDatas.AreaHeight;
+            AreaShadowOpacity = screenJsonDatas.AreaShadowOpacity;
             switch ((string)screenJsonDatas.GraphicType)
             {
                 case nameof(ImageBrushGraphic):

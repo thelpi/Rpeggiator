@@ -3,6 +3,7 @@
 	"AreaHeight": 600,
 	  "GraphicType": "PlainBrushGraphic",
 	  "HexColor": "#FFFFEFD5",
+	  "AreaShadowOpacity":0,
   "Walls": [
     {
       "X": 50,

@@ -1,5 +1,6 @@
 ﻿using RPG4.Abstraction;
 using RPG4.Abstraction.Graphic;
+using System.Collections.Generic;
 
 namespace RPG4
 {
@@ -39,10 +40,10 @@ namespace RPG4
         /// <summary>
         /// Initial list of items in the inventory.
         /// </summary>
-        public static readonly InventoryItem[] INVENTORY_ITEMS = new InventoryItem[]
+        public static readonly IReadOnlyDictionary<ItemIdEnum, int> INVENTORY_ITEMS = new Dictionary<ItemIdEnum, int>
         {
-            new InventoryItem(ItemIdEnum.SmallLifePotion, 3, Inventory.MAX_QUANTITY_BY_ITEM[ItemIdEnum.SmallLifePotion]),
-            new InventoryItem(ItemIdEnum.Bomb, 10, Inventory.MAX_QUANTITY_BY_ITEM[ItemIdEnum.Bomb]),
+            { ItemIdEnum.Lamp, 1 },
+            { ItemIdEnum.SmallLifePotion, 3 }
         };
         /// <summary>
         /// Initial life points.
