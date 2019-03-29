@@ -59,35 +59,44 @@ namespace RPG4
                 while (true)
                 {
                     stopWatch.Restart();
-                    // check pressed keys
-                    var pressedKeys = (KeyPress)Dispatcher.Invoke(new KeyPressHandler(delegate ()
+                    try
                     {
-                        int? inventorySlotId = null;
-                        for (int i = 0; i < Constants.INVENTORY_SIZE; i++)
+                        // check pressed keys
+                        var pressedKeys = (KeyPress)Dispatcher.Invoke(new KeyPressHandler(delegate ()
                         {
-                            if (Keyboard.IsKeyDown((Key)Enum.Parse(typeof(Key), string.Format("D{0}", i))))
+                            int? inventorySlotId = null;
+                            for (int i = 0; i < Constants.INVENTORY_SIZE; i++)
                             {
-                                inventorySlotId = i == 0 ? Constants.INVENTORY_SIZE : (i - 1);
-                                break;
+                                if (Keyboard.IsKeyDown((Key)Enum.Parse(typeof(Key), string.Format("D{0}", i))))
+                                {
+                                    inventorySlotId = i == 0 ? Constants.INVENTORY_SIZE : (i - 1);
+                                    break;
+                                }
                             }
+                            return new KeyPress(
+                                Keyboard.IsKeyDown(Key.Up),
+                                Keyboard.IsKeyDown(Key.Down),
+                                Keyboard.IsKeyDown(Key.Right),
+                                Keyboard.IsKeyDown(Key.Left),
+                                Keyboard.IsKeyDown(Key.Space),
+                                inventorySlotId
+                            );
+                        }));
+
+                        // recompute everything
+                        _engine.CheckEngineAtNewFrame(pressedKeys);
+
+                        (sender as BackgroundWorker).ReportProgress(0);
+
+                        if (_engine.Player.CheckDeath(_engine))
+                        {
+                            e.Result = null;
+                            return;
                         }
-                        return new KeyPress(
-                            Keyboard.IsKeyDown(Key.Up),
-                            Keyboard.IsKeyDown(Key.Down),
-                            Keyboard.IsKeyDown(Key.Right),
-                            Keyboard.IsKeyDown(Key.Left),
-                            Keyboard.IsKeyDown(Key.Space),
-                            inventorySlotId
-                        );
-                    }));
-
-                    // recompute everything
-                    _engine.CheckEngineAtNewFrame(pressedKeys);
-
-                    (sender as BackgroundWorker).ReportProgress(0);
-
-                    if (_engine.Player.CheckDeath(_engine))
+                    }
+                    catch (Exception ex)
                     {
+                        e.Result = ex.Message;
                         return;
                     }
                     stopWatch.Stop();
@@ -121,7 +130,7 @@ namespace RPG4
             };
             worker.RunWorkerCompleted += delegate (object sender, RunWorkerCompletedEventArgs e)
             {
-                MessageBox.Show("You die !");
+                MessageBox.Show(e.Result == null ? "You die !" : e.Result.ToString());
             };
             worker.RunWorkerAsync();
         }

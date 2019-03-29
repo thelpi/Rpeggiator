@@ -43,7 +43,8 @@ namespace RPG4
         public static readonly IReadOnlyDictionary<ItemIdEnum, int> INVENTORY_ITEMS = new Dictionary<ItemIdEnum, int>
         {
             { ItemIdEnum.Lamp, 1 },
-            { ItemIdEnum.SmallLifePotion, 3 }
+            { ItemIdEnum.SmallLifePotion, 3 },
+            { ItemIdEnum.Bomb, 1 }
         };
         /// <summary>
         /// Initial life points.

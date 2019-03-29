@@ -1,4 +1,5 @@
 ﻿using RPG4.Abstraction.Graphic;
+using System;
 
 namespace RPG4.Abstraction.Sprites
 {
@@ -14,19 +15,21 @@ namespace RPG4.Abstraction.Sprites
         private const double HEIGHT = 20;
         // When exploding, indicates the ratio size of the halo (compared to the bomb itself).
         private const double HALO_SIZE_RATIO = 3;
-        // Frames count before exploding.
-        private static readonly int PENDING_FRAME_COUNT = Constants.FPS * 2;
-        // Frames count while exploding.
-        private static readonly int EXPLODING_FRAME_COUNT = Constants.FPS;
+        // Milliseconds while pending explosion.
+        private static readonly double TIME_WHILE_PENDING = 2000;
+        // Milliseconds while exploding.
+        private static readonly double TIME_WHILE_EXPLODING = 1000;
         // Halo graphic rendering.
         private static readonly ISpriteGraphic HALO_GRAPHIC_RENDERING = new PlainBrushGraphic("#FFFF4500");
         // Bomb graphic rendering.
         private static readonly ISpriteGraphic GRAPHIC_RENDERING = new ImageBrushGraphic("Bomb");
 
-        // Frames count before exploding.
-        private int _pendingExplosionFrameCount;
-        // Frames count while exploding.
-        private int _explosionFrameCount;
+        // Timestamp of event beginning (pending or exploding).
+        private DateTime _eventTimestamp;
+        // Time while exploding.
+        private TimeSpan? _explosionTime;
+        // Time while pending.
+        private TimeSpan? _pendingTime;
 
         /// <summary>
         /// Explosion <see cref="Sprite"/>.
@@ -35,11 +38,11 @@ namespace RPG4.Abstraction.Sprites
         /// <summary>
         /// Inferred; Indicates the bomb explodes now.
         /// </summary>
-        public bool IsExploding { get { return _explosionFrameCount == 0; } }
+        public bool IsExploding { get { return _explosionTime.HasValue && _explosionTime.Value.TotalMilliseconds == 0; } }
         /// <summary>
         /// Inferred; Indicates the bomb's explosion is done.
         /// </summary>
-        public override bool IsDone { get { return _explosionFrameCount > EXPLODING_FRAME_COUNT; } }
+        public override bool IsDone { get { return _explosionTime.HasValue && _explosionTime.Value.TotalMilliseconds > TIME_WHILE_EXPLODING; } }
 
         /// <summary>
         /// Constructor.
@@ -48,31 +51,33 @@ namespace RPG4.Abstraction.Sprites
         /// <param name="y"><see cref="Sprite.Y"/></param>
         public ActionnedBomb(double x, double y) : base(x, y, WIDTH, HEIGHT, GRAPHIC_RENDERING)
         {
-            _pendingExplosionFrameCount = PENDING_FRAME_COUNT;
+            _pendingTime = new TimeSpan(0);
+            _eventTimestamp = DateTime.Now;
             ExplosionSprite = null;
-            _explosionFrameCount = -1;
+            _explosionTime = null;
         }
 
         /// <inheritdoc />
         public override void BehaviorAtNewFrame(AbstractEngine engine, params object[] args)
         {
             // Explosion beginning.
-            if (_pendingExplosionFrameCount == 0)
+            if (_pendingTime.HasValue && _pendingTime.Value.TotalMilliseconds >= TIME_WHILE_PENDING)
             {
-                _pendingExplosionFrameCount = -1;
-                _explosionFrameCount = 0;
+                _pendingTime = null;
+                _explosionTime = new TimeSpan(0);
+                _eventTimestamp = DateTime.Now;
                 ExplosionSprite = new Sprite(X - Width, Y - Height, Width * HALO_SIZE_RATIO, Height * HALO_SIZE_RATIO, HALO_GRAPHIC_RENDERING);
             }
             // Explosion pending.
-            else if (_pendingExplosionFrameCount > 0 && _pendingExplosionFrameCount <= PENDING_FRAME_COUNT)
+            else if (_pendingTime.HasValue && _pendingTime.Value.TotalMilliseconds < TIME_WHILE_PENDING)
             {
-                _pendingExplosionFrameCount--;
+                _pendingTime = DateTime.Now - _eventTimestamp;
             }
             // Post-explosion.
             else
             {
-                _explosionFrameCount++;
-                if (_explosionFrameCount > EXPLODING_FRAME_COUNT)
+                _explosionTime = DateTime.Now - _eventTimestamp;
+                if (_explosionTime.Value.TotalMilliseconds > TIME_WHILE_EXPLODING)
                 {
                     ExplosionSprite = null;
                 }
