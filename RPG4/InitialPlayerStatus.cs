@@ -12,11 +12,11 @@ namespace RPG4
         /// <summary>
         /// Player initial position on X-axis.
         /// </summary>
-        public const double INITIAL_PLAYER_X = 300;
+        public const double INITIAL_PLAYER_X = 400;
         /// <summary>
         /// Player initial position on Y-axis.
         /// </summary>
-        public const double INITIAL_PLAYER_Y = 220;
+        public const double INITIAL_PLAYER_Y = 300;
         /// <summary>
         /// Intial player's speed, in pixels by frame.
         /// </summary>

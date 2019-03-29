@@ -12,13 +12,17 @@ namespace RPG4
         /// </summary>
         public const int FPS = 20;
         /// <summary>
+        /// Minimal delay between two frames, in milliseconds.
+        /// </summary>
+        public const double MIN_DELAY_BETWEEN_FRAMES = 10;
+        /// <summary>
         /// Player's moves history max count.
         /// </summary>
         public const int MOVE_HISTORY_COUNT = 50;
         /// <summary>
-        /// Frames count while recovering from a hit.
+        /// Player recovery time span, in milliseconds.
         /// </summary>
-        public static readonly int RECOVERY_FRAME_COUNT = (int)(FPS * 0.5);
+        public const double PLAYER_RECOVERY_TIME = 1000;
         /// <summary>
         /// Substitution parameters for <see cref="FPS"/> in formulas.
         /// </summary>

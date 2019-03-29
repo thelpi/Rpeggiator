@@ -1,7 +1,10 @@
 ﻿using RPG4.Abstraction;
 using RPG4.Abstraction.Sprites;
 using System;
+using System.ComponentModel;
+using System.Diagnostics;
 using System.Linq;
+using System.Threading;
 using System.Timers;
 using System.Windows;
 using System.Windows.Controls;
@@ -26,12 +29,9 @@ namespace RPG4
         private const string _playerUid = "PlayerUid";
         private const string _shadowUid = "ShadowUid";
         private const string UNIQUE_TIMESTAMP_PATTERN = "fffffff";
-
-        private Timer _timer;
-        private volatile bool _timerIsIn;
+        
         private AbstractEngine _engine;
         private int _currentScreenIndex;
-        private ulong _missedFrames;
 
         /// <summary>
         /// Constructor.
@@ -49,48 +49,56 @@ namespace RPG4
 
             rctShadow.Uid = _shadowUid;
 
-            _missedFrames = 0;
-            _timer = new Timer(1000 / Constants.FPS);
-            _timer.Elapsed += NewFrame;
-            _timer.Start();
-        }
-
-        private void NewFrame(object sender, ElapsedEventArgs e)
-        {
-            if (_timerIsIn)
+            BackgroundWorker worker = new BackgroundWorker
             {
-                _missedFrames++;
-                return;
-            }
-
-            _timerIsIn = true;
-
-            // check pressed keys
-            var pressedKeys = (KeyPress)Dispatcher.Invoke(new KeyPressHandler(delegate()
+                WorkerReportsProgress = true
+            };
+            worker.DoWork += delegate(object sender, DoWorkEventArgs e)
             {
-                int? inventorySlotId = null;
-                for (int i = 0; i < Constants.INVENTORY_SIZE; i++)
+                Stopwatch stopWatch = new Stopwatch();
+                while (true)
                 {
-                    if (Keyboard.IsKeyDown((Key)Enum.Parse(typeof(Key), string.Format("D{0}", i))))
+                    stopWatch.Restart();
+                    // check pressed keys
+                    var pressedKeys = (KeyPress)Dispatcher.Invoke(new KeyPressHandler(delegate ()
                     {
-                        inventorySlotId = i == 0 ? Constants.INVENTORY_SIZE : (i - 1);
-                        break;
+                        int? inventorySlotId = null;
+                        for (int i = 0; i < Constants.INVENTORY_SIZE; i++)
+                        {
+                            if (Keyboard.IsKeyDown((Key)Enum.Parse(typeof(Key), string.Format("D{0}", i))))
+                            {
+                                inventorySlotId = i == 0 ? Constants.INVENTORY_SIZE : (i - 1);
+                                break;
+                            }
+                        }
+                        return new KeyPress(
+                            Keyboard.IsKeyDown(Key.Up),
+                            Keyboard.IsKeyDown(Key.Down),
+                            Keyboard.IsKeyDown(Key.Right),
+                            Keyboard.IsKeyDown(Key.Left),
+                            Keyboard.IsKeyDown(Key.Space),
+                            inventorySlotId
+                        );
+                    }));
+
+                    // recompute everything
+                    _engine.CheckEngineAtNewFrame(pressedKeys);
+
+                    (sender as BackgroundWorker).ReportProgress(0);
+
+                    if (_engine.Player.CheckDeath(_engine))
+                    {
+                        return;
+                    }
+                    stopWatch.Stop();
+                    double stayToElapse = Constants.MIN_DELAY_BETWEEN_FRAMES - stopWatch.Elapsed.TotalMilliseconds;
+                    if (stayToElapse > 0)
+                    {
+                        Thread.Sleep((int)stayToElapse);
                     }
                 }
-                return new KeyPress(
-                    Keyboard.IsKeyDown(Key.Up),
-                    Keyboard.IsKeyDown(Key.Down),
-                    Keyboard.IsKeyDown(Key.Right),
-                    Keyboard.IsKeyDown(Key.Left),
-                    Keyboard.IsKeyDown(Key.Space),
-                    inventorySlotId
-                );
-            }));
-
-            // recompute everything
-            _engine.CheckEngineAtNewFrame(pressedKeys);
-
-            Dispatcher.Invoke((delegate()
+            };
+            worker.ProgressChanged += delegate(object sender, ProgressChangedEventArgs e)
             {
                 if (_engine.CurrentScreenId != _currentScreenIndex)
                 {
@@ -110,15 +118,12 @@ namespace RPG4
 
                 RefreshAnimatedSprites();
                 RefreshMenu();
-
-                if (_engine.Player.CheckDeath(_engine))
-                {
-                    MessageBox.Show("You die !");
-                    _timer.Stop();
-                }
-            }));
-
-            _timerIsIn = false;
+            };
+            worker.RunWorkerCompleted += delegate (object sender, RunWorkerCompletedEventArgs e)
+            {
+                MessageBox.Show("You die !");
+            };
+            worker.RunWorkerAsync();
         }
 
         // Draws each calls inside the main canvas

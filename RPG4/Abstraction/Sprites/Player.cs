@@ -13,8 +13,10 @@ namespace RPG4.Abstraction.Sprites
     /// <see cref="IExplodable"/>
     public class Player : LifeSprite, IExplodable
     {
-        // Current frames count while recovering.
-        private int _currentRecoveryFrameCount;
+        // Recovery beginning timestamp.
+        private DateTime _recoveryBeginTimestamp;
+        // Time in recovery
+        private TimeSpan? _recoveryTime;
         // History of movements.
         private Queue<Point> _moveHistory = new Queue<Point>(Constants.MOVE_HISTORY_COUNT);
         // Hit frames count.
@@ -42,7 +44,7 @@ namespace RPG4.Abstraction.Sprites
         /// <summary>
         /// Indicates the player is currently recovering from an hit.
         /// </summary>
-        public bool IsRecovering { get { return _currentRecoveryFrameCount >= 0 && _currentRecoveryFrameCount <= Constants.RECOVERY_FRAME_COUNT; } }
+        public bool IsRecovering { get { return _recoveryTime.HasValue; } }
         /// <summary>
         /// Indicates if the player is currently hitting.
         /// </summary>
@@ -79,7 +81,7 @@ namespace RPG4.Abstraction.Sprites
             NewScreenEntrance = null;
             Inventory = new Inventory();
             HitSprite = null;
-            _currentRecoveryFrameCount = -1;
+            _recoveryTime = null;
             _hitDisplayFrameCount = -1;
             _hitFrameMaxCount = InitialPlayerStatus.HIT_FRAME_MAX_COUNT;
             LastDirection = Directions.right;
@@ -347,30 +349,23 @@ namespace RPG4.Abstraction.Sprites
             // currently recovering ?
             if (IsRecovering)
             {
-                _currentRecoveryFrameCount++;
-                if (_currentRecoveryFrameCount > Constants.RECOVERY_FRAME_COUNT)
+                _recoveryTime = DateTime.Now - _recoveryBeginTimestamp;
+                if (_recoveryTime.Value.TotalMilliseconds > Constants.PLAYER_RECOVERY_TIME)
                 {
-                    // end of recovery
-                    _currentRecoveryFrameCount = -1;
+                    _recoveryTime = null;
                 }
             }
 
-            if (_currentRecoveryFrameCount < 0)
+            if (!_recoveryTime.HasValue)
             {
-                // checks hits by enemies
-                double cumuledLifePoints = engine.CheckHitByEnemiesOnPlayer();
-                if (cumuledLifePoints > 0)
-                {
-                    Hit(cumuledLifePoints);
-                    _currentRecoveryFrameCount = 0;
-                }
+                // checks hits by enemies or bombs
+                var cumuledLifePoints = engine.CheckHitByEnemiesOnPlayer() + engine.OverlapAnExplodingBomb(this);
 
-                // checks hits by bombs
-                cumuledLifePoints = engine.OverlapAnExplodingBomb(this);
                 if (cumuledLifePoints > 0)
                 {
                     Hit(cumuledLifePoints);
-                    _currentRecoveryFrameCount = 0;
+                    _recoveryBeginTimestamp = DateTime.Now;
+                    _recoveryTime = DateTime.Now - _recoveryBeginTimestamp;
                 }
             }
         }
