@@ -4,7 +4,7 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         mc:Ignorable="d" Background="Gainsboro" ResizeMode="CanMinimize" Width="900" Height="700"
-        Title="MainWindow" WindowStartupLocation="CenterScreen" >
+        KeyUp="Window_KeyUp" Title="MainWindow" WindowStartupLocation="CenterScreen" >
     <DockPanel>
         <Canvas DockPanel.Dock="Top" Name="cvsMain">
             <Rectangle Name="rctPlayer" />

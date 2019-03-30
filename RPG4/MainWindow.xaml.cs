@@ -29,7 +29,10 @@ namespace RPG4
         private const string _playerUid = "PlayerUid";
         private const string _shadowUid = "ShadowUid";
         private const string UNIQUE_TIMESTAMP_PATTERN = "fffffff";
-        
+
+        private bool _hitKeyPressed;
+        private int? _inventoryKeyPressed;
+
         private AbstractEngine _engine;
         private int _currentScreenIndex;
 
@@ -53,7 +56,7 @@ namespace RPG4
             {
                 WorkerReportsProgress = true
             };
-            worker.DoWork += delegate(object sender, DoWorkEventArgs e)
+            worker.DoWork += delegate (object sender, DoWorkEventArgs e)
             {
                 Stopwatch stopWatch = new Stopwatch();
                 while (true)
@@ -64,23 +67,17 @@ namespace RPG4
                         // check pressed keys
                         var pressedKeys = (KeyPress)Dispatcher.Invoke(new KeyPressHandler(delegate ()
                         {
-                            int? inventorySlotId = null;
-                            for (int i = 0; i < Constants.INVENTORY_SIZE; i++)
-                            {
-                                if (Keyboard.IsKeyDown((Key)Enum.Parse(typeof(Key), string.Format("D{0}", i))))
-                                {
-                                    inventorySlotId = i == 0 ? Constants.INVENTORY_SIZE : (i - 1);
-                                    break;
-                                }
-                            }
-                            return new KeyPress(
+                            var kp = new KeyPress(
                                 Keyboard.IsKeyDown(Key.Up),
                                 Keyboard.IsKeyDown(Key.Down),
                                 Keyboard.IsKeyDown(Key.Right),
                                 Keyboard.IsKeyDown(Key.Left),
-                                Keyboard.IsKeyDown(Key.Space),
-                                inventorySlotId
+                                _hitKeyPressed,
+                                _inventoryKeyPressed
                             );
+                            _inventoryKeyPressed = null;
+                            _hitKeyPressed = false;
+                            return kp;
                         }));
 
                         // recompute everything
@@ -107,7 +104,7 @@ namespace RPG4
                     }
                 }
             };
-            worker.ProgressChanged += delegate(object sender, ProgressChangedEventArgs e)
+            worker.ProgressChanged += delegate (object sender, ProgressChangedEventArgs e)
             {
                 if (_engine.CurrentScreenId != _currentScreenIndex)
                 {
@@ -283,6 +280,47 @@ namespace RPG4
                             break;
                     }
                 }
+            }
+        }
+
+        // Happens on key press.
+        private void Window_KeyUp(object sender, KeyEventArgs e)
+        {
+            switch (e.Key)
+            {
+                case Key.Space:
+                    _hitKeyPressed = true;
+                    break;
+                case Key.D0:
+                    _inventoryKeyPressed = Constants.INVENTORY_SIZE - 1;
+                    break;
+                case Key.D1:
+                    _inventoryKeyPressed = 0;
+                    break;
+                case Key.D2:
+                    _inventoryKeyPressed = 1;
+                    break;
+                case Key.D3:
+                    _inventoryKeyPressed = 2;
+                    break;
+                case Key.D4:
+                    _inventoryKeyPressed = 3;
+                    break;
+                case Key.D5:
+                    _inventoryKeyPressed = 4;
+                    break;
+                case Key.D6:
+                    _inventoryKeyPressed = 5;
+                    break;
+                case Key.D7:
+                    _inventoryKeyPressed = 6;
+                    break;
+                case Key.D8:
+                    _inventoryKeyPressed = 7;
+                    break;
+                case Key.D9:
+                    _inventoryKeyPressed = 8;
+                    break;
             }
         }
     }
