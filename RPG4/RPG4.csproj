@@ -74,6 +74,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Abstraction\Elapser.cs" />
     <Compile Include="Abstraction\Exceptions\InfiniteOverlapCheckException.cs" />
     <Compile Include="Abstraction\Graphic\ImageBrushGraphic.cs" />
     <Compile Include="Abstraction\Graphic\PlainBrushGraphic.cs" />
