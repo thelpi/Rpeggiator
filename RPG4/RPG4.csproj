@@ -74,6 +74,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Abstraction\Exceptions\InfiniteOverlapCheckException.cs" />
     <Compile Include="Abstraction\Graphic\ImageBrushGraphic.cs" />
     <Compile Include="Abstraction\Graphic\PlainBrushGraphic.cs" />
     <Compile Include="Abstraction\Graphic\SpriteGraphic.cs" />
@@ -96,6 +97,11 @@
     <Compile Include="Abstraction\Sprites\Sprite.cs" />
     <Compile Include="Abstraction\Sprites\Gate.cs" />
     <Compile Include="InitialPlayerStatus.cs" />
+    <Compile Include="Messages.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Messages.resx</DependentUpon>
+    </Compile>
     <Compile Include="Properties\Resources.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -127,6 +133,10 @@
       <DependentUpon>Settings.settings</DependentUpon>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
+    <EmbeddedResource Include="Messages.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Messages.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <SubType>Designer</SubType>

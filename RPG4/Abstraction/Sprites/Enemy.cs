@@ -114,7 +114,7 @@ namespace RPG4.Abstraction.Sprites
                 nextY = Pattern.BottomRightY - Height;
             }
 
-            if (engine.SolidStructures.Any(s => s.Overlap(Copy(nextX, nextY))))
+            if (engine.SolidStructures.Any(s => s.Overlap(CopyToPosition(new System.Windows.Point(nextX, nextY)))))
             {
                 HourRotation = !HourRotation;
             }

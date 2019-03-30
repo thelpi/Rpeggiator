@@ -18,9 +18,9 @@ namespace RPG4
         /// </summary>
         public const double INITIAL_PLAYER_Y = 300;
         /// <summary>
-        /// Intial player's speed, in pixels by frame.
+        /// Intial player's speed, in pixels by second.
         /// </summary>
-        public static readonly int INITIAL_PLAYER_SPEED = Constants.FPS / 2;
+        public static readonly double INITIAL_PLAYER_SPEED = 200;
         /// <summary>
         /// Size of the player on X-axis.
         /// </summary>

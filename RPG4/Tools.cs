@@ -36,5 +36,15 @@ namespace RPG4
 
             return (T)Convert.ChangeType(new DataTable().Compute(formulaStringValue, string.Empty), typeof(T));
         }
+
+        /// <summary>
+        /// Computes the distance made in diagonal relatively to the distance made straightforward.
+        /// </summary>
+        /// <param name="frameDistance">Distance made straightforward.</param>
+        /// <returns>Diagonal distance.</returns>
+        public static double FrameDiagonalDistance(double frameDistance)
+        {
+            return Math.Sqrt((frameDistance * frameDistance) / 2);
+        }
     }
 }

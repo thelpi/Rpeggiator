@@ -85,14 +85,13 @@ namespace RPG4.Abstraction.Sprites
         }
 
         /// <summary>
-        /// Makes a copy of the current instance with the same <see cref="Width"/> and <see cref="Height"/>
+        /// Makes a copy of the current instance on a new position, with the same <see cref="Width"/> and <see cref="Height"/>.
         /// </summary>
-        /// <param name="x">New value for <see cref="X"/>.</param>
-        /// <param name="y">New value for <see cref="Y"/>.</param>
+        /// <param name="newPosition">The new position.</param>
         /// <returns>The new instance.</returns>
-        public Sprite Copy(double x, double y)
+        public Sprite CopyToPosition(Point newPosition)
         {
-            return new Sprite(x, y, Width, Height, Graphic);
+            return new Sprite(newPosition.X, newPosition.Y, Width, Height, Graphic);
         }
 
         /// <summary>
