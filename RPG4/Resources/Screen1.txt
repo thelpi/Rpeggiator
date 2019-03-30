@@ -33,12 +33,25 @@
       "HourRotation": true,
       "MaximalLifePoints": 2,
 	  "HitLifePointCost": 5,
-      "Pattern": {
-        "X": 50,
-        "Y": 50,
-        "Width": 550,
-        "Height": 400
-      },
+      "Path": [
+		{
+			"X": "730",
+			"Y": "350"
+		}
+		,
+		{
+			"X": "730",
+			"Y": "400"
+		},
+		{
+			"X": "750",
+			"Y": "550"
+		},
+		{
+			"X": "30",
+			"Y": "520"
+		}
+	  ],
 	  "GraphicType": "ImageBrushGraphic",
 	  "ImagePath": "Enemy"
     }

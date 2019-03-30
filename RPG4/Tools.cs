@@ -40,16 +40,9 @@ namespace RPG4
         /// <returns>A tuple of solutions; or <c>Null</c> if no solution.</returns>
         public static Tuple<double, double> ResolveQuadraticEquation(double a, double b, double c)
         {
-            Tuple<double, double> result = null;
+            double delta = (b*b)-(4*a*c);
 
-            double delta = Math.Sqrt(b) - (4 * a * c);
-
-            if (delta < 0)
-            {
-                return result;
-            }
-
-            return new Tuple<double, double>(
+            return delta < 0 ? null : new Tuple<double, double>(
                 ((-1 * b) + Math.Sqrt(delta)) / (2 * a),
                 ((-1 * b) - Math.Sqrt(delta)) / (2 * a)
             );
@@ -76,12 +69,12 @@ namespace RPG4
         /// </summary>
         /// <param name="pStart">The starting <see cref="Point"/></param>
         /// <param name="pDest">The destination <see cref="Point"/></param>
-        /// <param name="distance">The distance, in pixels.</param>
-        /// <param name="adjust"><c>True</c> to not go further than <paramref name="pDest"/>; <c>False</c> otherwise.</param>
+        /// <param name="d">The distance, in pixels.</param>
+        /// <param name="adjust">Optionnal; <c>True</c> to not go further than <paramref name="pDest"/>; <c>False</c> otherwise.</param>
         /// <returns>Coordinates of the point.</returns>
-        public static Point GetIntermediatePointBetweenTwoSprite(Point pStart, Point pDest, double distance, bool adjust)
+        public static Point GetPointOnLine(Point pStart, Point pDest, double d, bool adjust = false)
         {
-            if (distance == 0)
+            if (d == 0)
             {
                 return pStart;
             }
@@ -91,28 +84,63 @@ namespace RPG4
             if (linearProperties == null)
             {
                 double totalDistance = pDest.Y - pStart.Y;
-                if (Math.Sign(totalDistance) != Math.Sign(distance))
+                if (Math.Sign(totalDistance) != Math.Sign(d))
                 {
-                    distance *= -1;
+                    d *= -1;
                 }
-                if (adjust && Math.Abs(totalDistance) < Math.Abs(distance))
+                if (adjust && Math.Abs(totalDistance) < Math.Abs(d))
                 {
-                    distance = totalDistance;
+                    d = totalDistance;
                 }
 
-                return new Point(pStart.X, pStart.Y + distance);
+                return new Point(pStart.X, pStart.Y + d);
             }
 
             double a = linearProperties.Item1;
             double b = linearProperties.Item2;
             double x1 = pStart.X;
             double y1 = pStart.Y;
-            var quadraticSolution = ResolveQuadraticEquation(a+1, -1*((2*x1)+(2*a*b)-(2*a*y1)), (x1*x1)+(b*b)-(2*b*y1)+(y1*y1)-(distance*distance));
+            var quadraticSolution = ResolveQuadraticEquation(
+                1 + a * a,
+                -2 * x1 + 2 * a * b - 2 * a * y1,
+                x1 * x1 + b * b - 2 * b * y1 + y1 * y1 - d * d
+            );
 
-            double xn = quadraticSolution.Item1 < 0 ? quadraticSolution.Item2 : quadraticSolution.Item1;
-            double yn = (a * xn) + b;
+            double xn_s1 = quadraticSolution.Item1;
+            double yn_s1 = (a * xn_s1) + b;
 
-            return new Point(xn, yn);
+            double xn_s2 = quadraticSolution.Item2;
+            double yn_s2 = (a * xn_s2) + b;
+
+            double x = xn_s1 >= 0 ? xn_s1 : xn_s2;
+            double y = xn_s1 >= 0 ? yn_s1 : yn_s2;
+            if (xn_s1 >= 0 && xn_s2 >= 0)
+            {
+                if (yn_s1 < 0 || yn_s2 < 0)
+                {
+                    x = yn_s1 < 0 ? xn_s2 : xn_s1;
+                    y = yn_s1 < 0 ? yn_s2 : yn_s1;
+                }
+                else
+                {
+                    double gapX1 = Math.Abs(xn_s1 - pDest.X);
+                    double gapX2 = Math.Abs(xn_s2 - pDest.X);
+                    double gapY1 = Math.Abs(yn_s1 - pDest.Y);
+                    double gapY2 = Math.Abs(yn_s2 - pDest.Y);
+                    if (gapX1 + gapY1 < gapX2 + gapY2)
+                    {
+                        x = xn_s1;
+                        y = yn_s1;
+                    }
+                    else
+                    {
+                        x = xn_s2;
+                        y = yn_s2;
+                    }
+                }
+            }
+
+            return new Point(x, y);
         }
     }
 }

@@ -1,4 +1,6 @@
-﻿using System.Linq;
+﻿using System.Collections.Generic;
+using System.Windows;
+using System.Linq;
 
 namespace RPG4.Abstraction.Sprites
 {
@@ -13,19 +15,17 @@ namespace RPG4.Abstraction.Sprites
         private const double EXPLOSION_LIFE_POINT_COST = 2;
         // Movement time manager.
         private Elapser _movementTimeManager;
+        // Path.
+        private List<Point> _path;
+        // Next index on _path
+        private int _nextPointIndex;
+        // Reversed path.
+        private bool _reversedPath;
 
         /// <summary>
         /// Speed, in pixels by second.
         /// </summary>
         public double Speed { get; private set; }
-        /// <summary>
-        /// Movement pattern.
-        /// </summary>
-        public Sprite Pattern { get; private set; }
-        /// <summary>
-        /// Indicates the current rotation on <see cref="Pattern"/>.
-        /// </summary>
-        public bool HourRotation { get; private set; }
         /// <inheritdoc />
         public double ExplosionLifePointCost { get { return EXPLOSION_LIFE_POINT_COST; } }
 
@@ -36,9 +36,13 @@ namespace RPG4.Abstraction.Sprites
         public Enemy(dynamic enemyJson) : base((object)enemyJson)
         {
             Speed = enemyJson.Speed;
-            HourRotation = enemyJson.HourRotation;
-            Pattern = new Sprite(enemyJson.Pattern);
             _movementTimeManager = new Elapser();
+            _path = new List<Point>();
+            foreach (var jsonPath in enemyJson.Path)
+            {
+                _path.Add(new Point((double)jsonPath.X, (double)jsonPath.Y));
+            }
+            _path.Add(TopLeftCorner);
         }
 
         /// <inheritdoc />
@@ -49,67 +53,37 @@ namespace RPG4.Abstraction.Sprites
             double nextX = X;
             double nextY = Y;
 
-            bool isRight = X + Width >= Pattern.BottomRightX;
-            bool isDown = Y + Height >= Pattern.BottomRightY;
-            bool isLeft = X <= Pattern.X;
-            bool isUp = Y <= Pattern.Y;
+            var pt = Tools.GetPointOnLine(TopLeftCorner, _path[_nextPointIndex], distance);
+            nextX = pt.X;
+            nextY = pt.Y;
 
-            // si à droite
-            if (isRight)
+            if (engine.SolidStructures.Any(s => s.Overlap(CopyToPosition(new Point(nextX, nextY)))))
             {
-                // si en bas (horaire) ou en haut (antihoraire)
-                if ((HourRotation && isDown) || (!HourRotation && isUp))
-                {
-                    // vers la gauche
-                    nextX += distance * -1;
-                }
-                else
-                {
-                    // vers le bas (horaire) ou vers le haut (antihoraire)
-                    nextY += distance * (HourRotation ? 1 : -1);
-                }
-            }
-            // si à gauche
-            else if (isLeft)
-            {
-                // si en haut (horaire) ou en bas (antihoraire)
-                if ((HourRotation && isUp) || (!HourRotation && isDown))
-                {
-                    // vers la droite
-                    nextX += distance;
-                }
-                else
-                {
-                    // vers le haut (horaire) ou vers le bas (antihoraire)
-                    nextY += distance * (HourRotation ? -1 : 1);
-                }
-            }
-            // sinon
-            else
-            {
-                // si en bas
-                if (isDown)
-                {
-                    // vers la gauche (horaire) ou la droite (antihoraire)
-                    nextX += distance * (HourRotation ? -1 : 1);
-                }
-                // si en haut
-                else if (isUp)
-                {
-                    // vers la droite (horaire) ou la gauche (antihoraire)
-                    nextX += distance * (HourRotation ? 1 : -1);
-                }
-            }
-
-            if (engine.SolidStructures.Any(s => s.Overlap(CopyToPosition(new System.Windows.Point(nextX, nextY)))))
-            {
-                HourRotation = !HourRotation;
+                _reversedPath = !_reversedPath;
+                ComputeNextStepOnPath();
             }
             else
             {
+                if (X < _path[_nextPointIndex].X && nextX >= _path[_nextPointIndex].X
+                    || Y < _path[_nextPointIndex].Y && nextY >= _path[_nextPointIndex].Y
+                    || X > _path[_nextPointIndex].X && nextX <= _path[_nextPointIndex].X
+                    || Y > _path[_nextPointIndex].Y && nextY <= _path[_nextPointIndex].Y)
+                {
+                    ComputeNextStepOnPath();
+                }
                 X = nextX;
                 Y = nextY;
             }
+        }
+
+        /// <summary>
+        /// Computes the next step index on <see cref="_path"/>.
+        /// </summary>
+        private void ComputeNextStepOnPath()
+        {
+            _nextPointIndex = _reversedPath ?
+                (_nextPointIndex - 1 < 0 ? _path.Count - 1 : _nextPointIndex - 1)
+                : (_nextPointIndex + 1 == _path.Count ? 0 : _nextPointIndex + 1);
         }
 
         /// <summary>
@@ -136,7 +110,7 @@ namespace RPG4.Abstraction.Sprites
 
             if (hasBeenHit)
             {
-                HourRotation = !HourRotation;
+                _reversedPath = !_reversedPath;
             }
         }
     }

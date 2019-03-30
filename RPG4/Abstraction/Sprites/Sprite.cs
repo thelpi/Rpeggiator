@@ -17,6 +17,10 @@ namespace RPG4.Abstraction.Sprites
         /// </summary>
         public double Y { get; protected set; }
         /// <summary>
+        /// Inferred; top left corner coordinates.
+        /// </summary>
+        public Point TopLeftCorner { get { return new Point(X, Y); } }
+        /// <summary>
         /// Width
         /// </summary>
         public double Width { get; protected set; }
