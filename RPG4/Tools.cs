@@ -1,7 +1,7 @@
 ﻿using Newtonsoft.Json;
-using RPG4.Abstraction.Sprites;
 using RPG4.Properties;
 using System;
+using System.Text;
 using System.Windows;
 
 namespace RPG4
@@ -18,7 +18,8 @@ namespace RPG4
         /// <returns>Dynamic screen datas.</returns>
         public static dynamic GetScreenDatasFromIndex(int screenIndex)
         {
-            return JsonConvert.DeserializeObject(Resources.ResourceManager.GetString(string.Concat("Screen", screenIndex)));
+            var jsonBytes = (byte[])Resources.ResourceManager.GetObject(string.Format("Screen{0}", screenIndex));
+            return JsonConvert.DeserializeObject(Encoding.UTF8.GetString(jsonBytes));
         }
 
         /// <summary>

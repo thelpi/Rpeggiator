@@ -151,12 +151,6 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <None Include="Resources\Screen1.txt" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\Screen2.txt" />
-  </ItemGroup>
-  <ItemGroup>
     <BootstrapperPackage Include="Microsoft.Net.Framework.3.5.SP1">
       <Visible>False</Visible>
       <ProductName>.NET Framework 3.5 SP1</ProductName>
@@ -164,6 +158,8 @@
     </BootstrapperPackage>
   </ItemGroup>
   <ItemGroup>
+    <None Include="Resources\Screen1.json" />
+    <None Include="Resources\Screen2.json" />
     <None Include="Resources\Sword.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>

@@ -121,73 +121,22 @@ namespace RPG4.Properties {
         }
         
         /// <summary>
-        ///   Recherche une chaîne localisée semblable à {
-        ///	&quot;AreaWidth&quot;: 800,
-        ///	&quot;AreaHeight&quot;: 600,
-        ///	  &quot;GraphicType&quot;: &quot;PlainBrushGraphic&quot;,
-        ///	  &quot;HexColor&quot;: &quot;#FFFFEFD5&quot;,
-        ///  &quot;Walls&quot;: [
-        ///    {
-        ///      &quot;X&quot;: 50,
-        ///      &quot;Y&quot;: 300,
-        ///      &quot;Width&quot;: 250,
-        ///      &quot;Height&quot;: 50,
-        ///	  &quot;GraphicType&quot;: &quot;PlainBrushGraphic&quot;,
-        ///	  &quot;HexColor&quot;: &quot;#FF006400&quot;
-        ///    },
-        ///    {
-        ///      &quot;X&quot;: 100,
-        ///      &quot;Y&quot;: 260,
-        ///      &quot;Width&quot;: 50,
-        ///      &quot;Height&quot;: 140,
-        ///	  &quot;GraphicType&quot;: &quot;PlainBrushGraphic&quot;,
-        ///	  &quot;HexColor&quot;: &quot;#FF006400&quot;
-        ///    }
-        ///  ],
-        ///  &quot;Gates&quot;:[],
-        ///  &quot;Enemies&quot;: [
-        ///    {
-        ///      &quot;X&quot;: 50,
-        ///      &quot;Y&quot; [le reste de la chaîne a été tronqué]&quot;;.
+        ///   Recherche une ressource localisée de type System.Byte[].
         /// </summary>
-        internal static string Screen1 {
+        internal static byte[] Screen1 {
             get {
-                return ResourceManager.GetString("Screen1", resourceCulture);
+                object obj = ResourceManager.GetObject("Screen1", resourceCulture);
+                return ((byte[])(obj));
             }
         }
         
         /// <summary>
-        ///   Recherche une chaîne localisée semblable à {
-        ///	&quot;AreaWidth&quot;: 800,
-        ///	&quot;AreaHeight&quot;: 600,
-        ///	  &quot;GraphicType&quot;: &quot;ImageBrushGraphic&quot;,
-        ///	  &quot;ImagePath&quot;: &quot;Background2&quot;,
-        ///  &quot;Walls&quot;: [
-        ///    {
-        ///      &quot;X&quot;: 80,
-        ///      &quot;Y&quot;: 80,
-        ///      &quot;Width&quot;: 480,
-        ///      &quot;Height&quot;: 40,
-        ///	  &quot;GraphicType&quot;: &quot;PlainBrushGraphic&quot;,
-        ///	  &quot;HexColor&quot;: &quot;#FF006400&quot;
-        ///    },
-        ///	{
-        ///      &quot;X&quot;: 80,
-        ///      &quot;Y&quot;: 80,
-        ///      &quot;Width&quot;: 40,
-        ///      &quot;Height&quot;: 320,
-        ///	  &quot;GraphicType&quot;: &quot;PlainBrushGraphic&quot;,
-        ///	  &quot;HexColor&quot;: &quot;#FF006400&quot;
-        ///    },
-        ///	{
-        ///      &quot;X&quot;: 520,
-        ///      &quot;Y&quot;: 80,
-        ///      &quot;Width&quot;: 40,
-        ///      &quot;Height&quot; [le reste de la chaîne a été tronqué]&quot;;.
+        ///   Recherche une ressource localisée de type System.Byte[].
         /// </summary>
-        internal static string Screen2 {
+        internal static byte[] Screen2 {
             get {
-                return ResourceManager.GetString("Screen2", resourceCulture);
+                object obj = ResourceManager.GetObject("Screen2", resourceCulture);
+                return ((byte[])(obj));
             }
         }
         
