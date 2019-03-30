@@ -30,9 +30,9 @@ namespace RPG4
         /// </summary>
         public const int SPRITE_SIZE_Y = 40;
         /// <summary>
-        /// Frames count before ability to hit again.
+        /// Delay between two hits with the sword, in milliseconds.
         /// </summary>
-        public static readonly int HIT_FRAME_MAX_COUNT = Constants.FPS / 10;
+        public static readonly double SWORD_HIT_DELAY = 500;
         /// <summary>
         /// Hit life points cost on enemies.
         /// </summary>

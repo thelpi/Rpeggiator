@@ -20,12 +20,14 @@ namespace RPG4.Abstraction.Sprites
         private TimeSpan? _recoveryTime;
         // History of movements.
         private Queue<Point> _moveHistory = new Queue<Point>(Constants.MOVE_HISTORY_COUNT);
-        // Hit frames count.
-        private int _hitDisplayFrameCount;
-        // Frames count before ability to hit again.
-        private int _hitFrameMaxCount;
         // Timestamp of latest frame.
         private DateTime _latestFrameTimestamp;
+        // Delay, in milliseconds, between two hits with the current weapon.
+        private double _currentWeaponHitDelay;
+        // Elapsed time since the beginning of the latest hit with the current weapon.
+        private TimeSpan? _currentHitTime;
+        // Timestamp of the beginning of the latest hit.
+        private DateTime _hitTimestamp;
 
         /// <summary>
         /// Speed (i.e. distance, in pixels, by second)
@@ -46,7 +48,7 @@ namespace RPG4.Abstraction.Sprites
         /// <summary>
         /// Indicates if the player is currently hitting.
         /// </summary>
-        public bool IsHitting { get { return _hitDisplayFrameCount == 0; } }
+        public bool IsHitting { get { return _currentHitTime.HasValue; } }
         /// <summary>
         /// Hit <see cref="Sprite"/>.
         /// </summary>
@@ -80,8 +82,8 @@ namespace RPG4.Abstraction.Sprites
             Inventory = new Inventory();
             HitSprite = null;
             _recoveryTime = null;
-            _hitDisplayFrameCount = -1;
-            _hitFrameMaxCount = InitialPlayerStatus.HIT_FRAME_MAX_COUNT;
+            _currentHitTime = null;
+            _currentWeaponHitDelay = InitialPlayerStatus.SWORD_HIT_DELAY;
             LastDirection = Directions.right;
         }
 
@@ -111,9 +113,10 @@ namespace RPG4.Abstraction.Sprites
         // Manages the sword hit.
         private void ManageHit(bool pressHit)
         {
-            if (pressHit && _hitDisplayFrameCount == -1)
+            if (pressHit && !_currentHitTime.HasValue)
             {
-                _hitDisplayFrameCount = 0;
+                _hitTimestamp = DateTime.Now;
+                _currentHitTime = DateTime.Now - _hitTimestamp;
                 double hitX = X;
                 double hitY = Y;
                 switch (LastDirection)
@@ -149,15 +152,15 @@ namespace RPG4.Abstraction.Sprites
                 }
                 HitSprite = new Sprite(hitX, hitY, Width, Height, InitialPlayerStatus.HIT_GRAPHIC);
             }
-            else if (_hitDisplayFrameCount >= 0)
+            else if (_currentHitTime.HasValue)
             {
-                _hitDisplayFrameCount++;
-                if (_hitDisplayFrameCount > InitialPlayerStatus.HIT_FRAME_MAX_COUNT)
+                _currentHitTime = DateTime.Now - _hitTimestamp;
+                if (_currentHitTime.Value.TotalMilliseconds >= InitialPlayerStatus.SWORD_HIT_DELAY)
                 {
-                    _hitDisplayFrameCount = -1;
+                    _currentHitTime = null;
                 }
             }
-            if (_hitFrameMaxCount < 0)
+            if (!_currentHitTime.HasValue)
             {
                 HitSprite = null;
             }
