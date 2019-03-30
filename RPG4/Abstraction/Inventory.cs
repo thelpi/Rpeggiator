@@ -1,4 +1,5 @@
 ﻿using RPG4.Abstraction.Sprites;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -11,6 +12,7 @@ namespace RPG4.Abstraction
     {
         private List<InventoryItem> _items;
         private Dictionary<ItemIdEnum, int> _maxQuantityByItem;
+        private int _creationHashcode;
 
         /// <summary>
         /// List of <see cref="InventoryItem"/>
@@ -28,8 +30,9 @@ namespace RPG4.Abstraction
         /// <summary>
         /// Constructor.
         /// </summary>
-        public Inventory()
+        public Inventory(int creationHashcode)
         {
+            _creationHashcode = creationHashcode;
             _items = new List<InventoryItem>();
             _maxQuantityByItem = new Dictionary<ItemIdEnum, int>();
             LampIsOn = false;
@@ -80,7 +83,7 @@ namespace RPG4.Abstraction
 
             var item = _items.ElementAt(inventorySlotId);
 
-            if (!item.TryPick())
+            if (!ItemCanBeUseInContext(item.BaseItem.Id, engine) || !item.TryPick())
             {
                 return null;
             }
@@ -98,9 +101,13 @@ namespace RPG4.Abstraction
                     droppedItem = new ActionnedBomb(engine.Player.X, engine.Player.Y);
                     break;
                 case ItemIdEnum.SmallLifePotion:
+                    engine.Player.DrinkLifePotion(_creationHashcode, Constants.SMALL_LIFE_POTION_RECOVERY_LIFE_POINTS);
+                    break;
                 case ItemIdEnum.MediumLifePotion:
+                    engine.Player.DrinkLifePotion(_creationHashcode, Constants.MEDIUM_LIFE_POTION_RECOVERY_LIFE_POINTS);
+                    break;
                 case ItemIdEnum.LargeLifePotion:
-                    engine.Player.DrinkLifePotion(item.BaseItem.Id);
+                    engine.Player.DrinkLifePotion(_creationHashcode, Constants.LARGE_LIFE_POTION_RECOVERY_LIFE_POINTS);
                     break;
                 case ItemIdEnum.Lamp:
                     LampIsOn = !LampIsOn;
@@ -108,6 +115,32 @@ namespace RPG4.Abstraction
             }
 
             return droppedItem;
+        }
+
+        /// <summary>
+        /// Checks if an item can be used in the context.
+        /// </summary>
+        /// <param name="itemId"><see cref="ItemIdEnum"/></param>
+        /// <param name="engine"><see cref="AbstractEngine"/></param>
+        /// <returns><c>True</c> if it can be used; <c>False</c> otherwise.</returns>
+        private bool ItemCanBeUseInContext(ItemIdEnum itemId, AbstractEngine engine)
+        {
+            switch (itemId)
+            {
+                case ItemIdEnum.Bomb:
+                    // example : not underwater
+                    break;
+                case ItemIdEnum.SmallLifePotion:
+                case ItemIdEnum.MediumLifePotion:
+                case ItemIdEnum.LargeLifePotion:
+                    if (engine.Player.CurrentLifePoints == engine.Player.MaximalLifePoints)
+                    {
+                        return false;
+                    }
+                    break;
+            }
+
+            return true;
         }
 
         /// <summary>

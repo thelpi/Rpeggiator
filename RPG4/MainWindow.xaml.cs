@@ -28,7 +28,6 @@ namespace RPG4
     {
         private const string _playerUid = "PlayerUid";
         private const string _shadowUid = "ShadowUid";
-        private const string UNIQUE_TIMESTAMP_PATTERN = "fffffff";
 
         private bool _hitKeyPressed;
         private int? _inventoryKeyPressed;
@@ -158,7 +157,7 @@ namespace RPG4
             };
             if (fixedId)
             {
-                rct.Uid = DateTime.Now.ToString(UNIQUE_TIMESTAMP_PATTERN);
+                rct.Uid = DateTime.Now.ToString(Constants.UNIQUE_TIMESTAMP_PATTERN);
             }
             rct.SetValue(Canvas.TopProperty, sp.Y);
             rct.SetValue(Canvas.LeftProperty, sp.X);

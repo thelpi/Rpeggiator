@@ -26,6 +26,8 @@ namespace RPG4.Abstraction.Sprites
         private Elapser _movementTimeManager;
         // Lifetime manager for the current hit with the current weapon.
         private Elapser _hitElapser;
+        // Hashcode associated to the instance timestamp.
+        private int _creationHashcode;
 
         /// <summary>
         /// Speed (i.e. distance, in pixels, by second)
@@ -75,9 +77,11 @@ namespace RPG4.Abstraction.Sprites
             InitialPlayerStatus.MAXIMAL_LIFE_POINTS,
             InitialPlayerStatus.HIT_LIFE_POINT_COST)
         {
+            _creationHashcode = DateTime.Now.ToString(Constants.UNIQUE_TIMESTAMP_PATTERN).GetHashCode();
+
             Speed = InitialPlayerStatus.INITIAL_PLAYER_SPEED;
             NewScreenEntrance = null;
-            Inventory = new Inventory();
+            Inventory = new Inventory(_creationHashcode);
             HitSprite = null;
             _recoveryTime = null;
             _hitElapser = null;
@@ -191,24 +195,17 @@ namespace RPG4.Abstraction.Sprites
         }
 
         /// <summary>
-        /// Drinks a life potion.
+        /// Update the player lifepoints after drinking a potion.
         /// </summary>
-        /// <param name="potionType"><see cref="ItemIdEnum"/>; ignored if not a life potion.</param>
-        public void DrinkLifePotion(ItemIdEnum potionType)
+        /// <param name="creationHashcode">Ensure the call is made by the player <see cref="Inventory"/>.</param>
+        /// <param name="recoveryPoints">Lifepoints gained.</param>
+        public void DrinkLifePotion(int creationHashcode, double recoveryPoints)
         {
-            double recoveryPoints = 0;
-            switch (potionType)
+            if (_creationHashcode != creationHashcode)
             {
-                case ItemIdEnum.SmallLifePotion:
-                    recoveryPoints = Constants.SMALL_LIFE_POTION_RECOVERY_LIFE_POINTS;
-                    break;
-                case ItemIdEnum.MediumLifePotion:
-                    recoveryPoints = Constants.MEDIUM_LIFE_POTION_RECOVERY_LIFE_POINTS;
-                    break;
-                case ItemIdEnum.LargeLifePotion:
-                    recoveryPoints = Constants.LARGE_LIFE_POTION_RECOVERY_LIFE_POINTS;
-                    break;
+                return;
             }
+
             RegenerateLifePoints(recoveryPoints);
         }
 

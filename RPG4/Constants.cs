@@ -8,6 +8,10 @@ namespace RPG4
     public static class Constants
     {
         /// <summary>
+        /// <see cref="DateTime.ToString(string)"/> pattern.
+        /// </summary>
+        public const string UNIQUE_TIMESTAMP_PATTERN = "fffffff";
+        /// <summary>
         /// Minimal delay between two frames, in milliseconds.
         /// </summary>
         public const double MIN_DELAY_BETWEEN_FRAMES = 10;
