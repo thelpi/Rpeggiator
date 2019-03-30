@@ -9,15 +9,15 @@ namespace RPG4.Abstraction.Sprites
     /// <seealso cref="Sprite"/>
     public class FloorTrigger : Sprite
     {
-        // current number of frames while activated
-        private int _actionDelayCurrentFrameCount;
-        // Number of frames before the activation ends.
-        private readonly int _actionDelayMaxFrameCount;
+        // Action duration, in milliseconds.
+        private readonly double _actionDuration;
+        // Trigger time manager.
+        private Elapser _triggerTimeManager;
 
         /// <summary>
         /// Indicates if the trigger is currently activated.
         /// </summary>
-        public bool IsActivated { get { return _actionDelayCurrentFrameCount >= 0; } }
+        public bool IsActivated { get { return _triggerTimeManager?.Elapsed == false; } }
         /// <summary>
         /// Graphic rendering when activated.
         /// </summary>
@@ -29,8 +29,7 @@ namespace RPG4.Abstraction.Sprites
         /// <param name="triggerJson">The json dynamic object.</param>
         public FloorTrigger(dynamic triggerJson) : base((object)triggerJson)
         {
-            _actionDelayMaxFrameCount = Tools.ComputeFormulaResult<int>((string)triggerJson.ActionDelayMaxFrameCount, Constants.SUBSTITUTE_FORMULA_FPS);
-            _actionDelayCurrentFrameCount = -1;
+            _actionDuration = triggerJson.ActionDuration;
             switch ((string)triggerJson.GraphicType)
             {
                 case nameof(ImageBrushGraphic):
@@ -48,15 +47,11 @@ namespace RPG4.Abstraction.Sprites
         {
             if (engine.IsTriggered(this))
             {
-                _actionDelayCurrentFrameCount = 0;
+                _triggerTimeManager = new Elapser(_actionDuration);
             }
-            else if (_actionDelayCurrentFrameCount >= _actionDelayMaxFrameCount)
+            else if (_triggerTimeManager?.Elapsed == true)
             {
-                _actionDelayCurrentFrameCount = -1;
-            }
-            else if (_actionDelayCurrentFrameCount >= 0)
-            {
-                _actionDelayCurrentFrameCount += 1;
+                _triggerTimeManager = null;
             }
         }
     }

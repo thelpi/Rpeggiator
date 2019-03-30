@@ -8,10 +8,6 @@ namespace RPG4
     public static class Constants
     {
         /// <summary>
-        /// Frames per second.
-        /// </summary>
-        public const int FPS = 20;
-        /// <summary>
         /// Minimal delay between two frames, in milliseconds.
         /// </summary>
         public const double MIN_DELAY_BETWEEN_FRAMES = 10;
@@ -23,10 +19,6 @@ namespace RPG4
         /// Player recovery time span, in milliseconds.
         /// </summary>
         public const double PLAYER_RECOVERY_TIME = 1000;
-        /// <summary>
-        /// Substitution parameters for <see cref="FPS"/> in formulas.
-        /// </summary>
-        public static readonly Tuple<string, object> SUBSTITUTE_FORMULA_FPS = new Tuple<string, object>("{FPS}", FPS);
         /// <summary>
         /// First screen index.
         /// </summary>

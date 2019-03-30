@@ -18,18 +18,16 @@ namespace RPG4.Abstraction.Sprites
         // Milliseconds while pending explosion.
         private static readonly double TIME_WHILE_PENDING = 2000;
         // Milliseconds while exploding.
-        private static readonly double TIME_WHILE_EXPLODING = 1000;
+        private static readonly double TIME_WHILE_EXPLODING = 500;
         // Halo graphic rendering.
         private static readonly ISpriteGraphic HALO_GRAPHIC_RENDERING = new PlainBrushGraphic("#FFFF4500");
         // Bomb graphic rendering.
         private static readonly ISpriteGraphic GRAPHIC_RENDERING = new ImageBrushGraphic("Bomb");
 
-        // Timestamp of event beginning (pending or exploding).
-        private DateTime _eventTimestamp;
-        // Time while exploding.
-        private TimeSpan? _explosionTime;
-        // Time while pending.
-        private TimeSpan? _pendingTime;
+        // Pending time manager
+        private Elapser _pendingTimeManager;
+        // Pending time manager
+        private Elapser _explodingTimeManager;
 
         /// <summary>
         /// Explosion <see cref="Sprite"/>.
@@ -38,11 +36,11 @@ namespace RPG4.Abstraction.Sprites
         /// <summary>
         /// Inferred; Indicates the bomb explodes now.
         /// </summary>
-        public bool IsExploding { get { return _explosionTime.HasValue && _explosionTime.Value.TotalMilliseconds == 0; } }
+        public bool IsExploding { get { return _explodingTimeManager?.Elapsed == false; } }
         /// <summary>
         /// Inferred; Indicates the bomb's explosion is done.
         /// </summary>
-        public override bool IsDone { get { return _explosionTime.HasValue && _explosionTime.Value.TotalMilliseconds > TIME_WHILE_EXPLODING; } }
+        public override bool IsDone { get { return _explodingTimeManager?.Elapsed == true; } }
 
         /// <summary>
         /// Constructor.
@@ -51,36 +49,22 @@ namespace RPG4.Abstraction.Sprites
         /// <param name="y"><see cref="Sprite.Y"/></param>
         public ActionnedBomb(double x, double y) : base(x, y, WIDTH, HEIGHT, GRAPHIC_RENDERING)
         {
-            _pendingTime = new TimeSpan(0);
-            _eventTimestamp = DateTime.Now;
+            _pendingTimeManager = new Elapser(TIME_WHILE_PENDING);
             ExplosionSprite = null;
-            _explosionTime = null;
         }
 
         /// <inheritdoc />
         public override void BehaviorAtNewFrame(AbstractEngine engine, params object[] args)
         {
             // Explosion beginning.
-            if (_pendingTime.HasValue && _pendingTime.Value.TotalMilliseconds >= TIME_WHILE_PENDING)
+            if (_explodingTimeManager == null && _pendingTimeManager.Elapsed)
             {
-                _pendingTime = null;
-                _explosionTime = new TimeSpan(0);
-                _eventTimestamp = DateTime.Now;
+                _explodingTimeManager = new Elapser(TIME_WHILE_EXPLODING);
                 ExplosionSprite = new Sprite(X - Width, Y - Height, Width * HALO_SIZE_RATIO, Height * HALO_SIZE_RATIO, HALO_GRAPHIC_RENDERING);
             }
-            // Explosion pending.
-            else if (_pendingTime.HasValue && _pendingTime.Value.TotalMilliseconds < TIME_WHILE_PENDING)
+            else if (IsDone)
             {
-                _pendingTime = DateTime.Now - _eventTimestamp;
-            }
-            // Post-explosion.
-            else
-            {
-                _explosionTime = DateTime.Now - _eventTimestamp;
-                if (_explosionTime.Value.TotalMilliseconds > TIME_WHILE_EXPLODING)
-                {
-                    ExplosionSprite = null;
-                }
+                ExplosionSprite = null;
             }
         }
 

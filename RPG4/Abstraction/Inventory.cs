@@ -51,12 +51,12 @@ namespace RPG4.Abstraction
 
             if (_items.Any(item => item.BaseItem.Id == itemId))
             {
-                remaining = _items.First(item => item.BaseItem.Id == itemId).TryIncreaseQuantity(quantity, _maxQuantityByItem[itemId]);
+                remaining = _items.First(item => item.BaseItem.Id == itemId).TryStore(quantity, _maxQuantityByItem[itemId]);
             }
             else if (_items.Count < Constants.INVENTORY_SIZE)
             {
                 _items.Add(new InventoryItem(itemId, quantity));
-                _maxQuantityByItem.Add(itemId, Item.GetItem(itemId).InitialMaximalQuantity);
+                SetItemMaxQuantity(itemId, Item.GetItem(itemId).InitialMaximalQuantity);
             }
             else
             {
@@ -80,9 +80,14 @@ namespace RPG4.Abstraction
 
             var item = _items.ElementAt(inventorySlotId);
 
-            if (item.IsCurrentlyUsed(engine.FramesCount))
+            if (!item.TryPick())
             {
                 return null;
+            }
+
+            if (item.Quantity == 0)
+            {
+                _items.Remove(item);
             }
 
             ActionnedItem droppedItem = null;
@@ -102,13 +107,28 @@ namespace RPG4.Abstraction
                     break;
             }
 
-            item.DecreaseQuantity(engine.FramesCount);
-            if (item.Quantity == 0)
-            {
-                _items.Remove(item);
-            }
-
             return droppedItem;
+        }
+
+        /// <summary>
+        /// Sets the maximal quantity storable for an <see cref="InventoryItem"/>.
+        /// </summary>
+        /// <remarks>The storage capacity can't be decrease.</remarks>
+        /// <param name="itemId"><see cref="ItemIdEnum"/></param>
+        /// <param name="maxQuantity">Maximal quantity.</param>
+        private void SetItemMaxQuantity(ItemIdEnum itemId, int maxQuantity)
+        {
+            if (_maxQuantityByItem.ContainsKey(itemId))
+            {
+                if (_maxQuantityByItem[itemId] < maxQuantity)
+                {
+                    _maxQuantityByItem[itemId] = maxQuantity;
+                }
+            }
+            else
+            {
+                _maxQuantityByItem.Add(itemId, maxQuantity);
+            }
         }
     }
 }

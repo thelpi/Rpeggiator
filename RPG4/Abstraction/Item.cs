@@ -23,9 +23,9 @@ namespace RPG4.Abstraction
         /// </summary>
         public bool Unique { get; private set; }
         /// <summary>
-        /// Frames count delay between two use; -1 for no delay at all.
+        /// Delay between two uses, in milliseconds.
         /// </summary>
-        public int DelayBetweenUse { get; private set; }
+        public double UseDelay { get; private set; }
         /// <summary>
         /// Maximal quantity carriable at eh beginning.
         /// </summary>
@@ -58,7 +58,7 @@ namespace RPG4.Abstraction
                 Id = ItemIdEnum.Bomb,
                 Name = "Bomb",
                 Unique = false,
-                DelayBetweenUse = Constants.FPS,
+                UseDelay = 1000,
                 InitialMaximalQuantity = 20
             });
             _items.Add(new Item
@@ -66,7 +66,7 @@ namespace RPG4.Abstraction
                 Id = ItemIdEnum.SmallLifePotion,
                 Name = "Life potion (small)",
                 Unique = false,
-                DelayBetweenUse = Constants.FPS * 2,
+                UseDelay = 500,
                 InitialMaximalQuantity = 12
             });
             _items.Add(new Item
@@ -74,7 +74,7 @@ namespace RPG4.Abstraction
                 Id = ItemIdEnum.MediumLifePotion,
                 Name = "Life potion (medium)",
                 Unique = false,
-                DelayBetweenUse = Constants.FPS * 2,
+                UseDelay = 500,
                 InitialMaximalQuantity = 6
             });
             _items.Add(new Item
@@ -82,7 +82,7 @@ namespace RPG4.Abstraction
                 Id = ItemIdEnum.LargeLifePotion,
                 Name = "Life potion (large)",
                 Unique = false,
-                DelayBetweenUse = Constants.FPS * 2,
+                UseDelay = 500,
                 InitialMaximalQuantity = 3
             });
             _items.Add(new Item
@@ -90,7 +90,7 @@ namespace RPG4.Abstraction
                 Id = ItemIdEnum.Lamp,
                 Name = "Lamp",
                 Unique = true,
-                DelayBetweenUse = -1
+                UseDelay = 0
             });
         }
     }

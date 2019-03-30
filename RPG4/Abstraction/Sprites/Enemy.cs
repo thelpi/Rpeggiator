@@ -11,9 +11,11 @@ namespace RPG4.Abstraction.Sprites
     {
         // Indicates the life points cost when a bomb explodes nearby.
         private const double EXPLOSION_LIFE_POINT_COST = 2;
+        // Movement time manager.
+        private Elapser _movementTimeManager;
 
         /// <summary>
-        /// Distance by frame, in pixels.
+        /// Speed, in pixels by second.
         /// </summary>
         public double Speed { get; private set; }
         /// <summary>
@@ -33,14 +35,17 @@ namespace RPG4.Abstraction.Sprites
         /// <param name="enemyJson">The json dynamic object.</param>
         public Enemy(dynamic enemyJson) : base((object)enemyJson)
         {
-            Speed = Tools.ComputeFormulaResult<double>((string)enemyJson.Speed, Constants.SUBSTITUTE_FORMULA_FPS);
+            Speed = enemyJson.Speed;
             HourRotation = enemyJson.HourRotation;
             Pattern = new Sprite(enemyJson.Pattern);
+            _movementTimeManager = new Elapser();
         }
 
         /// <inheritdoc />
         public override void BehaviorAtNewFrame(AbstractEngine engine, params object[] args)
         {
+            double distance = _movementTimeManager.Distance(Speed);
+
             double nextX = X;
             double nextY = Y;
 
@@ -56,12 +61,12 @@ namespace RPG4.Abstraction.Sprites
                 if ((HourRotation && isDown) || (!HourRotation && isUp))
                 {
                     // vers la gauche
-                    nextX += Speed * -1;
+                    nextX += distance * -1;
                 }
                 else
                 {
                     // vers le bas (horaire) ou vers le haut (antihoraire)
-                    nextY += Speed * (HourRotation ? 1 : -1);
+                    nextY += distance * (HourRotation ? 1 : -1);
                 }
             }
             // si à gauche
@@ -71,12 +76,12 @@ namespace RPG4.Abstraction.Sprites
                 if ((HourRotation && isUp) || (!HourRotation && isDown))
                 {
                     // vers la droite
-                    nextX += Speed;
+                    nextX += distance;
                 }
                 else
                 {
                     // vers le haut (horaire) ou vers le bas (antihoraire)
-                    nextY += Speed * (HourRotation ? -1 : 1);
+                    nextY += distance * (HourRotation ? -1 : 1);
                 }
             }
             // sinon
@@ -86,32 +91,14 @@ namespace RPG4.Abstraction.Sprites
                 if (isDown)
                 {
                     // vers la gauche (horaire) ou la droite (antihoraire)
-                    nextX += Speed * (HourRotation ? -1 : 1);
+                    nextX += distance * (HourRotation ? -1 : 1);
                 }
                 // si en haut
                 else if (isUp)
                 {
                     // vers la droite (horaire) ou la gauche (antihoraire)
-                    nextX += Speed * (HourRotation ? 1 : -1);
+                    nextX += distance * (HourRotation ? 1 : -1);
                 }
-            }
-
-            // ajustement au bord (pertinence ?)
-            if (nextX < Pattern.X)
-            {
-                nextX = Pattern.X;
-            }
-            else if (nextX + Width > Pattern.BottomRightX)
-            {
-                nextX = Pattern.BottomRightX - Width;
-            }
-            if (nextY < Pattern.Y)
-            {
-                nextY = Pattern.Y;
-            }
-            else if (nextY + Height > Pattern.BottomRightY)
-            {
-                nextY = Pattern.BottomRightY - Height;
             }
 
             if (engine.SolidStructures.Any(s => s.Overlap(CopyToPosition(new System.Windows.Point(nextX, nextY)))))

@@ -21,23 +21,6 @@ namespace RPG4
         }
 
         /// <summary>
-        /// Computes the value of a string mathematic formula.
-        /// </summary>
-        /// <typeparam name="T">Type of formula result.</typeparam>
-        /// <param name="formulaStringValue">Formula.</param>
-        /// <param name="substitutions">Subtitutions to make in the formula.</param>
-        /// <returns>Formula result.</returns>
-        public static T ComputeFormulaResult<T>(string formulaStringValue, params Tuple<string, object>[] substitutions)
-        {
-            for (int i = 0; i < substitutions.Length; i++)
-            {
-                formulaStringValue = formulaStringValue.Replace(substitutions[i].Item1, substitutions[i].Item2.ToString());
-            }
-
-            return (T)Convert.ChangeType(new DataTable().Compute(formulaStringValue, string.Empty), typeof(T));
-        }
-
-        /// <summary>
         /// Computes the distance made in diagonal relatively to the distance made straightforward.
         /// </summary>
         /// <param name="frameDistance">Distance made straightforward.</param>

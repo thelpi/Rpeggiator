@@ -29,7 +29,7 @@
       "Y": 50,
       "Width": 40,
       "Height": 40,
-      "Speed": "{FPS} * 2.5",
+      "Speed": "150",
       "HourRotation": true,
       "MaximalLifePoints": 2,
 	  "HitLifePointCost": 5,

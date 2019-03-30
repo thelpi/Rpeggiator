@@ -20,10 +20,10 @@ namespace RPG4.Abstraction.Sprites
         private TimeSpan? _recoveryTime;
         // History of movements.
         private Queue<Point> _moveHistory = new Queue<Point>(Constants.MOVE_HISTORY_COUNT);
-        // Timestamp of latest frame.
-        private DateTime _latestFrameTimestamp;
         // Delay, in milliseconds, between two hits with the current weapon.
         private double _currentWeaponHitDelay;
+        // Movement time manager.
+        private Elapser _movementTimeManager;
         // Lifetime manager for the current hit with the current weapon.
         private Elapser _hitElapser;
 
@@ -83,6 +83,7 @@ namespace RPG4.Abstraction.Sprites
             _hitElapser = null;
             _currentWeaponHitDelay = InitialPlayerStatus.SWORD_HIT_DELAY;
             LastDirection = Directions.right;
+            _movementTimeManager = new Elapser();
         }
 
         /// <inheritdoc />
@@ -214,7 +215,7 @@ namespace RPG4.Abstraction.Sprites
         #region Position management private methods
 
         /// <summary>
-        /// Computes the next theoretical position; also sets <see cref="_latestFrameTimestamp"/>.
+        /// Computes the next theoretical position.
         /// </summary>
         /// <param name="keys"><see cref="KeyPress"/></param>
         /// <returns>The new position coordinates, which might be the same as current coordinates.</returns>
@@ -222,25 +223,23 @@ namespace RPG4.Abstraction.Sprites
         {
             double newTop = Y;
             double newLeft = X;
-            DateTime currentFrameTimestamp = DateTime.Now;
-            TimeSpan delay = currentFrameTimestamp - _latestFrameTimestamp;
-            double frameDistance = (delay.TotalMilliseconds / 1000) * Speed;
+            double distance = _movementTimeManager.Distance(Speed);
 
             if (keys.PressUp)
             {
                 if (keys.PressLeft)
                 {
-                    newTop -= Tools.FrameDiagonalDistance(frameDistance);
-                    newLeft -= Tools.FrameDiagonalDistance(frameDistance);
+                    newTop -= Tools.FrameDiagonalDistance(distance);
+                    newLeft -= Tools.FrameDiagonalDistance(distance);
                 }
                 else if (keys.PressRight)
                 {
-                    newTop -= Tools.FrameDiagonalDistance(frameDistance);
-                    newLeft += Tools.FrameDiagonalDistance(frameDistance);
+                    newTop -= Tools.FrameDiagonalDistance(distance);
+                    newLeft += Tools.FrameDiagonalDistance(distance);
                 }
                 else
                 {
-                    newTop -= frameDistance;
+                    newTop -= distance;
                 }
             }
             else if (keys.PressDown)
@@ -248,28 +247,27 @@ namespace RPG4.Abstraction.Sprites
                 if (keys.PressLeft)
                 {
 
-                    newTop += Tools.FrameDiagonalDistance(frameDistance);
-                    newLeft -= Tools.FrameDiagonalDistance(frameDistance);
+                    newTop += Tools.FrameDiagonalDistance(distance);
+                    newLeft -= Tools.FrameDiagonalDistance(distance);
                 }
                 else if (keys.PressRight)
                 {
-                    newTop += Tools.FrameDiagonalDistance(frameDistance);
-                    newLeft += Tools.FrameDiagonalDistance(frameDistance);
+                    newTop += Tools.FrameDiagonalDistance(distance);
+                    newLeft += Tools.FrameDiagonalDistance(distance);
                 }
                 else
                 {
-                    newTop += frameDistance;
+                    newTop += distance;
                 }
             }
             else if (keys.PressLeft)
             {
-                newLeft -= frameDistance;
+                newLeft -= distance;
             }
             else if (keys.PressRight)
             {
-                newLeft += frameDistance;
+                newLeft += distance;
             }
-            _latestFrameTimestamp = currentFrameTimestamp;
 
             return new Point(newLeft, newTop);
         }

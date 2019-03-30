@@ -5,7 +5,8 @@
     /// </summary>
     public class InventoryItem
     {
-        private ulong _engineFrameCountFlag;
+        // Time manager between each use.
+        private Elapser _useTimeManager;
 
         /// <summary>
         /// base item.
@@ -31,38 +32,44 @@
         {
             BaseItem = Item.GetItem(itemId);
             Quantity = BaseItem.Unique ? 1 : quantity;
-            _engineFrameCountFlag = 0;
         }
 
         /// <summary>
-        /// Decreases the quantity when used.
+        /// Tries to pick a single use of the item.
         /// </summary>
-        /// <param name="engineFrameCountFlag">The current engine <see cref="AbstractEngine.FramesCount"/> value.</param>
-        public void DecreaseQuantity(ulong engineFrameCountFlag)
+        /// <returns><c>True</c> if pickable; <c>False</c> otherwise.</returns>
+        public bool TryPick()
         {
-            _engineFrameCountFlag = engineFrameCountFlag;
+            if (_useTimeManager?.Elapsed == false)
+            {
+                return false;
+            }
+
+            _useTimeManager = new Elapser(BaseItem.UseDelay);
             if (Quantity > 0 && !BaseItem.Unique)
             {
                 Quantity--;
             }
+
+            return true;
         }
 
         /// <summary>
         /// Tries to increase the quantity.
         /// </summary>
-        /// <param name="newQuantity">Quantity to add.</param>
+        /// <param name="addedQuantity">Quantity to add.</param>
         /// <param name="maxQuantity">Maximal quantity carriable for this item.</param>
         /// <returns>Remaining quantity if limit reached.</returns>
-        public int TryIncreaseQuantity(int newQuantity, int maxQuantity)
+        public int TryStore(int addedQuantity, int maxQuantity)
         {
             if (BaseItem.Unique)
             {
-                return newQuantity;
+                return addedQuantity;
             }
 
             int remaining = 0;
 
-            Quantity += newQuantity;
+            Quantity += addedQuantity;
             if (Quantity > maxQuantity)
             {
                 remaining = Quantity - maxQuantity;
@@ -70,18 +77,6 @@
             }
 
             return remaining;
-        }
-
-        /// <summary>
-        /// Indicates if the item is alreayd in use.
-        /// </summary>
-        /// <param name="engineFrameCount">The current engine <see cref="AbstractEngine.FramesCount"/> value.</param>
-        /// <returns><c>True</c> if in use; <c>False</c> otherwise.</returns>
-        public bool IsCurrentlyUsed(ulong engineFrameCount)
-        {
-            return _engineFrameCountFlag > 0
-                && (int)(engineFrameCount - _engineFrameCountFlag) <= BaseItem.DelayBetweenUse
-                && BaseItem.DelayBetweenUse >= 0;
         }
     }
 }
