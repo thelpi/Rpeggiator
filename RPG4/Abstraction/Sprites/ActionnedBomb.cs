@@ -1,5 +1,5 @@
 ﻿using RPG4.Abstraction.Graphic;
-using System;
+using System.Windows;
 
 namespace RPG4.Abstraction.Sprites
 {
@@ -9,10 +9,14 @@ namespace RPG4.Abstraction.Sprites
     /// <seealso cref="ActionnedItem"/>
     public class ActionnedBomb : ActionnedItem
     {
-        // Width.
-        private const double WIDTH = 20;
-        // Height.
-        private const double HEIGHT = 20;
+        /// <summary>
+        /// Bomb width.
+        /// </summary>
+        public const double WIDTH = 20;
+        /// <summary>
+        /// Bomb height.
+        /// </summary>
+        public const double HEIGHT = 20;
         // When exploding, indicates the ratio size of the halo (compared to the bomb itself).
         private const double HALO_SIZE_RATIO = 3;
         // Milliseconds while pending explosion.
@@ -45,9 +49,8 @@ namespace RPG4.Abstraction.Sprites
         /// <summary>
         /// Constructor.
         /// </summary>
-        /// <param name="x"><see cref="Sprite.X"/></param>
-        /// <param name="y"><see cref="Sprite.Y"/></param>
-        public ActionnedBomb(double x, double y) : base(x, y, WIDTH, HEIGHT, GRAPHIC_RENDERING)
+        /// <param name="point">Drop coordinates.</param>
+        public ActionnedBomb(Point point) : base(point.X, point.Y, WIDTH, HEIGHT, GRAPHIC_RENDERING)
         {
             _pendingTimeManager = new Elapser(TIME_WHILE_PENDING);
             ExplosionSprite = null;

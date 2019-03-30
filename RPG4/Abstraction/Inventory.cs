@@ -1,7 +1,7 @@
 ﻿using RPG4.Abstraction.Sprites;
-using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Windows;
 
 namespace RPG4.Abstraction
 {
@@ -98,7 +98,7 @@ namespace RPG4.Abstraction
             switch (item.BaseItem.Id)
             {
                 case ItemIdEnum.Bomb:
-                    droppedItem = new ActionnedBomb(engine.Player.X, engine.Player.Y);
+                    droppedItem = new ActionnedBomb(ComputeBombDroppingCoordinates(engine.Player));
                     break;
                 case ItemIdEnum.SmallLifePotion:
                     engine.Player.DrinkLifePotion(_creationHashcode, Constants.SMALL_LIFE_POTION_RECOVERY_LIFE_POINTS);
@@ -115,6 +115,44 @@ namespace RPG4.Abstraction
             }
 
             return droppedItem;
+        }
+
+        /// <summary>
+        /// Computes bom dropping coordinates.
+        /// </summary>
+        /// <param name="player"><see cref="Player"/></param>
+        /// <returns>Coordinates point.</returns>
+        private Point ComputeBombDroppingCoordinates(Player player)
+        {
+            Point pt = new Point(player.X, player.Y);
+            switch (player.LastDirection)
+            {
+                case Directions.bottom_left:
+                    pt.Y = player.BottomRightY - ActionnedBomb.HEIGHT;
+                    break;
+                case Directions.bottom:
+                    pt.X = player.X + (player.Width / 2);
+                    pt.Y = player.BottomRightY - ActionnedBomb.HEIGHT;
+                    break;
+                case Directions.bottom_right:
+                    pt.X = player.BottomRightX - ActionnedBomb.WIDTH;
+                    pt.Y = player.BottomRightY - ActionnedBomb.HEIGHT;
+                    break;
+                case Directions.right:
+                    pt.X = player.BottomRightX - ActionnedBomb.WIDTH;
+                    pt.Y = player.Y + (player.Height / 2);
+                    break;
+                case Directions.top_right:
+                    pt.X = player.BottomRightX - ActionnedBomb.WIDTH;
+                    break;
+                case Directions.top:
+                    pt.X = player.X + (player.Width / 2);
+                    break;
+                case Directions.left:
+                    pt.Y = player.Y + (player.Height / 2);
+                    break;
+            }
+            return pt;
         }
 
         /// <summary>
