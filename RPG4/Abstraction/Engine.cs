@@ -9,6 +9,8 @@ namespace RPG4.Abstraction
     /// </summary>
     public class Engine
     {
+        private Screen _currentScreen;
+
         /// <summary>
         /// <see cref="Sprites.Player"/>
         /// </summary>
@@ -20,7 +22,18 @@ namespace RPG4.Abstraction
         /// <summary>
         /// Current <see cref="Screen"/> (where's the player).
         /// </summary>
-        public Screen CurrentScreen { get; private set; }
+        public Screen CurrentScreen
+        {
+            get
+            {
+                return _currentScreen;
+            }
+            set
+            {
+                _currentScreen?.FreezeEnemies();
+                _currentScreen = value;
+            }
+        }
 
         /// <summary>
         /// Constructor.

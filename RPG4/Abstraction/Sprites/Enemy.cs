@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Windows;
 using System.Linq;
+using System;
 
 namespace RPG4.Abstraction.Sprites
 {
@@ -28,6 +29,14 @@ namespace RPG4.Abstraction.Sprites
         public double Speed { get; private set; }
         /// <inheritdoc />
         public double ExplosionLifePointCost { get { return EXPLOSION_LIFE_POINT_COST; } }
+
+        /// <summary>
+        /// Freeze the instance movements by reseting the <see cref="Elapser"/>.
+        /// </summary>
+        public void Freeze()
+        {
+            _movementTimeManager.Reset();
+        }
 
         /// <summary>
         /// Constructor.

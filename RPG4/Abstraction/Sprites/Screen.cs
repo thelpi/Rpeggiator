@@ -28,6 +28,15 @@ namespace RPG4.Abstraction.Sprites
         /// Current screen identifier..
         /// </summary>
         public int Id { get; private set; }
+
+        /// <summary>
+        /// Freeze movements for every <see cref="Enemies"/>.
+        /// </summary>
+        public void FreezeEnemies()
+        {
+            _enemies.ForEach(e => e.Freeze());
+        }
+
         /// <summary>
         /// Current screen shadow.
         /// </summary>

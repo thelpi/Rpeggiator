@@ -48,5 +48,13 @@ namespace RPG4.Abstraction
             _latestTimestamp = DateTime.Now;
             return distance;
         }
+
+        /// <summary>
+        /// Reset the instance.
+        /// </summary>
+        public void Reset()
+        {
+            _latestTimestamp = null;
+        }
     }
 }
