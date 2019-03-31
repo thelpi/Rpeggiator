@@ -10,6 +10,17 @@ namespace RPG4.Abstraction
     /// </summary>
     public class Inventory
     {
+        // Recovered life points by drinking small life potion.
+        private const double SMALL_LIFE_POTION_RECOVERY_LIFE_POINTS = 2;
+        // Recovered life points by drinking medium life potion.
+        private const double MEDIUM_LIFE_POTION_RECOVERY_LIFE_POINTS = 5;
+        // Recovered life points by drinking large life potion.
+        private const double LARGE_LIFE_POTION_RECOVERY_LIFE_POINTS = 10;
+        /// <summary>
+        /// Initial size of the inventory.
+        /// </summary>
+        public const int SIZE = 10;
+
         private List<InventoryItem> _items;
         private Dictionary<ItemIdEnum, int> _maxQuantityByItem;
         private int _creationHashcode;
@@ -56,7 +67,7 @@ namespace RPG4.Abstraction
             {
                 remaining = _items.First(item => item.BaseItem.Id == itemId).TryStore(quantity, _maxQuantityByItem[itemId]);
             }
-            else if (_items.Count < Constants.INVENTORY_SIZE)
+            else if (_items.Count < SIZE)
             {
                 _items.Add(new InventoryItem(itemId, quantity));
                 SetItemMaxQuantity(itemId, Item.GetItem(itemId).InitialMaximalQuantity);
@@ -101,13 +112,13 @@ namespace RPG4.Abstraction
                     droppedItem = new ActionnedBomb(ComputeBombDroppingCoordinates(engine.Player));
                     break;
                 case ItemIdEnum.SmallLifePotion:
-                    engine.Player.DrinkLifePotion(_creationHashcode, Constants.SMALL_LIFE_POTION_RECOVERY_LIFE_POINTS);
+                    engine.Player.DrinkLifePotion(_creationHashcode, SMALL_LIFE_POTION_RECOVERY_LIFE_POINTS);
                     break;
                 case ItemIdEnum.MediumLifePotion:
-                    engine.Player.DrinkLifePotion(_creationHashcode, Constants.MEDIUM_LIFE_POTION_RECOVERY_LIFE_POINTS);
+                    engine.Player.DrinkLifePotion(_creationHashcode, MEDIUM_LIFE_POTION_RECOVERY_LIFE_POINTS);
                     break;
                 case ItemIdEnum.LargeLifePotion:
-                    engine.Player.DrinkLifePotion(_creationHashcode, Constants.LARGE_LIFE_POTION_RECOVERY_LIFE_POINTS);
+                    engine.Player.DrinkLifePotion(_creationHashcode, LARGE_LIFE_POTION_RECOVERY_LIFE_POINTS);
                     break;
                 case ItemIdEnum.Lamp:
                     LampIsOn = !LampIsOn;

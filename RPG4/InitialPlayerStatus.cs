@@ -66,5 +66,9 @@ namespace RPG4
         /// Recovery graphic rendering.
         /// </summary>
         public static readonly ISpriteGraphic RECOVERY_GRAPHIC = new ImageBrushGraphic("PlayerRecovery");
+        /// <summary>
+        /// Player recovery time span, in milliseconds.
+        /// </summary>
+        public const double RECOVERY_TIME = 1000;
     }
 }

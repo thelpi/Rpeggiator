@@ -1,5 +1,5 @@
 ﻿using RPG4.Abstraction.Sprites;
-using System.Collections.Generic;
+using System;
 using System.Linq;
 
 namespace RPG4.Abstraction
@@ -10,6 +10,7 @@ namespace RPG4.Abstraction
     public class Engine
     {
         private Screen _currentScreen;
+        private DateTime _beginTimestamp;
 
         /// <summary>
         /// <see cref="Sprites.Player"/>
@@ -34,6 +35,14 @@ namespace RPG4.Abstraction
                 _currentScreen = value;
             }
         }
+        /// <summary>
+        /// Inferred; current in-game day number.
+        /// </summary>
+        public int Day { get { return (int)Math.Floor((DateTime.Now - _beginTimestamp).TotalDays * Constants.TIME_RATIO); } }
+        /// <summary>
+        /// Inferred; current in-game hour.
+        /// </summary>
+        public int Hour { get { return ((int)Math.Floor((DateTime.Now - _beginTimestamp).TotalHours * Constants.TIME_RATIO)) % 24; } }
 
         /// <summary>
         /// Constructor.
@@ -41,6 +50,7 @@ namespace RPG4.Abstraction
         /// <param name="screenId"><see cref="CurrentScreen"/> identifier.</param>
         public Engine(int screenId)
         {
+            _beginTimestamp = DateTime.Now;
             Player = new Player();
             CurrentScreen = Screen.GetScreen(screenId);
         }

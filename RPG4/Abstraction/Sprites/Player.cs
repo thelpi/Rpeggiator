@@ -14,10 +14,6 @@ namespace RPG4.Abstraction.Sprites
     /// <see cref="IExplodable"/>
     public class Player : LifeSprite, IExplodable
     {
-        // Recovery beginning timestamp.
-        private DateTime _recoveryBeginTimestamp;
-        // Time in recovery
-        private TimeSpan? _recoveryTime;
         // History of movements.
         private Queue<Point> _moveHistory = new Queue<Point>(Constants.MOVE_HISTORY_COUNT);
         // Delay, in milliseconds, between two hits with the current weapon.
@@ -26,6 +22,8 @@ namespace RPG4.Abstraction.Sprites
         private Elapser _movementTimeManager;
         // Lifetime manager for the current hit with the current weapon.
         private Elapser _hitElapser;
+        // Recovery time manager.
+        private Elapser _recoveryManager;
         // Hashcode associated to the instance timestamp.
         private int _creationHashcode;
 
@@ -44,7 +42,7 @@ namespace RPG4.Abstraction.Sprites
         /// <summary>
         /// Indicates the player is currently recovering from an hit.
         /// </summary>
-        public bool IsRecovering { get { return _recoveryTime.HasValue; } }
+        public bool IsRecovering { get { return _recoveryManager?.Elapsed == false; } }
         /// <summary>
         /// Indicates if the player is currently hitting.
         /// </summary>
@@ -83,7 +81,7 @@ namespace RPG4.Abstraction.Sprites
             NewScreenEntrance = null;
             Inventory = new Inventory(_creationHashcode);
             HitSprite = null;
-            _recoveryTime = null;
+            _recoveryManager = null;
             _hitElapser = null;
             _currentWeaponHitDelay = InitialPlayerStatus.SWORD_HIT_DELAY;
             LastDirection = Directions.right;
@@ -171,16 +169,12 @@ namespace RPG4.Abstraction.Sprites
         public void CheckIfHasBeenHit(Engine engine)
         {
             // currently recovering ?
-            if (IsRecovering)
+            if (_recoveryManager?.Elapsed == true)
             {
-                _recoveryTime = DateTime.Now - _recoveryBeginTimestamp;
-                if (_recoveryTime.Value.TotalMilliseconds > Constants.PLAYER_RECOVERY_TIME)
-                {
-                    _recoveryTime = null;
-                }
+                _recoveryManager = null;
             }
 
-            if (!_recoveryTime.HasValue)
+            if (_recoveryManager == null)
             {
                 // checks hits by enemies or bombs
                 var cumuledLifePoints = engine.CheckHitByEnemiesOnPlayer() + engine.CurrentScreen.OverlapAnExplodingBomb(this);
@@ -188,8 +182,7 @@ namespace RPG4.Abstraction.Sprites
                 if (cumuledLifePoints > 0)
                 {
                     Hit(cumuledLifePoints);
-                    _recoveryBeginTimestamp = DateTime.Now;
-                    _recoveryTime = DateTime.Now - _recoveryBeginTimestamp;
+                    _recoveryManager = new Elapser(InitialPlayerStatus.RECOVERY_TIME);
                 }
             }
         }
