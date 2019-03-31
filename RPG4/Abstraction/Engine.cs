@@ -42,7 +42,15 @@ namespace RPG4.Abstraction
         /// <summary>
         /// Inferred; current in-game hour.
         /// </summary>
-        public int Hour { get { return ((int)Math.Floor((DateTime.Now - _beginTimestamp).TotalHours * Constants.TIME_RATIO)) % 24; } }
+        public double Hour
+        {
+            get
+            {
+                double totalHours = (DateTime.Now - _beginTimestamp).TotalHours * Constants.TIME_RATIO;
+                int totalHoursFloored = (int)Math.Floor(totalHours);
+                return (totalHoursFloored % 24) + (totalHours - totalHoursFloored);
+            }
+        }
 
         /// <summary>
         /// Constructor.

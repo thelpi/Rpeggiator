@@ -26,6 +26,26 @@ namespace RPG4
         /// <summary>
         /// Ratio of time acceleration betwean real world and game.
         /// </summary>
-        public const double TIME_RATIO = 120;
+        public const double TIME_RATIO = 240;
+        /// <summary>
+        /// Night darkness opacity ratio.
+        /// </summary>
+        public const double NIGHT_DARKNESS_OPACITY = 0.7;
+        /// <summary>
+        /// Night peak of darkness hour beginning.
+        /// </summary>
+        public const int NIGHT_PEAK_HOUR_BEGIN = 23;
+        /// <summary>
+        /// Night peak of darkness hour ending.
+        /// </summary>
+        public const int NIGHT_PEAK_HOUR_END = 5;
+        /// <summary>
+        /// Dawn ending hour.
+        /// </summary>
+        public const int NIGHT_DAWN_HOUR = 8;
+        /// <summary>
+        /// Dusk beginning hour.
+        /// </summary>
+        public const int NIGHT_DUSK_HOUR = 20;
     }
 }

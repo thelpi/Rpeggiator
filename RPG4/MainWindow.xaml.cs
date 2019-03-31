@@ -27,7 +27,7 @@ namespace RPG4
     public partial class MainWindow : Window
     {
         private const string _playerUid = "PlayerUid";
-        private const string _shadowUid = "ShadowUid";
+        private const string _darknessUid = "DarknessUid";
 
         private bool _hitKeyPressed;
         private int? _inventoryKeyPressed;
@@ -49,7 +49,7 @@ namespace RPG4
             rctPlayer.Width = _engine.Player.Width;
             rctPlayer.Uid = _playerUid;
 
-            rctShadow.Uid = _shadowUid;
+            rctDarkness.Uid = _darknessUid;
 
             BackgroundWorker worker = new BackgroundWorker
             {
@@ -113,14 +113,13 @@ namespace RPG4
                     cvsMain.Height = _engine.CurrentScreen.Height;
                     cvsMain.Width = _engine.CurrentScreen.Width;
 
-                    rctShadow.Height = _engine.CurrentScreen.Height;
-                    rctShadow.Width = _engine.CurrentScreen.Width;
-                    rctShadow.Opacity = _engine.CurrentScreen.ShadowOpacity;
+                    rctDarkness.Height = _engine.CurrentScreen.Height;
+                    rctDarkness.Width = _engine.CurrentScreen.Width;
 
                     ClearUnfixedChildren(true);
                     DrawWalls();
                 }
-
+                
                 RefreshAnimatedSprites();
                 RefreshMenu();
             };
@@ -168,12 +167,12 @@ namespace RPG4
         }
 
         // Remove every children of the canvas without fixed uid.
-        private void ClearUnfixedChildren(bool everythingExceptPlayerAndShadow = false)
+        private void ClearUnfixedChildren(bool everythingExceptPlayerAndDarkness = false)
         {
             for (int i = cvsMain.Children.Count - 1; i >= 0; i--)
             {
                 string uid = cvsMain.Children[i].Uid;
-                if (string.IsNullOrWhiteSpace(uid) || (everythingExceptPlayerAndShadow && uid != _playerUid && uid != _shadowUid))
+                if (string.IsNullOrWhiteSpace(uid) || (everythingExceptPlayerAndDarkness && uid != _playerUid && uid != _darknessUid))
                 {
                     cvsMain.Children.RemoveAt(i);
                 }
@@ -226,26 +225,7 @@ namespace RPG4
                 DrawSizedPoint(sprite, zIndex: zIndex);
             }
 
-            #region Shadow
-
-            if (_engine.Player.Inventory.LampIsOn)
-            {
-                var pt = new Point(_engine.Player.CenterPoint.X / _engine.CurrentScreen.Width,
-                    _engine.Player.CenterPoint.Y / _engine.CurrentScreen.Height);
-
-                var lampBrush = new RadialGradientBrush(Colors.Transparent, Colors.Black);
-                lampBrush.Center = pt;
-                lampBrush.GradientOrigin = pt;
-                lampBrush.RadiusX = 0.2 * (_engine.CurrentScreen.Height / _engine.CurrentScreen.Width);
-                lampBrush.RadiusY = 0.2;
-                rctShadow.Fill = lampBrush;
-            }
-            else
-            {
-                rctShadow.Fill = Brushes.Black;
-            }
-
-            #endregion
+            SetLightAndDarkness();
         }
 
         // Refresh the menu status.
@@ -320,6 +300,56 @@ namespace RPG4
                 case Key.D9:
                     _inventoryKeyPressed = 8;
                     break;
+            }
+        }
+
+        private void SetLightAndDarkness()
+        {
+            var currentHour = _engine.Hour;
+
+            double darknessOpacity = _engine.CurrentScreen.DarknessOpacity;
+
+            // after dawn, before dusk
+            double dayTimeDarknessOpacity;
+            if (currentHour >= Constants.NIGHT_DAWN_HOUR && currentHour < Constants.NIGHT_DUSK_HOUR)
+            {
+                dayTimeDarknessOpacity = 0;
+            }
+            // in the darkness peak
+            else if (currentHour >= Constants.NIGHT_PEAK_HOUR_BEGIN || currentHour < Constants.NIGHT_PEAK_HOUR_END)
+            {
+                dayTimeDarknessOpacity = Constants.NIGHT_DARKNESS_OPACITY;
+            }
+            // between dusk and darkness peak
+            else if (currentHour >= Constants.NIGHT_DUSK_HOUR && currentHour < Constants.NIGHT_PEAK_HOUR_BEGIN)
+            {
+                double nightProgressionRatio = (currentHour - Constants.NIGHT_DUSK_HOUR) / (double)(Constants.NIGHT_PEAK_HOUR_BEGIN - Constants.NIGHT_DUSK_HOUR);
+                dayTimeDarknessOpacity = Constants.NIGHT_DARKNESS_OPACITY * nightProgressionRatio;
+            }
+            // between darkness peak and dawn
+            else
+            {
+                double nightProgressionRatio = 1 - ((currentHour - Constants.NIGHT_PEAK_HOUR_END) / (double)(Constants.NIGHT_DAWN_HOUR - Constants.NIGHT_PEAK_HOUR_END));
+                dayTimeDarknessOpacity = Constants.NIGHT_DARKNESS_OPACITY * nightProgressionRatio;
+            }
+
+            rctDarkness.Opacity = darknessOpacity > dayTimeDarknessOpacity ? darknessOpacity : dayTimeDarknessOpacity;
+
+            if (_engine.Player.Inventory.LampIsOn)
+            {
+                var pt = new Point(_engine.Player.CenterPoint.X / _engine.CurrentScreen.Width,
+                    _engine.Player.CenterPoint.Y / _engine.CurrentScreen.Height);
+
+                var lampBrush = new RadialGradientBrush(Colors.Transparent, Colors.Black);
+                lampBrush.Center = pt;
+                lampBrush.GradientOrigin = pt;
+                lampBrush.RadiusX = 0.2 * (_engine.CurrentScreen.Height / _engine.CurrentScreen.Width);
+                lampBrush.RadiusY = 0.2;
+                rctDarkness.Fill = lampBrush;
+            }
+            else
+            {
+                rctDarkness.Fill = Brushes.Black;
             }
         }
     }

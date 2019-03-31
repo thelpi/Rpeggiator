@@ -5,7 +5,7 @@
   "Height": 600,
   "GraphicType": "ImageBrushGraphic",
   "ImagePath": "Background2",
-  "AreaShadowOpacity": 0.8,
+  "AreaDarknessOpacity": 0.8,
   "Walls": [
     {
       "X": 80,

@@ -28,19 +28,10 @@ namespace RPG4.Abstraction.Sprites
         /// Current screen identifier..
         /// </summary>
         public int Id { get; private set; }
-
         /// <summary>
-        /// Freeze movements for every <see cref="Enemies"/>.
+        /// Current screen darkness; opacity ratio between 0 (no) and 1 (full).
         /// </summary>
-        public void FreezeEnemies()
-        {
-            _enemies.ForEach(e => e.Freeze());
-        }
-
-        /// <summary>
-        /// Current screen shadow.
-        /// </summary>
-        public double ShadowOpacity { get; private set; }
+        public double DarknessOpacity { get; private set; }
         /// <summary>
         /// List of walls.
         /// </summary>
@@ -103,6 +94,14 @@ namespace RPG4.Abstraction.Sprites
         }
 
         /// <summary>
+        /// Freeze movements for every <see cref="Enemies"/>.
+        /// </summary>
+        public void FreezeEnemies()
+        {
+            _enemies.ForEach(e => e.Freeze());
+        }
+
+        /// <summary>
         /// Adds an <see cref="ActionnedItem"/>
         /// </summary>
         /// <param name="itemDropped"><see cref="ActionnedItem"/> to add.</param>
@@ -137,7 +136,7 @@ namespace RPG4.Abstraction.Sprites
             _pits = new List<Pit>();
             _pickableItems = new List<PickableItem>();
             _actionnedItems = new List<ActionnedItem>();
-            ShadowOpacity = screenJsonDatas.AreaShadowOpacity;
+            DarknessOpacity = screenJsonDatas.AreaDarknessOpacity;
             foreach (dynamic wallJson in screenJsonDatas.Walls)
             {
                 _walls.Add(new Sprite(wallJson));
