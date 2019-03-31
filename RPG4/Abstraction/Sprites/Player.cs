@@ -91,7 +91,7 @@ namespace RPG4.Abstraction.Sprites
         }
 
         /// <inheritdoc />
-        public override void BehaviorAtNewFrame(AbstractEngine engine, params object[] args)
+        public override void BehaviorAtNewFrame(Engine engine, params object[] args)
         {
             var keys = args[0] as KeyPress;
 
@@ -101,9 +101,9 @@ namespace RPG4.Abstraction.Sprites
             // If any movement.
             if (newPosition.X != X || newPosition.Y != Y)
             {
-                CheckPotentialOverlapAndAdjustPosition(ref newPosition, keys, engine.SolidStructures);
+                CheckPotentialOverlapAndAdjustPosition(ref newPosition, keys, engine.CurrentScreen.SolidStructures);
 
-                CheckNewScreenEntrance(ref newPosition, engine.AreaWidth, engine.AreaHeight);
+                CheckNewScreenEntrance(ref newPosition, engine.CurrentScreen.Width, engine.CurrentScreen.Height);
 
                 SetDirection(newPosition);
 
@@ -167,8 +167,8 @@ namespace RPG4.Abstraction.Sprites
         /// <summary>
         /// Checks if the instance has been hit.
         /// </summary>
-        /// <param name="engine"><see cref="AbstractEngine"/></param>
-        public void CheckIfHasBeenHit(AbstractEngine engine)
+        /// <param name="engine"><see cref="Engine"/></param>
+        public void CheckIfHasBeenHit(Engine engine)
         {
             // currently recovering ?
             if (IsRecovering)
@@ -183,7 +183,7 @@ namespace RPG4.Abstraction.Sprites
             if (!_recoveryTime.HasValue)
             {
                 // checks hits by enemies or bombs
-                var cumuledLifePoints = engine.CheckHitByEnemiesOnPlayer() + engine.OverlapAnExplodingBomb(this);
+                var cumuledLifePoints = engine.CheckHitByEnemiesOnPlayer() + engine.CurrentScreen.OverlapAnExplodingBomb(this);
 
                 if (cumuledLifePoints > 0)
                 {

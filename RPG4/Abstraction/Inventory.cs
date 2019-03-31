@@ -71,10 +71,10 @@ namespace RPG4.Abstraction
         /// <summary>
         /// Uses an item of the inventory.
         /// </summary>
-        /// <param name="engine"><see cref="AbstractEngine"/></param>
+        /// <param name="engine"><see cref="Engine"/></param>
         /// <param name="inventorySlotId">Inventory slot index.</param>
         /// <returns><see cref="ActionnedItem"/>; <c>Null</c> if item dropped.</returns>
-        public ActionnedItem UseItem(AbstractEngine engine, int inventorySlotId)
+        public ActionnedItem UseItem(Engine engine, int inventorySlotId)
         {
             if (inventorySlotId >= _items.Count)
             {
@@ -159,9 +159,9 @@ namespace RPG4.Abstraction
         /// Checks if an item can be used in the context.
         /// </summary>
         /// <param name="itemId"><see cref="ItemIdEnum"/></param>
-        /// <param name="engine"><see cref="AbstractEngine"/></param>
+        /// <param name="engine"><see cref="Engine"/></param>
         /// <returns><c>True</c> if it can be used; <c>False</c> otherwise.</returns>
-        private bool ItemCanBeUseInContext(ItemIdEnum itemId, AbstractEngine engine)
+        private bool ItemCanBeUseInContext(ItemIdEnum itemId, Engine engine)
         {
             switch (itemId)
             {

@@ -1,28 +1,30 @@
 {
-	"AreaWidth": 800,
-	"AreaHeight": 600,
-	  "GraphicType": "PlainBrushGraphic",
-	  "HexColor": "#FFFFEFD5",
-	  "AreaShadowOpacity":0,
+  "X": 0,
+  "Y": 0,
+  "Width": 800,
+  "Height": 600,
+  "GraphicType": "PlainBrushGraphic",
+  "HexColor": "#FFFFEFD5",
+  "AreaShadowOpacity": 0,
   "Walls": [
     {
       "X": 50,
       "Y": 300,
       "Width": 250,
       "Height": 50,
-	  "GraphicType": "PlainBrushGraphic",
-	  "HexColor": "#FF006400"
+      "GraphicType": "PlainBrushGraphic",
+      "HexColor": "#FF006400"
     },
     {
       "X": 100,
       "Y": 260,
       "Width": 50,
       "Height": 140,
-	  "GraphicType": "PlainBrushGraphic",
-	  "HexColor": "#FF006400"
+      "GraphicType": "PlainBrushGraphic",
+      "HexColor": "#FF006400"
     }
   ],
-  "Gates":[],
+  "Gates": [],
   "Enemies": [
     {
       "X": 50,
@@ -32,63 +34,62 @@
       "Speed": "150",
       "HourRotation": true,
       "MaximalLifePoints": 2,
-	  "HitLifePointCost": 5,
+      "HitLifePointCost": 5,
       "Path": [
-		{
-			"X": "730",
-			"Y": "350"
-		}
-		,
-		{
-			"X": "730",
-			"Y": "400"
-		},
-		{
-			"X": "750",
-			"Y": "550"
-		},
-		{
-			"X": "30",
-			"Y": "520"
-		}
-	  ],
-	  "GraphicType": "ImageBrushGraphic",
-	  "ImagePath": "Enemy"
+        {
+          "X": "730",
+          "Y": "350"
+        },
+        {
+          "X": "730",
+          "Y": "400"
+        },
+        {
+          "X": "750",
+          "Y": "550"
+        },
+        {
+          "X": "30",
+          "Y": "520"
+        }
+      ],
+      "GraphicType": "ImageBrushGraphic",
+      "ImagePath": "Enemy"
     }
   ],
   "GateTriggers": [],
-  "AdjacentScreens": {
-	"top_left": 2,
-	"top": 2,
-	"top_right": 2,
-	"right": 2,
-	"bottom_right": 2,
-	"bottom": 2,
-	"bottom_left": 2,
-	"left": 2
+  "NeighboringScreens": {
+    "top_left": 2,
+    "top": 2,
+    "top_right": 2,
+    "right": 2,
+    "bottom_right": 2,
+    "bottom": 2,
+    "bottom_left": 2,
+    "left": 2
   },
-  "Items":[
+  "Items": [
   ],
-  "Rifts":[
-	  {
-		  "X": 700,
-		  "Y": 400,
-		  "Width": 20,
-		  "Height": 100,
-		  "LifePoints": 8,
-	  "GraphicType": "PlainBrushGraphic",
-	  "HexColor": "#FF708090"
-	  }
+  "Rifts": [
+    {
+      "X": 700,
+      "Y": 400,
+      "Width": 20,
+      "Height": 100,
+      "LifePoints": 8,
+      "GraphicType": "PlainBrushGraphic",
+      "HexColor": "#FF708090"
+    }
   ],
-  "Pits":[
-	{
-		"X": "700",
-		"Y": "100",
-		"Width": "50",
-		"Height": "50",
-		"ScreenIndexEntrance": null,
-	  "GraphicType": "ImageBrushGraphic",
-	  "ImagePath": "Pit"
-	}
+  "Pits": [
+    {
+      "X": "700",
+      "Y": "100",
+      "Width": "50",
+      "Height": "50",
+      "ScreenIndexEntrance": null,
+      "GraphicType": "ImageBrushGraphic",
+      "ImagePath": "Pit"
+    }
   ]
 }

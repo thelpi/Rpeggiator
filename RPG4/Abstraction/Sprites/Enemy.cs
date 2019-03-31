@@ -46,7 +46,7 @@ namespace RPG4.Abstraction.Sprites
         }
 
         /// <inheritdoc />
-        public override void BehaviorAtNewFrame(AbstractEngine engine, params object[] args)
+        public override void BehaviorAtNewFrame(Engine engine, params object[] args)
         {
             double distance = _movementTimeManager.Distance(Speed);
 
@@ -57,7 +57,7 @@ namespace RPG4.Abstraction.Sprites
             nextX = pt.X;
             nextY = pt.Y;
 
-            if (engine.SolidStructures.Any(s => s.Overlap(CopyToPosition(new Point(nextX, nextY)))))
+            if (engine.CurrentScreen.SolidStructures.Any(s => s.Overlap(CopyToPosition(new Point(nextX, nextY)))))
             {
                 _reversedPath = !_reversedPath;
                 ComputeNextStepOnPath();
@@ -89,7 +89,7 @@ namespace RPG4.Abstraction.Sprites
         /// <summary>
         /// Checks if the instance has been hit.
         /// </summary>
-        public void CheckIfHasBeenHit(AbstractEngine engine)
+        public void CheckIfHasBeenHit(Engine engine)
         {
             bool hasBeenHit = false;
 
@@ -101,7 +101,7 @@ namespace RPG4.Abstraction.Sprites
             }
 
             // hit by a bomb ?
-            double lifePointCostByBomb = engine.OverlapAnExplodingBomb(this);
+            double lifePointCostByBomb = engine.CurrentScreen.OverlapAnExplodingBomb(this);
             if (lifePointCostByBomb > 0)
             {
                 Hit(lifePointCostByBomb);

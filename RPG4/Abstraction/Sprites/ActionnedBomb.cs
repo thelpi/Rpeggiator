@@ -57,7 +57,7 @@ namespace RPG4.Abstraction.Sprites
         }
 
         /// <inheritdoc />
-        public override void BehaviorAtNewFrame(AbstractEngine engine, params object[] args)
+        public override void BehaviorAtNewFrame(Engine engine, params object[] args)
         {
             // Explosion beginning.
             if (_explodingTimeManager == null && _pendingTimeManager.Elapsed)

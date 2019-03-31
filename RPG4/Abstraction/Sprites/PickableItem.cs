@@ -30,8 +30,8 @@ namespace RPG4.Abstraction.Sprites
         /// <summary>
         /// Picks the item.
         /// </summary>
-        /// <param name="engine"><see cref="AbstractEngine"/></param>
-        public void Pick(AbstractEngine engine)
+        /// <param name="engine"><see cref="Engine"/></param>
+        public void Pick(Engine engine)
         {
             Quantity = engine.Player.Inventory.TryAdd(ItemId, Quantity);
         }

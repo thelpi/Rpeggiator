@@ -32,7 +32,7 @@ namespace RPG4
         private bool _hitKeyPressed;
         private int? _inventoryKeyPressed;
 
-        private AbstractEngine _engine;
+        private Engine _engine;
         private int _currentScreenIndex;
 
         /// <summary>
@@ -42,7 +42,7 @@ namespace RPG4
         {
             InitializeComponent();
 
-            _engine = new AbstractEngine(Constants.FIRST_SCREEN_INDEX);
+            _engine = new Engine(Constants.FIRST_SCREEN_INDEX);
 
             // Size of the player never changes.
             rctPlayer.Height = _engine.Player.Height;
@@ -84,7 +84,7 @@ namespace RPG4
 
                         (sender as BackgroundWorker).ReportProgress(0);
 
-                        if (_engine.Player.CheckDeath(_engine))
+                        if (_engine.Player.CheckDeath(_engine.CurrentScreen))
                         {
                             e.Result = null;
                             return;
@@ -109,13 +109,13 @@ namespace RPG4
                 {
                     _currentScreenIndex = _engine.CurrentScreenId;
 
-                    cvsMain.Background = (Brush)_engine.ScreenGraphic.GetRendering();
-                    cvsMain.Height = _engine.AreaHeight;
-                    cvsMain.Width = _engine.AreaWidth;
+                    cvsMain.Background = (Brush)_engine.CurrentScreen.Graphic.GetRendering();
+                    cvsMain.Height = _engine.CurrentScreen.Height;
+                    cvsMain.Width = _engine.CurrentScreen.Width;
 
-                    rctShadow.Height = _engine.AreaHeight;
-                    rctShadow.Width = _engine.AreaWidth;
-                    rctShadow.Opacity = _engine.AreaShadowOpacity;
+                    rctShadow.Height = _engine.CurrentScreen.Height;
+                    rctShadow.Width = _engine.CurrentScreen.Width;
+                    rctShadow.Opacity = _engine.CurrentScreen.ShadowOpacity;
 
                     ClearUnfixedChildren(true);
                     DrawWalls();
@@ -134,7 +134,7 @@ namespace RPG4
         // Draws each calls inside the main canvas
         private void DrawWalls()
         {
-            foreach (var s in _engine.Walls)
+            foreach (var s in _engine.CurrentScreen.Walls)
             {
                 DrawSizedPoint(s, fixedId: true);
             }
@@ -210,7 +210,7 @@ namespace RPG4
 
             #endregion Player
 
-            foreach (var sprite in _engine.AnimatedSprites)
+            foreach (var sprite in _engine.CurrentScreen.AnimatedSprites)
             {
                 zIndex = 0;
                 if (sprite.GetType() == typeof(ActionnedBomb))
@@ -230,13 +230,13 @@ namespace RPG4
 
             if (_engine.Player.Inventory.LampIsOn)
             {
-                var pt = new Point(_engine.Player.CenterPoint.X / _engine.AreaWidth,
-                    _engine.Player.CenterPoint.Y / _engine.AreaHeight);
+                var pt = new Point(_engine.Player.CenterPoint.X / _engine.CurrentScreen.Width,
+                    _engine.Player.CenterPoint.Y / _engine.CurrentScreen.Height);
 
                 var lampBrush = new RadialGradientBrush(Colors.Transparent, Colors.Black);
                 lampBrush.Center = pt;
                 lampBrush.GradientOrigin = pt;
-                lampBrush.RadiusX = 0.2 * (_engine.AreaHeight / _engine.AreaWidth);
+                lampBrush.RadiusX = 0.2 * (_engine.CurrentScreen.Height / _engine.CurrentScreen.Width);
                 lampBrush.RadiusY = 0.2;
                 rctShadow.Fill = lampBrush;
             }

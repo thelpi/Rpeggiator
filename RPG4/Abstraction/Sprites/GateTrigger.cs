@@ -6,7 +6,7 @@
     public class GateTrigger : FloorTrigger
     {
         /// <summary>
-        /// Indicates the index of the gate linked to this trigger in the <see cref="Gate"/> collection of <see cref="AbstractEngine"/>.
+        /// Indicates the index of the gate linked to this trigger in the <see cref="Gate"/> collection of <see cref="Engine"/>.
         /// </summary>
         public int GateIndex { get; private set; }
         /// <summary>

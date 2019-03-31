@@ -27,9 +27,9 @@
         }
 
         /// <inheritdoc />
-        public override void BehaviorAtNewFrame(AbstractEngine engine, params object[] args)
+        public override void BehaviorAtNewFrame(Engine engine, params object[] args)
         {
-            LifePoints -= engine.OverlapAnExplodingBomb(this);
+            LifePoints -= engine.CurrentScreen.OverlapAnExplodingBomb(this);
         }
     }
 }

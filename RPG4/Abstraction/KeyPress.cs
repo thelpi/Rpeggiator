@@ -1,7 +1,7 @@
 ﻿namespace RPG4.Abstraction
 {
     /// <summary>
-    /// Represents the keayboard input for a frame inside the <see cref="AbstractEngine"/>
+    /// Represents the keayboard input for a frame inside the <see cref="Engine"/>
     /// </summary>
     public class KeyPress
     {

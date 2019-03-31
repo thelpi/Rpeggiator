@@ -62,12 +62,12 @@ namespace RPG4.Abstraction.Sprites
         /// <summary>
         /// Checks if the instance is in-game dead.
         /// </summary>
-        /// <param name="engine"><see cref="AbstractEngine"/></param>
+        /// <param name="screen"><see cref="Screen"/></param>
         /// <returns><c>True</c> if death; <c>False</c> otherwise.</returns>
-        public bool CheckDeath(AbstractEngine engine)
+        public bool CheckDeath(Screen screen)
         {
-            if (engine.SolidStructures.Any(ss => ss.Overlap(this))
-                || engine.Pits.Any(r => r.CanFallIn(this) && (GetType() == typeof(Enemy) || r.Deadly)))
+            if (screen.SolidStructures.Any(ss => ss.Overlap(this))
+                || screen.Pits.Any(r => r.CanFallIn(this) && (GetType() == typeof(Enemy) || r.Deadly)))
             {
                 CurrentLifePoints = 0;
             }
