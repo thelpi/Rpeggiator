@@ -54,7 +54,9 @@
         }
       ],
       "GraphicType": "ImageBrushGraphic",
-      "ImagePath": "Enemy"
+      "ImagePath": "Enemy",
+      "LootItemId": null,
+      "LootQuantity": 10
     }
   ],
   "GateTriggers": [],

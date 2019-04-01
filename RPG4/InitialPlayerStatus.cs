@@ -44,8 +44,14 @@ namespace RPG4
         {
             { ItemIdEnum.Lamp, 1 },
             { ItemIdEnum.SmallLifePotion, 3 },
+            { ItemIdEnum.MediumLifePotion, 1 },
+            { ItemIdEnum.LargeLifePotion, 1 },
             { ItemIdEnum.Bomb, 1 }
         };
+        /// <summary>
+        /// Initial coins.
+        /// </summary>
+        public static int COINS = 10;
         /// <summary>
         /// Initial life points.
         /// </summary>

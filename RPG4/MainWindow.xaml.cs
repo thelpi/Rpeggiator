@@ -246,20 +246,10 @@ namespace RPG4
                 {
                     var item = _engine.Player.Inventory.Items.ElementAt(i);
                     itemSlotTxt.Text = item.Quantity.ToString().PadLeft(3, '0');
-                    switch (item.BaseItem.Id)
-                    {
-                        case ItemIdEnum.Bomb:
-                            itemSlotRct.Fill = Brushes.LightBlue;
-                            break;
-                        case ItemIdEnum.SmallLifePotion:
-                            itemSlotRct.Fill = Brushes.LightGoldenrodYellow;
-                            break;
-                        case ItemIdEnum.Lamp:
-                            itemSlotRct.Fill = Brushes.Yellow;
-                            break;
-                    }
+                    itemSlotRct.Fill = (Brush)item.BaseItem.LootGraphic.GetRendering();
                 }
             }
+            txtCoins.Text = _engine.Player.Inventory.Coins.ToString().PadLeft(3, '0');
         }
 
         // Happens on key press.

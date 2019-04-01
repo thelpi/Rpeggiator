@@ -1,4 +1,5 @@
 ﻿using RPG4.Abstraction.Sprites;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Windows;
@@ -20,6 +21,10 @@ namespace RPG4.Abstraction
         /// Initial size of the inventory.
         /// </summary>
         public const int SIZE = 10;
+        /// <summary>
+        /// Coins limit.
+        /// </summary>
+        private const int COINS_LIMIT = 999;
 
         private List<InventoryItem> _items;
         private Dictionary<ItemIdEnum, int> _maxQuantityByItem;
@@ -37,6 +42,10 @@ namespace RPG4.Abstraction
         /// Indicates if the lamp item is currently used.
         /// </summary>
         public bool LampIsOn { get; private set; }
+        /// <summary>
+        /// Coins.
+        /// </summary>
+        public int Coins { get; private set; }
 
         /// <summary>
         /// Constructor.
@@ -51,6 +60,7 @@ namespace RPG4.Abstraction
             {
                 TryAdd(itemId, InitialPlayerStatus.INVENTORY_ITEMS[itemId]);
             }
+            Coins = InitialPlayerStatus.COINS;
         }
 
         /// <summary>
@@ -210,6 +220,26 @@ namespace RPG4.Abstraction
             else
             {
                 _maxQuantityByItem.Add(itemId, maxQuantity);
+            }
+        }
+
+        /// <summary>
+        /// Collect coins.
+        /// </summary>
+        /// <param name="coins">Number of coins.</param>
+        /// <returns>Number of coins left.</returns>
+        public int CollectCoins(int coins)
+        {
+            int toReachLimit = COINS_LIMIT - Coins;
+            if (toReachLimit == 0 || toReachLimit < coins)
+            {
+                Coins += toReachLimit;
+                return coins - toReachLimit;
+            }
+            else
+            {
+                Coins += coins;
+                return 0;
             }
         }
     }

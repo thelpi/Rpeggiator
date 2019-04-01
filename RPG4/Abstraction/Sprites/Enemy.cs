@@ -29,14 +29,14 @@ namespace RPG4.Abstraction.Sprites
         public double Speed { get; private set; }
         /// <inheritdoc />
         public double ExplosionLifePointCost { get { return EXPLOSION_LIFE_POINT_COST; } }
-
         /// <summary>
-        /// Freeze the instance movements by reseting the <see cref="Elapser"/>.
+        /// Loot <see cref="ItemIdEnum"/>; <c>Null</c> for coin.
         /// </summary>
-        public void Freeze()
-        {
-            _movementTimeManager.Reset();
-        }
+        public ItemIdEnum? LootItemId { get; private set; }
+        /// <summary>
+        /// Loot quantity.
+        /// </summary>
+        public int LootQuantity { get; private set; }
 
         /// <summary>
         /// Constructor.
@@ -52,6 +52,8 @@ namespace RPG4.Abstraction.Sprites
                 _path.Add(new Point((double)jsonPath.X, (double)jsonPath.Y));
             }
             _path.Add(TopLeftCorner);
+            LootItemId = enemyJson.LootItemId == null ? (ItemIdEnum?)null : (ItemIdEnum)Enum.Parse(typeof(ItemIdEnum), (string)enemyJson.LootItemId);
+            LootQuantity = enemyJson.LootQuantity;
         }
 
         /// <inheritdoc />
@@ -83,6 +85,14 @@ namespace RPG4.Abstraction.Sprites
                 X = nextX;
                 Y = nextY;
             }
+        }
+
+        /// <summary>
+        /// Freeze the instance movements by reseting the <see cref="Elapser"/>.
+        /// </summary>
+        public void Freeze()
+        {
+            _movementTimeManager.Reset();
         }
 
         /// <summary>

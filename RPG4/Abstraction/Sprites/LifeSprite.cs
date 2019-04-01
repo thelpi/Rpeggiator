@@ -71,7 +71,7 @@ namespace RPG4.Abstraction.Sprites
             {
                 CurrentLifePoints = 0;
             }
-
+            
             return CurrentLifePoints <= 0;
         }
 

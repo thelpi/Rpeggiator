@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using RPG4.Abstraction.Graphic;
+using System.Collections.Generic;
 
 namespace RPG4.Abstraction
 {
@@ -7,6 +8,23 @@ namespace RPG4.Abstraction
     /// </summary>
     public class Item
     {
+        /// <summary>
+        /// Item loot width.
+        /// </summary>
+        public const double LOOT_WIDTH = 20;
+        /// <summary>
+        /// Item loot height.
+        /// </summary>
+        public const double LOOT_HEIGHT = 20;
+        /// <summary>
+        /// Item loot lifetime, in milliseconds.
+        /// </summary>
+        public const double LOOT_LIFETIME = 10000;
+        /// <summary>
+        /// Coin graphic.
+        /// </summary>
+        public static readonly ISpriteGraphic COIN_GRAPHIC = new ImageBrushGraphic("Coin");
+
         // list of every items
         private static List<Item> _items = null;
 
@@ -30,6 +48,10 @@ namespace RPG4.Abstraction
         /// Maximal quantity carriable at eh beginning.
         /// </summary>
         public int InitialMaximalQuantity { get; private set; }
+        /// <summary>
+        /// Loot graphic.
+        /// </summary>
+        public ISpriteGraphic LootGraphic { get; private set; }
 
         // private constructor
         private Item() { }
@@ -59,7 +81,8 @@ namespace RPG4.Abstraction
                 Name = "Bomb",
                 Unique = false,
                 UseDelay = 1000,
-                InitialMaximalQuantity = 20
+                InitialMaximalQuantity = 20,
+                LootGraphic = new ImageBrushGraphic("Bomb")
             });
             _items.Add(new Item
             {
@@ -67,7 +90,8 @@ namespace RPG4.Abstraction
                 Name = "Life potion (small)",
                 Unique = false,
                 UseDelay = 500,
-                InitialMaximalQuantity = 12
+                InitialMaximalQuantity = 12,
+                LootGraphic = new ImageBrushGraphic("LifePotionSmall")
             });
             _items.Add(new Item
             {
@@ -75,7 +99,8 @@ namespace RPG4.Abstraction
                 Name = "Life potion (medium)",
                 Unique = false,
                 UseDelay = 500,
-                InitialMaximalQuantity = 6
+                InitialMaximalQuantity = 6,
+                LootGraphic = new ImageBrushGraphic("LifePotionMedium")
             });
             _items.Add(new Item
             {
@@ -83,14 +108,16 @@ namespace RPG4.Abstraction
                 Name = "Life potion (large)",
                 Unique = false,
                 UseDelay = 500,
-                InitialMaximalQuantity = 3
+                InitialMaximalQuantity = 3,
+                LootGraphic = new ImageBrushGraphic("LifePotionLarge")
             });
             _items.Add(new Item
             {
                 Id = ItemIdEnum.Lamp,
                 Name = "Lamp",
                 Unique = true,
-                UseDelay = 0
+                UseDelay = 0,
+                LootGraphic = new ImageBrushGraphic("Lamp")
             });
         }
     }

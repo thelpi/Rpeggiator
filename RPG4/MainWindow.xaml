@@ -11,44 +11,48 @@
             <Rectangle Name="rctDarkness" Panel.ZIndex="999" />
         </Canvas>
         <StackPanel DockPanel.Dock="Bottom" Orientation="Horizontal">
-            <ProgressBar Margin="20, 0, 0, 0" Name="pgbPlayerLifePoints" Height="20" Width="200" />
-            <StackPanel Orientation="Vertical" Margin="20, 0, 0, 0" Name="stpItem0" Width="20" Height="40">
+            <StackPanel Orientation="Vertical" Margin="20, 0, 0, 0" Width="20" Height="40">
+                <Image Width="20" Height="20" Source="Resources/Coin.png" />
+                <TextBlock Width="20" Height="20" VerticalAlignment="Center" HorizontalAlignment="Center" Name="txtCoins" />
+            </StackPanel>
+            <ProgressBar Margin="10, 0, 0, 0" Name="pgbPlayerLifePoints" Height="20" Width="200" />
+            <StackPanel Orientation="Vertical" Margin="20, 0, 0, 0" Width="20" Height="40">
                 <Rectangle Width="20" Height="20" Name="rctItem0" />
                 <TextBlock Width="20" Height="20" VerticalAlignment="Center" HorizontalAlignment="Center" Name="txbItem0" />
             </StackPanel>
-            <StackPanel Orientation="Vertical" Margin="10, 0, 0, 0" Name="stpItem1" Width="20" Height="40">
+            <StackPanel Orientation="Vertical" Margin="10, 0, 0, 0" Width="20" Height="40">
                 <Rectangle Width="20" Height="20" Name="rctItem1" />
                 <TextBlock Width="20" Height="20" VerticalAlignment="Center" HorizontalAlignment="Center" Name="txbItem1" />
             </StackPanel>
-            <StackPanel Orientation="Vertical" Margin="10, 0, 0, 0" Name="stpItem2" Width="20" Height="40">
+            <StackPanel Orientation="Vertical" Margin="10, 0, 0, 0" Width="20" Height="40">
                 <Rectangle Width="20" Height="20" Name="rctItem2" />
                 <TextBlock Width="20" Height="20" VerticalAlignment="Center" HorizontalAlignment="Center" Name="txbItem2" />
             </StackPanel>
-            <StackPanel Orientation="Vertical" Margin="10, 0, 0, 0" Name="stpItem3" Width="20" Height="40">
+            <StackPanel Orientation="Vertical" Margin="10, 0, 0, 0" Width="20" Height="40">
                 <Rectangle Width="20" Height="20" Name="rctItem3" />
                 <TextBlock Width="20" Height="20" VerticalAlignment="Center" HorizontalAlignment="Center" Name="txbItem3" />
             </StackPanel>
-            <StackPanel Orientation="Vertical" Margin="10, 0, 0, 0" Name="stpItem4" Width="20" Height="40">
+            <StackPanel Orientation="Vertical" Margin="10, 0, 0, 0" Width="20" Height="40">
                 <Rectangle Width="20" Height="20" Name="rctItem4" />
                 <TextBlock Width="20" Height="20" VerticalAlignment="Center" HorizontalAlignment="Center" Name="txbItem4" />
             </StackPanel>
-            <StackPanel Orientation="Vertical" Margin="10, 0, 0, 0" Name="stpItem5" Width="20" Height="40">
+            <StackPanel Orientation="Vertical" Margin="10, 0, 0, 0" Width="20" Height="40">
                 <Rectangle Width="20" Height="20" Name="rctItem5" />
                 <TextBlock Width="20" Height="20" VerticalAlignment="Center" HorizontalAlignment="Center" Name="txbItem5" />
             </StackPanel>
-            <StackPanel Orientation="Vertical" Margin="10, 0, 0, 0" Name="stpItem6" Width="20" Height="40">
+            <StackPanel Orientation="Vertical" Margin="10, 0, 0, 0" Width="20" Height="40">
                 <Rectangle Width="20" Height="20" Name="rctItem6" />
                 <TextBlock Width="20" Height="20" VerticalAlignment="Center" HorizontalAlignment="Center" Name="txbItem6" />
             </StackPanel>
-            <StackPanel Orientation="Vertical" Margin="10, 0, 0, 0" Name="stpItem7" Width="20" Height="40">
+            <StackPanel Orientation="Vertical" Margin="10, 0, 0, 0" Width="20" Height="40">
                 <Rectangle Width="20" Height="20" Name="rctItem7" />
                 <TextBlock Width="20" Height="20" VerticalAlignment="Center" HorizontalAlignment="Center" Name="txbItem7" />
             </StackPanel>
-            <StackPanel Orientation="Vertical" Margin="10, 0, 0, 0" Name="stpItem8" Width="20" Height="40">
+            <StackPanel Orientation="Vertical" Margin="10, 0, 0, 0" Width="20" Height="40">
                 <Rectangle Width="20" Height="20" Name="rctItem8" />
                 <TextBlock Width="20" Height="20" VerticalAlignment="Center" HorizontalAlignment="Center" Name="txbItem8" />
             </StackPanel>
-            <StackPanel Orientation="Vertical" Margin="10, 0, 0, 0" Name="stpItem9" Width="20" Height="40">
+            <StackPanel Orientation="Vertical" Margin="10, 0, 0, 0" Width="20" Height="40">
                 <Rectangle Width="20" Height="20" Name="rctItem9" />
                 <TextBlock Width="20" Height="20" VerticalAlignment="Center" HorizontalAlignment="Center" Name="txbItem9" />
             </StackPanel>

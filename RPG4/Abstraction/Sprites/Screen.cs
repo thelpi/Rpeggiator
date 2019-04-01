@@ -196,9 +196,18 @@ namespace RPG4.Abstraction.Sprites
             _rifts.ForEach(r => r.BehaviorAtNewFrame(engine));
             _actionnedItems.ForEach(di => di.BehaviorAtNewFrame(engine));
             _enemies.ForEach(e => e.CheckIfHasBeenHit(engine));
-            _enemies.RemoveAll(e => e.CheckDeath(this));
+            _enemies.RemoveAll(e =>
+            {
+                bool death = e.CheckDeath(this);
+                if (death && e.LootQuantity > 0)
+                {
+                    _pickableItems.Add(PickableItem.Loot(e, e.LootItemId, e.LootQuantity));
+                }
+                return death;
+            });
             _rifts.RemoveAll(r => r.LifePoints <= 0);
             _actionnedItems.RemoveAll(di => di.IsDone || SolidStructures.Any(cw => cw.Overlap(di)));
+            _pickableItems.RemoveAll(pi => pi.Disapear);
         }
 
         /// <summary>
