@@ -6,7 +6,7 @@
   "GraphicType": "PlainBrushGraphic",
   "HexColor": "#FFFFEFD5",
   "AreaDarknessOpacity": 0,
-  "Walls": [
+  "PermanentStructures": [
     {
       "X": 50,
       "Y": 300,
@@ -31,26 +31,26 @@
       "Y": 50,
       "Width": 40,
       "Height": 40,
-      "Speed": "150",
+      "Speed": 150,
       "HourRotation": true,
-      "MaximalLifePoints": 2,
+      "MaximalLifePoints": 4,
       "HitLifePointCost": 5,
       "Path": [
         {
-          "X": "730",
-          "Y": "350"
+          "X": 730,
+          "Y": 350
         },
         {
-          "X": "730",
-          "Y": "400"
+          "X": 730,
+          "Y": 400
         },
         {
-          "X": "750",
-          "Y": "550"
+          "X": 750,
+          "Y": 550
         },
         {
-          "X": "30",
-          "Y": "520"
+          "X": 30,
+          "Y": 520
         }
       ],
       "GraphicType": "ImageBrushGraphic",
@@ -85,10 +85,10 @@
   ],
   "Pits": [
     {
-      "X": "700",
-      "Y": "100",
-      "Width": "50",
-      "Height": "50",
+      "X": 700,
+      "Y": 100,
+      "Width": 50,
+      "Height": 50,
       "ScreenIndexEntrance": null,
       "GraphicType": "ImageBrushGraphic",
       "ImagePath": "Pit"

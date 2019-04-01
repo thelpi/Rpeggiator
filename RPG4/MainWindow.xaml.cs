@@ -117,7 +117,7 @@ namespace RPG4
                     rctDarkness.Width = _engine.CurrentScreen.Width;
 
                     ClearUnfixedChildren(true);
-                    DrawWalls();
+                    DrawPermanentStructures();
                 }
                 
                 RefreshAnimatedSprites();
@@ -130,10 +130,10 @@ namespace RPG4
             worker.RunWorkerAsync();
         }
 
-        // Draws each calls inside the main canvas
-        private void DrawWalls()
+        // Draws each permanent structures inside the main canvas
+        private void DrawPermanentStructures()
         {
-            foreach (var s in _engine.CurrentScreen.Walls)
+            foreach (var s in _engine.CurrentScreen.PermanentStructures)
             {
                 DrawSizedPoint(s, fixedId: true);
             }

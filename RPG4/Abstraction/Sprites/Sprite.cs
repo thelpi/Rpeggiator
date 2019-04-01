@@ -106,9 +106,6 @@ namespace RPG4.Abstraction.Sprites
         /// <returns><c>True</c> if overlaps; <c>False</c> otherwise.</returns>
         public bool Overlap(Sprite other, double overlapMinimalRatio = 0)
         {
-            double overlapX = ComputeOneDimensionOverlap(X, BottomRightX, other.X, other.BottomRightX);
-            double overlapY = ComputeOneDimensionOverlap(Y, BottomRightY, other.Y, other.BottomRightY);
-
             double surfaceCovered = ComputeHorizontalOverlap(other) * ComputeVerticalOverlap(other);
 
             if (overlapMinimalRatio == 0)
@@ -185,6 +182,34 @@ namespace RPG4.Abstraction.Sprites
             }
 
             return new Point(-1, -1);
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="currentPt"></param>
+        /// <param name="originalPt"></param>
+        /// <returns></returns>
+        public Directions? OverlapDirection(Sprite currentPt, Sprite originalPt)
+        {
+            double newOverlapX = ComputeHorizontalOverlap(currentPt);
+            double newOverlapY = ComputeVerticalOverlap(currentPt);
+            double oldOverlapX = ComputeHorizontalOverlap(originalPt);
+            double oldOverlapY = ComputeVerticalOverlap(originalPt);
+
+            if (newOverlapX * newOverlapY == 0)
+            {
+                return null;
+            }
+
+            if (newOverlapX > 0 && oldOverlapX == 0)
+            {
+                return Directions.left;
+            }
+            else
+            {
+
+            }
         }
     }
 }

@@ -99,7 +99,7 @@ namespace RPG4.Abstraction.Sprites
             // If any movement.
             if (newPosition.X != X || newPosition.Y != Y)
             {
-                CheckPotentialOverlapAndAdjustPosition(ref newPosition, keys, engine.CurrentScreen.SolidStructures);
+                CheckPotentialOverlapAndAdjustPosition(ref newPosition, keys, engine.CurrentScreen.Structures);
 
                 CheckNewScreenEntrance(ref newPosition, engine.CurrentScreen.Width, engine.CurrentScreen.Height);
 

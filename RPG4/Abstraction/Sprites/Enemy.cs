@@ -16,12 +16,8 @@ namespace RPG4.Abstraction.Sprites
         private const double EXPLOSION_LIFE_POINT_COST = 2;
         // Movement time manager.
         private Elapser _movementTimeManager;
-        // Path.
-        private List<Point> _path;
-        // Next index on _path
-        private int _nextPointIndex;
-        // Reversed path.
-        private bool _reversedPath;
+        // Movement path.
+        private Path _path;
 
         /// <summary>
         /// Speed, in pixels by second.
@@ -46,12 +42,12 @@ namespace RPG4.Abstraction.Sprites
         {
             Speed = enemyJson.Speed;
             _movementTimeManager = new Elapser();
-            _path = new List<Point>();
+            List<Point> points = new List<Point> { TopLeftCorner };
             foreach (var jsonPath in enemyJson.Path)
             {
-                _path.Add(new Point((double)jsonPath.X, (double)jsonPath.Y));
+                points.Add(new Point((double)jsonPath.X, (double)jsonPath.Y));
             }
-            _path.Add(TopLeftCorner);
+            _path = new Path(points.ToArray());
             LootItemId = enemyJson.LootItemId == null ? (ItemIdEnum?)null : (ItemIdEnum)Enum.Parse(typeof(ItemIdEnum), (string)enemyJson.LootItemId);
             LootQuantity = enemyJson.LootQuantity;
         }
@@ -64,24 +60,12 @@ namespace RPG4.Abstraction.Sprites
             double nextX = X;
             double nextY = Y;
 
-            var pt = Tools.GetPointOnLine(TopLeftCorner, _path[_nextPointIndex], distance);
+            var pt = Tools.GetPointOnLine(TopLeftCorner, _path.GetCurrentStep(), distance);
             nextX = pt.X;
             nextY = pt.Y;
 
-            if (engine.CurrentScreen.SolidStructures.Any(s => s.Overlap(CopyToPosition(new Point(nextX, nextY)))))
+            if (_path.ComputeNextStep(this, nextX, nextY, engine.CurrentScreen))
             {
-                _reversedPath = !_reversedPath;
-                ComputeNextStepOnPath();
-            }
-            else
-            {
-                if (X < _path[_nextPointIndex].X && nextX >= _path[_nextPointIndex].X
-                    || Y < _path[_nextPointIndex].Y && nextY >= _path[_nextPointIndex].Y
-                    || X > _path[_nextPointIndex].X && nextX <= _path[_nextPointIndex].X
-                    || Y > _path[_nextPointIndex].Y && nextY <= _path[_nextPointIndex].Y)
-                {
-                    ComputeNextStepOnPath();
-                }
                 X = nextX;
                 Y = nextY;
             }
@@ -93,16 +77,6 @@ namespace RPG4.Abstraction.Sprites
         public void Freeze()
         {
             _movementTimeManager.Reset();
-        }
-
-        /// <summary>
-        /// Computes the next step index on <see cref="_path"/>.
-        /// </summary>
-        private void ComputeNextStepOnPath()
-        {
-            _nextPointIndex = _reversedPath ?
-                (_nextPointIndex - 1 < 0 ? _path.Count - 1 : _nextPointIndex - 1)
-                : (_nextPointIndex + 1 == _path.Count ? 0 : _nextPointIndex + 1);
         }
 
         /// <summary>
@@ -129,7 +103,7 @@ namespace RPG4.Abstraction.Sprites
 
             if (hasBeenHit)
             {
-                _reversedPath = !_reversedPath;
+                _path.ReversePath();
             }
         }
     }

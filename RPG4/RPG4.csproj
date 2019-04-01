@@ -79,6 +79,8 @@
     <Compile Include="Abstraction\Graphic\ImageBrushGraphic.cs" />
     <Compile Include="Abstraction\Graphic\PlainBrushGraphic.cs" />
     <Compile Include="Abstraction\Graphic\SpriteGraphic.cs" />
+    <Compile Include="Abstraction\Path.cs" />
+    <Compile Include="Abstraction\PathStep.cs" />
     <Compile Include="Abstraction\Sprites\Screen.cs" />
     <Compile Include="Abstraction\Sprites\ActionnedBomb.cs" />
     <Compile Include="Abstraction\Directions.cs" />

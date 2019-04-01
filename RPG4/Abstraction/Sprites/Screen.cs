@@ -15,7 +15,7 @@ namespace RPG4.Abstraction.Sprites
         private static List<Screen> _screens = new List<Screen>();
 
         private Dictionary<Directions, int> _neighboringScreens;
-        private List<Sprite> _walls;
+        private List<Sprite> _permanentStructures;
         private List<Gate> _gates;
         private List<Rift> _rifts;
         private List<Enemy> _enemies;
@@ -33,21 +33,29 @@ namespace RPG4.Abstraction.Sprites
         /// </summary>
         public double DarknessOpacity { get; private set; }
         /// <summary>
-        /// List of walls.
+        /// List of permanent structures.
         /// </summary>
-        public IReadOnlyCollection<Sprite> Walls { get { return _walls; } }
-        /// <summary>
-        /// Inferred; list of <see cref="Sprite"/> which can't be crossed.
-        /// </summary>
-        public IReadOnlyCollection<Sprite> SolidStructures { get { return _walls.Concat(_rifts).Concat(_gates.Where(g => g.Activated)).ToList(); } }
+        public IReadOnlyCollection<Sprite> PermanentStructures { get { return _permanentStructures; } }
         /// <summary>
         /// List of <see cref="Pit"/>.
         /// </summary>
         public IReadOnlyCollection<Pit> Pits { get { return _pits; } }
         /// <summary>
-        /// List of every <see cref="Sprite"/> which requires a display management at each frame.
+        /// List of <see cref="Enemy"/>.
         /// </summary>
-        /// <remarks>Doesn't include <see cref="Walls"/>.</remarks>
+        public IReadOnlyCollection<Enemy> Enemies { get { return _enemies; } }
+        /// <summary>
+        /// List of <see cref="PickableItem"/>.
+        /// </summary>
+        public IReadOnlyCollection<PickableItem> PickableItems { get { return _pickableItems; } }
+        /// <summary>
+        /// Inferred; list of <see cref="Sprite"/> which can't be crossed.
+        /// </summary>
+        public IReadOnlyCollection<Sprite> Structures { get { return _permanentStructures.Concat(_rifts).Concat(_gates.Where(g => g.Activated)).ToList(); } }
+        /// <summary>
+        /// Inferred; list of every <see cref="Sprite"/> which requires a display management at each frame.
+        /// </summary>
+        /// <remarks>Doesn't include <see cref="PermanentStructures"/>.</remarks>
         public IReadOnlyCollection<Sprite> AnimatedSprites
         {
             get
@@ -63,14 +71,6 @@ namespace RPG4.Abstraction.Sprites
                 return sprites;
             }
         }
-        /// <summary>
-        /// Inferred; list of <see cref="Enemy"/>.
-        /// </summary>
-        public IReadOnlyCollection<Enemy> Enemies { get { return _enemies; } }
-        /// <summary>
-        /// Inferred; list of <see cref="PickableItem"/>.
-        /// </summary>
-        public IReadOnlyCollection<PickableItem> PickableItems { get { return _pickableItems; } }
 
         /// <summary>
         /// Gets a screen by its identifier.
@@ -128,7 +128,7 @@ namespace RPG4.Abstraction.Sprites
         private Screen(int id, dynamic screenJsonDatas) : base((object)screenJsonDatas)
         {
             Id = id;
-            _walls = new List<Sprite>();
+            _permanentStructures = new List<Sprite>();
             _enemies = new List<Enemy>();
             _gateTriggers = new List<GateTrigger>();
             _gates = new List<Gate>();
@@ -137,9 +137,9 @@ namespace RPG4.Abstraction.Sprites
             _pickableItems = new List<PickableItem>();
             _actionnedItems = new List<ActionnedItem>();
             DarknessOpacity = screenJsonDatas.AreaDarknessOpacity;
-            foreach (dynamic wallJson in screenJsonDatas.Walls)
+            foreach (dynamic structureJson in screenJsonDatas.PermanentStructures)
             {
-                _walls.Add(new Sprite(wallJson));
+                _permanentStructures.Add(new Sprite(structureJson));
             }
             foreach (dynamic gateJson in screenJsonDatas.Gates)
             {
@@ -206,7 +206,7 @@ namespace RPG4.Abstraction.Sprites
                 return death;
             });
             _rifts.RemoveAll(r => r.LifePoints <= 0);
-            _actionnedItems.RemoveAll(di => di.IsDone || SolidStructures.Any(cw => cw.Overlap(di)));
+            _actionnedItems.RemoveAll(di => di.IsDone || Structures.Any(cw => cw.Overlap(di)));
             _pickableItems.RemoveAll(pi => pi.Disapear);
         }
 
