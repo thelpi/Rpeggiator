@@ -24,6 +24,20 @@
       "HexColor": "#FF006400"
     }
   ],
+  "Chests": [
+    {
+      "X": "400",
+      "Y": "380",
+      "Width": 40,
+      "Height": 40,
+      "GraphicType": "ImageBrushGraphic",
+      "ImagePath": "Chest",
+      "OpenImagePath": "OpenChest",
+      "ItemId": "Bomb",
+      "Quantity": 10,
+      "KeyId": null
+    }
+  ],
   "Gates": [],
   "Enemies": [
     {

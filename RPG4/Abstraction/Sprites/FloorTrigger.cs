@@ -13,15 +13,15 @@ namespace RPG4.Abstraction.Sprites
         private readonly double _actionDuration;
         // Trigger time manager.
         private Elapser _triggerTimeManager;
+        // Activated graphic.
+        private ISpriteGraphic _activatedGraphic;
 
         /// <summary>
         /// Indicates if the trigger is currently activated.
         /// </summary>
         public bool IsActivated { get { return _triggerTimeManager?.Elapsed == false; } }
-        /// <summary>
-        /// Graphic rendering when activated.
-        /// </summary>
-        public ISpriteGraphic ActivatedGraphic { get; private set; }
+        /// <inheritdoc />
+        public override ISpriteGraphic Graphic { get { return IsActivated ? _activatedGraphic : base.Graphic; } }
 
         /// <summary>
         /// Constructor.
@@ -33,10 +33,10 @@ namespace RPG4.Abstraction.Sprites
             switch ((string)triggerJson.GraphicType)
             {
                 case nameof(ImageBrushGraphic):
-                    ActivatedGraphic = new ImageBrushGraphic((string)triggerJson.GraphicValueActivated);
+                    _activatedGraphic = new ImageBrushGraphic((string)triggerJson.GraphicValueActivated);
                     break;
                 case nameof(PlainBrushGraphic):
-                    ActivatedGraphic = new PlainBrushGraphic((string)triggerJson.GraphicValueActivated);
+                    _activatedGraphic = new PlainBrushGraphic((string)triggerJson.GraphicValueActivated);
                     break;
                     // TODO : other types of ISpriteGraphic must be implemented here.
             }

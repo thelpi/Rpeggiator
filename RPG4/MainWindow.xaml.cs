@@ -29,6 +29,7 @@ namespace RPG4
         private const string _darknessUid = "DarknessUid";
 
         private bool _hitKeyPressed;
+        private bool _actionKeyPressed;
         private int? _inventoryKeyPressed;
         
         private int _currentScreenIndex;
@@ -68,10 +69,12 @@ namespace RPG4
                                 Keyboard.IsKeyDown(Key.Right),
                                 Keyboard.IsKeyDown(Key.Left),
                                 _hitKeyPressed,
+                                _actionKeyPressed,
                                 _inventoryKeyPressed
                             );
                             _inventoryKeyPressed = null;
                             _hitKeyPressed = false;
+                            _actionKeyPressed = false;
                             return kp;
                         }));
 
@@ -138,15 +141,9 @@ namespace RPG4
         // Draws a sprite inside the main canvas.
         private void DrawSizedPoint(Sprite sp, int zIndex = 0, bool fixedId = false)
         {
-            Brush render = sp.Graphic.GetRenderingBrush();
-            if (sp.GetType().IsSubclassOf(typeof(FloorTrigger)) && ((FloorTrigger)sp).IsActivated)
-            {
-                render = ((FloorTrigger)sp).ActivatedGraphic.GetRenderingBrush();
-            }
-
             Rectangle rct = new Rectangle
             {
-                Fill = render,
+                Fill = sp.Graphic.GetRenderingBrush(),
                 Width = sp.Width,
                 Height = sp.Height
             };
@@ -253,6 +250,9 @@ namespace RPG4
         {
             switch (e.Key)
             {
+                case Key.Enter:
+                    _actionKeyPressed = true;
+                    break;
                 case Key.Space:
                     _hitKeyPressed = true;
                     break;

@@ -22,7 +22,7 @@ namespace RPG4.Abstraction.Sprites
         /// </summary>
         public bool IsOpen { get; private set; }
         /// <inheritdoc />
-        public new ISpriteGraphic Graphic { get { return IsOpen ? _openGraphic : base.Graphic; } }
+        public override ISpriteGraphic Graphic { get { return IsOpen ? _openGraphic : base.Graphic; } }
 
         /// <summary>
         /// Constructor.
@@ -33,14 +33,13 @@ namespace RPG4.Abstraction.Sprites
             _itemId = chestJsonDatas.ItemId;
             _quantity = chestJsonDatas.Quantity;
             _keyId = chestJsonDatas.KeyId;
-            _openGraphic = chestJsonDatas.OpenGraphic;
             switch ((string)chestJsonDatas.GraphicType)
             {
                 case nameof(ImageBrushGraphic):
-                    _openGraphic = new ImageBrushGraphic((string)chestJsonDatas.OpenHexColor);
+                    _openGraphic = new ImageBrushGraphic((string)chestJsonDatas.OpenImagePath);
                     break;
                 case nameof(PlainBrushGraphic):
-                    _openGraphic = new PlainBrushGraphic((string)chestJsonDatas.OpenImagePath);
+                    _openGraphic = new PlainBrushGraphic((string)chestJsonDatas.OpenHexColor);
                     break;
                     // TODO : other types of ISpriteGraphic must be implemented here.
             }

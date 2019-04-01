@@ -26,6 +26,10 @@
         /// </summary>
         public bool PressHit { get; private set; }
         /// <summary>
+        /// Indicates if the action button is pressed.
+        /// </summary>
+        public bool PressAction { get; private set; }
+        /// <summary>
         /// Indicates the inventory slot pressed.
         /// </summary>
         public int? InventorySlotId { get; private set; }
@@ -38,14 +42,16 @@
         /// <param name="right"><see cref="PressRight"/></param>
         /// <param name="left"><see cref="PressLeft"/></param>
         /// <param name="hit"><see cref="PressHit"/></param>
+        /// <param name="action"><see cref="PressAction"/></param>
         /// <param name="inventorySlotId"><see cref="InventorySlotId"/></param>
-        public KeyPress(bool up, bool down, bool right, bool left, bool hit, int? inventorySlotId)
+        public KeyPress(bool up, bool down, bool right, bool left, bool hit, bool action, int? inventorySlotId)
         {
             PressUp = up;
             PressDown = down;
             PressRight = right;
             PressLeft = left;
             PressHit = hit;
+            PressAction = action;
             InventorySlotId = inventorySlotId;
 
             // up and down both pressed cancel each other

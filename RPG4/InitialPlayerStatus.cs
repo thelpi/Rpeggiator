@@ -76,5 +76,9 @@ namespace RPG4
         /// Player recovery time span, in milliseconds.
         /// </summary>
         public const double RECOVERY_TIME = 1000;
+        /// <summary>
+        /// Range of action effet (compared to player size).
+        /// </summary>
+        public const double ACTION_RANGE = 1.2;
     }
 }

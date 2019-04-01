@@ -106,6 +106,19 @@ namespace RPG4.Abstraction.Sprites
             }
 
             ManageHit();
+
+            // Opens proximity chest (one at a time).
+            if (Engine.Default.KeyPress.PressAction)
+            {
+                foreach (var chest in Engine.Default.CurrentScreen.ClosedChests)
+                {
+                    if (chest.Overlap(ResizeToRatio(InitialPlayerStatus.ACTION_RANGE)))
+                    {
+                        chest.TryOpen();
+                        break;
+                    }
+                }
+            }
         }
 
         // Manages the main weapon hit.

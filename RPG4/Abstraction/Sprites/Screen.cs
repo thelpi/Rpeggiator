@@ -21,6 +21,7 @@ namespace RPG4.Abstraction.Sprites
         private List<PickableItem> _pickableItems;
         private List<ActionnedItem> _actionnedItems;
         private List<Pit> _pits;
+        private List<Chest> _chests;
 
         /// <summary>
         /// Current screen identifier..
@@ -39,6 +40,10 @@ namespace RPG4.Abstraction.Sprites
         /// </summary>
         public IReadOnlyCollection<Pit> Pits { get { return _pits; } }
         /// <summary>
+        /// Inferred; list of closed <see cref="Chest"/>.
+        /// </summary>
+        public IReadOnlyCollection<Chest> ClosedChests { get { return _chests.Where(ch => !ch.IsOpen).ToList(); } }
+        /// <summary>
         /// List of <see cref="Enemy"/>.
         /// </summary>
         public IReadOnlyCollection<Enemy> Enemies { get { return _enemies; } }
@@ -49,7 +54,18 @@ namespace RPG4.Abstraction.Sprites
         /// <summary>
         /// Inferred; list of <see cref="Sprite"/> which can't be crossed.
         /// </summary>
-        public IReadOnlyCollection<Sprite> Structures { get { return _permanentStructures.Concat(_rifts).Concat(_gates.Where(g => g.Activated)).ToList(); } }
+        public IReadOnlyCollection<Sprite> Structures
+        {
+            get
+            {
+                List<Sprite> sprites = new List<Sprite>();
+                sprites.AddRange(_permanentStructures);
+                sprites.AddRange(_rifts);
+                sprites.AddRange(_gates.Where(g => g.Activated));
+                sprites.AddRange(_chests);
+                return sprites;
+            }
+        }
         /// <summary>
         /// Inferred; list of every <see cref="Sprite"/> which requires a display management at each frame.
         /// </summary>
@@ -66,6 +82,7 @@ namespace RPG4.Abstraction.Sprites
                 sprites.AddRange(_gateTriggers);
                 sprites.AddRange(_enemies);
                 sprites.AddRange(_gates.Where(g => g.Activated));
+                sprites.AddRange(_chests);
                 return sprites;
             }
         }
@@ -105,6 +122,7 @@ namespace RPG4.Abstraction.Sprites
             _gates = new List<Gate>();
             _rifts = new List<Rift>();
             _pits = new List<Pit>();
+            _chests = new List<Chest>();
             _pickableItems = new List<PickableItem>();
             _actionnedItems = new List<ActionnedItem>();
             DarknessOpacity = screenJsonDatas.AreaDarknessOpacity;
@@ -123,6 +141,10 @@ namespace RPG4.Abstraction.Sprites
             foreach (dynamic pitJson in screenJsonDatas.Pits)
             {
                 _pits.Add(new Pit(pitJson));
+            }
+            foreach (dynamic chestJson in screenJsonDatas.Chests)
+            {
+                _chests.Add(new Chest(chestJson));
             }
             foreach (dynamic enemyJson in screenJsonDatas.Enemies)
             {

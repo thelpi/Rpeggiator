@@ -47,7 +47,7 @@ namespace RPG4.Abstraction.Sprites
         /// <summary>
         /// Graphic rendering.
         /// </summary>
-        public ISpriteGraphic Graphic { get; private set; }
+        public virtual ISpriteGraphic Graphic { get; private set; }
 
         /// <summary>
         /// Constructor.
@@ -235,6 +235,19 @@ namespace RPG4.Abstraction.Sprites
                 // Y move prior to X move.
                 return fromTop ? Directions.top : Directions.bottom;
             }
+        }
+
+        /// <summary>
+        /// Creates a copy of the current sprite compared to a size ratio.
+        /// </summary>
+        /// <param name="ratio">The size ratio.</param>
+        /// <returns>The sprite copy.</returns>
+        public Sprite ResizeToRatio(double ratio)
+        {
+            double a = ((1 - ratio) / 2);
+            double newX = X + (a * Width);
+            double newY = Y + (a * Height);
+            return new Sprite(newX, newY, Width * ratio, Height * ratio, Graphic);
         }
     }
 }
