@@ -1,5 +1,4 @@
 ﻿using RPG4.Abstraction.Sprites;
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Windows;
@@ -29,6 +28,7 @@ namespace RPG4.Abstraction
         private List<InventoryItem> _items;
         private Dictionary<ItemIdEnum, int> _maxQuantityByItem;
         private int _creationHashcode;
+        private List<int> _keyring;
 
         /// <summary>
         /// List of <see cref="InventoryItem"/>
@@ -46,6 +46,10 @@ namespace RPG4.Abstraction
         /// Coins.
         /// </summary>
         public int Coins { get; private set; }
+        /// <summary>
+        /// Keyring.
+        /// </summary>
+        public IReadOnlyCollection<int> Keyring { get { return _keyring; } }
 
         /// <summary>
         /// Constructor.
@@ -61,26 +65,42 @@ namespace RPG4.Abstraction
                 TryAdd(itemId, InitialPlayerStatus.INVENTORY_ITEMS[itemId]);
             }
             Coins = InitialPlayerStatus.COINS;
+            _keyring = new List<int>();
         }
 
         /// <summary>
         /// Tries to add or replace an item in the inventory.
         /// </summary>
-        /// <param name="itemId"><see cref="ItemIdEnum"/></param>
+        /// <param name="itemId"><see cref="ItemIdEnum"/>; <c>Null</c> for coins</param>
         /// <param name="quantity">Quantity.</param>
         /// <returns><c>True</c> if the item has been added; <c>False</c> otherwise.</returns>
-        public int TryAdd(ItemIdEnum itemId, int quantity)
+        public int TryAdd(ItemIdEnum? itemId, int quantity)
         {
+            if (!itemId.HasValue)
+            {
+                int toReachLimit = COINS_LIMIT - Coins;
+                if (toReachLimit == 0 || toReachLimit < quantity)
+                {
+                    Coins += toReachLimit;
+                    return quantity - toReachLimit;
+                }
+                else
+                {
+                    Coins += quantity;
+                    return 0;
+                }
+            }
+
             int remaining = 0;
 
-            if (_items.Any(item => item.BaseItem.Id == itemId))
+            if (_items.Any(item => item.BaseItem.Id == itemId.Value))
             {
-                remaining = _items.First(item => item.BaseItem.Id == itemId).TryStore(quantity, _maxQuantityByItem[itemId]);
+                remaining = _items.First(item => item.BaseItem.Id == itemId.Value).TryStore(quantity, _maxQuantityByItem[itemId.Value]);
             }
             else if (_items.Count < SIZE)
             {
-                _items.Add(new InventoryItem(itemId, quantity));
-                SetItemMaxQuantity(itemId, Item.GetItem(itemId).InitialMaximalQuantity);
+                _items.Add(new InventoryItem(itemId.Value, quantity));
+                SetItemMaxQuantity(itemId.Value, Item.GetItem(itemId.Value).InitialMaximalQuantity);
             }
             else
             {
@@ -92,11 +112,16 @@ namespace RPG4.Abstraction
         /// <summary>
         /// Uses an item of the inventory.
         /// </summary>
-        /// <param name="engine"><see cref="Engine"/></param>
-        /// <param name="inventorySlotId">Inventory slot index.</param>
         /// <returns><see cref="ActionnedItem"/>; <c>Null</c> if item dropped.</returns>
-        public ActionnedItem UseItem(Engine engine, int inventorySlotId)
+        public ActionnedItem UseItem()
         {
+            if (!Engine.Default.KeyPress.InventorySlotId.HasValue)
+            {
+                return null;
+            }
+
+            var inventorySlotId = Engine.Default.KeyPress.InventorySlotId.Value;
+
             if (inventorySlotId >= _items.Count)
             {
                 return null;
@@ -104,7 +129,7 @@ namespace RPG4.Abstraction
 
             var item = _items.ElementAt(inventorySlotId);
 
-            if (!ItemCanBeUseInContext(item.BaseItem.Id, engine) || !item.TryPick())
+            if (!ItemCanBeUseInContext(item.BaseItem.Id) || !item.TryPick())
             {
                 return null;
             }
@@ -119,16 +144,16 @@ namespace RPG4.Abstraction
             switch (item.BaseItem.Id)
             {
                 case ItemIdEnum.Bomb:
-                    droppedItem = new ActionnedBomb(ComputeBombDroppingCoordinates(engine.Player));
+                    droppedItem = new ActionnedBomb(ComputeBombDroppingCoordinates());
                     break;
                 case ItemIdEnum.SmallLifePotion:
-                    engine.Player.DrinkLifePotion(_creationHashcode, SMALL_LIFE_POTION_RECOVERY_LIFE_POINTS);
+                    Engine.Default.Player.DrinkLifePotion(_creationHashcode, SMALL_LIFE_POTION_RECOVERY_LIFE_POINTS);
                     break;
                 case ItemIdEnum.MediumLifePotion:
-                    engine.Player.DrinkLifePotion(_creationHashcode, MEDIUM_LIFE_POTION_RECOVERY_LIFE_POINTS);
+                    Engine.Default.Player.DrinkLifePotion(_creationHashcode, MEDIUM_LIFE_POTION_RECOVERY_LIFE_POINTS);
                     break;
                 case ItemIdEnum.LargeLifePotion:
-                    engine.Player.DrinkLifePotion(_creationHashcode, LARGE_LIFE_POTION_RECOVERY_LIFE_POINTS);
+                    Engine.Default.Player.DrinkLifePotion(_creationHashcode, LARGE_LIFE_POTION_RECOVERY_LIFE_POINTS);
                     break;
                 case ItemIdEnum.Lamp:
                     LampIsOn = !LampIsOn;
@@ -141,36 +166,38 @@ namespace RPG4.Abstraction
         /// <summary>
         /// Computes bom dropping coordinates.
         /// </summary>
-        /// <param name="player"><see cref="Player"/></param>
         /// <returns>Coordinates point.</returns>
-        private Point ComputeBombDroppingCoordinates(Player player)
+        private Point ComputeBombDroppingCoordinates()
         {
-            Point pt = new Point(player.X, player.Y);
-            switch (player.LastDirection)
+            // Just a shortcut.
+            var sprite = Engine.Default.Player;
+
+            Point pt = new Point(sprite.X, sprite.Y);
+            switch (sprite.LastDirection)
             {
                 case Directions.bottom_left:
-                    pt.Y = player.BottomRightY - ActionnedBomb.HEIGHT;
+                    pt.Y = sprite.BottomRightY - ActionnedBomb.HEIGHT;
                     break;
                 case Directions.bottom:
-                    pt.X = player.X + (player.Width / 2);
-                    pt.Y = player.BottomRightY - ActionnedBomb.HEIGHT;
+                    pt.X = sprite.X + (sprite.Width / 2);
+                    pt.Y = sprite.BottomRightY - ActionnedBomb.HEIGHT;
                     break;
                 case Directions.bottom_right:
-                    pt.X = player.BottomRightX - ActionnedBomb.WIDTH;
-                    pt.Y = player.BottomRightY - ActionnedBomb.HEIGHT;
+                    pt.X = sprite.BottomRightX - ActionnedBomb.WIDTH;
+                    pt.Y = sprite.BottomRightY - ActionnedBomb.HEIGHT;
                     break;
                 case Directions.right:
-                    pt.X = player.BottomRightX - ActionnedBomb.WIDTH;
-                    pt.Y = player.Y + (player.Height / 2);
+                    pt.X = sprite.BottomRightX - ActionnedBomb.WIDTH;
+                    pt.Y = sprite.Y + (sprite.Height / 2);
                     break;
                 case Directions.top_right:
-                    pt.X = player.BottomRightX - ActionnedBomb.WIDTH;
+                    pt.X = sprite.BottomRightX - ActionnedBomb.WIDTH;
                     break;
                 case Directions.top:
-                    pt.X = player.X + (player.Width / 2);
+                    pt.X = sprite.X + (sprite.Width / 2);
                     break;
                 case Directions.left:
-                    pt.Y = player.Y + (player.Height / 2);
+                    pt.Y = sprite.Y + (sprite.Height / 2);
                     break;
             }
             return pt;
@@ -180,9 +207,8 @@ namespace RPG4.Abstraction
         /// Checks if an item can be used in the context.
         /// </summary>
         /// <param name="itemId"><see cref="ItemIdEnum"/></param>
-        /// <param name="engine"><see cref="Engine"/></param>
         /// <returns><c>True</c> if it can be used; <c>False</c> otherwise.</returns>
-        private bool ItemCanBeUseInContext(ItemIdEnum itemId, Engine engine)
+        private bool ItemCanBeUseInContext(ItemIdEnum itemId)
         {
             switch (itemId)
             {
@@ -192,7 +218,7 @@ namespace RPG4.Abstraction
                 case ItemIdEnum.SmallLifePotion:
                 case ItemIdEnum.MediumLifePotion:
                 case ItemIdEnum.LargeLifePotion:
-                    if (engine.Player.CurrentLifePoints == engine.Player.MaximalLifePoints)
+                    if (Engine.Default.Player.CurrentLifePoints == Engine.Default.Player.MaximalLifePoints)
                     {
                         return false;
                     }
@@ -220,26 +246,6 @@ namespace RPG4.Abstraction
             else
             {
                 _maxQuantityByItem.Add(itemId, maxQuantity);
-            }
-        }
-
-        /// <summary>
-        /// Collect coins.
-        /// </summary>
-        /// <param name="coins">Number of coins.</param>
-        /// <returns>Number of coins left.</returns>
-        public int CollectCoins(int coins)
-        {
-            int toReachLimit = COINS_LIMIT - Coins;
-            if (toReachLimit == 0 || toReachLimit < coins)
-            {
-                Coins += toReachLimit;
-                return coins - toReachLimit;
-            }
-            else
-            {
-                Coins += coins;
-                return 0;
             }
         }
     }

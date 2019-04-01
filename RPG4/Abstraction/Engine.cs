@@ -9,9 +9,30 @@ namespace RPG4.Abstraction
     /// </summary>
     public class Engine
     {
+        private static Engine _engine;
+
+        /// <summary>
+        /// Singleton access.
+        /// </summary>
+        public static Engine Default
+        {
+            get
+            {
+                if (_engine == null)
+                {
+                    _engine = new Engine(Constants.FIRST_SCREEN_INDEX);
+                }
+                return _engine;
+            }
+        }
+
         private Screen _currentScreen;
         private DateTime _beginTimestamp;
 
+        /// <summary>
+        /// <see cref="KeyPress"/>
+        /// </summary>
+        public KeyPress KeyPress{ get; private set; }
         /// <summary>
         /// <see cref="Sprites.Player"/>
         /// </summary>
@@ -52,11 +73,8 @@ namespace RPG4.Abstraction
             }
         }
 
-        /// <summary>
-        /// Constructor.
-        /// </summary>
-        /// <param name="screenId"><see cref="CurrentScreen"/> identifier.</param>
-        public Engine(int screenId)
+        // Private constructor.
+        private Engine(int screenId)
         {
             _beginTimestamp = DateTime.Now;
             Player = new Player();
@@ -69,12 +87,14 @@ namespace RPG4.Abstraction
         /// <param name="keys"><see cref="KeyPress"/></param>
         public void CheckEngineAtNewFrame(KeyPress keys)
         {
-            Player.BehaviorAtNewFrame(this, keys);
-            Player.CheckIfHasBeenHit(this);
-            CollectPickableItems();
-            CheckInventoryUse(keys);
+            KeyPress = keys;
 
-            CurrentScreen.BehaviorAtNewFrame(this);
+            Player.BehaviorAtNewFrame();
+            Player.CheckIfHasBeenHit();
+            CollectPickableItems();
+            CheckInventoryUse();
+
+            CurrentScreen.BehaviorAtNewFrame();
 
             if (Player.NewScreenEntrance.HasValue)
             {
@@ -91,11 +111,11 @@ namespace RPG4.Abstraction
         }
 
         // Checks inventory use.
-        private void CheckInventoryUse(KeyPress keys)
+        private void CheckInventoryUse()
         {
-            if (keys.InventorySlotId.HasValue)
+            if (KeyPress.InventorySlotId.HasValue)
             {
-                var itemDropped = Player.Inventory.UseItem(this, keys.InventorySlotId.Value);
+                var itemDropped = Player.Inventory.UseItem();
                 if (itemDropped != null)
                 {
                     CurrentScreen.AddDroppedItem(itemDropped);
@@ -107,10 +127,7 @@ namespace RPG4.Abstraction
         private void CollectPickableItems()
         {
             var items = CurrentScreen.PickableItems.Where(it => it.Overlap(Player)).ToList();
-            foreach (var item in items)
-            {
-                item.Pick(this);
-            }
+            items.ForEach(i => i.Pick());
             CurrentScreen.CheckPickableItemsQuantities();
         }
 

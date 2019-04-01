@@ -2,7 +2,6 @@
 using RPG4.Abstraction.Graphic;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Windows;
 
 namespace RPG4.Abstraction.Sprites
@@ -89,32 +88,30 @@ namespace RPG4.Abstraction.Sprites
         }
 
         /// <inheritdoc />
-        public override void BehaviorAtNewFrame(Engine engine, params object[] args)
+        public override void BehaviorAtNewFrame()
         {
-            var keys = args[0] as KeyPress;
-
             NewScreenEntrance = null;
-            Point newPosition = ComputeTheoreticalMove(keys);
+            Point newPosition = ComputeTheoreticalMove();
 
             // If any movement.
             if (newPosition.X != X || newPosition.Y != Y)
             {
-                CheckPotentialOverlapAndAdjustPosition(ref newPosition, keys, engine.CurrentScreen.Structures);
+                CheckPotentialOverlapAndAdjustPosition(ref newPosition);
 
-                CheckNewScreenEntrance(ref newPosition, engine.CurrentScreen.Width, engine.CurrentScreen.Height);
+                CheckNewScreenEntrance(ref newPosition, Engine.Default.CurrentScreen.Width, Engine.Default.CurrentScreen.Height);
 
                 SetDirection(newPosition);
 
                 AssigneNewPositionAndAddToHistory(newPosition);
             }
 
-            ManageHit(keys.PressHit);
+            ManageHit();
         }
 
-        // Manages the sword hit.
-        private void ManageHit(bool pressHit)
+        // Manages the main weapon hit.
+        private void ManageHit()
         {
-            if (pressHit && _hitElapser == null)
+            if (Engine.Default.KeyPress.PressHit && _hitElapser == null)
             {
                 _hitElapser = new Elapser(_currentWeaponHitDelay);
                 double hitX = X;
@@ -165,8 +162,7 @@ namespace RPG4.Abstraction.Sprites
         /// <summary>
         /// Checks if the instance has been hit.
         /// </summary>
-        /// <param name="engine"><see cref="Engine"/></param>
-        public void CheckIfHasBeenHit(Engine engine)
+        public void CheckIfHasBeenHit()
         {
             // currently recovering ?
             if (_recoveryManager?.Elapsed == true)
@@ -177,7 +173,7 @@ namespace RPG4.Abstraction.Sprites
             if (_recoveryManager == null)
             {
                 // checks hits by enemies or bombs
-                var cumuledLifePoints = engine.CheckHitByEnemiesOnPlayer() + engine.CurrentScreen.OverlapAnExplodingBomb(this);
+                var cumuledLifePoints = Engine.Default.CheckHitByEnemiesOnPlayer() + Engine.Default.CurrentScreen.OverlapAnExplodingBomb(this);
 
                 if (cumuledLifePoints > 0)
                 {
@@ -207,10 +203,12 @@ namespace RPG4.Abstraction.Sprites
         /// <summary>
         /// Computes the next theoretical position.
         /// </summary>
-        /// <param name="keys"><see cref="KeyPress"/></param>
         /// <returns>The new position coordinates, which might be the same as current coordinates.</returns>
-        private Point ComputeTheoreticalMove(KeyPress keys)
+        private Point ComputeTheoreticalMove()
         {
+            // Shortcut.
+            KeyPress keys = Engine.Default.KeyPress;
+
             double newTop = Y;
             double newLeft = X;
             double distance = _movementTimeManager.Distance(Speed);
@@ -266,10 +264,8 @@ namespace RPG4.Abstraction.Sprites
         /// Checks, for a theoretical new position, if its avoid every solid structures of the screen; the position might be edited.
         /// </summary>
         /// <param name="newPosition">The position to check; might be edited inside the function.</param>
-        /// <param name="keys"><see cref="KeyPress"/></param>
-        /// <param name="structures">List of <see cref="Sprite"/> to avoid.</param>
         /// <exception cref="InfiniteOverlapCheckException"><see cref="Messages.InfiniteOverlapCheckExceptionMessage"/></exception>
-        private void CheckPotentialOverlapAndAdjustPosition(ref Point newPosition, KeyPress keys, IReadOnlyCollection<Sprite> structures)
+        private void CheckPotentialOverlapAndAdjustPosition(ref Point newPosition)
         {
             var forbiddens = new List<Point>();
             var findGoodSpot = false;
@@ -277,11 +273,11 @@ namespace RPG4.Abstraction.Sprites
             {
                 Sprite currentPt = CopyToPosition(newPosition);
                 findGoodSpot = true;
-                foreach (Sprite sprite in structures)
+                foreach (Sprite sprite in Engine.Default.CurrentScreen.Structures)
                 {
                     Point pToMove = sprite.CheckOverlapAndAdjustPosition(currentPt, this,
-                        keys.PressLeft ? true : (keys.PressRight ? false : (bool?)null),
-                        keys.PressUp ? true : (keys.PressDown ? false : (bool?)null));
+                        Engine.Default.KeyPress.PressLeft ? true : (Engine.Default.KeyPress.PressRight ? false : (bool?)null),
+                        Engine.Default.KeyPress.PressUp ? true : (Engine.Default.KeyPress.PressDown ? false : (bool?)null));
 
                     if (pToMove.X >= 0 || pToMove.Y >= 0)
                     {
@@ -290,7 +286,7 @@ namespace RPG4.Abstraction.Sprites
                         newPosition.Y = pToMove.Y;
                         if (forbiddens.Contains(newPosition))
                         {
-                            throw new InfiniteOverlapCheckException(this, structures, newPosition);
+                            throw new InfiniteOverlapCheckException(this, Engine.Default.CurrentScreen.Structures, newPosition);
                         }
                         findGoodSpot = false;
                     }

@@ -156,9 +156,7 @@ namespace RPG4.Abstraction.Sprites
         /// <summary>
         /// Overridden; behavior of the instance at new frame.
         /// </summary>
-        /// <param name="engine">The <see cref="Engine"/>.</param>
-        /// <param name="args">Other arguments.</param>
-        public virtual void BehaviorAtNewFrame(Engine engine, params object[] args)
+        public virtual void BehaviorAtNewFrame()
         {
             // no default behavior to implement
         }

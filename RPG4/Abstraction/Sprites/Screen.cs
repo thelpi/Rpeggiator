@@ -1,6 +1,4 @@
-﻿using RPG4.Abstraction.Graphic;
-using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 
 namespace RPG4.Abstraction.Sprites
@@ -94,33 +92,6 @@ namespace RPG4.Abstraction.Sprites
         }
 
         /// <summary>
-        /// Freeze movements for every <see cref="Enemies"/>.
-        /// </summary>
-        public void FreezeEnemies()
-        {
-            _enemies.ForEach(e => e.Freeze());
-        }
-
-        /// <summary>
-        /// Adds an <see cref="ActionnedItem"/>
-        /// </summary>
-        /// <param name="itemDropped"><see cref="ActionnedItem"/> to add.</param>
-        public void AddDroppedItem(ActionnedItem itemDropped)
-        {
-            _actionnedItems.Add(itemDropped);
-        }
-
-        /// <summary>
-        /// Gets the next <see cref="Screen"/> from a <see cref="Directions"/>.
-        /// </summary>
-        /// <param name="direction"><see cref="Directions"/></param>
-        /// <returns><see cref="Screen"/></returns>
-        public Screen GetNextScreenFromDirection(Directions direction)
-        {
-            return GetScreen(_neighboringScreens[direction]);
-        }
-
-        /// <summary>
         /// Private constructor.
         /// </summary>
         /// <param name="id"><see cref="Id"/></param>
@@ -188,14 +159,14 @@ namespace RPG4.Abstraction.Sprites
         }
 
         /// <inheritdoc />
-        public override void BehaviorAtNewFrame(Engine engine, params object[] args)
+        public override void BehaviorAtNewFrame()
         {
-            _enemies.ForEach(enemy => enemy.BehaviorAtNewFrame(engine));
-            _gateTriggers.ForEach(gt => gt.BehaviorAtNewFrame(engine));
-            _gates.ForEach(g => g.BehaviorAtNewFrame(engine));
-            _rifts.ForEach(r => r.BehaviorAtNewFrame(engine));
-            _actionnedItems.ForEach(di => di.BehaviorAtNewFrame(engine));
-            _enemies.ForEach(e => e.CheckIfHasBeenHit(engine));
+            _enemies.ForEach(enemy => enemy.BehaviorAtNewFrame());
+            _gateTriggers.ForEach(gt => gt.BehaviorAtNewFrame());
+            _gates.ForEach(g => g.BehaviorAtNewFrame());
+            _rifts.ForEach(r => r.BehaviorAtNewFrame());
+            _actionnedItems.ForEach(di => di.BehaviorAtNewFrame());
+            _enemies.ForEach(e => e.CheckIfHasBeenHit());
             _enemies.RemoveAll(e =>
             {
                 bool death = e.CheckDeath(this);
@@ -229,6 +200,33 @@ namespace RPG4.Abstraction.Sprites
         public double OverlapAnExplodingBomb<T>(T sprite) where T : Sprite, IExplodable
         {
             return _actionnedItems.Where(di => di is ActionnedBomb).Sum(b => (b as ActionnedBomb).GetLifePointCost(sprite));
+        }
+
+        /// <summary>
+        /// Freeze movements for every <see cref="Enemies"/>.
+        /// </summary>
+        public void FreezeEnemies()
+        {
+            _enemies.ForEach(e => e.Freeze());
+        }
+
+        /// <summary>
+        /// Adds an <see cref="ActionnedItem"/>
+        /// </summary>
+        /// <param name="itemDropped"><see cref="ActionnedItem"/> to add.</param>
+        public void AddDroppedItem(ActionnedItem itemDropped)
+        {
+            _actionnedItems.Add(itemDropped);
+        }
+
+        /// <summary>
+        /// Gets the next <see cref="Screen"/> from a <see cref="Directions"/>.
+        /// </summary>
+        /// <param name="direction"><see cref="Directions"/></param>
+        /// <returns><see cref="Screen"/></returns>
+        public Screen GetNextScreenFromDirection(Directions direction)
+        {
+            return GetScreen(_neighboringScreens[direction]);
         }
     }
 }

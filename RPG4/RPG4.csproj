@@ -81,6 +81,7 @@
     <Compile Include="Abstraction\Graphic\SpriteGraphic.cs" />
     <Compile Include="Abstraction\Path.cs" />
     <Compile Include="Abstraction\PathStep.cs" />
+    <Compile Include="Abstraction\Sprites\Chest.cs" />
     <Compile Include="Abstraction\Sprites\Screen.cs" />
     <Compile Include="Abstraction\Sprites\ActionnedBomb.cs" />
     <Compile Include="Abstraction\Directions.cs" />
@@ -229,6 +230,16 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Resources\Lamp.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Resource>
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Chest.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Resource>
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\OpenChest.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Resource>
   </ItemGroup>

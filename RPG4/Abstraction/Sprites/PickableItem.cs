@@ -71,17 +71,9 @@ namespace RPG4.Abstraction.Sprites
         /// <summary>
         /// Picks the item.
         /// </summary>
-        /// <param name="engine"><see cref="Engine"/></param>
-        public void Pick(Engine engine)
+        public void Pick()
         {
-            if (_itemId.HasValue)
-            {
-                Quantity = engine.Player.Inventory.TryAdd(_itemId.Value, Quantity);
-            }
-            else
-            {
-                Quantity = engine.Player.Inventory.CollectCoins(Quantity);
-            }
+            Quantity = Engine.Default.Player.Inventory.TryAdd(_itemId, Quantity);
         }
     }
 }

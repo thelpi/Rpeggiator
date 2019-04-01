@@ -27,7 +27,7 @@ namespace RPG4.Abstraction.Graphic
         }
 
         /// <inheritdoc />
-        public object GetRendering()
+        public Brush GetRenderingBrush()
         {
             if (_brush == null)
             {

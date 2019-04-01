@@ -43,9 +43,9 @@ namespace RPG4.Abstraction.Sprites
         }
 
         /// <inheritdoc />
-        public override void BehaviorAtNewFrame(Engine engine, params object[] args)
+        public override void BehaviorAtNewFrame()
         {
-            if (engine.IsTriggered(this))
+            if (Engine.Default.IsTriggered(this))
             {
                 _triggerTimeManager = new Elapser(_actionDuration);
             }

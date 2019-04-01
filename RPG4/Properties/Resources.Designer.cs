@@ -83,6 +83,16 @@ namespace RPG4.Properties {
         /// <summary>
         ///   Recherche une ressource localisée de type System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap Chest {
+            get {
+                object obj = ResourceManager.GetObject("Chest", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Recherche une ressource localisée de type System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap Coin {
             get {
                 object obj = ResourceManager.GetObject("Coin", resourceCulture);
@@ -136,6 +146,16 @@ namespace RPG4.Properties {
         internal static System.Drawing.Bitmap LifePotionSmall {
             get {
                 object obj = ResourceManager.GetObject("LifePotionSmall", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Recherche une ressource localisée de type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap OpenChest {
+            get {
+                object obj = ResourceManager.GetObject("OpenChest", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }

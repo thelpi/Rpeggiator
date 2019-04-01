@@ -5,7 +5,6 @@ using System.ComponentModel;
 using System.Diagnostics;
 using System.Linq;
 using System.Threading;
-using System.Timers;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
@@ -31,8 +30,7 @@ namespace RPG4
 
         private bool _hitKeyPressed;
         private int? _inventoryKeyPressed;
-
-        private Engine _engine;
+        
         private int _currentScreenIndex;
 
         /// <summary>
@@ -42,11 +40,9 @@ namespace RPG4
         {
             InitializeComponent();
 
-            _engine = new Engine(Constants.FIRST_SCREEN_INDEX);
-
             // Size of the player never changes.
-            rctPlayer.Height = _engine.Player.Height;
-            rctPlayer.Width = _engine.Player.Width;
+            rctPlayer.Height = Engine.Default.Player.Height;
+            rctPlayer.Width = Engine.Default.Player.Width;
             rctPlayer.Uid = _playerUid;
 
             rctDarkness.Uid = _darknessUid;
@@ -80,11 +76,11 @@ namespace RPG4
                         }));
 
                         // recompute everything
-                        _engine.CheckEngineAtNewFrame(pressedKeys);
+                        Engine.Default.CheckEngineAtNewFrame(pressedKeys);
 
                         (sender as BackgroundWorker).ReportProgress(0);
 
-                        if (_engine.Player.CheckDeath(_engine.CurrentScreen))
+                        if (Engine.Default.Player.CheckDeath(Engine.Default.CurrentScreen))
                         {
                             e.Result = null;
                             return;
@@ -105,16 +101,16 @@ namespace RPG4
             };
             worker.ProgressChanged += delegate (object sender, ProgressChangedEventArgs e)
             {
-                if (_engine.CurrentScreenId != _currentScreenIndex)
+                if (Engine.Default.CurrentScreenId != _currentScreenIndex)
                 {
-                    _currentScreenIndex = _engine.CurrentScreenId;
+                    _currentScreenIndex = Engine.Default.CurrentScreenId;
 
-                    cvsMain.Background = (Brush)_engine.CurrentScreen.Graphic.GetRendering();
-                    cvsMain.Height = _engine.CurrentScreen.Height;
-                    cvsMain.Width = _engine.CurrentScreen.Width;
+                    cvsMain.Background = Engine.Default.CurrentScreen.Graphic.GetRenderingBrush();
+                    cvsMain.Height = Engine.Default.CurrentScreen.Height;
+                    cvsMain.Width = Engine.Default.CurrentScreen.Width;
 
-                    rctDarkness.Height = _engine.CurrentScreen.Height;
-                    rctDarkness.Width = _engine.CurrentScreen.Width;
+                    rctDarkness.Height = Engine.Default.CurrentScreen.Height;
+                    rctDarkness.Width = Engine.Default.CurrentScreen.Width;
 
                     ClearUnfixedChildren(true);
                     DrawPermanentStructures();
@@ -133,7 +129,7 @@ namespace RPG4
         // Draws each permanent structures inside the main canvas
         private void DrawPermanentStructures()
         {
-            foreach (var s in _engine.CurrentScreen.PermanentStructures)
+            foreach (var s in Engine.Default.CurrentScreen.PermanentStructures)
             {
                 DrawSizedPoint(s, fixedId: true);
             }
@@ -142,10 +138,10 @@ namespace RPG4
         // Draws a sprite inside the main canvas.
         private void DrawSizedPoint(Sprite sp, int zIndex = 0, bool fixedId = false)
         {
-            Brush render = (Brush)sp.Graphic.GetRendering();
+            Brush render = sp.Graphic.GetRenderingBrush();
             if (sp.GetType().IsSubclassOf(typeof(FloorTrigger)) && ((FloorTrigger)sp).IsActivated)
             {
-                render = (Brush)((FloorTrigger)sp).ActivatedGraphic.GetRendering();
+                render = ((FloorTrigger)sp).ActivatedGraphic.GetRenderingBrush();
             }
 
             Rectangle rct = new Rectangle
@@ -186,30 +182,30 @@ namespace RPG4
 
             #region Player
 
-            rctPlayer.SetValue(Canvas.TopProperty, _engine.Player.Y);
-            rctPlayer.SetValue(Canvas.LeftProperty, _engine.Player.X);
+            rctPlayer.SetValue(Canvas.TopProperty, Engine.Default.Player.Y);
+            rctPlayer.SetValue(Canvas.LeftProperty, Engine.Default.Player.X);
 
-            if (_engine.Player.IsRecovering)
+            if (Engine.Default.Player.IsRecovering)
             {
-                rctPlayer.Fill = (Brush)_engine.Player.RecoveryGraphic.GetRendering();
+                rctPlayer.Fill = Engine.Default.Player.RecoveryGraphic.GetRenderingBrush();
             }
             else
             {
-                rctPlayer.Fill = (Brush)_engine.Player.Graphic.GetRendering();
+                rctPlayer.Fill = Engine.Default.Player.Graphic.GetRenderingBrush();
             }
 
             int zIndex = 0;
-            if (_engine.Player.IsHitting)
+            if (Engine.Default.Player.IsHitting)
             {
                 zIndex = 1;
-                DrawSizedPoint(_engine.Player.HitSprite);
+                DrawSizedPoint(Engine.Default.Player.HitSprite);
             }
 
             Panel.SetZIndex(rctPlayer, zIndex);
 
             #endregion Player
 
-            foreach (var sprite in _engine.CurrentScreen.AnimatedSprites)
+            foreach (var sprite in Engine.Default.CurrentScreen.AnimatedSprites)
             {
                 zIndex = 0;
                 if (sprite.GetType() == typeof(ActionnedBomb))
@@ -231,25 +227,25 @@ namespace RPG4
         // Refresh the menu status.
         private void RefreshMenu()
         {
-            pgbPlayerLifePoints.Maximum = _engine.Player.MaximalLifePoints;
-            pgbPlayerLifePoints.Value = _engine.Player.CurrentLifePoints;
+            pgbPlayerLifePoints.Maximum = Engine.Default.Player.MaximalLifePoints;
+            pgbPlayerLifePoints.Value = Engine.Default.Player.CurrentLifePoints;
             for (int i = 0; i < Inventory.SIZE; i++)
             {
                 var itemSlotRct = (Rectangle)FindName(string.Format("rctItem{0}", i));
                 var itemSlotTxt = (TextBlock)FindName(string.Format("txbItem{0}", i));
-                if (_engine.Player.Inventory.Items.Count < (i + 1))
+                if (Engine.Default.Player.Inventory.Items.Count < (i + 1))
                 {
                     itemSlotRct.Fill = Brushes.AliceBlue;
                     itemSlotTxt.Text = "000";
                 }
                 else
                 {
-                    var item = _engine.Player.Inventory.Items.ElementAt(i);
+                    var item = Engine.Default.Player.Inventory.Items.ElementAt(i);
                     itemSlotTxt.Text = item.Quantity.ToString().PadLeft(3, '0');
-                    itemSlotRct.Fill = (Brush)item.BaseItem.LootGraphic.GetRendering();
+                    itemSlotRct.Fill = item.BaseItem.LootGraphic.GetRenderingBrush();
                 }
             }
-            txtCoins.Text = _engine.Player.Inventory.Coins.ToString().PadLeft(3, '0');
+            txtCoins.Text = Engine.Default.Player.Inventory.Coins.ToString().PadLeft(3, '0');
         }
 
         // Happens on key press.
@@ -295,9 +291,9 @@ namespace RPG4
 
         private void SetLightAndDarkness()
         {
-            var currentHour = _engine.Hour;
+            var currentHour = Engine.Default.Hour;
 
-            double darknessOpacity = _engine.CurrentScreen.DarknessOpacity;
+            double darknessOpacity = Engine.Default.CurrentScreen.DarknessOpacity;
 
             // after dawn, before dusk
             double dayTimeDarknessOpacity;
@@ -325,15 +321,15 @@ namespace RPG4
 
             rctDarkness.Opacity = darknessOpacity > dayTimeDarknessOpacity ? darknessOpacity : dayTimeDarknessOpacity;
 
-            if (_engine.Player.Inventory.LampIsOn)
+            if (Engine.Default.Player.Inventory.LampIsOn)
             {
-                var pt = new Point(_engine.Player.CenterPoint.X / _engine.CurrentScreen.Width,
-                    _engine.Player.CenterPoint.Y / _engine.CurrentScreen.Height);
+                var pt = new Point(Engine.Default.Player.CenterPoint.X / Engine.Default.CurrentScreen.Width,
+                    Engine.Default.Player.CenterPoint.Y / Engine.Default.CurrentScreen.Height);
 
                 var lampBrush = new RadialGradientBrush(Colors.Transparent, Colors.Black);
                 lampBrush.Center = pt;
                 lampBrush.GradientOrigin = pt;
-                lampBrush.RadiusX = 0.2 * (_engine.CurrentScreen.Height / _engine.CurrentScreen.Width);
+                lampBrush.RadiusX = 0.2 * (Engine.Default.CurrentScreen.Height / Engine.Default.CurrentScreen.Width);
                 lampBrush.RadiusY = 0.2;
                 rctDarkness.Fill = lampBrush;
             }

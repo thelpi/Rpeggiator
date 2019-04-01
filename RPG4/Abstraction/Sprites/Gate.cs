@@ -29,9 +29,9 @@ namespace RPG4.Abstraction.Sprites
         }
 
         /// <inheritdoc />
-        public override void BehaviorAtNewFrame(Engine engine, params object[] args)
+        public override void BehaviorAtNewFrame()
         {
-            var triggersOn = engine.CurrentScreen.GetTriggersForSpecifiedGate(this);
+            var triggersOn = Engine.Default.CurrentScreen.GetTriggersForSpecifiedGate(this);
 
             if (triggersOn.Any())
             {
