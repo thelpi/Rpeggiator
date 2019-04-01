@@ -1,4 +1,5 @@
 ﻿using RPG4.Abstraction.Sprites;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Windows;
@@ -37,12 +38,23 @@ namespace RPG4.Abstraction
         {
             Sprite ownerCopy = owner.CopyToPosition(new Point(nextX, nextY));
 
-            Sprite overlapStruct = screen.Structures.FirstOrDefault(s => s.Overlap(ownerCopy));
-            if (overlapStruct != null)
+            var overlapStructs = screen.Structures.Where(s => s.Overlap(ownerCopy)).ToList();
+            if (overlapStructs.Count > 0)
             {
-                Point pt = new Point();
+                _reverse = true;
                 SetNextStepIndex();
-                _steps.Insert(_currentStepIndex, new PathStep(pt, screen.PermanentStructures.Contains(overlapStruct)));
+                /*if (overlapStructs.Count > 1)
+                {
+                    // If there're more than one structure overlaped
+                    _reverse = true;
+                    SetNextStepIndex();
+                }
+                else
+                {
+                    var overlapStruct = overlapStructs.First();
+
+                    ComputeNewPath(owner, screen, ownerCopy, overlapStruct);
+                }*/
                 return false;
             }
 
@@ -70,6 +82,76 @@ namespace RPG4.Abstraction
             return true;
         }
 
+        // Tries to compute a new path when overlaping a structure; doesn't work so far.
+        private void ComputeNewPath(Sprite owner, Screen screen, Sprite ownerCopy, Sprite overlapStruct)
+        {
+            double distanceToX1 = Math.Abs(overlapStruct.X - owner.X);
+            double distanceToX2 = Math.Abs(overlapStruct.BottomRightX - owner.X);
+            double distanceToY1 = Math.Abs(overlapStruct.Y - owner.Y);
+            double distanceToY2 = Math.Abs(overlapStruct.BottomRightY - owner.Y);
+
+            Directions dir = overlapStruct.OverlapDirection(ownerCopy, owner).Value;
+            Point pt = new Point();
+            switch (dir)
+            {
+                case Directions.bottom:
+                    pt = new Point(distanceToX1 < distanceToX2 ? overlapStruct.X : overlapStruct.BottomRightX, overlapStruct.BottomRightY);
+                    break;
+                case Directions.top:
+                    pt = new Point(distanceToX1 < distanceToX2 ? overlapStruct.X : overlapStruct.BottomRightX, overlapStruct.Y);
+                    break;
+                case Directions.left:
+                    pt = new Point(overlapStruct.X, distanceToY1 < distanceToY2 ? overlapStruct.Y : overlapStruct.BottomRightY);
+                    break;
+                case Directions.right:
+                    pt = new Point(overlapStruct.BottomRightX, distanceToY1 < distanceToY2 ? overlapStruct.Y : overlapStruct.BottomRightY);
+                    break;
+                case Directions.bottom_left:
+                    if (distanceToY1 < distanceToX2)
+                    {
+                        pt = new Point(overlapStruct.X, overlapStruct.Y);
+                    }
+                    else
+                    {
+                        pt = new Point(overlapStruct.BottomRightX, overlapStruct.BottomRightY);
+                    }
+                    break;
+                case Directions.bottom_right:
+                    if (distanceToY1 < distanceToX1)
+                    {
+                        pt = new Point(overlapStruct.BottomRightX, overlapStruct.Y);
+                    }
+                    else
+                    {
+                        pt = new Point(overlapStruct.X, overlapStruct.BottomRightY);
+                    }
+                    break;
+                case Directions.top_left:
+                    if (distanceToY2 < distanceToX2)
+                    {
+                        pt = new Point(overlapStruct.X, overlapStruct.BottomRightY);
+                    }
+                    else
+                    {
+                        pt = new Point(overlapStruct.BottomRightX, overlapStruct.Y);
+                    }
+                    break;
+                case Directions.top_right:
+                    if (distanceToY2 < distanceToX1)
+                    {
+                        pt = new Point(overlapStruct.BottomRightX, overlapStruct.BottomRightY);
+                    }
+                    else
+                    {
+                        pt = new Point(overlapStruct.X, overlapStruct.Y);
+                    }
+                    break;
+            }
+            SetNextStepIndex();
+            _steps.Insert(_currentStepIndex, new PathStep(pt, screen.PermanentStructures.Contains(overlapStruct)));
+        }
+
+        // Computes and sets the next step index.
         private void SetNextStepIndex()
         {
             _currentStepIndex = _reverse ?

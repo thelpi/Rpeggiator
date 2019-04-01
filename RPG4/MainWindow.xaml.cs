@@ -92,7 +92,7 @@ namespace RPG4
                     }
                     catch (Exception ex)
                     {
-                        e.Result = ex.Message;
+                        e.Result = string.Concat(ex.Message, "\r\n", ex.StackTrace);
                         return;
                     }
                     stopWatch.Stop();

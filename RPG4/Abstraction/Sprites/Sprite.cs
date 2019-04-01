@@ -185,30 +185,57 @@ namespace RPG4.Abstraction.Sprites
         }
 
         /// <summary>
-        /// 
+        /// Indicates the <see cref="Directions"/> of an overlap between this instance and another one. The direction is relative to the second one.
         /// </summary>
-        /// <param name="currentPt"></param>
-        /// <param name="originalPt"></param>
-        /// <returns></returns>
-        public Directions? OverlapDirection(Sprite currentPt, Sprite originalPt)
+        /// <param name="positionToCheck">Second <see cref="Sprite"/> current position.</param>
+        /// <param name="previousPosition">Second <see cref="Sprite"/> previous position.</param>
+        /// <returns>Overlap <see cref="Directions"/>; <c>Null</c> if no overlap.</returns>
+        public Directions? OverlapDirection(Sprite positionToCheck, Sprite previousPosition)
         {
-            double newOverlapX = ComputeHorizontalOverlap(currentPt);
-            double newOverlapY = ComputeVerticalOverlap(currentPt);
-            double oldOverlapX = ComputeHorizontalOverlap(originalPt);
-            double oldOverlapY = ComputeVerticalOverlap(originalPt);
+            double newOverlapX = ComputeHorizontalOverlap(positionToCheck);
+            double newOverlapY = ComputeVerticalOverlap(positionToCheck);
+            double oldOverlapX = ComputeHorizontalOverlap(previousPosition);
+            double oldOverlapY = ComputeVerticalOverlap(previousPosition);
 
             if (newOverlapX * newOverlapY == 0)
             {
                 return null;
             }
 
-            if (newOverlapX > 0 && oldOverlapX == 0)
+            bool fromLeft = previousPosition.X < positionToCheck.X;
+            bool fromTop = previousPosition.Y < positionToCheck.Y;
+
+            if (oldOverlapY == 0)
             {
-                return Directions.left;
+                // Y move only.
+                return fromTop ? Directions.top : Directions.bottom;
+            }
+            else if (oldOverlapX == 0)
+            {
+                // X move only.
+                return fromLeft ? Directions.left : Directions.right;
+            }
+            else if (newOverlapX == newOverlapY)
+            {
+                // Very specific case in diagonal right on a corner.
+                if (fromLeft)
+                {
+                    return fromTop ? Directions.top_left : Directions.bottom_left;
+                }
+                else
+                {
+                    return fromTop ? Directions.top_right : Directions.bottom_right;
+                }
+            }
+            else if (newOverlapX > newOverlapY)
+            {
+                // X move prior to Y move.
+                return fromLeft ? Directions.left : Directions.right;
             }
             else
             {
-
+                // Y move prior to X move.
+                return fromTop ? Directions.top : Directions.bottom;
             }
         }
     }
