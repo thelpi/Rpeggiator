@@ -48,8 +48,8 @@ namespace RPG4
         /// </summary>
         public const int NIGHT_DUSK_HOUR = 20;
         /// <summary>
-        /// Number of pixels used as margin when a NPC gets around a structure.
+        /// Size ratio, compared to <see cref="Abstraction.Engine.Player"/>, which triggers pursue by enemies.
         /// </summary>
-        public const double NPC_GETAROUND_MOVE_MARGIN = 0;
+        public const double PLAYER_SIZE_RATIO_TO_TRIGGER_ENEMY = 3;
     }
 }

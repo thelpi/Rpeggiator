@@ -109,6 +109,12 @@ namespace RPG4
                 x1 * x1 + b * b - 2 * b * y1 + y1 * y1 - d * d
             );
 
+            if (quadraticSolution == null)
+            {
+                // TODO : log this case
+                return pStart;
+            }
+
             double xn_s1 = quadraticSolution.Item1;
             double yn_s1 = (a * xn_s1) + b;
 

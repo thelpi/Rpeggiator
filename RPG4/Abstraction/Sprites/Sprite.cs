@@ -17,10 +17,6 @@ namespace RPG4.Abstraction.Sprites
         /// </summary>
         public double Y { get; protected set; }
         /// <summary>
-        /// Inferred; top left corner coordinates.
-        /// </summary>
-        public Point TopLeftCorner { get { return new Point(X, Y); } }
-        /// <summary>
         /// Width
         /// </summary>
         public double Width { get; protected set; }
@@ -28,6 +24,15 @@ namespace RPG4.Abstraction.Sprites
         /// Height
         /// </summary>
         public double Height { get; protected set; }
+        /// <summary>
+        /// Graphic rendering.
+        /// </summary>
+        public virtual ISpriteGraphic Graphic { get; private set; }
+
+        /// <summary>
+        /// Inferred; top left corner coordinates.
+        /// </summary>
+        public Point TopLeftCorner { get { return new Point(X, Y); } }
         /// <summary>
         /// Inferred; BottomRightX
         /// </summary>
@@ -41,13 +46,9 @@ namespace RPG4.Abstraction.Sprites
         /// </summary>
         public double Surface { get { return Width * Height; } }
         /// <summary>
-        /// Center point.
+        /// Inferred; Center point.
         /// </summary>
         public Point CenterPoint { get { return new Point(X + (Width / 2), Y + (Height / 2)); } }
-        /// <summary>
-        /// Graphic rendering.
-        /// </summary>
-        public virtual ISpriteGraphic Graphic { get; private set; }
 
         /// <summary>
         /// Constructor.
@@ -116,41 +117,6 @@ namespace RPG4.Abstraction.Sprites
             double surfaceExpectedCovered = overlapMinimalRatio * other.Surface;
 
             return surfaceCovered >= surfaceExpectedCovered;
-        }
-
-        // Computes an horizontal overlap (width)
-        private double ComputeHorizontalOverlap(Sprite other)
-        {
-            return ComputeOneDimensionOverlap(X, BottomRightX, other.X, other.BottomRightX);
-        }
-
-        // Computes a vertival overlap (height)
-        private double ComputeVerticalOverlap(Sprite other)
-        {
-            return ComputeOneDimensionOverlap(Y, BottomRightY, other.Y, other.BottomRightY);
-        }
-
-        // Computes a one-dimensional overlap (width / height)
-        private double ComputeOneDimensionOverlap(double i1Start, double i1End, double i2Start, double i2End)
-        {
-            if (i1Start <= i2Start && i1End >= i2End)
-            {
-                return i2End - i2Start;
-            }
-            else if (i2Start <= i1Start && i2End >= i1End)
-            {
-                return i1End - i1Start;
-            }
-            else if (i1Start <= i2Start && i2Start <= i1End)
-            {
-                return i1End - i2Start;
-            }
-            else if (i1Start <= i2End && i1End >= i2End)
-            {
-                return i2End - i1Start;
-            }
-
-            return 0;
         }
 
         /// <summary>
@@ -249,6 +215,52 @@ namespace RPG4.Abstraction.Sprites
             double newX = X + (a * Width);
             double newY = Y + (a * Height);
             return new Sprite(newX, newY, Width * ratio, Height * ratio, Graphic);
+        }
+
+        /// <summary>
+        /// Checks if a <see cref="Sprite"/> is completely inside this one.
+        /// Usefull to check if a <see cref="Sprite"/> is inside the screen.
+        /// </summary>
+        /// <param name="other"><see cref="Sprite"/> to check.</param>
+        /// <returns><c>True</c> if is inside; <c>False</c> otherwise.</returns>
+        public bool IsInside(Sprite other)
+        {
+            return other.X >= X && other.BottomRightX < BottomRightX && other.Y >= Y && other.BottomRightY < BottomRightY;
+        }
+
+        // Computes an horizontal overlap (width).
+        private double ComputeHorizontalOverlap(Sprite other)
+        {
+            return ComputeOneDimensionOverlap(X, BottomRightX, other.X, other.BottomRightX);
+        }
+
+        // Computes a vertival overlap (height).
+        private double ComputeVerticalOverlap(Sprite other)
+        {
+            return ComputeOneDimensionOverlap(Y, BottomRightY, other.Y, other.BottomRightY);
+        }
+
+        // Computes a one-dimensional overlap (width / height).
+        private double ComputeOneDimensionOverlap(double i1Start, double i1End, double i2Start, double i2End)
+        {
+            if (i1Start <= i2Start && i1End >= i2End)
+            {
+                return i2End - i2Start;
+            }
+            else if (i2Start <= i1Start && i2End >= i1End)
+            {
+                return i1End - i1Start;
+            }
+            else if (i1Start <= i2Start && i2Start <= i1End)
+            {
+                return i1End - i2Start;
+            }
+            else if (i1Start <= i2End && i1End >= i2End)
+            {
+                return i2End - i1Start;
+            }
+
+            return 0;
         }
     }
 }

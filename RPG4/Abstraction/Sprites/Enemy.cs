@@ -55,20 +55,9 @@ namespace RPG4.Abstraction.Sprites
         /// <inheritdoc />
         public override void BehaviorAtNewFrame()
         {
-            double distance = _movementTimeManager.Distance(Speed);
-
-            double nextX = X;
-            double nextY = Y;
-
-            var pt = Tools.GetPointOnLine(TopLeftCorner, _path.GetCurrentStep(), distance);
-            nextX = pt.X;
-            nextY = pt.Y;
-
-            if (_path.ComputeNextStep(this, nextX, nextY, Engine.Default.CurrentScreen))
-            {
-                X = nextX;
-                Y = nextY;
-            }
+            Point pt = _path.ComputeNextPosition(this, _movementTimeManager.Distance(Speed));
+            X = pt.X;
+            Y = pt.Y;
         }
 
         /// <summary>
