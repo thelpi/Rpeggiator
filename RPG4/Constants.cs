@@ -47,5 +47,9 @@ namespace RPG4
         /// Dusk beginning hour.
         /// </summary>
         public const int NIGHT_DUSK_HOUR = 20;
+        /// <summary>
+        /// Number of pixels used as margin when a NPC gets around a structure.
+        /// </summary>
+        public const double NPC_GETAROUND_MOVE_MARGIN = 0;
     }
 }

@@ -11,6 +11,8 @@ namespace RPG4
     /// </summary>
     public static class Tools
     {
+        private static Random _random = new Random(DateTime.Now.Millisecond);
+
         /// <summary>
         /// Gets the screen datas by its index.
         /// </summary>
@@ -142,6 +144,26 @@ namespace RPG4
             }
 
             return new Point(x, y);
+        }
+
+        /// <summary>
+        /// Gets a random <see cref="int"/> inside the specified range.
+        /// </summary>
+        /// <param name="minIncluded">Minimal value (included).</param>
+        /// <param name="maxExcluded">Maximal value (excluded).</param>
+        /// <returns>Random <see cref="int"/>.</returns>
+        public static int GetRandomNumber(int minIncluded, int maxExcluded)
+        {
+            return _random.Next(minIncluded, maxExcluded);
+        }
+
+        /// <summary>
+        /// Gets a random <see cref="double"/> between 0 (included) and 1 (excluded).
+        /// </summary>
+        /// <returns>Random <see cref="double"/>.</returns>
+        public static double GetRandomNumber()
+        {
+            return _random.NextDouble();
         }
     }
 }

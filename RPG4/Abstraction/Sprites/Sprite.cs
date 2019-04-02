@@ -213,9 +213,10 @@ namespace RPG4.Abstraction.Sprites
                 // X move only.
                 return fromLeft ? Directions.left : Directions.right;
             }
-            else if (newOverlapX == newOverlapY)
+            // Case not treated : in diagonal exactly right on a corner.
+            /*else if (newOverlapX == newOverlapY)
             {
-                // Very specific case in diagonal right on a corner.
+                
                 if (fromLeft)
                 {
                     return fromTop ? Directions.top_left : Directions.bottom_left;
@@ -224,7 +225,7 @@ namespace RPG4.Abstraction.Sprites
                 {
                     return fromTop ? Directions.top_right : Directions.bottom_right;
                 }
-            }
+            }*/
             else if (newOverlapX > newOverlapY)
             {
                 // X move prior to Y move.
