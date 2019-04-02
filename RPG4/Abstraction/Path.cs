@@ -42,44 +42,44 @@ namespace RPG4.Abstraction
             var overlapStructs = screen.Structures.Where(s => s.Overlap(ownerCopy)).ToList();
             if (overlapStructs.Count > 0)
             {
-                if (overlapStructs.Count > 1)
+                if (overlapStructs.Count > 1 || !ComputeStepsToAvoidStructure(owner, screen, ownerCopy, overlapStructs.First()))
                 {
-                    // If there're more than one structure overlaped
+                    // There're more than one structure overlaped or unable to determinate a path.
                     _reverse = true;
                     _currentStepIndex = GetNextStepIndex();
-                }
-                else
-                {
-                    ComputeNewPath(owner, screen, ownerCopy, overlapStructs.First());
                 }
                 return false;
             }
 
-            // Checks if the current step is crossed.
-            if (owner.X < _steps[_currentStepIndex].Point.X && nextX >= _steps[_currentStepIndex].Point.X
-                || owner.Y < _steps[_currentStepIndex].Point.Y && nextY >= _steps[_currentStepIndex].Point.Y
-                || owner.X > _steps[_currentStepIndex].Point.X && nextX <= _steps[_currentStepIndex].Point.X
-                || owner.Y > _steps[_currentStepIndex].Point.Y && nextY <= _steps[_currentStepIndex].Point.Y)
+            if (CheckCurrentStepIsCrossed(owner, nextX, nextY))
             {
-                // Computes the next step index.
-                int previousStepIndex = _currentStepIndex;
                 _currentStepIndex = GetNextStepIndex();
-
-                // If a step "original" is started
-                PathStep step = _steps[_currentStepIndex];
-                if (step.Permanent)
-                {
-                    _steps.RemoveAll(ps => !ps.Permanent);
-                    _currentStepIndex = _steps.IndexOf(step);
-                    _getAroundByRightAndBottom = null;
-                }
+                CleanTemporarySteps();
             }
 
             return true;
         }
 
-        // Tries to compute a new path when overlaping a structure; doesn't work so far.
-        private void ComputeNewPath(Sprite owner, Screen screen, Sprite ownerCopy, Sprite overlapStruct)
+        private void CleanTemporarySteps()
+        {
+            PathStep step = _steps[_currentStepIndex];
+            if (step.Permanent)
+            {
+                _steps.RemoveAll(ps => !ps.Permanent);
+                _currentStepIndex = _steps.IndexOf(step);
+                _getAroundByRightAndBottom = null;
+            }
+        }
+
+        private bool CheckCurrentStepIsCrossed(Sprite owner, double nextX, double nextY)
+        {
+            return owner.X < _steps[_currentStepIndex].Point.X && nextX >= _steps[_currentStepIndex].Point.X
+                            || owner.Y < _steps[_currentStepIndex].Point.Y && nextY >= _steps[_currentStepIndex].Point.Y
+                            || owner.X > _steps[_currentStepIndex].Point.X && nextX <= _steps[_currentStepIndex].Point.X
+                            || owner.Y > _steps[_currentStepIndex].Point.Y && nextY <= _steps[_currentStepIndex].Point.Y;
+        }
+        
+        private bool ComputeStepsToAvoidStructure(Sprite owner, Screen screen, Sprite ownerCopy, Sprite overlapStruct)
         {
             double distanceToX1 = Math.Abs(overlapStruct.X - owner.X);
             double distanceToX2 = Math.Abs(overlapStruct.BottomRightX - owner.X);
@@ -87,72 +87,79 @@ namespace RPG4.Abstraction
             double distanceToY2 = Math.Abs(overlapStruct.BottomRightY - owner.Y);
 
             Directions dir = overlapStruct.OverlapDirection(ownerCopy, owner).Value;
+            bool validPath = false;
+            int attemps = 0;
             double newX1 = 0, newX2 = 0, newY1 = 0, newY2 = 0;
-            if (!_getAroundByRightAndBottom.HasValue)
+            while (!validPath && attemps < 2)
             {
-                _getAroundByRightAndBottom = Tools.GetRandomNumber(0, 2) == 0;
+                newX1++;
+                if (!_getAroundByRightAndBottom.HasValue)
+                {
+                    _getAroundByRightAndBottom = Tools.GetRandomNumber(0, 2) == 0;
+                }
+                switch (dir)
+                {
+                    case Directions.bottom:
+                        newX1 = _getAroundByRightAndBottom.Value ?
+                            overlapStruct.BottomRightX + Constants.NPC_GETAROUND_MOVE_MARGIN
+                            : overlapStruct.X - owner.Width - Constants.NPC_GETAROUND_MOVE_MARGIN;
+                        newX2 = newX1;
+                        newY1 = overlapStruct.BottomRightY + Constants.NPC_GETAROUND_MOVE_MARGIN;
+                        newY2 = overlapStruct.Y - owner.Height - Constants.NPC_GETAROUND_MOVE_MARGIN;
+                        break;
+                    case Directions.top:
+                        newX1 = _getAroundByRightAndBottom.Value ?
+                            overlapStruct.BottomRightX + Constants.NPC_GETAROUND_MOVE_MARGIN
+                            : overlapStruct.X - owner.Width - Constants.NPC_GETAROUND_MOVE_MARGIN;
+                        newX2 = newX1;
+                        newY1 = overlapStruct.Y - owner.Height - Constants.NPC_GETAROUND_MOVE_MARGIN;
+                        newY2 = overlapStruct.BottomRightY + Constants.NPC_GETAROUND_MOVE_MARGIN;
+                        break;
+                    case Directions.left:
+                        newX1 = overlapStruct.X - owner.Width - Constants.NPC_GETAROUND_MOVE_MARGIN;
+                        newY1 = _getAroundByRightAndBottom.Value ?
+                            overlapStruct.BottomRightY + Constants.NPC_GETAROUND_MOVE_MARGIN
+                            : overlapStruct.Y - owner.Height - Constants.NPC_GETAROUND_MOVE_MARGIN;
+                        newX2 = overlapStruct.BottomRightX + Constants.NPC_GETAROUND_MOVE_MARGIN;
+                        newY2 = newY1;
+                        break;
+                    case Directions.right:
+                        newX1 = overlapStruct.BottomRightX + Constants.NPC_GETAROUND_MOVE_MARGIN;
+                        newY1 = _getAroundByRightAndBottom.Value ?
+                            overlapStruct.BottomRightY + Constants.NPC_GETAROUND_MOVE_MARGIN
+                            : overlapStruct.Y - owner.Height - Constants.NPC_GETAROUND_MOVE_MARGIN;
+                        newX2 = overlapStruct.X - owner.Width - Constants.NPC_GETAROUND_MOVE_MARGIN;
+                        newY2 = newY1;
+                        break;
+                }
+                validPath = !(newX1 < 0 || newX2 > screen.Width || newY1 < 0 || newY2 > screen.Height);
+                if (!validPath)
+                {
+                    _getAroundByRightAndBottom = !_getAroundByRightAndBottom.Value;
+                }
             }
-            switch (dir)
+            if (validPath)
             {
-                case Directions.bottom:
-                    newX1 = _getAroundByRightAndBottom.Value ?
-                        overlapStruct.BottomRightX + Constants.NPC_GETAROUND_MOVE_MARGIN
-                        : overlapStruct.X - owner.Width - Constants.NPC_GETAROUND_MOVE_MARGIN;
-                    newX2 = newX1;
-                    newY1 = overlapStruct.BottomRightY + Constants.NPC_GETAROUND_MOVE_MARGIN;
-                    newY2 = overlapStruct.Y - owner.Height - Constants.NPC_GETAROUND_MOVE_MARGIN;
-                    break;
-                case Directions.top:
-                    newX1 = _getAroundByRightAndBottom.Value ?
-                        overlapStruct.BottomRightX + Constants.NPC_GETAROUND_MOVE_MARGIN
-                        : overlapStruct.X - owner.Width - Constants.NPC_GETAROUND_MOVE_MARGIN;
-                    newX2 = newX1;
-                    newY1 = overlapStruct.Y - owner.Height - Constants.NPC_GETAROUND_MOVE_MARGIN;
-                    newY2 = overlapStruct.BottomRightY + Constants.NPC_GETAROUND_MOVE_MARGIN;
-                    break;
-                case Directions.left:
-                    newX1 = overlapStruct.X - owner.Width - Constants.NPC_GETAROUND_MOVE_MARGIN;
-                    newY1 = _getAroundByRightAndBottom.Value ?
-                        overlapStruct.BottomRightY + Constants.NPC_GETAROUND_MOVE_MARGIN
-                        : overlapStruct.Y - owner.Height - Constants.NPC_GETAROUND_MOVE_MARGIN;
-                    newX2 = overlapStruct.BottomRightX + Constants.NPC_GETAROUND_MOVE_MARGIN;
-                    newY2 = newY1;
-                    break;
-                case Directions.right:
-                    newX1 = overlapStruct.BottomRightX + Constants.NPC_GETAROUND_MOVE_MARGIN;
-                    newY1 = _getAroundByRightAndBottom.Value ?
-                        overlapStruct.BottomRightY + Constants.NPC_GETAROUND_MOVE_MARGIN
-                        : overlapStruct.Y - owner.Height - Constants.NPC_GETAROUND_MOVE_MARGIN;
-                    newX2 = overlapStruct.X - owner.Width - Constants.NPC_GETAROUND_MOVE_MARGIN;
-                    newY2 = newY1;
-                    break;
+                if (!_reverse)
+                {
+                    _steps.Insert(_currentStepIndex, new PathStep(new Point(newX1, newY1), false));
+                    _steps.Insert(_currentStepIndex + 1, new PathStep(new Point(newX2, newY2), false));
+                }
+                else
+                {
+                    _steps.Insert(_currentStepIndex, new PathStep(new Point(newX2, newY2), false));
+                    _steps.Insert(_currentStepIndex + 1, new PathStep(new Point(newX1, newY1), false));
+                    _currentStepIndex++;
+                }
             }
-            if (!_reverse)
-            {
-                _steps.Insert(_currentStepIndex, new PathStep(new Point(newX1, newY1), false));
-                _steps.Insert(_currentStepIndex + 1, new PathStep(new Point(newX2, newY2), false));
-            }
-            else
-            {
-                _steps.Insert(_currentStepIndex, new PathStep(new Point(newX2, newY2), false));
-                _steps.Insert(_currentStepIndex + 1, new PathStep(new Point(newX1, newY1), false));
-                _currentStepIndex++;
-            }
+            return validPath;
         }
 
-        /// <summary>
-        /// Computes the next step index.
-        /// </summary>
-        /// <param name="fromStep">Optionnal; previous step index.
-        /// Takes <see cref="_currentStepIndex"/> if not specified or less than 0.</param>
-        /// <returns>Next step index.</returns>
-        private int GetNextStepIndex(int fromStep = -1)
+        private int GetNextStepIndex()
         {
-            fromStep = fromStep < 0 ? _currentStepIndex : fromStep;
-
             return _reverse ?
-                (fromStep - 1 < 0 ? _steps.Count - 1 : fromStep - 1) :
-                (fromStep + 1 == _steps.Count ? 0 : fromStep + 1);
+                (_currentStepIndex - 1 < 0 ? _steps.Count - 1 : _currentStepIndex - 1) :
+                (_currentStepIndex + 1 == _steps.Count ? 0 : _currentStepIndex + 1);
         }
 
         /// <summary>

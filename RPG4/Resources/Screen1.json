@@ -8,9 +8,9 @@
   "AreaDarknessOpacity": 0,
   "PermanentStructures": [
     {
-      "X": 50,
+      "X": 0,
       "Y": 300,
-      "Width": 250,
+      "Width": 300,
       "Height": 50,
       "GraphicType": "PlainBrushGraphic",
       "HexColor": "#FF006400"
