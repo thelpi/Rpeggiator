@@ -82,6 +82,7 @@
     <Compile Include="Abstraction\Path.cs" />
     <Compile Include="Abstraction\PathStep.cs" />
     <Compile Include="Abstraction\Sprites\Chest.cs" />
+    <Compile Include="Abstraction\Sprites\Door.cs" />
     <Compile Include="Abstraction\Sprites\Screen.cs" />
     <Compile Include="Abstraction\Sprites\ActionnedBomb.cs" />
     <Compile Include="Abstraction\Directions.cs" />
@@ -153,6 +154,7 @@
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
     </None>
+    <None Include="Resources\Screen3.json" />
   </ItemGroup>
   <ItemGroup>
     <BootstrapperPackage Include="Microsoft.Net.Framework.3.5.SP1">

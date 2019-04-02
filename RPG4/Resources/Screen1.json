@@ -33,9 +33,10 @@
       "GraphicType": "ImageBrushGraphic",
       "ImagePath": "Chest",
       "OpenImagePath": "OpenChest",
-      "ItemId": "Bomb",
+      "ItemId": null,
       "Quantity": 10,
-      "KeyId": null
+      "KeyId": null,
+      "KeyIdContainer": 1
     }
   ],
   "Gates": [],
@@ -106,6 +107,22 @@
       "ScreenIndexEntrance": null,
       "GraphicType": "ImageBrushGraphic",
       "ImagePath": "Pit"
+    }
+  ],
+  "Doors": [
+    {
+      "X": 400,
+      "Y": 0,
+      "Width": 80,
+      "Height": 20,
+      "GraphicType": "PlainBrushGraphic",
+      "HexColor": "#D2691E",
+      "ScreenId": 3,
+      "KeyId": 1,
+      /* TODO : should be relative to the player size */
+      "PlayerGoThroughX": 400,
+      "PlayerGoThroughY": 540,
+      "Id": 1
     }
   ]
 }

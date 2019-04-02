@@ -2,6 +2,7 @@
 using RPG4.Abstraction.Graphic;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Windows;
 
 namespace RPG4.Abstraction.Sprites
@@ -107,7 +108,8 @@ namespace RPG4.Abstraction.Sprites
 
             ManageHit();
 
-            // Opens proximity chest (one at a time).
+            // Proceeds to proximity actions (open chests...)
+            // Single action at a time.
             if (Engine.Default.KeyPress.PressAction)
             {
                 foreach (var chest in Engine.Default.CurrentScreen.ClosedChests)
@@ -209,6 +211,17 @@ namespace RPG4.Abstraction.Sprites
             }
 
             RegenerateLifePoints(recoveryPoints);
+        }
+
+        /// <summary>
+        /// Resets player position when he goes through a door and changes screen.
+        /// </summary>
+        /// <param name="doorId">The door identifier.</param>
+        public void SetPositionRelativeToDoorGoThrough(int doorId)
+        {
+            Door doorInNewScreen = Engine.Default.CurrentScreen.Doors.First(d => d.Id == doorId);
+            X = doorInNewScreen.PlayerGoThroughX;
+            Y = doorInNewScreen.PlayerGoThroughY;
         }
 
         #region Position management private methods

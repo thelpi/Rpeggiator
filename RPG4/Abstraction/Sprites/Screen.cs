@@ -22,6 +22,7 @@ namespace RPG4.Abstraction.Sprites
         private List<ActionnedItem> _actionnedItems;
         private List<Pit> _pits;
         private List<Chest> _chests;
+        private List<Door> _doors;
 
         /// <summary>
         /// Current screen identifier..
@@ -35,6 +36,10 @@ namespace RPG4.Abstraction.Sprites
         /// List of permanent structures.
         /// </summary>
         public IReadOnlyCollection<Sprite> PermanentStructures { get { return _permanentStructures; } }
+        /// <summary>
+        /// List of <see cref="Door"/>.
+        /// </summary>
+        public IReadOnlyCollection<Door> Doors { get { return _doors; } }
         /// <summary>
         /// List of <see cref="Pit"/>.
         /// </summary>
@@ -63,6 +68,7 @@ namespace RPG4.Abstraction.Sprites
                 sprites.AddRange(_rifts);
                 sprites.AddRange(_gates.Where(g => g.Activated));
                 sprites.AddRange(_chests);
+                sprites.AddRange(_doors);
                 return sprites;
             }
         }
@@ -83,6 +89,7 @@ namespace RPG4.Abstraction.Sprites
                 sprites.AddRange(_enemies);
                 sprites.AddRange(_gates.Where(g => g.Activated));
                 sprites.AddRange(_chests);
+                sprites.AddRange(_doors);
                 return sprites;
             }
         }
@@ -117,6 +124,7 @@ namespace RPG4.Abstraction.Sprites
         {
             Id = id;
             _permanentStructures = new List<Sprite>();
+            _doors = new List<Door>();
             _enemies = new List<Enemy>();
             _gateTriggers = new List<GateTrigger>();
             _gates = new List<Gate>();
@@ -145,6 +153,10 @@ namespace RPG4.Abstraction.Sprites
             foreach (dynamic chestJson in screenJsonDatas.Chests)
             {
                 _chests.Add(new Chest(chestJson));
+            }
+            foreach (dynamic doorJson in screenJsonDatas.Doors)
+            {
+                _doors.Add(new Door(doorJson));
             }
             foreach (dynamic enemyJson in screenJsonDatas.Enemies)
             {

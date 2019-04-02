@@ -1,9 +1,5 @@
 ﻿using RPG4.Abstraction.Graphic;
-using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace RPG4.Abstraction.Sprites
 {
@@ -16,6 +12,7 @@ namespace RPG4.Abstraction.Sprites
         private ItemIdEnum? _itemId;
         private int _quantity;
         private ISpriteGraphic _openGraphic;
+        private int? _keyIdContainer;
 
         /// <summary>
         /// Indicates if the chest is open.
@@ -33,6 +30,7 @@ namespace RPG4.Abstraction.Sprites
             _itemId = chestJsonDatas.ItemId;
             _quantity = chestJsonDatas.Quantity;
             _keyId = chestJsonDatas.KeyId;
+            _keyIdContainer = chestJsonDatas.KeyIdContainer;
             switch ((string)chestJsonDatas.GraphicType)
             {
                 case nameof(ImageBrushGraphic):
@@ -50,10 +48,17 @@ namespace RPG4.Abstraction.Sprites
         /// </summary>
         public void TryOpen()
         {
-            if (!IsOpen && !_keyId.HasValue || Engine.Default.Player.Inventory.Keyring.Contains(_keyId.Value))
+            if (!IsOpen && (!_keyId.HasValue || Engine.Default.Player.Inventory.Keyring.Contains(_keyId.Value)))
             {
                 IsOpen = true;
-                Engine.Default.Player.Inventory.TryAdd(_itemId, _quantity);
+                if (_keyIdContainer.HasValue)
+                {
+                    Engine.Default.Player.Inventory.AddToKeyring(_keyIdContainer.Value);
+                }
+                else
+                {
+                    Engine.Default.Player.Inventory.TryAdd(_itemId, _quantity);
+                }
             }
         }
     }

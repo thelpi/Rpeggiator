@@ -96,16 +96,29 @@ namespace RPG4.Abstraction
 
             CurrentScreen.BehaviorAtNewFrame();
 
+            // At last, every possiblities to change screen.
             if (Player.NewScreenEntrance.HasValue)
             {
                 CurrentScreen = CurrentScreen.GetNextScreenFromDirection(Player.NewScreenEntrance.Value);
             }
             else
             {
-                Pit pit = CurrentScreen.Pits.FirstOrDefault(p => p.ScreenIndexEntrance.HasValue && p.CanFallIn(Player));
-                if (pit != null)
+                int? doorId;
+                int? newScreenByDoor = CheckForDoorOpened(out doorId);
+                if (newScreenByDoor.HasValue)
                 {
-                    CurrentScreen = Screen.GetScreen(pit.ScreenIndexEntrance.Value);
+                    // The position must be set before to get to the screen.
+                    // Otherwise, the door got in the first method will be from the new screen.
+                    Player.SetPositionRelativeToDoorGoThrough(doorId.Value);
+                    CurrentScreen = Screen.GetScreen(newScreenByDoor.Value);
+                }
+                else
+                {
+                    Pit pit = CurrentScreen.Pits.FirstOrDefault(p => p.ScreenIndexEntrance.HasValue && p.CanFallIn(Player));
+                    if (pit != null)
+                    {
+                        CurrentScreen = Screen.GetScreen(pit.ScreenIndexEntrance.Value);
+                    }
                 }
             }
         }
@@ -157,6 +170,37 @@ namespace RPG4.Abstraction
                 }
             }
             return cumuledLifePoints;
+        }
+
+        /// <summary>
+        /// Checks if a door to a new screen has been opened.
+        /// </summary>
+        /// <param name="doorId">ByRef; door identifier.</param>
+        /// <returns>New <see cref="Screen"/> identifier.</returns>
+        public int? CheckForDoorOpened(out int? doorId)
+        {
+            doorId = null;
+
+            if (!KeyPress.PressAction)
+            {
+                return null;
+            }
+
+            foreach (var door in CurrentScreen.Doors)
+            {
+                // TODO : check direction
+                if (door.Overlap(Player.ResizeToRatio(InitialPlayerStatus.ACTION_RANGE)))
+                {
+                    int? screenId = door.TryOpen();
+                    if (screenId.HasValue)
+                    {
+                        doorId = door.Id;
+                        return screenId;
+                    }
+                }
+            }
+
+            return null;
         }
     }
 }

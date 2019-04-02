@@ -110,6 +110,18 @@ namespace RPG4.Abstraction
         }
 
         /// <summary>
+        /// Adds a key to the <see cref="Keyring"/>.
+        /// </summary>
+        /// <param name="keyId">Key identifier.</param>
+        public void AddToKeyring(int keyId)
+        {
+            if (!_keyring.Contains(keyId))
+            {
+                _keyring.Add(keyId);
+            }
+        }
+
+        /// <summary>
         /// Uses an item of the inventory.
         /// </summary>
         /// <returns><see cref="ActionnedItem"/>; <c>Null</c> if item dropped.</returns>
