@@ -237,10 +237,12 @@ namespace RPG4.Abstraction.Sprites
         /// <returns><c>True</c> if <paramref name="pointToCheck"/> is crossed; <c>False</c> otherwise.</returns>
         public bool CheckPointIsCrossed(Point pointToCheck, double nextX, double nextY)
         {
-            return X.LowerEqual(pointToCheck.X) && nextX.GreaterEqual(pointToCheck.X)
-                || Y.LowerEqual(pointToCheck.Y) && nextY.GreaterEqual(pointToCheck.Y)
-                || X.GreaterEqual(pointToCheck.X) && nextX.LowerEqual(pointToCheck.X)
-                || Y.GreaterEqual(pointToCheck.Y) && nextY.LowerEqual(pointToCheck.Y);
+            bool xIsCrossed = (X.LowerEqual(pointToCheck.X) && nextX.GreaterEqual(pointToCheck.X))
+                || (X.GreaterEqual(pointToCheck.X) && nextX.LowerEqual(pointToCheck.X));
+            bool yIsCrossed = (Y.LowerEqual(pointToCheck.Y) && nextY.GreaterEqual(pointToCheck.Y))
+                || (Y.GreaterEqual(pointToCheck.Y) && nextY.LowerEqual(pointToCheck.Y));
+
+            return xIsCrossed && yIsCrossed;
         }
 
         // Computes an horizontal overlap (width).
