@@ -58,13 +58,11 @@ namespace RPG4.Abstraction
         // Checks if the specified point is a valid movement.
         private bool CheckNewPointValidityInContext(Sprite owner, Point nextPt)
         {
-            Sprite ownerCopy = owner.CopyToPosition(nextPt);
-
             // Checks if the new point overlap a structure (or more) of the screen.
-            var overlapStructs = Engine.Default.CurrentScreen.Structures.Where(s => s.Overlap(ownerCopy)).ToList();
+            var overlapStructs = Engine.Default.CurrentScreen.Structures.Where(s => s.Overlap(owner.CopyToPosition(nextPt))).ToList();
             if (overlapStructs.Count > 0)
             {
-                if (overlapStructs.Count > 1 || !ComputeExtraStepToAvoidStructure(owner, ownerCopy, overlapStructs.First()))
+                if (overlapStructs.Count > 1 || !ComputeExtraStepToAvoidStructure(owner, nextPt, overlapStructs.First()))
                 {
                     // There're more than one structure overlaped
                     // or unable to determinate a path.
@@ -82,7 +80,7 @@ namespace RPG4.Abstraction
             }
             // The owner is an enemy and has the player in his line of sight
             else if (owner.GetType() == typeof(Enemy)
-                && ownerCopy.Overlap(Engine.Default.Player.ResizeToRatio(Constants.PLAYER_SIZE_RATIO_TO_TRIGGER_ENEMY)))
+                && owner.CopyToPosition(nextPt).Overlap(Engine.Default.Player.ResizeToRatio(Constants.PLAYER_SIZE_RATIO_TO_TRIGGER_ENEMY)))
             {
                 // Inserts a pursue step.
                 _steps.Insert(_currentStepIndex, PathStep.CreatePursueStep(Engine.Default.Player));
@@ -109,15 +107,14 @@ namespace RPG4.Abstraction
         }
         
         // Computes a (potential) new step to avoid a structure.
-        private bool ComputeExtraStepToAvoidStructure(Sprite owner, Sprite ownerCopy, Sprite overlapStruct)
+        private bool ComputeExtraStepToAvoidStructure(Sprite owner, Point newPosition, Sprite overlapStruct)
         {
             // Ensure a direction to get around.
             _counterClockGetAround = _counterClockGetAround ?? Tools.GetRandomNumber(0, 2) == 0;
 
             // Gets the direction the sprite comes from, relative to the structure.
-            // As we already know there's an overlap, "Value" can't be Null.
-            // The direction can't be a corner ("top_left", "bottom_right", etc...).
-            Directions dir = overlapStruct.OverlapDirection(ownerCopy, owner, _counterClockGetAround.Value).Value;
+            Directions generalDirection = overlapStruct.DirectionSourceOfOverlap(owner, newPosition).Value;
+            AdjustOverlapDirectionFromGetAroundDirection(ref generalDirection);
 
             Point tmpPt = new Point();
 
@@ -126,67 +123,25 @@ namespace RPG4.Abstraction
             int attemps = 0;
             while (!validPath && attemps < 2)
             {
-                switch (dir)
+                switch (generalDirection)
                 {
                     case Directions.top:
-                        if (_counterClockGetAround.Value)
-                        {
-                            tmpPt.X = overlapStruct.X - owner.Width;
-                            tmpPt.Y = overlapStruct.Y - owner.Height;
-                        }
-                        else
-                        {
-                            tmpPt.X = overlapStruct.BottomRightX;
-                            tmpPt.Y = overlapStruct.Y - owner.Height;
-                        }
+                        tmpPt.X = _counterClockGetAround.Value ? overlapStruct.X - owner.Width : overlapStruct.BottomRightX;
+                        tmpPt.Y = overlapStruct.Y - owner.Height;
                         break;
                     case Directions.bottom:
-                        if (_counterClockGetAround.Value)
-                        {
-                            tmpPt.X = overlapStruct.BottomRightX;
-                            tmpPt.Y = overlapStruct.BottomRightY;
-                        }
-                        else
-                        {
-                            tmpPt.X = overlapStruct.X - owner.Width;
-                            tmpPt.Y = overlapStruct.BottomRightY;
-                        }
+                        tmpPt.X = _counterClockGetAround.Value ? overlapStruct.BottomRightX : overlapStruct.X - owner.Width;
+                        tmpPt.Y = overlapStruct.BottomRightY;
                         break;
                     case Directions.left:
-                        if (_counterClockGetAround.Value)
-                        {
-                            tmpPt.X = overlapStruct.X - owner.Width;
-                            tmpPt.Y = overlapStruct.BottomRightY;
-                        }
-                        else
-                        {
-                            tmpPt.X = overlapStruct.X - owner.Width;
-                            tmpPt.Y = overlapStruct.Y - owner.Height;
-                        }
+                        tmpPt.X = overlapStruct.X - owner.Width;
+                        tmpPt.Y = _counterClockGetAround.Value ? overlapStruct.BottomRightY : overlapStruct.Y - owner.Height;
                         break;
                     case Directions.right:
-                        if (_counterClockGetAround.Value)
-                        {
-                            tmpPt.X = overlapStruct.BottomRightX;
-                            tmpPt.Y = overlapStruct.Y - owner.Height;
-                        }
-                        else
-                        {
-                            tmpPt.X = overlapStruct.BottomRightX;
-                            tmpPt.Y = overlapStruct.BottomRightY;
-                        }
+                        tmpPt.X = overlapStruct.BottomRightX;
+                        tmpPt.Y = _counterClockGetAround.Value ? overlapStruct.Y - owner.Height : overlapStruct.BottomRightY;
                         break;
                 }
-                /*if (dir == Directions.bottom || dir == Directions.top)
-                {
-                    tmpPt.X = _counterClockGetAround.Value ? overlapStruct.BottomRightX : overlapStruct.X - owner.Width;
-                    tmpPt.Y = dir == Directions.bottom ? overlapStruct.BottomRightY : overlapStruct.Y - owner.Height;
-                }
-                else
-                {
-                    tmpPt.Y = _counterClockGetAround.Value ? overlapStruct.BottomRightY : overlapStruct.Y - owner.Height;
-                    tmpPt.X = dir == Directions.left ? overlapStruct.X - owner.Width : overlapStruct.BottomRightX;
-                }*/
 
                 // The owner, at the path coordinates, should not cross the screen borders.
                 validPath = Engine.Default.CurrentScreen.IsInside(owner.CopyToPosition(tmpPt));
@@ -208,13 +163,38 @@ namespace RPG4.Abstraction
             return validPath;
         }
 
+        // Force a straightforward direction, depending on "_counterClockGetAround",  when the direction is a corner.
+        private void AdjustOverlapDirectionFromGetAroundDirection(ref Directions direction)
+        {
+            if (!_counterClockGetAround.HasValue)
+            {
+                return;
+            }
+
+            switch (direction)
+            {
+                case Directions.bottom_left:
+                    direction = _counterClockGetAround.Value ? Directions.bottom : Directions.left;
+                    break;
+                case Directions.bottom_right:
+                    direction = _counterClockGetAround.Value ? Directions.right : Directions.bottom;
+                    break;
+                case Directions.top_left:
+                    direction = _counterClockGetAround.Value ? Directions.left : Directions.top;
+                    break;
+                case Directions.top_right:
+                    direction = _counterClockGetAround.Value ? Directions.top : Directions.right;
+                    break;
+            }
+        }
+
         // Gets the next step index.
         private int GetNextStepIndex()
         {
             return _currentStepIndex + 1 == _steps.Count ? 0 : _currentStepIndex + 1;
         }
 
-        // Gets the next step index.
+        // Gets the previous step index.
         private int GetPreviousStepIndex()
         {
             return _currentStepIndex - 1 < 0 ? _steps.Count - 1 : _currentStepIndex - 1;

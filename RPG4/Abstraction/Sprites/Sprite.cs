@@ -149,52 +149,34 @@ namespace RPG4.Abstraction.Sprites
         }
 
         /// <summary>
-        /// Indicates the <see cref="Directions"/> of an overlap between this instance and another one. The direction is relative to the second one.
+        /// Computes, when a sprite in motion overlap the current instance, from which direction its comes from.
         /// </summary>
-        /// <param name="positionToCheck">Second <see cref="Sprite"/> current position.</param>
-        /// <param name="previousPosition">Second <see cref="Sprite"/> previous position.</param>
-        /// <param name="counterClockGetAround">Indicates a preference to a counterclock get around.</param>
-        /// <returns>Overlap <see cref="Directions"/>; <c>Null</c> if no overlap.</returns>
-        public Directions? OverlapDirection(Sprite positionToCheck, Sprite previousPosition, bool counterClockGetAround)
+        /// <param name="spriteInMotion"><see cref="Sprite"/> in motion.</param>
+        /// <param name="positionToCheck">Position to check.</param>
+        /// <returns><see cref="Directions"/> <paramref name="spriteInMotion"/> come before its overlaps; <c>Null</c> if no overlap.</returns>
+        public Directions? DirectionSourceOfOverlap(Sprite spriteInMotion, Point positionToCheck)
         {
-            double newOverlapX = ComputeHorizontalOverlap(positionToCheck);
-            double newOverlapY = ComputeVerticalOverlap(positionToCheck);
-            double oldOverlapX = ComputeHorizontalOverlap(previousPosition);
-            double oldOverlapY = ComputeVerticalOverlap(previousPosition);
+            Sprite spriteInPosition = spriteInMotion.CopyToPosition(positionToCheck);
+
+            double newOverlapX = ComputeHorizontalOverlap(spriteInPosition);
+            double newOverlapY = ComputeVerticalOverlap(spriteInPosition);
+            double oldOverlapX = ComputeHorizontalOverlap(spriteInMotion);
+            double oldOverlapY = ComputeVerticalOverlap(spriteInMotion);
 
             if ((newOverlapX * newOverlapY).Equal(0))
             {
                 return null;
             }
 
-            bool fromLeft = previousPosition.X.Lower(positionToCheck.X);
-            bool fromTop = previousPosition.Y.Lower(positionToCheck.Y);
+            bool fromLeft = spriteInMotion.X.Lower(positionToCheck.X);
+            bool fromTop = spriteInMotion.Y.Lower(positionToCheck.Y);
 
             if (oldOverlapY.Equal(0) && oldOverlapX.Equal(0))
             {
                 // in diagonal exactly right on a corner.
-                if (fromLeft)
-                {
-                    if (fromTop)
-                    {
-                        return counterClockGetAround ? Directions.left : Directions.top;
-                    }
-                    else
-                    {
-                        return counterClockGetAround ? Directions.bottom : Directions.left;
-                    }
-                }
-                else
-                {
-                    if (fromTop)
-                    {
-                        return counterClockGetAround ? Directions.top : Directions.right;
-                    }
-                    else
-                    {
-                        return counterClockGetAround ? Directions.right : Directions.bottom;
-                    }
-                }
+                return fromLeft ?
+                    (fromTop ? Directions.top_left : Directions.bottom_left)
+                    : (fromTop ? Directions.top_right : Directions.bottom_right);
             }
             else if (oldOverlapY.Equal(0))
             {
