@@ -1,4 +1,4 @@
-﻿namespace RPG4.Abstraction
+﻿namespace RPG4.Models
 {
     /// <summary>
     /// Enumeration of directions through screens

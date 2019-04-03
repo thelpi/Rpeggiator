@@ -1,6 +1,6 @@
 ﻿using System.Windows.Media;
 
-namespace RPG4.Abstraction.Graphic
+namespace RPG4.Models.Graphic
 {
     /// <summary>
     /// Interface for <see cref="Sprites.Sprite"/> graphic rendering.

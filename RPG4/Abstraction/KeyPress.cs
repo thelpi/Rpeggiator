@@ -1,4 +1,4 @@
-﻿namespace RPG4.Abstraction
+﻿namespace RPG4.Models
 {
     /// <summary>
     /// Represents the keayboard input for a frame inside the <see cref="Engine"/>

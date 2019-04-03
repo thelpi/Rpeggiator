@@ -3,7 +3,7 @@ using System.Windows;
 using System.Linq;
 using System;
 
-namespace RPG4.Abstraction.Sprites
+namespace RPG4.Models.Sprites
 {
     /// <summary>
     /// Represents an enemy.

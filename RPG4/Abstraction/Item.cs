@@ -1,7 +1,7 @@
-﻿using RPG4.Abstraction.Graphic;
+﻿using RPG4.Models.Graphic;
 using System.Collections.Generic;
 
-namespace RPG4.Abstraction
+namespace RPG4.Models
 {
     /// <summary>
     /// Represents an item.

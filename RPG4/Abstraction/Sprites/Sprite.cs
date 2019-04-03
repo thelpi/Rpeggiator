@@ -1,7 +1,7 @@
-﻿using RPG4.Abstraction.Graphic;
+﻿using RPG4.Models.Graphic;
 using System.Windows;
 
-namespace RPG4.Abstraction.Sprites
+namespace RPG4.Models.Sprites
 {
     /// <summary>
     /// Represents a two-dimensional point (i.e. a rectangle) which evolves in time.

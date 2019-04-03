@@ -1,7 +1,7 @@
-﻿using RPG4.Abstraction.Graphic;
+﻿using RPG4.Models.Graphic;
 using System;
 
-namespace RPG4.Abstraction.Sprites
+namespace RPG4.Models.Sprites
 {
     /// <summary>
     /// Represents a <see cref="Item"/>, or coins, when pickable on the floor.

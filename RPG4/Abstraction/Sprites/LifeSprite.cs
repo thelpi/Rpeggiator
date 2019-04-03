@@ -1,6 +1,6 @@
 ﻿using System.Linq;
 
-namespace RPG4.Abstraction.Sprites
+namespace RPG4.Models.Sprites
 {
     /// <summary>
     /// Represents a <see cref="Sprite"/> with a life status.

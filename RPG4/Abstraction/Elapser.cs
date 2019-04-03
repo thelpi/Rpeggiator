@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace RPG4.Abstraction
+namespace RPG4.Models
 {
     /// <summary>
     /// Lifetime event manager.

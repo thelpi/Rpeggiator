@@ -1,4 +1,4 @@
-﻿namespace RPG4.Abstraction
+﻿namespace RPG4.Models
 {
     /// <summary>
     /// Ths interface indicates a <see cref="Sprites.Sprite"/> can be damages by <see cref="Sprites.ActionnedBomb"/>.

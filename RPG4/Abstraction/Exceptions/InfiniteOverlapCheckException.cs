@@ -1,9 +1,9 @@
-﻿using RPG4.Abstraction.Sprites;
+﻿using RPG4.Models.Sprites;
 using System;
 using System.Collections.Generic;
 using System.Windows;
 
-namespace RPG4.Abstraction.Exceptions
+namespace RPG4.Models.Exceptions
 {
     /// <summary>
     /// Exception thrown when the detection of overlaps for a <see cref="Sprite"/> is stuck in an infinite loop.

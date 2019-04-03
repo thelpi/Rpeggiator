@@ -1,4 +1,4 @@
-﻿namespace RPG4.Abstraction.Sprites
+﻿namespace RPG4.Models.Sprites
 {
     /// <summary>
     /// Represents a structure which can be destroyed by a <see cref="ActionnedBomb"/>.

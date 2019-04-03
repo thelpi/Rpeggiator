@@ -1,5 +1,5 @@
-﻿using RPG4.Abstraction;
-using RPG4.Abstraction.Sprites;
+﻿using RPG4.Models;
+using RPG4.Models.Sprites;
 using System;
 using System.ComponentModel;
 using System.Diagnostics;
@@ -11,7 +11,7 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Shapes;
 
-namespace RPG4
+namespace RPG4.Visuals
 {
     /// <summary>
     /// Delegate to pass the pressed keys of the keayboard to the engine.

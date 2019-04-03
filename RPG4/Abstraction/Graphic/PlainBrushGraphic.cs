@@ -1,6 +1,6 @@
 ﻿using System.Windows.Media;
 
-namespace RPG4.Abstraction.Graphic
+namespace RPG4.Models.Graphic
 {
     /// <summary>
     /// Represents a plain color as a way to render a <see cref="Sprites.Sprite"/>.

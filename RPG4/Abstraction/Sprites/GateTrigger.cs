@@ -1,4 +1,4 @@
-﻿namespace RPG4.Abstraction.Sprites
+﻿namespace RPG4.Models.Sprites
 {
     /// <summary>
     /// Represents a <see cref="FloorTrigger"/> which make appears or disappear <see cref="Gate"/>.

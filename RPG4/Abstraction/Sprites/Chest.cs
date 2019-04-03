@@ -1,7 +1,7 @@
-﻿using RPG4.Abstraction.Graphic;
+﻿using RPG4.Models.Graphic;
 using System.Linq;
 
-namespace RPG4.Abstraction.Sprites
+namespace RPG4.Models.Sprites
 {
     /// <summary>
     /// Represents a chest.

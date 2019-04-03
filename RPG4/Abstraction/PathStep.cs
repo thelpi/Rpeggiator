@@ -1,7 +1,7 @@
-﻿using RPG4.Abstraction.Sprites;
+﻿using RPG4.Models.Sprites;
 using System.Windows;
 
-namespace RPG4.Abstraction
+namespace RPG4.Models
 {
     /// <summary>
     /// Represents a <see cref="Path"/> step.

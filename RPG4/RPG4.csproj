@@ -104,7 +104,7 @@
     <Compile Include="Abstraction\Sprites\Rift.cs" />
     <Compile Include="Abstraction\Sprites\Sprite.cs" />
     <Compile Include="Abstraction\Sprites\Gate.cs" />
-    <Compile Include="InitialPlayerStatus.cs" />
+    <Compile Include="Tools\InitialPlayerStatus.cs" />
     <Compile Include="Messages.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -115,8 +115,8 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
-    <Compile Include="Tools.cs" />
-    <Page Include="MainWindow.xaml">
+    <Compile Include="Tools\Tools.cs" />
+    <Page Include="Visuals\MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
@@ -125,8 +125,8 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Abstraction\KeyPress.cs" />
-    <Compile Include="Constants.cs" />
-    <Compile Include="MainWindow.xaml.cs">
+    <Compile Include="Tools\Constants.cs" />
+    <Compile Include="Visuals\MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>

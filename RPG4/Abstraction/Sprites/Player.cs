@@ -1,11 +1,11 @@
-﻿using RPG4.Abstraction.Exceptions;
-using RPG4.Abstraction.Graphic;
+﻿using RPG4.Models.Exceptions;
+using RPG4.Models.Graphic;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Windows;
 
-namespace RPG4.Abstraction.Sprites
+namespace RPG4.Models.Sprites
 {
     /// <summary>
     /// Represents the player.

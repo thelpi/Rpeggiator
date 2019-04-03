@@ -1,5 +1,5 @@
-﻿using RPG4.Abstraction;
-using RPG4.Abstraction.Graphic;
+﻿using RPG4.Models;
+using RPG4.Models.Graphic;
 using System.Collections.Generic;
 
 namespace RPG4

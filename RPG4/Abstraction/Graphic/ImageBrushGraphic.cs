@@ -3,7 +3,7 @@ using System.IO;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 
-namespace RPG4.Abstraction.Graphic
+namespace RPG4.Models.Graphic
 {
     /// <summary>
     /// Represents an image brush as a way to render a <see cref="Sprites.Sprite"/>.

@@ -1,6 +1,6 @@
-﻿using RPG4.Abstraction.Graphic;
+﻿using RPG4.Models.Graphic;
 
-namespace RPG4.Abstraction.Sprites
+namespace RPG4.Models.Sprites
 {
     /// <summary>
     /// Represents a trigger which can be activated by walking on it.

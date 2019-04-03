@@ -1,8 +1,8 @@
-﻿using RPG4.Abstraction.Sprites;
+﻿using RPG4.Models.Sprites;
 using System;
 using System.Linq;
 
-namespace RPG4.Abstraction
+namespace RPG4.Models
 {
     /// <summary>
     /// Game engine.

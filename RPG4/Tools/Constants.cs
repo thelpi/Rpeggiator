@@ -48,7 +48,7 @@ namespace RPG4
         /// </summary>
         public const int NIGHT_DUSK_HOUR = 20;
         /// <summary>
-        /// Size ratio, compared to <see cref="Abstraction.Engine.Player"/>, which triggers pursue by enemies.
+        /// Size ratio, compared to <see cref="Models.Engine.Player"/>, which triggers pursue by enemies.
         /// </summary>
         public const double PLAYER_SIZE_RATIO_TO_TRIGGER_ENEMY = 3;
         /// <summary>
