@@ -109,14 +109,14 @@ namespace RPG4.Abstraction.Sprites
         {
             double surfaceCovered = ComputeHorizontalOverlap(other) * ComputeVerticalOverlap(other);
 
-            if (overlapMinimalRatio == 0)
+            if (overlapMinimalRatio.Equal(0))
             {
-                return surfaceCovered > 0;
+                return surfaceCovered.Greater(0);
             }
 
             double surfaceExpectedCovered = overlapMinimalRatio * other.Surface;
 
-            return surfaceCovered >= surfaceExpectedCovered;
+            return surfaceCovered.GreaterEqual(surfaceExpectedCovered);
         }
 
         /// <summary>
@@ -140,8 +140,8 @@ namespace RPG4.Abstraction.Sprites
             if (Overlap(currentPt))
             {
                 return new Point(
-                    goLeft.HasValue && ComputeHorizontalOverlap(originalPt) == 0 ? (goLeft == true ? BottomRightX : (X - originalPt.Width)) : currentPt.X,
-                    goUp.HasValue && ComputeVerticalOverlap(originalPt) == 0 ? (goUp == true ? BottomRightY : (Y - originalPt.Height)) : currentPt.Y
+                    goLeft.HasValue && ComputeHorizontalOverlap(originalPt).Equal(0) ? (goLeft == true ? BottomRightX : (X - originalPt.Width)) : currentPt.X,
+                    goUp.HasValue && ComputeVerticalOverlap(originalPt).Equal(0) ? (goUp == true ? BottomRightY : (Y - originalPt.Height)) : currentPt.Y
                 );
             }
 
@@ -153,46 +153,60 @@ namespace RPG4.Abstraction.Sprites
         /// </summary>
         /// <param name="positionToCheck">Second <see cref="Sprite"/> current position.</param>
         /// <param name="previousPosition">Second <see cref="Sprite"/> previous position.</param>
+        /// <param name="counterClockGetAround">Indicates a preference to a counterclock get around.</param>
         /// <returns>Overlap <see cref="Directions"/>; <c>Null</c> if no overlap.</returns>
-        public Directions? OverlapDirection(Sprite positionToCheck, Sprite previousPosition)
+        public Directions? OverlapDirection(Sprite positionToCheck, Sprite previousPosition, bool counterClockGetAround)
         {
             double newOverlapX = ComputeHorizontalOverlap(positionToCheck);
             double newOverlapY = ComputeVerticalOverlap(positionToCheck);
             double oldOverlapX = ComputeHorizontalOverlap(previousPosition);
             double oldOverlapY = ComputeVerticalOverlap(previousPosition);
 
-            if (newOverlapX * newOverlapY == 0)
+            if ((newOverlapX * newOverlapY).Equal(0))
             {
                 return null;
             }
 
-            bool fromLeft = previousPosition.X < positionToCheck.X;
-            bool fromTop = previousPosition.Y < positionToCheck.Y;
+            bool fromLeft = previousPosition.X.Lower(positionToCheck.X);
+            bool fromTop = previousPosition.Y.Lower(positionToCheck.Y);
 
-            if (oldOverlapY == 0)
+            if (oldOverlapY.Equal(0) && oldOverlapX.Equal(0))
+            {
+                // in diagonal exactly right on a corner.
+                if (fromLeft)
+                {
+                    if (fromTop)
+                    {
+                        return counterClockGetAround ? Directions.left : Directions.top;
+                    }
+                    else
+                    {
+                        return counterClockGetAround ? Directions.bottom : Directions.left;
+                    }
+                }
+                else
+                {
+                    if (fromTop)
+                    {
+                        return counterClockGetAround ? Directions.top : Directions.right;
+                    }
+                    else
+                    {
+                        return counterClockGetAround ? Directions.right : Directions.bottom;
+                    }
+                }
+            }
+            else if (oldOverlapY.Equal(0))
             {
                 // Y move only.
                 return fromTop ? Directions.top : Directions.bottom;
             }
-            else if (oldOverlapX == 0)
+            else if (oldOverlapX.Equal(0))
             {
                 // X move only.
                 return fromLeft ? Directions.left : Directions.right;
             }
-            // Case not treated : in diagonal exactly right on a corner.
-            /*else if (newOverlapX == newOverlapY)
-            {
-                
-                if (fromLeft)
-                {
-                    return fromTop ? Directions.top_left : Directions.bottom_left;
-                }
-                else
-                {
-                    return fromTop ? Directions.top_right : Directions.bottom_right;
-                }
-            }*/
-            else if (newOverlapX > newOverlapY)
+            else if (newOverlapX.Greater(newOverlapY))
             {
                 // X move prior to Y move.
                 return fromLeft ? Directions.left : Directions.right;
@@ -225,7 +239,26 @@ namespace RPG4.Abstraction.Sprites
         /// <returns><c>True</c> if is inside; <c>False</c> otherwise.</returns>
         public bool IsInside(Sprite other)
         {
-            return other.X >= X && other.BottomRightX < BottomRightX && other.Y >= Y && other.BottomRightY < BottomRightY;
+            return other.X.GreaterEqual(X)
+                && other.BottomRightX.LowerEqual(BottomRightX)
+                && other.Y.GreaterEqual(Y)
+                && other.BottomRightY.LowerEqual(BottomRightY);
+        }
+
+        /// <summary>
+        /// Checks if a <see cref="Point"/> is crossed by this instance while moving to a new point.
+        /// </summary>
+        /// <remarks>If exactly on the point, it's considered as crossed.</remarks>
+        /// <param name="pointToCheck">The <see cref="Point"/> to check.</param>
+        /// <param name="nextX">New point X-axis.</param>
+        /// <param name="nextY">New point Y-axis.</param>
+        /// <returns><c>True</c> if <paramref name="pointToCheck"/> is crossed; <c>False</c> otherwise.</returns>
+        public bool CheckPointIsCrossed(Point pointToCheck, double nextX, double nextY)
+        {
+            return X.LowerEqual(pointToCheck.X) && nextX.GreaterEqual(pointToCheck.X)
+                || Y.LowerEqual(pointToCheck.Y) && nextY.GreaterEqual(pointToCheck.Y)
+                || X.GreaterEqual(pointToCheck.X) && nextX.LowerEqual(pointToCheck.X)
+                || Y.GreaterEqual(pointToCheck.Y) && nextY.LowerEqual(pointToCheck.Y);
         }
 
         // Computes an horizontal overlap (width).
@@ -243,19 +276,19 @@ namespace RPG4.Abstraction.Sprites
         // Computes a one-dimensional overlap (width / height).
         private double ComputeOneDimensionOverlap(double i1Start, double i1End, double i2Start, double i2End)
         {
-            if (i1Start <= i2Start && i1End >= i2End)
+            if (i1Start.LowerEqual(i2Start) && i1End.GreaterEqual(i2End))
             {
                 return i2End - i2Start;
             }
-            else if (i2Start <= i1Start && i2End >= i1End)
+            else if (i2Start.LowerEqual(i1Start) && i2End.GreaterEqual(i1End))
             {
                 return i1End - i1Start;
             }
-            else if (i1Start <= i2Start && i2Start <= i1End)
+            else if (i1Start.LowerEqual(i2Start) && i2Start.LowerEqual(i1End))
             {
                 return i1End - i2Start;
             }
-            else if (i1Start <= i2End && i1End >= i2End)
+            else if (i1Start.LowerEqual(i2End) && i1End.GreaterEqual(i2End))
             {
                 return i2End - i1Start;
             }

@@ -51,5 +51,9 @@ namespace RPG4
         /// Size ratio, compared to <see cref="Abstraction.Engine.Player"/>, which triggers pursue by enemies.
         /// </summary>
         public const double PLAYER_SIZE_RATIO_TO_TRIGGER_ENEMY = 3;
+        /// <summary>
+        /// Maximal gap to consider two <see cref="double"/> as equal.
+        /// </summary>
+        public const double TYPE_DOUBLE_COMPARISON_TOLERANCE = 0.00001;
     }
 }

@@ -18,7 +18,7 @@ namespace RPG4.Abstraction
         {
             get
             {
-                return (DateTime.Now - _timestamp).TotalMilliseconds >= _lifetime;
+                return (DateTime.Now - _timestamp).TotalMilliseconds.GreaterEqual(_lifetime);
             }
         }
 

@@ -95,7 +95,7 @@ namespace RPG4.Abstraction.Sprites
             Point newPosition = ComputeTheoreticalMove();
 
             // If any movement.
-            if (newPosition.X != X || newPosition.Y != Y)
+            if (!newPosition.X.Equal(X) || !newPosition.Y.Equal(Y))
             {
                 CheckPotentialOverlapAndAdjustPosition(ref newPosition);
 
@@ -190,7 +190,7 @@ namespace RPG4.Abstraction.Sprites
                 // checks hits by enemies or bombs
                 var cumuledLifePoints = Engine.Default.CheckHitByEnemiesOnPlayer() + Engine.Default.CurrentScreen.OverlapAnExplodingBomb(this);
 
-                if (cumuledLifePoints > 0)
+                if (cumuledLifePoints.Greater(0))
                 {
                     Hit(cumuledLifePoints);
                     _recoveryManager = new Elapser(InitialPlayerStatus.RECOVERY_TIME);
@@ -305,7 +305,7 @@ namespace RPG4.Abstraction.Sprites
                         Engine.Default.KeyPress.PressLeft ? true : (Engine.Default.KeyPress.PressRight ? false : (bool?)null),
                         Engine.Default.KeyPress.PressUp ? true : (Engine.Default.KeyPress.PressDown ? false : (bool?)null));
 
-                    if (pToMove.X >= 0 || pToMove.Y >= 0)
+                    if (pToMove.X.GreaterEqual(0) || pToMove.Y.GreaterEqual(0))
                     {
                         forbiddens.Add(new Point(currentPt.X, currentPt.Y));
                         newPosition.X = pToMove.X;
@@ -329,10 +329,10 @@ namespace RPG4.Abstraction.Sprites
         /// <returns><c>True</c> if enters a new screen; <c>False</c> otherwise.</returns>
         private bool CheckNewScreenEntrance(ref Point newPosition, double areaWidth, double areaHeight)
         {
-            bool goLeft = newPosition.X < 0;
-            bool goUp = newPosition.Y < 0;
-            bool goRight = newPosition.X + Width > areaWidth;
-            bool goDown = newPosition.Y + Height > areaHeight;
+            bool goLeft = newPosition.X.Lower(0);
+            bool goUp = newPosition.Y.Lower(0);
+            bool goRight = (newPosition.X + Width).Greater(areaWidth);
+            bool goDown = (newPosition.Y + Height).Greater(areaHeight);
 
             if (!goLeft && !goUp && !goRight && !goDown)
             {
@@ -399,13 +399,13 @@ namespace RPG4.Abstraction.Sprites
             {
                 LastDirection = NewScreenEntrance.Value;
             }
-            else if (newPosition.X < X)
+            else if (newPosition.X.Lower(X))
             {
-                if (newPosition.Y > Y)
+                if (newPosition.Y.Greater(Y))
                 {
                     LastDirection = Directions.bottom_left;
                 }
-                else if (newPosition.Y < Y)
+                else if (newPosition.Y.Lower(Y))
                 {
                     LastDirection = Directions.top_left;
                 }
@@ -414,13 +414,13 @@ namespace RPG4.Abstraction.Sprites
                     LastDirection = Directions.left;
                 }
             }
-            else if (newPosition.X > X)
+            else if (newPosition.X.Greater(X))
             {
-                if (newPosition.Y > Y)
+                if (newPosition.Y.Greater(Y))
                 {
                     LastDirection = Directions.bottom_right;
                 }
-                else if (newPosition.Y < Y)
+                else if (newPosition.Y.Lower(Y))
                 {
                     LastDirection = Directions.top_right;
                 }
@@ -431,11 +431,11 @@ namespace RPG4.Abstraction.Sprites
             }
             else
             {
-                if (newPosition.Y > Y)
+                if (newPosition.Y.Greater(Y))
                 {
                     LastDirection = Directions.bottom;
                 }
-                else if (newPosition.Y < Y)
+                else if (newPosition.Y.Lower(Y))
                 {
                     LastDirection = Directions.top;
                 }

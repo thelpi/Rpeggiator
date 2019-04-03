@@ -210,7 +210,7 @@ namespace RPG4.Abstraction.Sprites
                 }
                 return death;
             });
-            _rifts.RemoveAll(r => r.LifePoints <= 0);
+            _rifts.RemoveAll(r => r.LifePoints.LowerEqual(0));
             _actionnedItems.RemoveAll(di => di.IsDone || Structures.Any(cw => cw.Overlap(di)));
             _pickableItems.RemoveAll(pi => pi.Disapear);
         }

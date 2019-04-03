@@ -6,7 +6,7 @@ namespace RPG4.Abstraction
     /// <summary>
     /// Represents a <see cref="Path"/> step.
     /// </summary>
-    public struct PathStep
+    public class PathStep
     {
         /// <summary>
         /// <see cref="System.Windows.Point"/>

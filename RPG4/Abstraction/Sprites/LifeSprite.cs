@@ -71,8 +71,8 @@ namespace RPG4.Abstraction.Sprites
             {
                 CurrentLifePoints = 0;
             }
-            
-            return CurrentLifePoints <= 0;
+
+            return CurrentLifePoints.LowerEqual(0);
         }
 
         /// <summary>
@@ -81,10 +81,10 @@ namespace RPG4.Abstraction.Sprites
         /// <param name="lifePoints">Life points gained count.</param>
         protected void RegenerateLifePoints(double lifePoints)
         {
-            if (lifePoints > 0)
+            if (lifePoints.Greater(0))
             {
                 CurrentLifePoints += lifePoints;
-                CurrentLifePoints = CurrentLifePoints > MaximalLifePoints ? MaximalLifePoints : CurrentLifePoints;
+                CurrentLifePoints = CurrentLifePoints.Greater(MaximalLifePoints) ? MaximalLifePoints : CurrentLifePoints;
             }
         }
     }

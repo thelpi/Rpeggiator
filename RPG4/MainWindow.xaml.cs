@@ -96,7 +96,7 @@ namespace RPG4
                     }
                     stopWatch.Stop();
                     double stayToElapse = Constants.MIN_DELAY_BETWEEN_FRAMES - stopWatch.Elapsed.TotalMilliseconds;
-                    if (stayToElapse > 0)
+                    if (stayToElapse.Greater(0))
                     {
                         Thread.Sleep((int)stayToElapse);
                     }
@@ -297,29 +297,29 @@ namespace RPG4
 
             // after dawn, before dusk
             double dayTimeDarknessOpacity;
-            if (currentHour >= Constants.NIGHT_DAWN_HOUR && currentHour < Constants.NIGHT_DUSK_HOUR)
+            if (currentHour.GreaterEqual(Constants.NIGHT_DAWN_HOUR) && currentHour.Lower(Constants.NIGHT_DUSK_HOUR))
             {
                 dayTimeDarknessOpacity = 0;
             }
             // in the darkness peak
-            else if (currentHour >= Constants.NIGHT_PEAK_HOUR_BEGIN || currentHour < Constants.NIGHT_PEAK_HOUR_END)
+            else if (currentHour.GreaterEqual(Constants.NIGHT_PEAK_HOUR_BEGIN) || currentHour.Lower(Constants.NIGHT_PEAK_HOUR_END))
             {
                 dayTimeDarknessOpacity = Constants.NIGHT_DARKNESS_OPACITY;
             }
             // between dusk and darkness peak
-            else if (currentHour >= Constants.NIGHT_DUSK_HOUR && currentHour < Constants.NIGHT_PEAK_HOUR_BEGIN)
+            else if (currentHour.GreaterEqual(Constants.NIGHT_DUSK_HOUR) && currentHour.Lower(Constants.NIGHT_PEAK_HOUR_BEGIN))
             {
-                double nightProgressionRatio = (currentHour - Constants.NIGHT_DUSK_HOUR) / (double)(Constants.NIGHT_PEAK_HOUR_BEGIN - Constants.NIGHT_DUSK_HOUR);
+                double nightProgressionRatio = (currentHour - Constants.NIGHT_DUSK_HOUR) / (Constants.NIGHT_PEAK_HOUR_BEGIN - Constants.NIGHT_DUSK_HOUR);
                 dayTimeDarknessOpacity = Constants.NIGHT_DARKNESS_OPACITY * nightProgressionRatio;
             }
             // between darkness peak and dawn
             else
             {
-                double nightProgressionRatio = 1 - ((currentHour - Constants.NIGHT_PEAK_HOUR_END) / (double)(Constants.NIGHT_DAWN_HOUR - Constants.NIGHT_PEAK_HOUR_END));
+                double nightProgressionRatio = 1 - ((currentHour - Constants.NIGHT_PEAK_HOUR_END) / (Constants.NIGHT_DAWN_HOUR - Constants.NIGHT_PEAK_HOUR_END));
                 dayTimeDarknessOpacity = Constants.NIGHT_DARKNESS_OPACITY * nightProgressionRatio;
             }
 
-            rctDarkness.Opacity = darknessOpacity > dayTimeDarknessOpacity ? darknessOpacity : dayTimeDarknessOpacity;
+            rctDarkness.Opacity = darknessOpacity.Greater(dayTimeDarknessOpacity) ? darknessOpacity : dayTimeDarknessOpacity;
 
             if (Engine.Default.Player.Inventory.LampIsOn)
             {

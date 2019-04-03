@@ -37,7 +37,7 @@
         /// <returns><c>True</c> if <paramref name="other"/> falls in; <c>False</c> otherwise.</returns>
         public bool CanFallIn(Sprite other)
         {
-            return Width >= other.Width && Height >= other.Height && Overlap(other, FALL_IN_OVERLAP_RATIO);
+            return Width.GreaterEqual(other.Width) && Height.GreaterEqual(other.Height) && Overlap(other, FALL_IN_OVERLAP_RATIO);
         }
     }
 }

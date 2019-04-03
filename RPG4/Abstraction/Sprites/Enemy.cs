@@ -84,7 +84,7 @@ namespace RPG4.Abstraction.Sprites
 
             // hit by a bomb ?
             double lifePointCostByBomb = Engine.Default.CurrentScreen.OverlapAnExplodingBomb(this);
-            if (lifePointCostByBomb > 0)
+            if (lifePointCostByBomb.Greater(0))
             {
                 Hit(lifePointCostByBomb);
                 hasBeenHit = true;

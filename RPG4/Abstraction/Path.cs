@@ -32,9 +32,6 @@ namespace RPG4.Abstraction
         /// <returns><see cref="Point"/></returns>
         public Point ComputeNextPosition(Sprite owner, double distance)
         {
-            // DEBUG
-            //distance = 1.3;
-
             // Gets the theoretical point. 
             Point newPoint = Tools.GetPointOnLine(owner.TopLeftCorner, _steps[_currentStepIndex].Point, distance, true);
 
@@ -98,19 +95,17 @@ namespace RPG4.Abstraction
         // Cleans every temporary steps, except the current one.
         private void CleanTemporarySteps()
         {
+            PathStep previousStep = _steps[GetPreviousStepIndex()];
             PathStep step = _steps[_currentStepIndex];
             _steps.RemoveAll(ps => !ps.Permanent && !ps.Equals(step));
             _currentStepIndex = _steps.IndexOf(step);
-            _counterClockGetAround = step.Permanent || step.Pursue ? (bool?)null : _counterClockGetAround.Value;
+            _counterClockGetAround = step.Permanent && previousStep.Permanent || step.Pursue ? null : _counterClockGetAround;
         }
 
         // Checks if the current step is reached / crossed.
         private bool CheckCurrentStepIsCrossed(Sprite owner, double nextX, double nextY)
         {
-            return owner.X < _steps[_currentStepIndex].Point.X && nextX >= _steps[_currentStepIndex].Point.X
-                || owner.Y < _steps[_currentStepIndex].Point.Y && nextY >= _steps[_currentStepIndex].Point.Y
-                || owner.X > _steps[_currentStepIndex].Point.X && nextX <= _steps[_currentStepIndex].Point.X
-                || owner.Y > _steps[_currentStepIndex].Point.Y && nextY <= _steps[_currentStepIndex].Point.Y;
+            return owner.CheckPointIsCrossed(_steps[_currentStepIndex].Point, nextX, nextY);
         }
         
         // Computes a (potential) new step to avoid a structure.
@@ -122,7 +117,7 @@ namespace RPG4.Abstraction
             // Gets the direction the sprite comes from, relative to the structure.
             // As we already know there's an overlap, "Value" can't be Null.
             // The direction can't be a corner ("top_left", "bottom_right", etc...).
-            Directions dir = overlapStruct.OverlapDirection(ownerCopy, owner).Value;
+            Directions dir = overlapStruct.OverlapDirection(ownerCopy, owner, _counterClockGetAround.Value).Value;
 
             Point tmpPt = new Point();
 
@@ -131,7 +126,58 @@ namespace RPG4.Abstraction
             int attemps = 0;
             while (!validPath && attemps < 2)
             {
-                if (dir == Directions.bottom || dir == Directions.top)
+                switch (dir)
+                {
+                    case Directions.top:
+                        if (_counterClockGetAround.Value)
+                        {
+                            tmpPt.X = overlapStruct.X - owner.Width;
+                            tmpPt.Y = overlapStruct.Y - owner.Height;
+                        }
+                        else
+                        {
+                            tmpPt.X = overlapStruct.BottomRightX;
+                            tmpPt.Y = overlapStruct.Y - owner.Height;
+                        }
+                        break;
+                    case Directions.bottom:
+                        if (_counterClockGetAround.Value)
+                        {
+                            tmpPt.X = overlapStruct.BottomRightX;
+                            tmpPt.Y = overlapStruct.BottomRightY;
+                        }
+                        else
+                        {
+                            tmpPt.X = overlapStruct.X - owner.Width;
+                            tmpPt.Y = overlapStruct.BottomRightY;
+                        }
+                        break;
+                    case Directions.left:
+                        if (_counterClockGetAround.Value)
+                        {
+                            tmpPt.X = overlapStruct.X - owner.Width;
+                            tmpPt.Y = overlapStruct.BottomRightY;
+                        }
+                        else
+                        {
+                            tmpPt.X = overlapStruct.X - owner.Width;
+                            tmpPt.Y = overlapStruct.Y - owner.Height;
+                        }
+                        break;
+                    case Directions.right:
+                        if (_counterClockGetAround.Value)
+                        {
+                            tmpPt.X = overlapStruct.BottomRightX;
+                            tmpPt.Y = overlapStruct.Y - owner.Height;
+                        }
+                        else
+                        {
+                            tmpPt.X = overlapStruct.BottomRightX;
+                            tmpPt.Y = overlapStruct.BottomRightY;
+                        }
+                        break;
+                }
+                /*if (dir == Directions.bottom || dir == Directions.top)
                 {
                     tmpPt.X = _counterClockGetAround.Value ? overlapStruct.BottomRightX : overlapStruct.X - owner.Width;
                     tmpPt.Y = dir == Directions.bottom ? overlapStruct.BottomRightY : overlapStruct.Y - owner.Height;
@@ -140,7 +186,7 @@ namespace RPG4.Abstraction
                 {
                     tmpPt.Y = _counterClockGetAround.Value ? overlapStruct.BottomRightY : overlapStruct.Y - owner.Height;
                     tmpPt.X = dir == Directions.left ? overlapStruct.X - owner.Width : overlapStruct.BottomRightX;
-                }
+                }*/
 
                 // The owner, at the path coordinates, should not cross the screen borders.
                 validPath = Engine.Default.CurrentScreen.IsInside(owner.CopyToPosition(tmpPt));
@@ -166,6 +212,12 @@ namespace RPG4.Abstraction
         private int GetNextStepIndex()
         {
             return _currentStepIndex + 1 == _steps.Count ? 0 : _currentStepIndex + 1;
+        }
+
+        // Gets the next step index.
+        private int GetPreviousStepIndex()
+        {
+            return _currentStepIndex - 1 < 0 ? _steps.Count - 1 : _currentStepIndex - 1;
         }
     }
 }

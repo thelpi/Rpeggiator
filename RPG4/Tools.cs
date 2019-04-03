@@ -59,7 +59,7 @@ namespace RPG4
         /// <returns>Slope and initial ordinate; <c>Null</c> if both points have the same abscissa.</returns>
         public static Tuple<double, double> GetLinearFunctionFromPoints(Point p1, Point p2)
         {
-            if (p2.X == p1.X)
+            if (p2.X.Equal(p1.X))
             {
                 return null;
             }
@@ -91,7 +91,7 @@ namespace RPG4
                 {
                     d *= -1;
                 }
-                if (shrinkToDestination && Math.Abs(totalDistance) < Math.Abs(d))
+                if (shrinkToDestination && Math.Abs(totalDistance).Lower(Math.Abs(d)))
                 {
                     d = totalDistance;
                 }
@@ -151,11 +151,11 @@ namespace RPG4
 
             if (shrinkToDestination)
             {
-                if ((x > pDest.X && pDest.X > pStart.X) || (x < pDest.X && pDest.X < pStart.X))
+                if ((x.Greater(pDest.X) && pDest.X.Greater(pStart.X)) || (x.Lower(pDest.X) && pDest.X.Lower(pStart.X)))
                 {
                     x = pDest.X;
                 }
-                if ((y > pDest.X && pDest.Y > pStart.Y) || (y < pDest.Y && pDest.Y < pStart.Y))
+                if ((y.Greater(pDest.Y) && pDest.Y.Greater(pStart.Y)) || (y.Lower(pDest.Y) && pDest.Y.Lower(pStart.Y)))
                 {
                     y = pDest.Y;
                 }
@@ -182,6 +182,61 @@ namespace RPG4
         public static double GetRandomNumber()
         {
             return _random.NextDouble();
+        }
+
+        /// <summary>
+        /// Checks equality between two <see cref="double"/> (with the margin of error <see cref="Constants.TYPE_DOUBLE_COMPARISON_TOLERANCE"/>).
+        /// </summary>
+        /// <param name="a">First value.</param>
+        /// <param name="b">Second value.</param>
+        /// <returns><c>True</c> if equals; <c>False</c> otherwise.</returns>
+        public static bool Equal(this double a, double b)
+        {
+            return Math.Abs(a - b) < Constants.TYPE_DOUBLE_COMPARISON_TOLERANCE;
+        }
+
+        /// <summary>
+        /// Checks if a <see cref="double"/> is lower than another (with the margin of error <see cref="Constants.TYPE_DOUBLE_COMPARISON_TOLERANCE"/>).
+        /// </summary>
+        /// <param name="a">First value.</param>
+        /// <param name="b">Second value.</param>
+        /// <returns><c>True</c> if <paramref name="a"/> is lower; <c>False</c> otherwise.</returns>
+        public static bool Lower(this double a, double b)
+        {
+            return a < b && Math.Abs(a - b) >= Constants.TYPE_DOUBLE_COMPARISON_TOLERANCE;
+        }
+
+        /// <summary>
+        /// Checks if a <see cref="double"/> is greater than another (with the margin of error <see cref="Constants.TYPE_DOUBLE_COMPARISON_TOLERANCE"/>).
+        /// </summary>
+        /// <param name="a">First value.</param>
+        /// <param name="b">Second value.</param>
+        /// <returns><c>True</c> if <paramref name="a"/> is greater; <c>False</c> otherwise.</returns>
+        public static bool Greater(this double a, double b)
+        {
+            return a > b && Math.Abs(a - b) >= Constants.TYPE_DOUBLE_COMPARISON_TOLERANCE;
+        }
+
+        /// <summary>
+        /// Checks if a <see cref="double"/> is lower or equals than another (with the margin of error <see cref="Constants.TYPE_DOUBLE_COMPARISON_TOLERANCE"/>).
+        /// </summary>
+        /// <param name="a">First value.</param>
+        /// <param name="b">Second value.</param>
+        /// <returns><c>True</c> if <paramref name="a"/> is lower or equals; <c>False</c> otherwise.</returns>
+        public static bool LowerEqual(this double a, double b)
+        {
+            return a.Equal(b) || a.Lower(b);
+        }
+
+        /// <summary>
+        /// Checks if a <see cref="double"/> is greater or equals than another (with the margin of error <see cref="Constants.TYPE_DOUBLE_COMPARISON_TOLERANCE"/>).
+        /// </summary>
+        /// <param name="a">First value.</param>
+        /// <param name="b">Second value.</param>
+        /// <returns><c>True</c> if <paramref name="a"/> is greater or equals; <c>False</c> otherwise.</returns>
+        public static bool GreaterEqual(this double a, double b)
+        {
+            return a.Equal(b) || a.Greater(b);
         }
     }
 }

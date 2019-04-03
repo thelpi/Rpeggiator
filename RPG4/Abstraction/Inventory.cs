@@ -230,7 +230,7 @@ namespace RPG4.Abstraction
                 case ItemIdEnum.SmallLifePotion:
                 case ItemIdEnum.MediumLifePotion:
                 case ItemIdEnum.LargeLifePotion:
-                    if (Engine.Default.Player.CurrentLifePoints == Engine.Default.Player.MaximalLifePoints)
+                    if (Engine.Default.Player.CurrentLifePoints.Equal(Engine.Default.Player.MaximalLifePoints))
                     {
                         return false;
                     }
