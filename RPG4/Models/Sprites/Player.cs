@@ -114,7 +114,7 @@ namespace RPG4.Models.Sprites
             {
                 foreach (var chest in Engine.Default.CurrentScreen.ClosedChests)
                 {
-                    if (chest.Overlap(ResizeToRatio(InitialPlayerStatus.ACTION_RANGE)))
+                    if (chest.Overlap(ResizeToRatio(InitialPlayerStatus.ACTION_RANGE)) && chest.PlayerIsLookingTo())
                     {
                         chest.TryOpen();
                         break;

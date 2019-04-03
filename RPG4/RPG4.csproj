@@ -74,37 +74,37 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
-    <Compile Include="Abstraction\Elapser.cs" />
-    <Compile Include="Abstraction\Exceptions\InfiniteOverlapCheckException.cs" />
-    <Compile Include="Abstraction\Exceptions\NoQuadraticSolutionException.cs" />
-    <Compile Include="Abstraction\Graphic\ImageBrushGraphic.cs" />
-    <Compile Include="Abstraction\Graphic\PlainBrushGraphic.cs" />
-    <Compile Include="Abstraction\Graphic\SpriteGraphic.cs" />
-    <Compile Include="Abstraction\Path.cs" />
-    <Compile Include="Abstraction\PathStep.cs" />
-    <Compile Include="Abstraction\Sprites\Chest.cs" />
-    <Compile Include="Abstraction\Sprites\Door.cs" />
-    <Compile Include="Abstraction\FloorTypeEnum.cs" />
-    <Compile Include="Abstraction\Sprites\Floor.cs" />
-    <Compile Include="Abstraction\Sprites\Screen.cs" />
-    <Compile Include="Abstraction\Sprites\ActionnedBomb.cs" />
-    <Compile Include="Abstraction\DirectionEnum.cs" />
-    <Compile Include="Abstraction\Sprites\ActionnedItem.cs" />
-    <Compile Include="Abstraction\Sprites\Pit.cs" />
-    <Compile Include="Abstraction\Sprites\PickableItem.cs" />
-    <Compile Include="Abstraction\IExplodable.cs" />
-    <Compile Include="Abstraction\Inventory.cs" />
-    <Compile Include="Abstraction\InventoryItem.cs" />
-    <Compile Include="Abstraction\Item.cs" />
-    <Compile Include="Abstraction\Sprites\GateTrigger.cs" />
-    <Compile Include="Abstraction\Sprites\FloorTrigger.cs" />
-    <Compile Include="Abstraction\ItemEnum.cs" />
-    <Compile Include="Abstraction\Sprites\LifeSprite.cs" />
-    <Compile Include="Abstraction\Sprites\Player.cs" />
-    <Compile Include="Abstraction\Sprites\Enemy.cs" />
-    <Compile Include="Abstraction\Sprites\Rift.cs" />
-    <Compile Include="Abstraction\Sprites\Sprite.cs" />
-    <Compile Include="Abstraction\Sprites\Gate.cs" />
+    <Compile Include="Models\Elapser.cs" />
+    <Compile Include="Models\Exceptions\InfiniteOverlapCheckException.cs" />
+    <Compile Include="Models\Exceptions\NoQuadraticSolutionException.cs" />
+    <Compile Include="Models\Graphic\ImageBrushGraphic.cs" />
+    <Compile Include="Models\Graphic\PlainBrushGraphic.cs" />
+    <Compile Include="Models\Graphic\SpriteGraphic.cs" />
+    <Compile Include="Models\Path.cs" />
+    <Compile Include="Models\PathStep.cs" />
+    <Compile Include="Models\Sprites\Chest.cs" />
+    <Compile Include="Models\Sprites\Door.cs" />
+    <Compile Include="Models\FloorTypeEnum.cs" />
+    <Compile Include="Models\Sprites\Floor.cs" />
+    <Compile Include="Models\Sprites\Screen.cs" />
+    <Compile Include="Models\Sprites\ActionnedBomb.cs" />
+    <Compile Include="Models\DirectionEnum.cs" />
+    <Compile Include="Models\Sprites\ActionnedItem.cs" />
+    <Compile Include="Models\Sprites\Pit.cs" />
+    <Compile Include="Models\Sprites\PickableItem.cs" />
+    <Compile Include="Models\IExplodable.cs" />
+    <Compile Include="Models\Inventory.cs" />
+    <Compile Include="Models\InventoryItem.cs" />
+    <Compile Include="Models\Item.cs" />
+    <Compile Include="Models\Sprites\GateTrigger.cs" />
+    <Compile Include="Models\Sprites\FloorTrigger.cs" />
+    <Compile Include="Models\ItemEnum.cs" />
+    <Compile Include="Models\Sprites\LifeSprite.cs" />
+    <Compile Include="Models\Sprites\Player.cs" />
+    <Compile Include="Models\Sprites\Enemy.cs" />
+    <Compile Include="Models\Sprites\Rift.cs" />
+    <Compile Include="Models\Sprites\Sprite.cs" />
+    <Compile Include="Models\Sprites\Gate.cs" />
     <Compile Include="Tools\InitialPlayerStatus.cs" />
     <Compile Include="Messages.Designer.cs">
       <AutoGen>True</AutoGen>
@@ -125,7 +125,7 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Abstraction\KeyPress.cs" />
+    <Compile Include="Models\KeyPress.cs" />
     <Compile Include="Tools\Constants.cs" />
     <Compile Include="Visuals\MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
@@ -133,7 +133,7 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Abstraction\Engine.cs" />
+    <Compile Include="Models\Engine.cs" />
     <Compile Include="Properties\AssemblyInfo.cs">
       <SubType>Code</SubType>
     </Compile>

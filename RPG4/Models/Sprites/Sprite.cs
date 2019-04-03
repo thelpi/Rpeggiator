@@ -246,6 +246,38 @@ namespace RPG4.Models.Sprites
             return xIsCrossed && yIsCrossed;
         }
 
+        /// <summary>
+        /// Checks if the <see cref="Engine.Player"/> is currently looking this instance.
+        /// </summary>
+        /// <returns><c>True</c> if looking; <c>False</c> otherwise.</returns>
+        public bool PlayerIsLookingTo()
+        {
+            // Shortcut.
+            Player p = Engine.Default.Player;
+
+            switch (p.LastDirection)
+            {
+                case DirectionEnum.Bottom:
+                    return Y.GreaterEqual(p.BottomRightY) && ComputeHorizontalOverlap(p).Greater(0);
+                case DirectionEnum.BottomLeft:
+                    return Y.GreaterEqual(p.BottomRightY) && X.GreaterEqual(p.BottomRightX);
+                case DirectionEnum.BottomRight:
+                    return Y.GreaterEqual(p.BottomRightY) && BottomRightX.LowerEqual(p.X);
+                case DirectionEnum.Left:
+                    return X.GreaterEqual(p.BottomRightX) && ComputeVerticalOverlap(p).Greater(0);
+                case DirectionEnum.Right:
+                    return BottomRightX.LowerEqual(p.X) && ComputeVerticalOverlap(p).Greater(0);
+                case DirectionEnum.Top:
+                    return BottomRightY.LowerEqual(p.Y) && ComputeHorizontalOverlap(p).Greater(0);
+                case DirectionEnum.TopLeft:
+                    return BottomRightY.LowerEqual(p.Y) && X.GreaterEqual(p.BottomRightX);
+                case DirectionEnum.TopRight:
+                    return BottomRightY.LowerEqual(p.Y) && BottomRightX.LowerEqual(p.X);
+            }
+
+            return false;
+        }
+
         // Computes an horizontal overlap (width).
         private double ComputeHorizontalOverlap(Sprite other)
         {
