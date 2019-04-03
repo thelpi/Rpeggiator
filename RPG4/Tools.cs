@@ -73,9 +73,9 @@ namespace RPG4
         /// <param name="pStart">The starting <see cref="Point"/></param>
         /// <param name="pDest">The destination <see cref="Point"/></param>
         /// <param name="d">The distance, in pixels.</param>
-        /// <param name="adjust">Optionnal; <c>True</c> to not go further than <paramref name="pDest"/>; <c>False</c> otherwise.</param>
+        /// <param name="shrinkToDestination">Optionnal; <c>True</c> to not go further than <paramref name="pDest"/>; <c>False</c> otherwise.</param>
         /// <returns>Coordinates of the point.</returns>
-        public static Point GetPointOnLine(Point pStart, Point pDest, double d, bool adjust = false)
+        public static Point GetPointOnLine(Point pStart, Point pDest, double d, bool shrinkToDestination = false)
         {
             if (d == 0)
             {
@@ -91,7 +91,7 @@ namespace RPG4
                 {
                     d *= -1;
                 }
-                if (adjust && Math.Abs(totalDistance) < Math.Abs(d))
+                if (shrinkToDestination && Math.Abs(totalDistance) < Math.Abs(d))
                 {
                     d = totalDistance;
                 }
@@ -146,6 +146,18 @@ namespace RPG4
                         x = xn_s2;
                         y = yn_s2;
                     }
+                }
+            }
+
+            if (shrinkToDestination)
+            {
+                if ((x > pDest.X && pDest.X > pStart.X) || (x < pDest.X && pDest.X < pStart.X))
+                {
+                    x = pDest.X;
+                }
+                if ((y > pDest.X && pDest.Y > pStart.Y) || (y < pDest.Y && pDest.Y < pStart.Y))
+                {
+                    y = pDest.Y;
                 }
             }
 

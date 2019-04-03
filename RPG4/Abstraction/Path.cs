@@ -21,7 +21,7 @@ namespace RPG4.Abstraction
         public Path(params Point[] points)
         {
             _steps = points.Select(p => new PathStep(p, true)).ToList();
-            _currentStepIndex = 0;
+            _currentStepIndex = 1;
         }
 
         /// <summary>
@@ -32,8 +32,11 @@ namespace RPG4.Abstraction
         /// <returns><see cref="Point"/></returns>
         public Point ComputeNextPosition(Sprite owner, double distance)
         {
+            // DEBUG
+            //distance = 1.3;
+
             // Gets the theoretical point. 
-            Point newPoint = Tools.GetPointOnLine(owner.TopLeftCorner, _steps[_currentStepIndex].Point, distance);
+            Point newPoint = Tools.GetPointOnLine(owner.TopLeftCorner, _steps[_currentStepIndex].Point, distance, true);
 
             if (CheckNewPointValidityInContext(owner, newPoint))
             {
@@ -78,27 +81,27 @@ namespace RPG4.Abstraction
             if (CheckCurrentStepIsCrossed(owner, nextPt.X, nextPt.Y))
             {
                 _currentStepIndex = GetNextStepIndex();
-                CleanTemporarySteps(_steps[_currentStepIndex]);
+                CleanTemporarySteps();
             }
             // The owner is an enemy and has the player in his line of sight
             else if (owner.GetType() == typeof(Enemy)
                 && ownerCopy.Overlap(Engine.Default.Player.ResizeToRatio(Constants.PLAYER_SIZE_RATIO_TO_TRIGGER_ENEMY)))
             {
                 // Inserts a pursue step.
-                var pursueStep = new PathStep(Engine.Default.Player.TopLeftCorner, false);
-                _steps.Insert(_currentStepIndex, pursueStep);
-                CleanTemporarySteps(pursueStep);
+                _steps.Insert(_currentStepIndex, PathStep.CreatePursueStep(Engine.Default.Player));
+                CleanTemporarySteps();
             }
 
             return true;
         }
 
         // Cleans every temporary steps, except the current one.
-        private void CleanTemporarySteps(PathStep step)
+        private void CleanTemporarySteps()
         {
+            PathStep step = _steps[_currentStepIndex];
             _steps.RemoveAll(ps => !ps.Permanent && !ps.Equals(step));
             _currentStepIndex = _steps.IndexOf(step);
-            _counterClockGetAround = null;
+            _counterClockGetAround = step.Permanent || step.Pursue ? (bool?)null : _counterClockGetAround.Value;
         }
 
         // Checks if the current step is reached / crossed.
