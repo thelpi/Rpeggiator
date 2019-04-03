@@ -113,6 +113,16 @@ namespace RPG4.Properties {
         /// <summary>
         ///   Recherche une ressource localisée de type System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap Keyring {
+            get {
+                object obj = ResourceManager.GetObject("Keyring", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Recherche une ressource localisée de type System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap Lamp {
             get {
                 object obj = ResourceManager.GetObject("Lamp", resourceCulture);

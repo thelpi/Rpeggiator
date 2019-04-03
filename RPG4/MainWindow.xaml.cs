@@ -243,6 +243,7 @@ namespace RPG4
                 }
             }
             txtCoins.Text = Engine.Default.Player.Inventory.Coins.ToString().PadLeft(3, '0');
+            txtKeyring.Text = Engine.Default.Player.Inventory.Keyring.Count.ToString().PadLeft(3, '0');
         }
 
         // Happens on key press.
