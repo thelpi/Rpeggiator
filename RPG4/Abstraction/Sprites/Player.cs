@@ -34,7 +34,7 @@ namespace RPG4.Abstraction.Sprites
         /// <summary>
         /// When coming into a new screen, indicates the direction relative to the former screen.
         /// </summary>
-        public Directions? NewScreenEntrance { get; private set; }
+        public DirectionEnum? NewScreenEntrance { get; private set; }
         /// <summary>
         /// Inventory.
         /// </summary>
@@ -54,7 +54,7 @@ namespace RPG4.Abstraction.Sprites
         /// <summary>
         /// Indicates the sprite direction.
         /// </summary>
-        public Directions LastDirection { get; private set; }
+        public DirectionEnum LastDirection { get; private set; }
         /// <inheritdoc />
         public double ExplosionLifePointCost { get { return InitialPlayerStatus.EXPLOSION_LIFE_POINT_COST; } }
         /// <summary>
@@ -84,7 +84,7 @@ namespace RPG4.Abstraction.Sprites
             _recoveryManager = null;
             _hitElapser = null;
             _currentWeaponHitDelay = InitialPlayerStatus.SWORD_HIT_DELAY;
-            LastDirection = Directions.right;
+            LastDirection = DirectionEnum.Right;
             _movementTimeManager = new Elapser();
         }
 
@@ -133,32 +133,32 @@ namespace RPG4.Abstraction.Sprites
                 double hitY = Y;
                 switch (LastDirection)
                 {
-                    case Directions.bottom:
+                    case DirectionEnum.Bottom:
                         hitY += Height;
                         break;
-                    case Directions.bottom_left:
+                    case DirectionEnum.BottomLeft:
                         hitY += Height;
                         hitX -= Width;
                         break;
-                    case Directions.bottom_right:
+                    case DirectionEnum.BottomRight:
                         hitY += Height;
                         hitX += Width;
                         break;
-                    case Directions.left:
+                    case DirectionEnum.Left:
                         hitX -= Width;
                         break;
-                    case Directions.right:
+                    case DirectionEnum.Right:
                         hitX += Width;
                         break;
-                    case Directions.top_right:
+                    case DirectionEnum.TopRight:
                         hitY -= Height;
                         hitX += Width;
                         break;
-                    case Directions.top_left:
+                    case DirectionEnum.TopLeft:
                         hitY -= Height;
                         hitX -= Width;
                         break;
-                    case Directions.top:
+                    case DirectionEnum.Top:
                         hitY -= Height;
                         break;
                 }
@@ -344,17 +344,17 @@ namespace RPG4.Abstraction.Sprites
                 newPosition.X = areaWidth - Width;
                 if (goUp)
                 {
-                    NewScreenEntrance = Directions.top_left;
+                    NewScreenEntrance = DirectionEnum.TopLeft;
                     newPosition.Y = areaHeight - Height;
                 }
                 else if (goDown)
                 {
-                    NewScreenEntrance = Directions.bottom_left;
+                    NewScreenEntrance = DirectionEnum.BottomLeft;
                     newPosition.Y = 0;
                 }
                 else
                 {
-                    NewScreenEntrance = Directions.left;
+                    NewScreenEntrance = DirectionEnum.Left;
                 }
             }
             else if (goRight)
@@ -362,27 +362,27 @@ namespace RPG4.Abstraction.Sprites
                 newPosition.X = 0;
                 if (goUp)
                 {
-                    NewScreenEntrance = Directions.top_right;
+                    NewScreenEntrance = DirectionEnum.TopRight;
                     newPosition.Y = areaHeight - Height;
                 }
                 else if (goDown)
                 {
-                    NewScreenEntrance = Directions.bottom_right;
+                    NewScreenEntrance = DirectionEnum.BottomRight;
                     newPosition.Y = 0;
                 }
                 else
                 {
-                    NewScreenEntrance = Directions.right;
+                    NewScreenEntrance = DirectionEnum.Right;
                 }
             }
             else if (goUp)
             {
-                NewScreenEntrance = Directions.top;
+                NewScreenEntrance = DirectionEnum.Top;
                 newPosition.Y = areaHeight - Height;
             }
             else
             {
-                NewScreenEntrance = Directions.bottom;
+                NewScreenEntrance = DirectionEnum.Bottom;
                 newPosition.Y = 0;
             }
 
@@ -403,41 +403,41 @@ namespace RPG4.Abstraction.Sprites
             {
                 if (newPosition.Y.Greater(Y))
                 {
-                    LastDirection = Directions.bottom_left;
+                    LastDirection = DirectionEnum.BottomLeft;
                 }
                 else if (newPosition.Y.Lower(Y))
                 {
-                    LastDirection = Directions.top_left;
+                    LastDirection = DirectionEnum.TopLeft;
                 }
                 else
                 {
-                    LastDirection = Directions.left;
+                    LastDirection = DirectionEnum.Left;
                 }
             }
             else if (newPosition.X.Greater(X))
             {
                 if (newPosition.Y.Greater(Y))
                 {
-                    LastDirection = Directions.bottom_right;
+                    LastDirection = DirectionEnum.BottomRight;
                 }
                 else if (newPosition.Y.Lower(Y))
                 {
-                    LastDirection = Directions.top_right;
+                    LastDirection = DirectionEnum.TopRight;
                 }
                 else
                 {
-                    LastDirection = Directions.right;
+                    LastDirection = DirectionEnum.Right;
                 }
             }
             else
             {
                 if (newPosition.Y.Greater(Y))
                 {
-                    LastDirection = Directions.bottom;
+                    LastDirection = DirectionEnum.Bottom;
                 }
                 else if (newPosition.Y.Lower(Y))
                 {
-                    LastDirection = Directions.top;
+                    LastDirection = DirectionEnum.Top;
                 }
             }
         }

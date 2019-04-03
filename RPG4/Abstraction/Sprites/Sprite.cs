@@ -27,7 +27,7 @@ namespace RPG4.Abstraction.Sprites
         /// <summary>
         /// Graphic rendering.
         /// </summary>
-        public virtual ISpriteGraphic Graphic { get; private set; }
+        public virtual ISpriteGraphic Graphic { get; protected set; }
 
         /// <summary>
         /// Inferred; top left corner coordinates.
@@ -153,8 +153,8 @@ namespace RPG4.Abstraction.Sprites
         /// </summary>
         /// <param name="spriteInMotion"><see cref="Sprite"/> in motion.</param>
         /// <param name="positionToCheck">Position to check.</param>
-        /// <returns><see cref="Directions"/> <paramref name="spriteInMotion"/> come before its overlaps; <c>Null</c> if no overlap.</returns>
-        public Directions? DirectionSourceOfOverlap(Sprite spriteInMotion, Point positionToCheck)
+        /// <returns><see cref="DirectionEnum"/> <paramref name="spriteInMotion"/> come before its overlaps; <c>Null</c> if no overlap.</returns>
+        public DirectionEnum? DirectionSourceOfOverlap(Sprite spriteInMotion, Point positionToCheck)
         {
             Sprite spriteInPosition = spriteInMotion.CopyToPosition(positionToCheck);
 
@@ -175,28 +175,28 @@ namespace RPG4.Abstraction.Sprites
             {
                 // in diagonal exactly right on a corner.
                 return fromLeft ?
-                    (fromTop ? Directions.top_left : Directions.bottom_left)
-                    : (fromTop ? Directions.top_right : Directions.bottom_right);
+                    (fromTop ? DirectionEnum.TopLeft : DirectionEnum.BottomLeft)
+                    : (fromTop ? DirectionEnum.TopRight : DirectionEnum.BottomRight);
             }
             else if (oldOverlapY.Equal(0))
             {
                 // Y move only.
-                return fromTop ? Directions.top : Directions.bottom;
+                return fromTop ? DirectionEnum.Top : DirectionEnum.Bottom;
             }
             else if (oldOverlapX.Equal(0))
             {
                 // X move only.
-                return fromLeft ? Directions.left : Directions.right;
+                return fromLeft ? DirectionEnum.Left : DirectionEnum.Right;
             }
             else if (newOverlapX.Greater(newOverlapY))
             {
                 // X move prior to Y move.
-                return fromLeft ? Directions.left : Directions.right;
+                return fromLeft ? DirectionEnum.Left : DirectionEnum.Right;
             }
             else
             {
                 // Y move prior to X move.
-                return fromTop ? Directions.top : Directions.bottom;
+                return fromTop ? DirectionEnum.Top : DirectionEnum.Bottom;
             }
         }
 

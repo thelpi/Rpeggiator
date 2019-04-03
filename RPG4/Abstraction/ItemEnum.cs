@@ -3,7 +3,7 @@
     /// <summary>
     /// Enumeration of item identifiers.
     /// </summary>
-    public enum ItemIdEnum
+    public enum ItemEnum
     {
         /// <summary>
         /// Bomb item identifier.

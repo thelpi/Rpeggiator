@@ -113,7 +113,7 @@ namespace RPG4.Abstraction
             _counterClockGetAround = _counterClockGetAround ?? Tools.GetRandomNumber(0, 2) == 0;
 
             // Gets the direction the sprite comes from, relative to the structure.
-            Directions generalDirection = overlapStruct.DirectionSourceOfOverlap(owner, newPosition).Value;
+            DirectionEnum generalDirection = overlapStruct.DirectionSourceOfOverlap(owner, newPosition).Value;
             AdjustOverlapDirectionFromGetAroundDirection(ref generalDirection);
 
             Point tmpPt = new Point();
@@ -125,19 +125,19 @@ namespace RPG4.Abstraction
             {
                 switch (generalDirection)
                 {
-                    case Directions.top:
+                    case DirectionEnum.Top:
                         tmpPt.X = _counterClockGetAround.Value ? overlapStruct.X - owner.Width : overlapStruct.BottomRightX;
                         tmpPt.Y = overlapStruct.Y - owner.Height;
                         break;
-                    case Directions.bottom:
+                    case DirectionEnum.Bottom:
                         tmpPt.X = _counterClockGetAround.Value ? overlapStruct.BottomRightX : overlapStruct.X - owner.Width;
                         tmpPt.Y = overlapStruct.BottomRightY;
                         break;
-                    case Directions.left:
+                    case DirectionEnum.Left:
                         tmpPt.X = overlapStruct.X - owner.Width;
                         tmpPt.Y = _counterClockGetAround.Value ? overlapStruct.BottomRightY : overlapStruct.Y - owner.Height;
                         break;
-                    case Directions.right:
+                    case DirectionEnum.Right:
                         tmpPt.X = overlapStruct.BottomRightX;
                         tmpPt.Y = _counterClockGetAround.Value ? overlapStruct.Y - owner.Height : overlapStruct.BottomRightY;
                         break;
@@ -164,7 +164,7 @@ namespace RPG4.Abstraction
         }
 
         // Force a straightforward direction, depending on "_counterClockGetAround",  when the direction is a corner.
-        private void AdjustOverlapDirectionFromGetAroundDirection(ref Directions direction)
+        private void AdjustOverlapDirectionFromGetAroundDirection(ref DirectionEnum direction)
         {
             if (!_counterClockGetAround.HasValue)
             {
@@ -173,17 +173,17 @@ namespace RPG4.Abstraction
 
             switch (direction)
             {
-                case Directions.bottom_left:
-                    direction = _counterClockGetAround.Value ? Directions.bottom : Directions.left;
+                case DirectionEnum.BottomLeft:
+                    direction = _counterClockGetAround.Value ? DirectionEnum.Bottom : DirectionEnum.Left;
                     break;
-                case Directions.bottom_right:
-                    direction = _counterClockGetAround.Value ? Directions.right : Directions.bottom;
+                case DirectionEnum.BottomRight:
+                    direction = _counterClockGetAround.Value ? DirectionEnum.Right : DirectionEnum.Bottom;
                     break;
-                case Directions.top_left:
-                    direction = _counterClockGetAround.Value ? Directions.left : Directions.top;
+                case DirectionEnum.TopLeft:
+                    direction = _counterClockGetAround.Value ? DirectionEnum.Left : DirectionEnum.Top;
                     break;
-                case Directions.top_right:
-                    direction = _counterClockGetAround.Value ? Directions.top : Directions.right;
+                case DirectionEnum.TopRight:
+                    direction = _counterClockGetAround.Value ? DirectionEnum.Top : DirectionEnum.Right;
                     break;
             }
         }

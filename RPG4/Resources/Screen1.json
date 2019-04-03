@@ -3,6 +3,7 @@
   "Y": 0,
   "Width": 800,
   "Height": 600,
+  "FloorType": "ground",
   "GraphicType": "PlainBrushGraphic",
   "HexColor": "#FFFFEFD5",
   "AreaDarknessOpacity": 0,
@@ -76,14 +77,14 @@
   ],
   "GateTriggers": [],
   "NeighboringScreens": {
-    "top_left": 2,
-    "top": 2,
-    "top_right": 2,
-    "right": 2,
-    "bottom_right": 2,
-    "bottom": 2,
-    "bottom_left": 2,
-    "left": 2
+    "TopLeft": 2,
+    "Top": 2,
+    "TopRight": 2,
+    "Right": 2,
+    "BottomRight": 2,
+    "Bottom": 2,
+    "BottomLeft": 2,
+    "Left": 2
   },
   "Items": [
   ],

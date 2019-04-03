@@ -9,7 +9,7 @@ namespace RPG4.Abstraction.Sprites
     public class Chest : Sprite
     {
         private int? _keyId;
-        private ItemIdEnum? _itemId;
+        private ItemEnum? _itemId;
         private int _quantity;
         private ISpriteGraphic _openGraphic;
         private int? _keyIdContainer;

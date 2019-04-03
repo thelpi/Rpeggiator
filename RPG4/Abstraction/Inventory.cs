@@ -26,7 +26,7 @@ namespace RPG4.Abstraction
         private const int COINS_LIMIT = 999;
 
         private List<InventoryItem> _items;
-        private Dictionary<ItemIdEnum, int> _maxQuantityByItem;
+        private Dictionary<ItemEnum, int> _maxQuantityByItem;
         private int _creationHashcode;
         private List<int> _keyring;
 
@@ -37,7 +37,7 @@ namespace RPG4.Abstraction
         /// <summary>
         /// Maximal quantity carriable for each item.
         /// </summary>
-        public IReadOnlyDictionary<ItemIdEnum, int> MaxQuantityByItem { get { return _maxQuantityByItem; } }
+        public IReadOnlyDictionary<ItemEnum, int> MaxQuantityByItem { get { return _maxQuantityByItem; } }
         /// <summary>
         /// Indicates if the lamp item is currently used.
         /// </summary>
@@ -58,7 +58,7 @@ namespace RPG4.Abstraction
         {
             _creationHashcode = creationHashcode;
             _items = new List<InventoryItem>();
-            _maxQuantityByItem = new Dictionary<ItemIdEnum, int>();
+            _maxQuantityByItem = new Dictionary<ItemEnum, int>();
             LampIsOn = false;
             foreach (var itemId in InitialPlayerStatus.INVENTORY_ITEMS.Keys)
             {
@@ -71,10 +71,10 @@ namespace RPG4.Abstraction
         /// <summary>
         /// Tries to add or replace an item in the inventory.
         /// </summary>
-        /// <param name="itemId"><see cref="ItemIdEnum"/>; <c>Null</c> for coins</param>
+        /// <param name="itemId"><see cref="ItemEnum"/>; <c>Null</c> for coins</param>
         /// <param name="quantity">Quantity.</param>
         /// <returns><c>True</c> if the item has been added; <c>False</c> otherwise.</returns>
-        public int TryAdd(ItemIdEnum? itemId, int quantity)
+        public int TryAdd(ItemEnum? itemId, int quantity)
         {
             if (!itemId.HasValue)
             {
@@ -155,19 +155,19 @@ namespace RPG4.Abstraction
 
             switch (item.BaseItem.Id)
             {
-                case ItemIdEnum.Bomb:
+                case ItemEnum.Bomb:
                     droppedItem = new ActionnedBomb(ComputeBombDroppingCoordinates());
                     break;
-                case ItemIdEnum.SmallLifePotion:
+                case ItemEnum.SmallLifePotion:
                     Engine.Default.Player.DrinkLifePotion(_creationHashcode, SMALL_LIFE_POTION_RECOVERY_LIFE_POINTS);
                     break;
-                case ItemIdEnum.MediumLifePotion:
+                case ItemEnum.MediumLifePotion:
                     Engine.Default.Player.DrinkLifePotion(_creationHashcode, MEDIUM_LIFE_POTION_RECOVERY_LIFE_POINTS);
                     break;
-                case ItemIdEnum.LargeLifePotion:
+                case ItemEnum.LargeLifePotion:
                     Engine.Default.Player.DrinkLifePotion(_creationHashcode, LARGE_LIFE_POTION_RECOVERY_LIFE_POINTS);
                     break;
-                case ItemIdEnum.Lamp:
+                case ItemEnum.Lamp:
                     LampIsOn = !LampIsOn;
                     break;
             }
@@ -187,28 +187,28 @@ namespace RPG4.Abstraction
             Point pt = new Point(sprite.X, sprite.Y);
             switch (sprite.LastDirection)
             {
-                case Directions.bottom_left:
+                case DirectionEnum.BottomLeft:
                     pt.Y = sprite.BottomRightY - ActionnedBomb.HEIGHT;
                     break;
-                case Directions.bottom:
+                case DirectionEnum.Bottom:
                     pt.X = sprite.X + (sprite.Width / 2);
                     pt.Y = sprite.BottomRightY - ActionnedBomb.HEIGHT;
                     break;
-                case Directions.bottom_right:
+                case DirectionEnum.BottomRight:
                     pt.X = sprite.BottomRightX - ActionnedBomb.WIDTH;
                     pt.Y = sprite.BottomRightY - ActionnedBomb.HEIGHT;
                     break;
-                case Directions.right:
+                case DirectionEnum.Right:
                     pt.X = sprite.BottomRightX - ActionnedBomb.WIDTH;
                     pt.Y = sprite.Y + (sprite.Height / 2);
                     break;
-                case Directions.top_right:
+                case DirectionEnum.TopRight:
                     pt.X = sprite.BottomRightX - ActionnedBomb.WIDTH;
                     break;
-                case Directions.top:
+                case DirectionEnum.Top:
                     pt.X = sprite.X + (sprite.Width / 2);
                     break;
-                case Directions.left:
+                case DirectionEnum.Left:
                     pt.Y = sprite.Y + (sprite.Height / 2);
                     break;
             }
@@ -218,18 +218,18 @@ namespace RPG4.Abstraction
         /// <summary>
         /// Checks if an item can be used in the context.
         /// </summary>
-        /// <param name="itemId"><see cref="ItemIdEnum"/></param>
+        /// <param name="itemId"><see cref="ItemEnum"/></param>
         /// <returns><c>True</c> if it can be used; <c>False</c> otherwise.</returns>
-        private bool ItemCanBeUseInContext(ItemIdEnum itemId)
+        private bool ItemCanBeUseInContext(ItemEnum itemId)
         {
             switch (itemId)
             {
-                case ItemIdEnum.Bomb:
+                case ItemEnum.Bomb:
                     // example : not underwater
                     break;
-                case ItemIdEnum.SmallLifePotion:
-                case ItemIdEnum.MediumLifePotion:
-                case ItemIdEnum.LargeLifePotion:
+                case ItemEnum.SmallLifePotion:
+                case ItemEnum.MediumLifePotion:
+                case ItemEnum.LargeLifePotion:
                     if (Engine.Default.Player.CurrentLifePoints.Equal(Engine.Default.Player.MaximalLifePoints))
                     {
                         return false;
@@ -244,9 +244,9 @@ namespace RPG4.Abstraction
         /// Sets the maximal quantity storable for an <see cref="InventoryItem"/>.
         /// </summary>
         /// <remarks>The storage capacity can't be decrease.</remarks>
-        /// <param name="itemId"><see cref="ItemIdEnum"/></param>
+        /// <param name="itemId"><see cref="ItemEnum"/></param>
         /// <param name="maxQuantity">Maximal quantity.</param>
-        private void SetItemMaxQuantity(ItemIdEnum itemId, int maxQuantity)
+        private void SetItemMaxQuantity(ItemEnum itemId, int maxQuantity)
         {
             if (_maxQuantityByItem.ContainsKey(itemId))
             {

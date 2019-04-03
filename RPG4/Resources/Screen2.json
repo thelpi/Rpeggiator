@@ -3,6 +3,7 @@
   "Y": 0,
   "Width": 800,
   "Height": 600,
+  "FloorType": "ground",
   "GraphicType": "ImageBrushGraphic",
   "ImagePath": "Background2",
   "AreaDarknessOpacity": 0.8,
@@ -89,14 +90,14 @@
     }
   ],
   "NeighboringScreens": {
-    "top_left": 1,
-    "top": 1,
-    "top_right": 1,
-    "right": 1,
-    "bottom_right": 1,
-    "bottom": 1,
-    "bottom_left": 1,
-    "left": 1
+    "TopLeft": 1,
+    "Top": 1,
+    "TopRight": 1,
+    "Right": 1,
+    "BottomRight": 1,
+    "Bottom": 1,
+    "BottomLeft": 1,
+    "Left": 1
   },
   "Items": [
     {

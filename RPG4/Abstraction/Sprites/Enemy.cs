@@ -26,9 +26,9 @@ namespace RPG4.Abstraction.Sprites
         /// <inheritdoc />
         public double ExplosionLifePointCost { get { return EXPLOSION_LIFE_POINT_COST; } }
         /// <summary>
-        /// Loot <see cref="ItemIdEnum"/>; <c>Null</c> for coin.
+        /// Loot <see cref="ItemEnum"/>; <c>Null</c> for coin.
         /// </summary>
-        public ItemIdEnum? LootItemId { get; private set; }
+        public ItemEnum? LootItemId { get; private set; }
         /// <summary>
         /// Loot quantity.
         /// </summary>
@@ -48,7 +48,7 @@ namespace RPG4.Abstraction.Sprites
                 points.Add(new Point((double)jsonPath.X, (double)jsonPath.Y));
             }
             _path = new Path(points.ToArray());
-            LootItemId = enemyJson.LootItemId == null ? (ItemIdEnum?)null : (ItemIdEnum)Enum.Parse(typeof(ItemIdEnum), (string)enemyJson.LootItemId);
+            LootItemId = enemyJson.LootItemId;
             LootQuantity = enemyJson.LootQuantity;
         }
 

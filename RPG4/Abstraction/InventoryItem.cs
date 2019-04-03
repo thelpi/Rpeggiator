@@ -21,14 +21,14 @@
         /// Constructor.
         /// </summary>
         /// <param name="itemId"><see cref="BaseItem"/> identifier.</param>
-        public InventoryItem(ItemIdEnum itemId) : this(itemId, 1) { }
+        public InventoryItem(ItemEnum itemId) : this(itemId, 1) { }
 
         /// <summary>
         /// Constructor.
         /// </summary>
         /// <param name="itemId"><see cref="BaseItem"/> identifier.</param>
         /// <param name="quantity"><see cref="Quantity"/>; ignored if the item is marked as unique.</param>
-        public InventoryItem(ItemIdEnum itemId, int quantity)
+        public InventoryItem(ItemEnum itemId, int quantity)
         {
             BaseItem = Item.GetItem(itemId);
             Quantity = BaseItem.Unique ? 1 : quantity;

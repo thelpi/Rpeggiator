@@ -29,9 +29,9 @@ namespace RPG4.Abstraction
         private static List<Item> _items = null;
 
         /// <summary>
-        /// <see cref="ItemIdEnum"/>
+        /// <see cref="ItemEnum"/>
         /// </summary>
-        public ItemIdEnum Id { get; private set; }
+        public ItemEnum Id { get; private set; }
         /// <summary>
         /// Name.
         /// </summary>
@@ -57,11 +57,11 @@ namespace RPG4.Abstraction
         private Item() { }
 
         /// <summary>
-        /// Gets an <see cref="Item"/> by its <see cref="ItemIdEnum"/>.
+        /// Gets an <see cref="Item"/> by its <see cref="ItemEnum"/>.
         /// </summary>
-        /// <param name="itemId"><see cref="ItemIdEnum"/></param>
+        /// <param name="itemId"><see cref="ItemEnum"/></param>
         /// <returns><see cref="Item"/></returns>
-        public static Item GetItem(ItemIdEnum itemId)
+        public static Item GetItem(ItemEnum itemId)
         {
             if (_items == null)
             {
@@ -77,7 +77,7 @@ namespace RPG4.Abstraction
             _items = new List<Item>();
             _items.Add(new Item
             {
-                Id = ItemIdEnum.Bomb,
+                Id = ItemEnum.Bomb,
                 Name = "Bomb",
                 Unique = false,
                 UseDelay = 1000,
@@ -86,7 +86,7 @@ namespace RPG4.Abstraction
             });
             _items.Add(new Item
             {
-                Id = ItemIdEnum.SmallLifePotion,
+                Id = ItemEnum.SmallLifePotion,
                 Name = "Life potion (small)",
                 Unique = false,
                 UseDelay = 500,
@@ -95,7 +95,7 @@ namespace RPG4.Abstraction
             });
             _items.Add(new Item
             {
-                Id = ItemIdEnum.MediumLifePotion,
+                Id = ItemEnum.MediumLifePotion,
                 Name = "Life potion (medium)",
                 Unique = false,
                 UseDelay = 500,
@@ -104,7 +104,7 @@ namespace RPG4.Abstraction
             });
             _items.Add(new Item
             {
-                Id = ItemIdEnum.LargeLifePotion,
+                Id = ItemEnum.LargeLifePotion,
                 Name = "Life potion (large)",
                 Unique = false,
                 UseDelay = 500,
@@ -113,7 +113,7 @@ namespace RPG4.Abstraction
             });
             _items.Add(new Item
             {
-                Id = ItemIdEnum.Lamp,
+                Id = ItemEnum.Lamp,
                 Name = "Lamp",
                 Unique = true,
                 UseDelay = 0,

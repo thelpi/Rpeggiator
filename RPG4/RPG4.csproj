@@ -83,9 +83,11 @@
     <Compile Include="Abstraction\PathStep.cs" />
     <Compile Include="Abstraction\Sprites\Chest.cs" />
     <Compile Include="Abstraction\Sprites\Door.cs" />
+    <Compile Include="Abstraction\FloorTypeEnum.cs" />
+    <Compile Include="Abstraction\Sprites\Floor.cs" />
     <Compile Include="Abstraction\Sprites\Screen.cs" />
     <Compile Include="Abstraction\Sprites\ActionnedBomb.cs" />
-    <Compile Include="Abstraction\Directions.cs" />
+    <Compile Include="Abstraction\DirectionEnum.cs" />
     <Compile Include="Abstraction\Sprites\ActionnedItem.cs" />
     <Compile Include="Abstraction\Sprites\Pit.cs" />
     <Compile Include="Abstraction\Sprites\PickableItem.cs" />
@@ -95,7 +97,7 @@
     <Compile Include="Abstraction\Item.cs" />
     <Compile Include="Abstraction\Sprites\GateTrigger.cs" />
     <Compile Include="Abstraction\Sprites\FloorTrigger.cs" />
-    <Compile Include="Abstraction\ItemIdEnum.cs" />
+    <Compile Include="Abstraction\ItemEnum.cs" />
     <Compile Include="Abstraction\Sprites\LifeSprite.cs" />
     <Compile Include="Abstraction\Sprites\Player.cs" />
     <Compile Include="Abstraction\Sprites\Enemy.cs" />

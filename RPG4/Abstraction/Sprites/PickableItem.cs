@@ -12,7 +12,7 @@ namespace RPG4.Abstraction.Sprites
         // Time manager.
         private Elapser _timeManager;
         // Null for coins.
-        private ItemIdEnum? _itemId;
+        private ItemEnum? _itemId;
 
         /// <summary>
         /// Indicates the quantity.
@@ -29,15 +29,15 @@ namespace RPG4.Abstraction.Sprites
         /// <param name="floorItemJson">The json dynamic object.</param>
         public PickableItem(dynamic floorItemJson)
             : base((double)floorItemJson.X, (double)floorItemJson.Y, Item.LOOT_WIDTH, Item.LOOT_HEIGHT,
-                  Item.GetItem((ItemIdEnum)Enum.Parse(typeof(ItemIdEnum), (string)floorItemJson.ItemId)).LootGraphic)
+                  Item.GetItem((ItemEnum)Enum.Parse(typeof(ItemEnum), (string)floorItemJson.ItemId)).LootGraphic)
         {
-            _itemId = (ItemIdEnum)Enum.Parse(typeof(ItemIdEnum), (string)floorItemJson.ItemId);
+            _itemId = floorItemJson.ItemId;
             Quantity = floorItemJson.Quantity;
         }
 
         // Private constructor.
         private PickableItem(double x, double y, double with, double height, ISpriteGraphic graphic,
-            ItemIdEnum? itemId, int quantity, double? timeBeForeDisapear)
+            ItemEnum? itemId, int quantity, double? timeBeForeDisapear)
             : base(x, y, with, height, graphic)
         {
             _itemId = itemId;
@@ -52,10 +52,10 @@ namespace RPG4.Abstraction.Sprites
         /// Builds an instance from enemy's loot.
         /// </summary>
         /// <param name="enemy"><see cref="Enemy"/></param>
-        /// <param name="itemId"><see cref="ItemIdEnum"/>; <c>Null</c> for coin.</param>
+        /// <param name="itemId"><see cref="ItemEnum"/>; <c>Null</c> for coin.</param>
         /// <param name="quantity">Quantity looted.</param>
         /// <returns><see cref="PickableItem"/></returns>
-        public static PickableItem Loot(Enemy enemy, ItemIdEnum? itemId, int quantity)
+        public static PickableItem Loot(Enemy enemy, ItemEnum? itemId, int quantity)
         {
             return new PickableItem(
                 enemy.X + (enemy.Width / 2) - (Item.LOOT_WIDTH / 2),

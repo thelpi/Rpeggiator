@@ -3,39 +3,39 @@
     /// <summary>
     /// Enumeration of directions through screens
     /// </summary>
-    public enum Directions
+    public enum DirectionEnum
     {
         /// <summary>
         /// Top-left
         /// </summary>
-        top_left,
+        TopLeft,
         /// <summary>
         /// Top
         /// </summary>
-        top,
+        Top,
         /// <summary>
         /// Top-right
         /// </summary>
-        top_right,
+        TopRight,
         /// <summary>
         /// Right
         /// </summary>
-        right,
+        Right,
         /// <summary>
         /// Bottom-right
         /// </summary>
-        bottom_right,
+        BottomRight,
         /// <summary>
         /// Bottom
         /// </summary>
-        bottom,
+        Bottom,
         /// <summary>
         /// Bottom-left
         /// </summary>
-        bottom_left,
+        BottomLeft,
         /// <summary>
         /// Left
         /// </summary>
-        left
+        Left
     }
 }

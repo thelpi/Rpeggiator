@@ -40,13 +40,13 @@ namespace RPG4
         /// <summary>
         /// Initial list of items in the inventory.
         /// </summary>
-        public static readonly IReadOnlyDictionary<ItemIdEnum, int> INVENTORY_ITEMS = new Dictionary<ItemIdEnum, int>
+        public static readonly IReadOnlyDictionary<ItemEnum, int> INVENTORY_ITEMS = new Dictionary<ItemEnum, int>
         {
-            { ItemIdEnum.Lamp, 1 },
-            { ItemIdEnum.SmallLifePotion, 3 },
-            { ItemIdEnum.MediumLifePotion, 1 },
-            { ItemIdEnum.LargeLifePotion, 1 },
-            { ItemIdEnum.Bomb, 1 }
+            { ItemEnum.Lamp, 1 },
+            { ItemEnum.SmallLifePotion, 3 },
+            { ItemEnum.MediumLifePotion, 1 },
+            { ItemEnum.LargeLifePotion, 1 },
+            { ItemEnum.Bomb, 1 }
         };
         /// <summary>
         /// Initial coins.
