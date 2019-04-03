@@ -25,22 +25,15 @@ namespace RPG4.Models.Sprites
         /// Constructor.
         /// </summary>
         /// <param name="chestJsonDatas">Chest json datas.</param>
-        public Chest(dynamic chestJsonDatas) : base((object)chestJsonDatas)
+        public Chest(dynamic chestJsonDatas)
+            : base((double)chestJsonDatas.X, (double)chestJsonDatas.Y, (double)chestJsonDatas.Width, (double)chestJsonDatas.Height, null)
         {
             _itemId = chestJsonDatas.ItemId;
             _quantity = chestJsonDatas.Quantity;
             _keyId = chestJsonDatas.KeyId;
             _keyIdContainer = chestJsonDatas.KeyIdContainer;
-            switch ((string)chestJsonDatas.GraphicType)
-            {
-                case nameof(ImageBrushGraphic):
-                    _openGraphic = new ImageBrushGraphic((string)chestJsonDatas.OpenImagePath);
-                    break;
-                case nameof(PlainBrushGraphic):
-                    _openGraphic = new PlainBrushGraphic((string)chestJsonDatas.OpenHexColor);
-                    break;
-                    // TODO : other types of ISpriteGraphic must be implemented here.
-            }
+            Graphic = new ImageBrushGraphic("Chest");
+            _openGraphic = new ImageBrushGraphic("OpenChest");
         }
 
         /// <summary>

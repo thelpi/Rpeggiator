@@ -120,4 +120,10 @@
   <data name="InfiniteOverlapCheckExceptionMessage" xml:space="preserve">
     <value>The method can't find a position which avoid every structures.</value>
   </data>
+  <data name="NoQuadraticSolutionExceptionMessage" xml:space="preserve">
+    <value>Unable to resolve this quadratic equation.</value>
+  </data>
+  <data name="NotImplementedGraphicExceptionMessage" xml:space="preserve">
+    <value>This sub-type of graphic should be implemented.</value>
+  </data>
 </root>

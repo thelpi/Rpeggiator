@@ -111,8 +111,7 @@ namespace RPG4
 
             if (quadraticSolution == null)
             {
-                // TODO : log this case
-                return pStart;
+                throw new Abstraction.Exceptions.NoQuadraticSolutionException(pStart, pDest, d);
             }
 
             double xn_s1 = quadraticSolution.Item1;

@@ -27,19 +27,12 @@ namespace RPG4.Models.Sprites
         /// Constructor.
         /// </summary>
         /// <param name="triggerJson">The json dynamic object.</param>
-        public FloorTrigger(dynamic triggerJson) : base((object)triggerJson)
+        public FloorTrigger(dynamic triggerJson)
+            : base((double)triggerJson.X, (double)triggerJson.Y, (double)triggerJson.Width, (double)triggerJson.Height, null)
         {
             _actionDuration = triggerJson.ActionDuration;
-            switch ((string)triggerJson.GraphicType)
-            {
-                case nameof(ImageBrushGraphic):
-                    _activatedGraphic = new ImageBrushGraphic((string)triggerJson.GraphicValueActivated);
-                    break;
-                case nameof(PlainBrushGraphic):
-                    _activatedGraphic = new PlainBrushGraphic((string)triggerJson.GraphicValueActivated);
-                    break;
-                    // TODO : other types of ISpriteGraphic must be implemented here.
-            }
+            base.Graphic = new ImageBrushGraphic("TriggerOff");
+            _activatedGraphic = new ImageBrushGraphic("TriggerOn");
         }
 
         /// <inheritdoc />

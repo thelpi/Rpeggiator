@@ -68,5 +68,23 @@ namespace RPG4 {
                 return ResourceManager.GetString("InfiniteOverlapCheckExceptionMessage", resourceCulture);
             }
         }
+        
+        /// <summary>
+        ///   Recherche une chaîne localisée semblable à Unable to resolve this quadratic equation..
+        /// </summary>
+        internal static string NoQuadraticSolutionExceptionMessage {
+            get {
+                return ResourceManager.GetString("NoQuadraticSolutionExceptionMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Recherche une chaîne localisée semblable à This sub-type of graphic should be implemented..
+        /// </summary>
+        internal static string NotImplementedGraphicExceptionMessage {
+            get {
+                return ResourceManager.GetString("NotImplementedGraphicExceptionMessage", resourceCulture);
+            }
+        }
     }
 }

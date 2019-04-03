@@ -40,7 +40,8 @@ namespace RPG4.Models.Sprites
                         case nameof(PlainBrushGraphic):
                             Graphic = new PlainBrushGraphic((string)floorJsonDatas.HexColor);
                             break;
-                            // TODO : other types of ISpriteGraphic must be implemented here.
+                        default:
+                            throw new System.NotImplementedException(Messages.NotImplementedGraphicExceptionMessage);
                     }
                     break;
             }

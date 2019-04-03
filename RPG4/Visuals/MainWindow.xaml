@@ -17,11 +17,11 @@
             <GroupBox Header="Wallet" Margin="10, 0, 0, 0" Padding="5">
                 <StackPanel Orientation="Horizontal">
                     <StackPanel Orientation="Vertical" Width="20" Height="40">
-                        <Image Width="20" Height="20" Source="Resources/Coin.png" />
+                        <Image Width="20" Height="20" Source="../Resources/Coin.png" />
                         <TextBlock Width="20" Height="20" VerticalAlignment="Center" HorizontalAlignment="Center" Name="txtCoins" />
                     </StackPanel>
                     <StackPanel Margin="5, 0, 0, 0" Orientation="Vertical" Width="20" Height="40">
-                        <Image Width="20" Height="20" Source="Resources/Keyring.png" />
+                        <Image Width="20" Height="20" Source="../Resources/Keyring.png" />
                         <TextBlock Width="20" Height="20" VerticalAlignment="Center" HorizontalAlignment="Center" Name="txtKeyring" />
                     </StackPanel>
                 </StackPanel>

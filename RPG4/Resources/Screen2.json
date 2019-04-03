@@ -71,10 +71,7 @@
       "Height": 20,
       "ActionDuration": 5000,
       "GateIndex": 0,
-      "AppearOnActivation": false,
-      "GraphicType": "ImageBrushGraphic",
-      "ImagePath": "TriggerOff",
-      "GraphicValueActivated": "TriggerOn"
+      "AppearOnActivation": false
     },
     {
       "X": 160,
