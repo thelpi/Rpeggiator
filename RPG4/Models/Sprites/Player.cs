@@ -54,7 +54,7 @@ namespace RPG4.Models.Sprites
         /// <summary>
         /// Indicates the sprite direction.
         /// </summary>
-        public DirectionEnum LastDirection { get; private set; }
+        public DirectionEnum Direction { get; private set; }
         /// <inheritdoc />
         public double ExplosionLifePointCost { get { return InitialPlayerStatus.EXPLOSION_LIFE_POINT_COST; } }
         /// <summary>
@@ -84,7 +84,7 @@ namespace RPG4.Models.Sprites
             _recoveryManager = null;
             _hitElapser = null;
             _currentWeaponHitDelay = InitialPlayerStatus.SWORD_HIT_DELAY;
-            LastDirection = DirectionEnum.Right;
+            Direction = DirectionEnum.Right;
             _movementTimeManager = new Elapser();
         }
 
@@ -99,9 +99,9 @@ namespace RPG4.Models.Sprites
             {
                 CheckPotentialOverlapAndAdjustPosition(ref newPosition);
 
-                CheckNewScreenEntrance(ref newPosition, Engine.Default.CurrentScreen.Width, Engine.Default.CurrentScreen.Height);
+                CheckNewScreenEntrance(ref newPosition);
 
-                SetDirection(newPosition);
+                Direction = Engine.Default.KeyPress.Direction ?? Direction;
 
                 AssigneNewPositionAndAddToHistory(newPosition);
             }
@@ -131,7 +131,7 @@ namespace RPG4.Models.Sprites
                 _hitElapser = new Elapser(_currentWeaponHitDelay);
                 double hitX = X;
                 double hitY = Y;
-                switch (LastDirection)
+                switch (Direction)
                 {
                     case DirectionEnum.Bottom:
                         hitY += Height;
@@ -239,48 +239,36 @@ namespace RPG4.Models.Sprites
             double newLeft = X;
             double distance = _movementTimeManager.Distance(Speed);
 
-            if (keys.PressUp)
+            switch (keys.Direction)
             {
-                if (keys.PressLeft)
-                {
-                    newTop -= Tools.FrameDiagonalDistance(distance);
-                    newLeft -= Tools.FrameDiagonalDistance(distance);
-                }
-                else if (keys.PressRight)
-                {
-                    newTop -= Tools.FrameDiagonalDistance(distance);
-                    newLeft += Tools.FrameDiagonalDistance(distance);
-                }
-                else
-                {
-                    newTop -= distance;
-                }
-            }
-            else if (keys.PressDown)
-            {
-                if (keys.PressLeft)
-                {
-
-                    newTop += Tools.FrameDiagonalDistance(distance);
-                    newLeft -= Tools.FrameDiagonalDistance(distance);
-                }
-                else if (keys.PressRight)
-                {
-                    newTop += Tools.FrameDiagonalDistance(distance);
-                    newLeft += Tools.FrameDiagonalDistance(distance);
-                }
-                else
-                {
+                case DirectionEnum.Bottom:
                     newTop += distance;
-                }
-            }
-            else if (keys.PressLeft)
-            {
-                newLeft -= distance;
-            }
-            else if (keys.PressRight)
-            {
-                newLeft += distance;
+                    break;
+                case DirectionEnum.BottomLeft:
+                    newTop += Tools.FrameDiagonalDistance(distance);
+                    newLeft -= Tools.FrameDiagonalDistance(distance);
+                    break;
+                case DirectionEnum.BottomRight:
+                    newTop += Tools.FrameDiagonalDistance(distance);
+                    newLeft += Tools.FrameDiagonalDistance(distance);
+                    break;
+                case DirectionEnum.Top:
+                    newTop -= distance;
+                    break;
+                case DirectionEnum.TopLeft:
+                    newTop -= Tools.FrameDiagonalDistance(distance);
+                    newLeft -= Tools.FrameDiagonalDistance(distance);
+                    break;
+                case DirectionEnum.TopRight:
+                    newTop -= Tools.FrameDiagonalDistance(distance);
+                    newLeft += Tools.FrameDiagonalDistance(distance);
+                    break;
+                case DirectionEnum.Left:
+                    newLeft -= distance;
+                    break;
+                case DirectionEnum.Right:
+                    newLeft += distance;
+                    break;
             }
 
             return new Point(newLeft, newTop);
@@ -302,8 +290,8 @@ namespace RPG4.Models.Sprites
                 foreach (Sprite sprite in Engine.Default.CurrentScreen.Structures)
                 {
                     Point pToMove = sprite.CheckOverlapAndAdjustPosition(currentPt, this,
-                        Engine.Default.KeyPress.PressLeft ? true : (Engine.Default.KeyPress.PressRight ? false : (bool?)null),
-                        Engine.Default.KeyPress.PressUp ? true : (Engine.Default.KeyPress.PressDown ? false : (bool?)null));
+                        Engine.Default.KeyPress.GoLeft ? true : (Engine.Default.KeyPress.GoRight ? false : (bool?)null),
+                        Engine.Default.KeyPress.GoUp ? true : (Engine.Default.KeyPress.GoBottom ? false : (bool?)null));
 
                     if (pToMove.X.GreaterEqual(0) || pToMove.Y.GreaterEqual(0))
                     {
@@ -324,15 +312,13 @@ namespace RPG4.Models.Sprites
         /// Checks if <paramref name="newPosition"/> triggers a new screen entrance.
         /// </summary>
         /// <param name="newPosition">The new position; might be edited inside the function.</param>
-        /// <param name="areaWidth">Current area width.</param>
-        /// <param name="areaHeight">Current area height.</param>
         /// <returns><c>True</c> if enters a new screen; <c>False</c> otherwise.</returns>
-        private bool CheckNewScreenEntrance(ref Point newPosition, double areaWidth, double areaHeight)
+        private bool CheckNewScreenEntrance(ref Point newPosition)
         {
             bool goLeft = newPosition.X.Lower(0);
             bool goUp = newPosition.Y.Lower(0);
-            bool goRight = (newPosition.X + Width).Greater(areaWidth);
-            bool goDown = (newPosition.Y + Height).Greater(areaHeight);
+            bool goRight = (newPosition.X + Width).Greater(Engine.Default.CurrentScreen.Width);
+            bool goDown = (newPosition.Y + Height).Greater(Engine.Default.CurrentScreen.Height);
 
             if (!goLeft && !goUp && !goRight && !goDown)
             {
@@ -341,11 +327,11 @@ namespace RPG4.Models.Sprites
 
             if (goLeft)
             {
-                newPosition.X = areaWidth - Width;
+                newPosition.X = Engine.Default.CurrentScreen.Width - Width;
                 if (goUp)
                 {
                     NewScreenEntrance = DirectionEnum.TopLeft;
-                    newPosition.Y = areaHeight - Height;
+                    newPosition.Y = Engine.Default.CurrentScreen.Height - Height;
                 }
                 else if (goDown)
                 {
@@ -363,7 +349,7 @@ namespace RPG4.Models.Sprites
                 if (goUp)
                 {
                     NewScreenEntrance = DirectionEnum.TopRight;
-                    newPosition.Y = areaHeight - Height;
+                    newPosition.Y = Engine.Default.CurrentScreen.Height - Height;
                 }
                 else if (goDown)
                 {
@@ -378,7 +364,7 @@ namespace RPG4.Models.Sprites
             else if (goUp)
             {
                 NewScreenEntrance = DirectionEnum.Top;
-                newPosition.Y = areaHeight - Height;
+                newPosition.Y = Engine.Default.CurrentScreen.Height - Height;
             }
             else
             {
@@ -387,59 +373,6 @@ namespace RPG4.Models.Sprites
             }
 
             return true;
-        }
-
-        /// <summary>
-        /// Sets <see cref="LastDirection"/> property.
-        /// </summary>
-        /// <param name="newPosition">new position.</param>
-        private void SetDirection(Point newPosition)
-        {
-            if (NewScreenEntrance.HasValue)
-            {
-                LastDirection = NewScreenEntrance.Value;
-            }
-            else if (newPosition.X.Lower(X))
-            {
-                if (newPosition.Y.Greater(Y))
-                {
-                    LastDirection = DirectionEnum.BottomLeft;
-                }
-                else if (newPosition.Y.Lower(Y))
-                {
-                    LastDirection = DirectionEnum.TopLeft;
-                }
-                else
-                {
-                    LastDirection = DirectionEnum.Left;
-                }
-            }
-            else if (newPosition.X.Greater(X))
-            {
-                if (newPosition.Y.Greater(Y))
-                {
-                    LastDirection = DirectionEnum.BottomRight;
-                }
-                else if (newPosition.Y.Lower(Y))
-                {
-                    LastDirection = DirectionEnum.TopRight;
-                }
-                else
-                {
-                    LastDirection = DirectionEnum.Right;
-                }
-            }
-            else
-            {
-                if (newPosition.Y.Greater(Y))
-                {
-                    LastDirection = DirectionEnum.Bottom;
-                }
-                else if (newPosition.Y.Lower(Y))
-                {
-                    LastDirection = DirectionEnum.Top;
-                }
-            }
         }
 
         /// <summary>

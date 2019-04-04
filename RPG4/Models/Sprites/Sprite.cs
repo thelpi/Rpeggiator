@@ -255,24 +255,24 @@ namespace RPG4.Models.Sprites
             // Shortcut.
             Player p = Engine.Default.Player;
 
-            switch (p.LastDirection)
+            switch (p.Direction)
             {
-                case DirectionEnum.Bottom:
-                    return Y.GreaterEqual(p.BottomRightY) && ComputeHorizontalOverlap(p).Greater(0);
-                case DirectionEnum.BottomLeft:
-                    return Y.GreaterEqual(p.BottomRightY) && X.GreaterEqual(p.BottomRightX);
-                case DirectionEnum.BottomRight:
-                    return Y.GreaterEqual(p.BottomRightY) && BottomRightX.LowerEqual(p.X);
-                case DirectionEnum.Left:
-                    return X.GreaterEqual(p.BottomRightX) && ComputeVerticalOverlap(p).Greater(0);
-                case DirectionEnum.Right:
-                    return BottomRightX.LowerEqual(p.X) && ComputeVerticalOverlap(p).Greater(0);
                 case DirectionEnum.Top:
                     return BottomRightY.LowerEqual(p.Y) && ComputeHorizontalOverlap(p).Greater(0);
+                case DirectionEnum.Bottom:
+                    return Y.GreaterEqual(p.BottomRightY) && ComputeHorizontalOverlap(p).Greater(0);
+                case DirectionEnum.Right:
+                    return X.GreaterEqual(p.BottomRightX) && ComputeVerticalOverlap(p).Greater(0);
+                case DirectionEnum.Left:
+                    return BottomRightX.LowerEqual(p.X) && ComputeVerticalOverlap(p).Greater(0);
+                case DirectionEnum.BottomLeft:
+                    return BottomRightX.LowerEqual(p.X) && Y.GreaterEqual(p.BottomRightY);
+                case DirectionEnum.BottomRight:
+                    return X.GreaterEqual(p.BottomRightX) && Y.GreaterEqual(p.BottomRightY);
                 case DirectionEnum.TopLeft:
-                    return BottomRightY.LowerEqual(p.Y) && X.GreaterEqual(p.BottomRightX);
+                    return BottomRightX.LowerEqual(p.X) && BottomRightY.LowerEqual(p.Y);
                 case DirectionEnum.TopRight:
-                    return BottomRightY.LowerEqual(p.Y) && BottomRightX.LowerEqual(p.X);
+                    return X.GreaterEqual(p.BottomRightX) && BottomRightY.LowerEqual(p.Y);
             }
 
             return false;

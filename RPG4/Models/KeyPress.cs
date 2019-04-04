@@ -1,4 +1,6 @@
-﻿namespace RPG4.Models
+﻿using System.Linq;
+
+namespace RPG4.Models
 {
     /// <summary>
     /// Represents the keayboard input for a frame inside the <see cref="Engine"/>
@@ -6,21 +8,9 @@
     public class KeyPress
     {
         /// <summary>
-        /// Indicates if the up button is pressed.
+        /// Indicates the direction if arrow keys are pressed.
         /// </summary>
-        public bool PressUp { get; private set; }
-        /// <summary>
-        /// Indicates if the down button is pressed.
-        /// </summary>
-        public bool PressDown { get; private set; }
-        /// <summary>
-        /// Indicates if the right button is pressed.
-        /// </summary>
-        public bool PressRight { get; private set; }
-        /// <summary>
-        /// Indicates if the left button is pressed.
-        /// </summary>
-        public bool PressLeft { get; private set; }
+        public DirectionEnum? Direction { get; private set; }
         /// <summary>
         /// Indicates if the hit button is pressed.
         /// </summary>
@@ -33,40 +23,119 @@
         /// Indicates the inventory slot pressed.
         /// </summary>
         public int? InventorySlotId { get; private set; }
+        /// <summary>
+        /// Inferred; indicates if the general direction of pressed keys is left.
+        /// </summary>
+        /// <returns><c>True</c> if it's left; <c>False</c> otherwise.</returns>
+        public bool GoLeft
+        {
+            get
+            {
+                return GoDirection(DirectionEnum.Left, DirectionEnum.TopLeft, DirectionEnum.BottomLeft);
+            }
+        }
+        /// <summary>
+        /// Inferred; indicates if the general direction of pressed keys is right.
+        /// </summary>
+        /// <returns><c>True</c> if it's right; <c>False</c> otherwise.</returns>
+        public bool GoRight
+        {
+            get
+            {
+                return GoDirection(DirectionEnum.Right, DirectionEnum.TopRight, DirectionEnum.BottomRight);
+            }
+        }
+        /// <summary>
+        /// Inferred; indicates if the general direction of pressed keys is up.
+        /// </summary>
+        /// <returns><c>True</c> if it's up; <c>False</c> otherwise.</returns>
+        public bool GoUp
+        {
+            get
+            {
+                return GoDirection(DirectionEnum.Top, DirectionEnum.TopLeft, DirectionEnum.TopRight);
+            }
+        }
+        /// <summary>
+        /// Inferred; indicates if the general direction of pressed keys is bottom.
+        /// </summary>
+        /// <returns><c>True</c> if it's bottom; <c>False</c> otherwise.</returns>
+        public bool GoBottom
+        {
+            get
+            {
+                return GoDirection(DirectionEnum.Bottom, DirectionEnum.BottomLeft, DirectionEnum.BottomRight);
+            }
+        }
 
         /// <summary>
         /// Constructor.
         /// </summary>
-        /// <param name="up"><see cref="PressUp"/></param>
-        /// <param name="down"><see cref="PressDown"/></param>
-        /// <param name="right"><see cref="PressRight"/></param>
-        /// <param name="left"><see cref="PressLeft"/></param>
+        /// <param name="up">Indicates if up key is pressed.</param>
+        /// <param name="down">Indicates if down key is pressed.</param>
+        /// <param name="right">Indicates if right key is pressed.</param>
+        /// <param name="left">Indicates if left key is pressed.</param>
         /// <param name="hit"><see cref="PressHit"/></param>
         /// <param name="action"><see cref="PressAction"/></param>
         /// <param name="inventorySlotId"><see cref="InventorySlotId"/></param>
         public KeyPress(bool up, bool down, bool right, bool left, bool hit, bool action, int? inventorySlotId)
         {
-            PressUp = up;
-            PressDown = down;
-            PressRight = right;
-            PressLeft = left;
             PressHit = hit;
             PressAction = action;
             InventorySlotId = inventorySlotId;
 
             // up and down both pressed cancel each other
-            if (PressUp && PressDown)
+            if (up && down)
             {
-                PressDown = false;
-                PressUp = false;
+                down = false;
+                up = false;
             }
 
             // right and left both pressed cancel each other
-            if (PressRight && PressLeft)
+            if (right && left)
             {
-                PressRight = false;
-                PressLeft = false;
+                right = false;
+                left = false;
             }
+
+            if (up)
+            {
+                Direction = DirectionEnum.Top;
+                if (right)
+                {
+                    Direction = DirectionEnum.TopRight;
+                }
+                else if (left)
+                {
+                    Direction = DirectionEnum.TopLeft;
+                }
+            }
+            else if (down)
+            {
+                Direction = DirectionEnum.Bottom;
+                if (right)
+                {
+                    Direction = DirectionEnum.BottomRight;
+                }
+                else if (left)
+                {
+                    Direction = DirectionEnum.BottomLeft;
+                }
+            }
+            else if (right)
+            {
+                Direction = DirectionEnum.Right;
+            }
+            else if (left)
+            {
+                Direction = DirectionEnum.Left;
+            }
+        }
+
+        // Indicates if the general direction is one of the input array.
+        private bool GoDirection(params DirectionEnum[] dirs)
+        {
+            return Direction.HasValue && dirs.Contains(Direction.Value);
         }
     }
 }

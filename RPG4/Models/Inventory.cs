@@ -185,7 +185,7 @@ namespace RPG4.Models
             var sprite = Engine.Default.Player;
 
             Point pt = new Point(sprite.X, sprite.Y);
-            switch (sprite.LastDirection)
+            switch (sprite.Direction)
             {
                 case DirectionEnum.BottomLeft:
                     pt.Y = sprite.BottomRightY - ActionnedBomb.HEIGHT;
