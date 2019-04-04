@@ -126,4 +126,7 @@
   <data name="NotImplementedGraphicExceptionMessage" xml:space="preserve">
     <value>This sub-type of graphic should be implemented.</value>
   </data>
+  <data name="NotImplementedZindexTypeExceptionMessage" xml:space="preserve">
+    <value>The Z-index property for this subtype has not been implemented.</value>
+  </data>
 </root>

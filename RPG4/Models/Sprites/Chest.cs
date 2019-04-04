@@ -25,8 +25,9 @@ namespace RPG4.Models.Sprites
         /// Constructor.
         /// </summary>
         /// <param name="chestJsonDatas">Chest json datas.</param>
-        public Chest(dynamic chestJsonDatas)
-            : base((double)chestJsonDatas.X, (double)chestJsonDatas.Y, (double)chestJsonDatas.Width, (double)chestJsonDatas.Height, null)
+        public Chest(dynamic chestJsonDatas) : base(
+            (double)chestJsonDatas.X, (double)chestJsonDatas.Y,
+            (double)chestJsonDatas.Width, (double)chestJsonDatas.Height)
         {
             _itemId = chestJsonDatas.ItemId;
             _quantity = chestJsonDatas.Quantity;

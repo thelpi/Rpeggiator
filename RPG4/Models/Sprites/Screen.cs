@@ -13,7 +13,7 @@ namespace RPG4.Models.Sprites
         private static List<Screen> _screens = new List<Screen>();
 
         private Dictionary<DirectionEnum, int> _neighboringScreens;
-        private List<Sprite> _permanentStructures;
+        private List<PermanentStructure> _permanentStructures;
         private List<Gate> _gates;
         private List<Rift> _rifts;
         private List<Enemy> _enemies;
@@ -23,6 +23,7 @@ namespace RPG4.Models.Sprites
         private List<Pit> _pits;
         private List<Chest> _chests;
         private List<Door> _doors;
+        private List<Floor> _floors;
 
         /// <summary>
         /// Current screen identifier..
@@ -35,11 +36,15 @@ namespace RPG4.Models.Sprites
         /// <summary>
         /// List of permanent structures.
         /// </summary>
-        public IReadOnlyCollection<Sprite> PermanentStructures { get { return _permanentStructures; } }
+        public IReadOnlyCollection<PermanentStructure> PermanentStructures { get { return _permanentStructures; } }
         /// <summary>
         /// List of <see cref="Door"/>.
         /// </summary>
         public IReadOnlyCollection<Door> Doors { get { return _doors; } }
+        /// <summary>
+        /// List of <see cref="Floor"/>.
+        /// </summary>
+        public IReadOnlyCollection<Floor> Floors { get { return _floors; } }
         /// <summary>
         /// List of <see cref="Pit"/>.
         /// </summary>
@@ -123,8 +128,9 @@ namespace RPG4.Models.Sprites
         private Screen(int id, dynamic screenJsonDatas) : base((object)screenJsonDatas)
         {
             Id = id;
-            _permanentStructures = new List<Sprite>();
+            _permanentStructures = new List<PermanentStructure>();
             _doors = new List<Door>();
+            _floors = new List<Floor>();
             _enemies = new List<Enemy>();
             _gateTriggers = new List<GateTrigger>();
             _gates = new List<Gate>();
@@ -136,7 +142,7 @@ namespace RPG4.Models.Sprites
             DarknessOpacity = screenJsonDatas.AreaDarknessOpacity;
             foreach (dynamic structureJson in screenJsonDatas.PermanentStructures)
             {
-                _permanentStructures.Add(new Sprite(structureJson));
+                _permanentStructures.Add(new PermanentStructure(structureJson));
             }
             foreach (dynamic gateJson in screenJsonDatas.Gates)
             {
@@ -157,6 +163,10 @@ namespace RPG4.Models.Sprites
             foreach (dynamic doorJson in screenJsonDatas.Doors)
             {
                 _doors.Add(new Door(doorJson));
+            }
+            foreach (dynamic floorJson in screenJsonDatas.Floors)
+            {
+                _floors.Add(new Floor(floorJson));
             }
             foreach (dynamic enemyJson in screenJsonDatas.Enemies)
             {

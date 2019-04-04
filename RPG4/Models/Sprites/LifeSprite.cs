@@ -31,7 +31,7 @@ namespace RPG4.Models.Sprites
         /// <param name="graphic"><see cref="Sprite.Graphic"/></param>
         /// <param name="maximalLifePoints"><see cref="MaximalLifePoints"/></param>
         /// <param name="hitLifePointCost"><see cref="HitLifePointCost"/></param>
-        public LifeSprite(double x, double y, double width, double height, Graphic.ISpriteGraphic graphic, double maximalLifePoints, double hitLifePointCost)
+        protected LifeSprite(double x, double y, double width, double height, Graphic.ISpriteGraphic graphic, double maximalLifePoints, double hitLifePointCost)
             : base(x, y, width, height, graphic)
         {
             MaximalLifePoints = maximalLifePoints;
@@ -43,7 +43,7 @@ namespace RPG4.Models.Sprites
         /// Constructor.
         /// </summary>
         /// <param name="lifeSpriteJson">The json dynamic object.</param>
-        public LifeSprite(dynamic lifeSpriteJson) : base((object)lifeSpriteJson)
+        protected LifeSprite(dynamic lifeSpriteJson) : base((object)lifeSpriteJson)
         {
             MaximalLifePoints = lifeSpriteJson.MaximalLifePoints;
             CurrentLifePoints = MaximalLifePoints;

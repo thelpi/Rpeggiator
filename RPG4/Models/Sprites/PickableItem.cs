@@ -27,9 +27,10 @@ namespace RPG4.Models.Sprites
         /// Constructor.
         /// </summary>
         /// <param name="floorItemJson">The json dynamic object.</param>
-        public PickableItem(dynamic floorItemJson)
-            : base((double)floorItemJson.X, (double)floorItemJson.Y, Item.LOOT_WIDTH, Item.LOOT_HEIGHT,
-                  Item.GetItem((ItemEnum)Enum.Parse(typeof(ItemEnum), (string)floorItemJson.ItemId)).LootGraphic)
+        public PickableItem(dynamic floorItemJson) : base(
+            (double)floorItemJson.X, (double)floorItemJson.Y,
+            Item.LOOT_WIDTH, Item.LOOT_HEIGHT,
+            Item.GetItem((ItemEnum)floorItemJson.ItemId).LootGraphic)
         {
             _itemId = floorItemJson.ItemId;
             Quantity = floorItemJson.Quantity;
@@ -37,8 +38,7 @@ namespace RPG4.Models.Sprites
 
         // Private constructor.
         private PickableItem(double x, double y, double with, double height, ISpriteGraphic graphic,
-            ItemEnum? itemId, int quantity, double? timeBeForeDisapear)
-            : base(x, y, with, height, graphic)
+            ItemEnum? itemId, int quantity, double? timeBeForeDisapear) : base(x, y, with, height, graphic)
         {
             _itemId = itemId;
             Quantity = quantity;

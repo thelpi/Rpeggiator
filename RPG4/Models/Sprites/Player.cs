@@ -50,7 +50,7 @@ namespace RPG4.Models.Sprites
         /// <summary>
         /// Hit <see cref="Sprite"/>.
         /// </summary>
-        public Sprite HitSprite { get; private set; }
+        public WeaponHit HitSprite { get; private set; }
         /// <summary>
         /// Indicates the sprite direction.
         /// </summary>
@@ -61,6 +61,18 @@ namespace RPG4.Models.Sprites
         /// Graphic rendering when recovering.
         /// </summary>
         public ISpriteGraphic RecoveryGraphic { get { return InitialPlayerStatus.RECOVERY_GRAPHIC; } }
+        /// <summary>
+        /// Inferred; current <see cref="FloorTypeEnum"/> the player is standing on.
+        /// </summary>
+        public FloorTypeEnum CurrentFloor
+        {
+            get
+            {
+                return Engine.Default.CurrentScreen.Floors.FirstOrDefault(f =>
+                    Overlap(f, Constants.FLOOR_CHANGE_OVERLAP_RATIO)
+                )?.FloorType ?? Engine.Default.CurrentScreen.FloorType;
+            }
+        }
 
         /// <summary>
         /// Constructor.
@@ -120,57 +132,6 @@ namespace RPG4.Models.Sprites
                         break;
                     }
                 }
-            }
-        }
-
-        // Manages the main weapon hit.
-        private void ManageHit()
-        {
-            if (Engine.Default.KeyPress.PressHit && _hitElapser == null)
-            {
-                _hitElapser = new Elapser(_currentWeaponHitDelay);
-                double hitX = X;
-                double hitY = Y;
-                switch (Direction)
-                {
-                    case DirectionEnum.Bottom:
-                        hitY += Height;
-                        break;
-                    case DirectionEnum.BottomLeft:
-                        hitY += Height;
-                        hitX -= Width;
-                        break;
-                    case DirectionEnum.BottomRight:
-                        hitY += Height;
-                        hitX += Width;
-                        break;
-                    case DirectionEnum.Left:
-                        hitX -= Width;
-                        break;
-                    case DirectionEnum.Right:
-                        hitX += Width;
-                        break;
-                    case DirectionEnum.TopRight:
-                        hitY -= Height;
-                        hitX += Width;
-                        break;
-                    case DirectionEnum.TopLeft:
-                        hitY -= Height;
-                        hitX -= Width;
-                        break;
-                    case DirectionEnum.Top:
-                        hitY -= Height;
-                        break;
-                }
-                HitSprite = new Sprite(hitX, hitY, Width, Height, InitialPlayerStatus.HIT_GRAPHIC);
-            }
-            else if (_hitElapser?.Elapsed == true)
-            {
-                _hitElapser = null;
-            }
-            if (_hitElapser == null)
-            {
-                HitSprite = null;
             }
         }
 
@@ -392,5 +353,56 @@ namespace RPG4.Models.Sprites
         }
 
         #endregion Position management private methods
+
+        // Manages the main weapon hit.
+        private void ManageHit()
+        {
+            if (Engine.Default.KeyPress.PressHit && _hitElapser == null)
+            {
+                _hitElapser = new Elapser(_currentWeaponHitDelay);
+                double hitX = X;
+                double hitY = Y;
+                switch (Direction)
+                {
+                    case DirectionEnum.Bottom:
+                        hitY += Height;
+                        break;
+                    case DirectionEnum.BottomLeft:
+                        hitY += Height;
+                        hitX -= Width;
+                        break;
+                    case DirectionEnum.BottomRight:
+                        hitY += Height;
+                        hitX += Width;
+                        break;
+                    case DirectionEnum.Left:
+                        hitX -= Width;
+                        break;
+                    case DirectionEnum.Right:
+                        hitX += Width;
+                        break;
+                    case DirectionEnum.TopRight:
+                        hitY -= Height;
+                        hitX += Width;
+                        break;
+                    case DirectionEnum.TopLeft:
+                        hitY -= Height;
+                        hitX -= Width;
+                        break;
+                    case DirectionEnum.Top:
+                        hitY -= Height;
+                        break;
+                }
+                HitSprite = new WeaponHit(hitX, hitY, Width, Height);
+            }
+            else if (_hitElapser?.Elapsed == true)
+            {
+                _hitElapser = null;
+            }
+            if (_hitElapser == null)
+            {
+                HitSprite = null;
+            }
+        }
     }
 }

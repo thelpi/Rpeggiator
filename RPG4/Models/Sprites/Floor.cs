@@ -16,8 +16,9 @@ namespace RPG4.Models.Sprites
         /// Constructor.
         /// </summary>
         /// <param name="floorJsonDatas">Floor json datas.</param>
-        public Floor(dynamic floorJsonDatas)
-            : base((double)floorJsonDatas.X, (double)floorJsonDatas.Y, (double)floorJsonDatas.Width, (double)floorJsonDatas.Height, null)
+        public Floor(dynamic floorJsonDatas) : base(
+            (double)floorJsonDatas.X, (double)floorJsonDatas.Y,
+            (double)floorJsonDatas.Width, (double)floorJsonDatas.Height)
         {
             FloorType = floorJsonDatas.FloorType;
             switch (FloorType)

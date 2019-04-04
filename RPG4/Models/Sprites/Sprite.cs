@@ -1,4 +1,6 @@
 ﻿using RPG4.Models.Graphic;
+using System.Collections.Generic;
+using System.Linq;
 using System.Windows;
 
 namespace RPG4.Models.Sprites
@@ -28,6 +30,10 @@ namespace RPG4.Models.Sprites
         /// Graphic rendering.
         /// </summary>
         public virtual ISpriteGraphic Graphic { get; protected set; }
+        /// <summary>
+        /// Z-axis layer when displayed.
+        /// </summary>
+        public int ZIndex { get; private set; }
 
         /// <summary>
         /// Inferred; top left corner coordinates.
@@ -53,41 +59,54 @@ namespace RPG4.Models.Sprites
         /// <summary>
         /// Constructor.
         /// </summary>
+        /// <param name="datas">The json dynamic object.</param>
+        protected Sprite(dynamic datas) : this((double)datas.X, (double)datas.Y, (double)datas.Width, (double)datas.Height)
+        {
+            switch ((string)datas.GraphicType)
+            {
+                case nameof(ImageBrushGraphic):
+                    Graphic = new ImageBrushGraphic((string)datas.ImagePath);
+                    break;
+                case nameof(PlainBrushGraphic):
+                    Graphic = new PlainBrushGraphic((string)datas.HexColor);
+                    break;
+                default:
+                    throw new System.NotImplementedException(Messages.NotImplementedGraphicExceptionMessage);
+            }
+        }
+
+        /// <summary>
+        /// Constructor.
+        /// </summary>
+        /// <param name="x"><see cref="X"/></param>
+        /// <param name="y"><see cref="Y"/></param>
+        /// <param name="width"><see cref="Width"/></param>
+        /// <param name="height"><see cref="Height"/></param>
+        protected Sprite(double x, double y, double width, double height) : this(x, y, width, height, null) { }
+
+        /// <summary>
+        /// Constructor.
+        /// </summary>
         /// <param name="x"><see cref="X"/></param>
         /// <param name="y"><see cref="Y"/></param>
         /// <param name="width"><see cref="Width"/></param>
         /// <param name="height"><see cref="Height"/></param>
         /// <param name="graphic"><see cref="Graphic"/></param>
-        public Sprite(double x, double y, double width, double height, ISpriteGraphic graphic)
+        protected Sprite(double x, double y, double width, double height, ISpriteGraphic graphic)
+            : this(x, y, width, height, graphic, 0)
+        {
+            ZIndex = GetZIndexBySubType();
+        }
+
+        // Private constructor.
+        private Sprite(double x, double y, double width, double height, ISpriteGraphic graphic, int zIndex)
         {
             X = x;
             Y = y;
             Width = width;
             Height = height;
             Graphic = graphic;
-        }
-
-        /// <summary>
-        /// Constructor.
-        /// </summary>
-        /// <param name="sizedPointJson">The json dynamic object.</param>
-        public Sprite(dynamic sizedPointJson)
-        {
-            X = sizedPointJson.X;
-            Y = sizedPointJson.Y;
-            Width = sizedPointJson.Width;
-            Height = sizedPointJson.Height;
-            switch ((string)sizedPointJson.GraphicType)
-            {
-                case nameof(ImageBrushGraphic):
-                    Graphic = new ImageBrushGraphic((string)sizedPointJson.ImagePath);
-                    break;
-                case nameof(PlainBrushGraphic):
-                    Graphic = new PlainBrushGraphic((string)sizedPointJson.HexColor);
-                    break;
-                default:
-                    throw new System.NotImplementedException(Messages.NotImplementedGraphicExceptionMessage);
-            }
+            ZIndex = zIndex;
         }
 
         /// <summary>
@@ -97,7 +116,7 @@ namespace RPG4.Models.Sprites
         /// <returns>The new instance.</returns>
         public Sprite CopyToPosition(Point newPosition)
         {
-            return new Sprite(newPosition.X, newPosition.Y, Width, Height, Graphic);
+            return new Sprite(newPosition.X, newPosition.Y, Width, Height, Graphic, ZIndex);
         }
 
         /// <summary>
@@ -211,7 +230,7 @@ namespace RPG4.Models.Sprites
             double a = ((1 - ratio) / 2);
             double newX = X + (a * Width);
             double newY = Y + (a * Height);
-            return new Sprite(newX, newY, Width * ratio, Height * ratio, Graphic);
+            return new Sprite(newX, newY, Width * ratio, Height * ratio, Graphic, ZIndex);
         }
 
         /// <summary>
@@ -311,6 +330,31 @@ namespace RPG4.Models.Sprites
             }
 
             return 0;
+        }
+
+        // Gets the Z-axis index depending on real sprite type.
+        private int GetZIndexBySubType()
+        {
+            Dictionary<int, System.Type[]> typesByZIndex = new Dictionary<int, System.Type[]>
+            {
+                { 0, new System.Type[] { typeof(Screen) } },
+                { 1, new System.Type[] { typeof(Floor) } },
+                { 2, new System.Type[] { typeof(Rift), typeof(Pit), typeof(Door), typeof(Gate), typeof(GateTrigger),
+                    typeof(PickableItem), typeof(Chest), typeof(PermanentStructure) } },
+                { 3, new System.Type[] { typeof(Enemy), typeof(Player) } },
+                { 4, new System.Type[] { typeof(BombExplosion), } },
+                { 5, new System.Type[] { typeof(ActionnedBomb), typeof(WeaponHit) } }
+            };
+
+            foreach (int zIndexKey in typesByZIndex.Keys)
+            {
+                if (typesByZIndex[zIndexKey].Contains(GetType()))
+                {
+                    return zIndexKey;
+                }
+            }
+
+            throw new System.NotImplementedException(Messages.NotImplementedZindexTypeExceptionMessage);
         }
     }
 }

@@ -82,10 +82,12 @@
     <Compile Include="Models\Graphic\SpriteGraphic.cs" />
     <Compile Include="Models\Path.cs" />
     <Compile Include="Models\PathStep.cs" />
+    <Compile Include="Models\Sprites\BombExplosion.cs" />
     <Compile Include="Models\Sprites\Chest.cs" />
     <Compile Include="Models\Sprites\Door.cs" />
     <Compile Include="Models\FloorTypeEnum.cs" />
     <Compile Include="Models\Sprites\Floor.cs" />
+    <Compile Include="Models\Sprites\WeaponHit.cs" />
     <Compile Include="Models\Sprites\Screen.cs" />
     <Compile Include="Models\Sprites\ActionnedBomb.cs" />
     <Compile Include="Models\DirectionEnum.cs" />
@@ -105,6 +107,7 @@
     <Compile Include="Models\Sprites\Rift.cs" />
     <Compile Include="Models\Sprites\Sprite.cs" />
     <Compile Include="Models\Sprites\Gate.cs" />
+    <Compile Include="Models\Sprites\PermanentStructure.cs" />
     <Compile Include="Tools\InitialPlayerStatus.cs" />
     <Compile Include="Messages.Designer.cs">
       <AutoGen>True</AutoGen>

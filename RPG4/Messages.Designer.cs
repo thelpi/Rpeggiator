@@ -86,5 +86,14 @@ namespace RPG4 {
                 return ResourceManager.GetString("NotImplementedGraphicExceptionMessage", resourceCulture);
             }
         }
+        
+        /// <summary>
+        ///   Recherche une chaîne localisée semblable à The Z-index property for this subtype has not been implemented..
+        /// </summary>
+        internal static string NotImplementedZindexTypeExceptionMessage {
+            get {
+                return ResourceManager.GetString("NotImplementedZindexTypeExceptionMessage", resourceCulture);
+            }
+        }
     }
 }

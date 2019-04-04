@@ -55,5 +55,9 @@ namespace RPG4
         /// Maximal gap to consider two <see cref="double"/> as equal.
         /// </summary>
         public const double TYPE_DOUBLE_COMPARISON_TOLERANCE = 0.00001;
+        /// <summary>
+        /// Overlap ratio to change from one <see cref="Models.Sprites.Floor"/> to another.
+        /// </summary>
+        public const double FLOOR_CHANGE_OVERLAP_RATIO = 0.5;
     }
 }

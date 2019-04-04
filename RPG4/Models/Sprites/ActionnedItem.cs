@@ -19,6 +19,7 @@
         /// <param name="height"><see cref="Sprite.Height"/></param>
         /// <param name="width"><see cref="Sprite.Width"/></param>
         /// <param name="graphic"><see cref="Sprite.Graphic"/></param>
-        public ActionnedItem(double x, double y, double width, double height, Graphic.ISpriteGraphic graphic) : base(x, y, width, height, graphic) { }
+        protected ActionnedItem(double x, double y, double width, double height, Graphic.ISpriteGraphic graphic)
+            : base(x, y, width, height, graphic) { }
     }
 }

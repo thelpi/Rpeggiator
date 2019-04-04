@@ -136,10 +136,14 @@ namespace RPG4.Visuals
             {
                 DrawSizedPoint(s, fixedId: true);
             }
+            foreach (var f in Engine.Default.CurrentScreen.Floors)
+            {
+                DrawSizedPoint(f, fixedId: true);
+            }
         }
 
         // Draws a sprite inside the main canvas.
-        private void DrawSizedPoint(Sprite sp, int zIndex = 0, bool fixedId = false)
+        private void DrawSizedPoint(Sprite sp, bool fixedId = false)
         {
             Rectangle rct = new Rectangle
             {
@@ -154,7 +158,7 @@ namespace RPG4.Visuals
             rct.SetValue(Canvas.TopProperty, sp.Y);
             rct.SetValue(Canvas.LeftProperty, sp.X);
 
-            Panel.SetZIndex(rct, zIndex);
+            Panel.SetZIndex(rct, sp.ZIndex);
 
             cvsMain.Children.Add(rct);
         }
@@ -190,32 +194,28 @@ namespace RPG4.Visuals
             {
                 rctPlayer.Fill = Engine.Default.Player.Graphic.GetRenderingBrush();
             }
-
-            int zIndex = 0;
+            
             if (Engine.Default.Player.IsHitting)
             {
-                zIndex = 1;
                 DrawSizedPoint(Engine.Default.Player.HitSprite);
             }
 
-            Panel.SetZIndex(rctPlayer, zIndex);
+            Panel.SetZIndex(rctPlayer, Engine.Default.Player.ZIndex);
 
             #endregion Player
 
             foreach (var sprite in Engine.Default.CurrentScreen.AnimatedSprites)
             {
-                zIndex = 0;
                 if (sprite.GetType() == typeof(ActionnedBomb))
                 {
                     var halo = (sprite as ActionnedBomb).ExplosionSprite;
                     if (halo != null)
                     {
                         DrawSizedPoint(halo);
-                        zIndex = 1;
                     }
                 }
 
-                DrawSizedPoint(sprite, zIndex: zIndex);
+                DrawSizedPoint(sprite);
             }
 
             SetLightAndDarkness();

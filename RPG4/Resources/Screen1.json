@@ -3,10 +3,11 @@
   "Y": 0,
   "Width": 800,
   "Height": 600,
-  "FloorType": "ground",
+  "FloorType": "Ground",
   "GraphicType": "PlainBrushGraphic",
   "HexColor": "#FFFFEFD5",
   "AreaDarknessOpacity": 0,
+  "Floors": [],
   "PermanentStructures": [
     {
       "X": 0,

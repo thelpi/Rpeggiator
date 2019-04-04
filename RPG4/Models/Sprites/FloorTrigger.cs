@@ -27,8 +27,9 @@ namespace RPG4.Models.Sprites
         /// Constructor.
         /// </summary>
         /// <param name="triggerJson">The json dynamic object.</param>
-        public FloorTrigger(dynamic triggerJson)
-            : base((double)triggerJson.X, (double)triggerJson.Y, (double)triggerJson.Width, (double)triggerJson.Height, null)
+        protected FloorTrigger(dynamic triggerJson) : base(
+            (double)triggerJson.X, (double)triggerJson.Y,
+            (double)triggerJson.Width, (double)triggerJson.Height)
         {
             _actionDuration = triggerJson.ActionDuration;
             base.Graphic = new ImageBrushGraphic("TriggerOff");

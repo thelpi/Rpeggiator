@@ -17,14 +17,10 @@ namespace RPG4.Models.Sprites
         /// Bomb height.
         /// </summary>
         public const double HEIGHT = 20;
-        // When exploding, indicates the ratio size of the halo (compared to the bomb itself).
-        private const double HALO_SIZE_RATIO = 3;
         // Milliseconds while pending explosion.
         private static readonly double TIME_WHILE_PENDING = 2000;
         // Milliseconds while exploding.
         private static readonly double TIME_WHILE_EXPLODING = 500;
-        // Halo graphic rendering.
-        private static readonly ISpriteGraphic HALO_GRAPHIC_RENDERING = new PlainBrushGraphic("#FFFF4500");
         // Bomb graphic rendering.
         private static readonly ISpriteGraphic GRAPHIC_RENDERING = new ImageBrushGraphic("Bomb");
 
@@ -34,9 +30,9 @@ namespace RPG4.Models.Sprites
         private Elapser _explodingTimeManager;
 
         /// <summary>
-        /// Explosion <see cref="Sprite"/>.
+        /// <see cref="BombExplosion"/> sprite.
         /// </summary>
-        public Sprite ExplosionSprite { get; private set; }
+        public BombExplosion ExplosionSprite { get; private set; }
         /// <summary>
         /// Inferred; Indicates the bomb explodes now.
         /// </summary>
@@ -63,7 +59,7 @@ namespace RPG4.Models.Sprites
             if (_explodingTimeManager == null && _pendingTimeManager.Elapsed)
             {
                 _explodingTimeManager = new Elapser(TIME_WHILE_EXPLODING);
-                ExplosionSprite = new Sprite(X - Width, Y - Height, Width * HALO_SIZE_RATIO, Height * HALO_SIZE_RATIO, HALO_GRAPHIC_RENDERING);
+                ExplosionSprite = new BombExplosion(this);
             }
             else if (IsDone)
             {
