@@ -202,6 +202,19 @@ namespace RPG4.Models
             /// Coin graphic.
             /// </summary>
             public static readonly ISpriteGraphic COIN_GRAPHIC = new ImageBrushGraphic("Coin");
+            /// <summary>
+            /// Delay between two uses of a specific item, in milliseconds.
+            /// </summary>
+            public static readonly IReadOnlyDictionary<ItemType, int> DELAY_BETWEEN_USE = new Dictionary<ItemType, int>
+            {
+                { ItemType.Bomb, 500 },
+                { ItemType.LargeLifePotion, 500 },
+                { ItemType.MediumLifePotion, 500 },
+                { ItemType.SmallLifePotion, 500 },
+                { ItemType.Lamp, 0 },
+                { ItemType.Bow, 1000 },
+                { ItemType.Arrow, 0 }
+            };
         }
 
         /// <summary>

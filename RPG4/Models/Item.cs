@@ -1,5 +1,6 @@
 ﻿using RPG4.Models.Enums;
 using RPG4.Models.Graphic;
+using RPG4.Properties;
 using System.Collections.Generic;
 
 namespace RPG4.Models
@@ -9,7 +10,7 @@ namespace RPG4.Models
     /// </summary>
     public class Item
     {
-        // list of every items
+        // Static list of every instancied items.
         private static List<Item> _items = null;
 
         /// <summary>
@@ -29,23 +30,24 @@ namespace RPG4.Models
         /// </summary>
         public double UseDelay { get; private set; }
         /// <summary>
-        /// Maximal quantity carriable at eh beginning.
+        /// Maximal quantity initially carriable in the <see cref="Inventory"/>.
         /// </summary>
         public int InitialMaximalQuantity { get; private set; }
         /// <summary>
-        /// Loot graphic.
+        /// <see cref="ISpriteGraphic"/> as loot.
         /// </summary>
         public ISpriteGraphic LootGraphic { get; private set; }
 
-        // private constructor
+        // Private constructor. Only the method "BuildItemList" can create items.
         private Item() { }
 
         /// <summary>
-        /// Gets an <see cref="Item"/> by its <see cref="Enums.ItemType"/>.
+        /// Gets an <see cref="Item"/> by its <see cref="ItemType"/>.
         /// </summary>
-        /// <param name="itemId"><see cref="Enums.ItemType"/></param>
+        /// <remarks>Calls <see cref="BuildItemList"/> if never called before.</remarks>
+        /// <param name="itemId"><see cref="ItemType"/></param>
         /// <returns><see cref="Item"/></returns>
-        public static Item GetItem(Enums.ItemType itemId)
+        public static Item GetItem(ItemType itemId)
         {
             if (_items == null)
             {
@@ -55,54 +57,66 @@ namespace RPG4.Models
             return _items.Find(item => item.Id == itemId);
         }
 
-        // creates an instance of every items
+        // Creates an instance of every items.
         private static void BuildItemList()
         {
             _items = new List<Item>();
             _items.Add(new Item
             {
-                Id = Enums.ItemType.Bomb,
-                Name = "Bomb",
+                Id = ItemType.Bomb,
+                Name = Names.ItemBomb,
                 Unique = false,
-                UseDelay = 1000,
                 InitialMaximalQuantity = 20,
-                LootGraphic = new ImageBrushGraphic("Bomb")
+                LootGraphic = new ImageBrushGraphic(nameof(Resources.Bomb))
             });
             _items.Add(new Item
             {
-                Id = Enums.ItemType.SmallLifePotion,
-                Name = "Life potion (small)",
+                Id = ItemType.SmallLifePotion,
+                Name = Names.ItemLifePotionSmall,
                 Unique = false,
-                UseDelay = 500,
                 InitialMaximalQuantity = 12,
-                LootGraphic = new ImageBrushGraphic("LifePotionSmall")
+                LootGraphic = new ImageBrushGraphic(nameof(Resources.LifePotionSmall))
             });
             _items.Add(new Item
             {
-                Id = Enums.ItemType.MediumLifePotion,
-                Name = "Life potion (medium)",
+                Id = ItemType.MediumLifePotion,
+                Name = Names.ItemLifePotionMedium,
                 Unique = false,
-                UseDelay = 500,
                 InitialMaximalQuantity = 6,
-                LootGraphic = new ImageBrushGraphic("LifePotionMedium")
+                LootGraphic = new ImageBrushGraphic(nameof(Resources.LifePotionMedium))
             });
             _items.Add(new Item
             {
-                Id = Enums.ItemType.LargeLifePotion,
-                Name = "Life potion (large)",
+                Id = ItemType.LargeLifePotion,
+                Name = Names.ItemLifePotionLarge,
                 Unique = false,
-                UseDelay = 500,
                 InitialMaximalQuantity = 3,
-                LootGraphic = new ImageBrushGraphic("LifePotionLarge")
+                LootGraphic = new ImageBrushGraphic(nameof(Resources.LifePotionLarge))
             });
             _items.Add(new Item
             {
-                Id = Enums.ItemType.Lamp,
-                Name = "Lamp",
+                Id = ItemType.Lamp,
+                Name = Names.ItemLamp,
                 Unique = true,
-                UseDelay = 0,
-                LootGraphic = new ImageBrushGraphic("Lamp")
+                LootGraphic = new ImageBrushGraphic(nameof(Resources.Lamp))
             });
+            _items.Add(new Item
+            {
+                Id = ItemType.Bow,
+                Name = Names.ItemBow,
+                Unique = true,
+                LootGraphic = new ImageBrushGraphic(nameof(Resources.Bow))
+            });
+            _items.Add(new Item
+            {
+                Id = ItemType.Arrow,
+                Name = Names.ItemArrow,
+                Unique = false,
+                InitialMaximalQuantity = 20,
+                LootGraphic = new ImageBrushGraphic(nameof(Resources.Arrow))
+            });
+            // Sets the use delay for every items of the list.
+            _items.ForEach(item => item.UseDelay = Constants.Item.DELAY_BETWEEN_USE[item.Id]);
         }
     }
 }

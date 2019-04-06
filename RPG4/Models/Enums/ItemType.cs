@@ -24,6 +24,14 @@
         /// <summary>
         /// Lamp.
         /// </summary>
-        Lamp
+        Lamp,
+        /// <summary>
+        /// Bow.
+        /// </summary>
+        Bow,
+        /// <summary>
+        /// Arrow.
+        /// </summary>
+        Arrow
     }
 }

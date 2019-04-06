@@ -63,6 +63,16 @@ namespace RPG4.Properties {
         /// <summary>
         ///   Recherche une ressource localisée de type System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap Arrow {
+            get {
+                object obj = ResourceManager.GetObject("Arrow", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Recherche une ressource localisée de type System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap Background2 {
             get {
                 object obj = ResourceManager.GetObject("Background2", resourceCulture);
@@ -76,6 +86,16 @@ namespace RPG4.Properties {
         internal static System.Drawing.Bitmap Bomb {
             get {
                 object obj = ResourceManager.GetObject("Bomb", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Recherche une ressource localisée de type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap Bow {
+            get {
+                object obj = ResourceManager.GetObject("Bow", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
