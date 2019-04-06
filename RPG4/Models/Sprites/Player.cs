@@ -11,8 +11,7 @@ namespace RPG4.Models.Sprites
     /// Represents the player.
     /// </summary>
     /// <seealso cref="LifeSprite"/>
-    /// <see cref="IExplodable"/>
-    public class Player : LifeSprite, IExplodable
+    public class Player : LifeSprite
     {
         // History of movements.
         private Queue<Point> _moveHistory = new Queue<Point>(Constants.MOVE_HISTORY_COUNT);
@@ -26,11 +25,6 @@ namespace RPG4.Models.Sprites
         private Elapser _recoveryManager;
         // Hashcode associated to the instance timestamp.
         private int _creationHashcode;
-
-        /// <summary>
-        /// Speed (i.e. distance, in pixels, by second)
-        /// </summary>
-        public double Speed { get; private set; }
         /// <summary>
         /// When coming into a new screen, indicates the direction relative to the former screen.
         /// </summary>
@@ -55,24 +49,10 @@ namespace RPG4.Models.Sprites
         /// Indicates the sprite direction.
         /// </summary>
         public DirectionEnum Direction { get; private set; }
-        /// <inheritdoc />
-        public double ExplosionLifePointCost { get { return InitialPlayerStatus.EXPLOSION_LIFE_POINT_COST; } }
         /// <summary>
         /// Graphic rendering when recovering.
         /// </summary>
         public ISpriteGraphic RecoveryGraphic { get { return InitialPlayerStatus.RECOVERY_GRAPHIC; } }
-        /// <summary>
-        /// Inferred; current <see cref="FloorTypeEnum"/> the player is standing on.
-        /// </summary>
-        public FloorTypeEnum CurrentFloor
-        {
-            get
-            {
-                return Engine.Default.CurrentScreen.Floors.FirstOrDefault(f =>
-                    Overlap(f, Constants.FLOOR_CHANGE_OVERLAP_RATIO)
-                )?.FloorType ?? Engine.Default.CurrentScreen.FloorType;
-            }
-        }
 
         /// <summary>
         /// Constructor.
@@ -85,11 +65,11 @@ namespace RPG4.Models.Sprites
             InitialPlayerStatus.SPRITE_SIZE_Y,
             InitialPlayerStatus.GRAPHIC,
             InitialPlayerStatus.MAXIMAL_LIFE_POINTS,
-            InitialPlayerStatus.HIT_LIFE_POINT_COST)
+            InitialPlayerStatus.HIT_LIFE_POINT_COST,
+            InitialPlayerStatus.INITIAL_PLAYER_SPEED)
         {
             _creationHashcode = DateTime.Now.ToString(Constants.UNIQUE_TIMESTAMP_PATTERN).GetHashCode();
 
-            Speed = InitialPlayerStatus.INITIAL_PLAYER_SPEED;
             NewScreenEntrance = null;
             Inventory = new Inventory(_creationHashcode);
             HitSprite = null;

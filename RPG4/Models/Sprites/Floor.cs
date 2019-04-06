@@ -7,10 +7,17 @@ namespace RPG4.Models.Sprites
     /// </summary>
     public class Floor : Sprite
     {
+        private const double WATER_SPEED_RATIO = 0.5;
+        private const double ICE_SPEED_RATIO = 1.2;
+
         /// <summary>
         /// <see cref="FloorTypeEnum"/>
         /// </summary>
         public FloorTypeEnum FloorType { get; private set; }
+        /// <summary>
+        /// Influence on speed (ratio).
+        /// </summary>
+        public double SpeedRatio { get; private set; }
 
         /// <summary>
         /// Constructor.
@@ -20,6 +27,7 @@ namespace RPG4.Models.Sprites
             (double)floorJsonDatas.X, (double)floorJsonDatas.Y,
             (double)floorJsonDatas.Width, (double)floorJsonDatas.Height)
         {
+            SpeedRatio = 1;
             FloorType = floorJsonDatas.FloorType;
             switch (FloorType)
             {
@@ -28,9 +36,11 @@ namespace RPG4.Models.Sprites
                     break;
                 case FloorTypeEnum.Water:
                     Graphic = new PlainBrushGraphic("#0000FF");
+                    SpeedRatio = WATER_SPEED_RATIO;
                     break;
                 case FloorTypeEnum.Ice:
                     Graphic = new PlainBrushGraphic("#ADD8E6");
+                    SpeedRatio = ICE_SPEED_RATIO;
                     break;
                 default:
                     switch ((string)floorJsonDatas.GraphicType)

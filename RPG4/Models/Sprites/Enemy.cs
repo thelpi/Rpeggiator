@@ -10,7 +10,7 @@ namespace RPG4.Models.Sprites
     /// </summary>
     /// <seealso cref="LifeSprite"/>
     /// <see cref="IExplodable"/>
-    public class Enemy : LifeSprite, IExplodable
+    public class Enemy : LifeSprite
     {
         // Indicates the life points cost when a bomb explodes nearby.
         private const double EXPLOSION_LIFE_POINT_COST = 2;
@@ -18,13 +18,7 @@ namespace RPG4.Models.Sprites
         private Elapser _movementTimeManager;
         // Movement path.
         private Path _path;
-
-        /// <summary>
-        /// Speed, in pixels by second.
-        /// </summary>
-        public double Speed { get; private set; }
-        /// <inheritdoc />
-        public double ExplosionLifePointCost { get { return EXPLOSION_LIFE_POINT_COST; } }
+        
         /// <summary>
         /// Loot <see cref="ItemEnum"/>; <c>Null</c> for coin.
         /// </summary>
@@ -40,7 +34,6 @@ namespace RPG4.Models.Sprites
         /// <param name="enemyJson">The json dynamic object.</param>
         public Enemy(dynamic enemyJson) : base((object)enemyJson)
         {
-            Speed = enemyJson.Speed;
             _movementTimeManager = new Elapser();
             List<Point> points = new List<Point> { TopLeftCorner };
             foreach (var jsonPath in enemyJson.Path)

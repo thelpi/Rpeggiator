@@ -3,11 +3,14 @@
 namespace RPG4.Models.Sprites
 {
     /// <summary>
-    /// Represents a <see cref="Sprite"/> with a life status.
+    /// Represents a living <see cref="Sprite"/> (player, enemies, pngs...).
     /// </summary>
     /// <seealso cref="Sprite"/>
-    public class LifeSprite : Sprite
+    /// <seealso cref="IExplodable"/>
+    public class LifeSprite : Sprite, IExplodable
     {
+        private double _originalSpeed;
+
         /// <summary>
         /// Maximal number of life points.
         /// </summary>
@@ -20,6 +23,30 @@ namespace RPG4.Models.Sprites
         /// When hitting, indicates the life points cost on the enemy.
         /// </summary>
         public double HitLifePointCost { get; private set; }
+        /// <inheritdoc />
+        public double ExplosionLifePointCost { get { return InitialPlayerStatus.EXPLOSION_LIFE_POINT_COST; } }
+        /// <summary>
+        /// Inferred; current speed (i.e. distance, in pixels, by second)
+        /// </summary>
+        public double Speed
+        {
+            get
+            {
+                return _originalSpeed * CurrentFloor.SpeedRatio;
+            }
+        }
+        /// <summary>
+        /// Inferred; current <see cref="Floor"/> the player is standing on.
+        /// </summary>
+        public Floor CurrentFloor
+        {
+            get
+            {
+                return Engine.Default.CurrentScreen.Floors.FirstOrDefault(f =>
+                    f.Overlap(this, Constants.FLOOR_CHANGE_OVERLAP_RATIO)
+                ) ?? Engine.Default.CurrentScreen;
+            }
+        }
 
         /// <summary>
         /// Constructor.
@@ -31,12 +58,15 @@ namespace RPG4.Models.Sprites
         /// <param name="graphic"><see cref="Sprite.Graphic"/></param>
         /// <param name="maximalLifePoints"><see cref="MaximalLifePoints"/></param>
         /// <param name="hitLifePointCost"><see cref="HitLifePointCost"/></param>
-        protected LifeSprite(double x, double y, double width, double height, Graphic.ISpriteGraphic graphic, double maximalLifePoints, double hitLifePointCost)
+        /// <param name="speed"><see cref="_originalSpeed"/></param>
+        protected LifeSprite(double x, double y, double width, double height, Graphic.ISpriteGraphic graphic,
+            double maximalLifePoints, double hitLifePointCost, double speed)
             : base(x, y, width, height, graphic)
         {
             MaximalLifePoints = maximalLifePoints;
             CurrentLifePoints = maximalLifePoints;
             HitLifePointCost = hitLifePointCost;
+            _originalSpeed = speed;
         }
 
         /// <summary>
@@ -48,6 +78,7 @@ namespace RPG4.Models.Sprites
             MaximalLifePoints = lifeSpriteJson.MaximalLifePoints;
             CurrentLifePoints = MaximalLifePoints;
             HitLifePointCost = lifeSpriteJson.HitLifePointCost;
+            _originalSpeed = lifeSpriteJson.Speed;
         }
 
         /// <summary>
@@ -67,7 +98,8 @@ namespace RPG4.Models.Sprites
         public bool CheckDeath(Screen screen)
         {
             if (screen.Structures.Any(ss => ss.Overlap(this))
-                || screen.Pits.Any(r => r.CanFallIn(this) && (GetType() == typeof(Enemy) || r.Deadly)))
+                || screen.Pits.Any(r => r.CanFallIn(this) && (GetType() == typeof(Enemy) || r.Deadly))
+                || CurrentFloor.FloorType == FloorTypeEnum.Lava)
             {
                 CurrentLifePoints = 0;
             }
