@@ -9,21 +9,6 @@ namespace RPG4.Models.Sprites
     /// <seealso cref="ActionnedItem"/>
     public class ActionnedBomb : ActionnedItem
     {
-        /// <summary>
-        /// Bomb width.
-        /// </summary>
-        public const double WIDTH = 20;
-        /// <summary>
-        /// Bomb height.
-        /// </summary>
-        public const double HEIGHT = 20;
-        // Milliseconds while pending explosion.
-        private static readonly double TIME_WHILE_PENDING = 2000;
-        // Milliseconds while exploding.
-        private static readonly double TIME_WHILE_EXPLODING = 500;
-        // Bomb graphic rendering.
-        private static readonly ISpriteGraphic GRAPHIC_RENDERING = new ImageBrushGraphic("Bomb");
-
         // Pending time manager
         private Elapser _pendingTimeManager;
         // Pending time manager
@@ -46,9 +31,11 @@ namespace RPG4.Models.Sprites
         /// Constructor.
         /// </summary>
         /// <param name="point">Drop coordinates.</param>
-        public ActionnedBomb(Point point) : base(point.X, point.Y, WIDTH, HEIGHT, GRAPHIC_RENDERING)
+        public ActionnedBomb(Point point) : base(point.X, point.Y,
+            Constants.Bomb.WIDTH, Constants.Bomb.HEIGHT,
+            Constants.Bomb.GRAPHIC_RENDERING)
         {
-            _pendingTimeManager = new Elapser(TIME_WHILE_PENDING);
+            _pendingTimeManager = new Elapser(Constants.Bomb.TIME_WHILE_PENDING);
             ExplosionSprite = null;
         }
 
@@ -58,7 +45,7 @@ namespace RPG4.Models.Sprites
             // Explosion beginning.
             if (_explodingTimeManager == null && _pendingTimeManager.Elapsed)
             {
-                _explodingTimeManager = new Elapser(TIME_WHILE_EXPLODING);
+                _explodingTimeManager = new Elapser(Constants.Bomb.TIME_WHILE_EXPLODING);
                 ExplosionSprite = new BombExplosion(this);
             }
             else if (IsDone)

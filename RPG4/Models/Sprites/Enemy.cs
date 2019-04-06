@@ -12,8 +12,6 @@ namespace RPG4.Models.Sprites
     /// <see cref="IExplodable"/>
     public class Enemy : LifeSprite
     {
-        // Indicates the life points cost when a bomb explodes nearby.
-        private const double EXPLOSION_LIFE_POINT_COST = 2;
         // Movement time manager.
         private Elapser _movementTimeManager;
         // Movement path.

@@ -7,11 +7,6 @@
     public class Pit : Sprite
     {
         /// <summary>
-        /// Indicates the ratio of overlaping to fall into.
-        /// </summary>
-        public const double FALL_IN_OVERLAP_RATIO = 0.5;
-
-        /// <summary>
         /// Inferred; indicates if the pit is deadly (I.e. no scrren entrance).
         /// </summary>
         public bool Deadly { get { return !ScreenIndexEntrance.HasValue; } }
@@ -37,7 +32,7 @@
         /// <returns><c>True</c> if <paramref name="other"/> falls in; <c>False</c> otherwise.</returns>
         public bool CanFallIn(Sprite other)
         {
-            return Width.GreaterEqual(other.Width) && Height.GreaterEqual(other.Height) && Overlap(other, FALL_IN_OVERLAP_RATIO);
+            return Width.GreaterEqual(other.Width) && Height.GreaterEqual(other.Height) && Overlap(other, Constants.PIT_FALL_IN_OVERLAP_RATIO);
         }
     }
 }

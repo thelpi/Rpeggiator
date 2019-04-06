@@ -29,7 +29,7 @@ namespace RPG4.Models.Sprites
         /// <param name="floorItemJson">The json dynamic object.</param>
         public PickableItem(dynamic floorItemJson) : base(
             (double)floorItemJson.X, (double)floorItemJson.Y,
-            Item.LOOT_WIDTH, Item.LOOT_HEIGHT,
+            Constants.Item.LOOT_WIDTH, Constants.Item.LOOT_HEIGHT,
             Item.GetItem((ItemEnum)floorItemJson.ItemId).LootGraphic)
         {
             _itemId = floorItemJson.ItemId;
@@ -58,14 +58,14 @@ namespace RPG4.Models.Sprites
         public static PickableItem Loot(Enemy enemy, ItemEnum? itemId, int quantity)
         {
             return new PickableItem(
-                enemy.X + (enemy.Width / 2) - (Item.LOOT_WIDTH / 2),
-                enemy.Y + (enemy.Height / 2) - (Item.LOOT_HEIGHT / 2),
-                Item.LOOT_WIDTH,
-                Item.LOOT_HEIGHT,
-                itemId.HasValue ? Item.GetItem(itemId.Value).LootGraphic : Item.COIN_GRAPHIC,
+                enemy.X + (enemy.Width / 2) - (Constants.Item.LOOT_WIDTH / 2),
+                enemy.Y + (enemy.Height / 2) - (Constants.Item.LOOT_HEIGHT / 2),
+                Constants.Item.LOOT_WIDTH,
+                Constants.Item.LOOT_HEIGHT,
+                itemId.HasValue ? Item.GetItem(itemId.Value).LootGraphic : Constants.Item.COIN_GRAPHIC,
                 itemId,
                 quantity,
-                Item.LOOT_LIFETIME);
+                Constants.Item.LOOT_LIFETIME);
         }
 
         /// <summary>

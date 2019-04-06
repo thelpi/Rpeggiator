@@ -226,7 +226,7 @@ namespace RPG4.Visuals
         {
             pgbPlayerLifePoints.Maximum = Engine.Default.Player.MaximalLifePoints;
             pgbPlayerLifePoints.Value = Engine.Default.Player.CurrentLifePoints;
-            for (int i = 0; i < Inventory.SIZE; i++)
+            for (int i = 0; i < Constants.Inventory.SIZE; i++)
             {
                 var itemSlotRct = (Rectangle)FindName(string.Format("rctItem{0}", i));
                 var itemSlotTxt = (TextBlock)FindName(string.Format("txbItem{0}", i));
@@ -258,7 +258,7 @@ namespace RPG4.Visuals
                     _hitKeyPressed = true;
                     break;
                 case Key.D0:
-                    _inventoryKeyPressed = Inventory.SIZE - 1;
+                    _inventoryKeyPressed = Constants.Inventory.SIZE - 1;
                     break;
                 case Key.D1:
                     _inventoryKeyPressed = 0;

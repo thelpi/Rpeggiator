@@ -7,15 +7,12 @@
     /// <seealso cref="IExplodable"/>
     public class Rift : Sprite, IExplodable
     {
-        // Indicates the life points cost when a bomb explodes nearby.
-        private const double EXPLOSION_LIFE_POINT_COST = 5;
-
         /// <summary>
         /// Life points count.
         /// </summary>
         public double LifePoints { get; private set; }
         /// <inheritdoc />
-        public double ExplosionLifePointCost { get { return EXPLOSION_LIFE_POINT_COST; } }
+        public double ExplosionLifePointCost { get { return Constants.RIFT_EXPLOSION_LIFE_POINT_COST; } }
 
         /// <summary>
         /// Constructor.

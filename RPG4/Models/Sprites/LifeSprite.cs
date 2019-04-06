@@ -24,7 +24,7 @@ namespace RPG4.Models.Sprites
         /// </summary>
         public double HitLifePointCost { get; private set; }
         /// <inheritdoc />
-        public double ExplosionLifePointCost { get { return InitialPlayerStatus.EXPLOSION_LIFE_POINT_COST; } }
+        public double ExplosionLifePointCost { get { return Constants.Bomb.EXPLOSION_LIFE_POINT_COST; } }
         /// <summary>
         /// Inferred; current speed (i.e. distance, in pixels, by second)
         /// </summary>

@@ -10,21 +10,6 @@ namespace RPG4.Models
     /// </summary>
     public class Inventory
     {
-        // Recovered life points by drinking small life potion.
-        private const double SMALL_LIFE_POTION_RECOVERY_LIFE_POINTS = 2;
-        // Recovered life points by drinking medium life potion.
-        private const double MEDIUM_LIFE_POTION_RECOVERY_LIFE_POINTS = 5;
-        // Recovered life points by drinking large life potion.
-        private const double LARGE_LIFE_POTION_RECOVERY_LIFE_POINTS = 10;
-        /// <summary>
-        /// Initial size of the inventory.
-        /// </summary>
-        public const int SIZE = 10;
-        /// <summary>
-        /// Coins limit.
-        /// </summary>
-        private const int COINS_LIMIT = 999;
-
         private List<InventoryItem> _items;
         private Dictionary<ItemEnum, int> _maxQuantityByItem;
         private int _creationHashcode;
@@ -60,11 +45,11 @@ namespace RPG4.Models
             _items = new List<InventoryItem>();
             _maxQuantityByItem = new Dictionary<ItemEnum, int>();
             LampIsOn = false;
-            foreach (var itemId in InitialPlayerStatus.INVENTORY_ITEMS.Keys)
+            foreach (var itemId in Constants.Player.INVENTORY_ITEMS.Keys)
             {
-                TryAdd(itemId, InitialPlayerStatus.INVENTORY_ITEMS[itemId]);
+                TryAdd(itemId, Constants.Player.INVENTORY_ITEMS[itemId]);
             }
-            Coins = InitialPlayerStatus.COINS;
+            Coins = Constants.Player.COINS;
             _keyring = new List<int>();
         }
 
@@ -78,7 +63,7 @@ namespace RPG4.Models
         {
             if (!itemId.HasValue)
             {
-                int toReachLimit = COINS_LIMIT - Coins;
+                int toReachLimit = Constants.Inventory.COINS_LIMIT - Coins;
                 if (toReachLimit == 0 || toReachLimit < quantity)
                 {
                     Coins += toReachLimit;
@@ -97,7 +82,7 @@ namespace RPG4.Models
             {
                 remaining = _items.First(item => item.BaseItem.Id == itemId.Value).TryStore(quantity, _maxQuantityByItem[itemId.Value]);
             }
-            else if (_items.Count < SIZE)
+            else if (_items.Count < Constants.Inventory.SIZE)
             {
                 _items.Add(new InventoryItem(itemId.Value, quantity));
                 SetItemMaxQuantity(itemId.Value, Item.GetItem(itemId.Value).InitialMaximalQuantity);
@@ -159,13 +144,13 @@ namespace RPG4.Models
                     droppedItem = new ActionnedBomb(ComputeBombDroppingCoordinates());
                     break;
                 case ItemEnum.SmallLifePotion:
-                    Engine.Default.Player.DrinkLifePotion(_creationHashcode, SMALL_LIFE_POTION_RECOVERY_LIFE_POINTS);
+                    Engine.Default.Player.DrinkLifePotion(_creationHashcode, Constants.Inventory.SMALL_LIFE_POTION_RECOVERY_LIFE_POINTS);
                     break;
                 case ItemEnum.MediumLifePotion:
-                    Engine.Default.Player.DrinkLifePotion(_creationHashcode, MEDIUM_LIFE_POTION_RECOVERY_LIFE_POINTS);
+                    Engine.Default.Player.DrinkLifePotion(_creationHashcode, Constants.Inventory.MEDIUM_LIFE_POTION_RECOVERY_LIFE_POINTS);
                     break;
                 case ItemEnum.LargeLifePotion:
-                    Engine.Default.Player.DrinkLifePotion(_creationHashcode, LARGE_LIFE_POTION_RECOVERY_LIFE_POINTS);
+                    Engine.Default.Player.DrinkLifePotion(_creationHashcode, Constants.Inventory.LARGE_LIFE_POTION_RECOVERY_LIFE_POINTS);
                     break;
                 case ItemEnum.Lamp:
                     LampIsOn = !LampIsOn;
@@ -188,22 +173,22 @@ namespace RPG4.Models
             switch (sprite.Direction)
             {
                 case DirectionEnum.BottomLeft:
-                    pt.Y = sprite.BottomRightY - ActionnedBomb.HEIGHT;
+                    pt.Y = sprite.BottomRightY - Constants.Bomb.HEIGHT;
                     break;
                 case DirectionEnum.Bottom:
                     pt.X = sprite.X + (sprite.Width / 2);
-                    pt.Y = sprite.BottomRightY - ActionnedBomb.HEIGHT;
+                    pt.Y = sprite.BottomRightY - Constants.Bomb.HEIGHT;
                     break;
                 case DirectionEnum.BottomRight:
-                    pt.X = sprite.BottomRightX - ActionnedBomb.WIDTH;
-                    pt.Y = sprite.BottomRightY - ActionnedBomb.HEIGHT;
+                    pt.X = sprite.BottomRightX - Constants.Bomb.WIDTH;
+                    pt.Y = sprite.BottomRightY - Constants.Bomb.HEIGHT;
                     break;
                 case DirectionEnum.Right:
-                    pt.X = sprite.BottomRightX - ActionnedBomb.WIDTH;
+                    pt.X = sprite.BottomRightX - Constants.Bomb.WIDTH;
                     pt.Y = sprite.Y + (sprite.Height / 2);
                     break;
                 case DirectionEnum.TopRight:
-                    pt.X = sprite.BottomRightX - ActionnedBomb.WIDTH;
+                    pt.X = sprite.BottomRightX - Constants.Bomb.WIDTH;
                     break;
                 case DirectionEnum.Top:
                     pt.X = sprite.X + (sprite.Width / 2);

@@ -8,23 +8,6 @@ namespace RPG4.Models
     /// </summary>
     public class Item
     {
-        /// <summary>
-        /// Item loot width.
-        /// </summary>
-        public const double LOOT_WIDTH = 20;
-        /// <summary>
-        /// Item loot height.
-        /// </summary>
-        public const double LOOT_HEIGHT = 20;
-        /// <summary>
-        /// Item loot lifetime, in milliseconds.
-        /// </summary>
-        public const double LOOT_LIFETIME = 10000;
-        /// <summary>
-        /// Coin graphic.
-        /// </summary>
-        public static readonly ISpriteGraphic COIN_GRAPHIC = new ImageBrushGraphic("Coin");
-
         // list of every items
         private static List<Item> _items = null;
 

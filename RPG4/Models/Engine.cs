@@ -188,7 +188,7 @@ namespace RPG4.Models
 
             foreach (var door in CurrentScreen.Doors)
             {
-                if (door.Overlap(Player.ResizeToRatio(InitialPlayerStatus.ACTION_RANGE)) && door.PlayerIsLookingTo())
+                if (door.Overlap(Player.ResizeToRatio(Constants.Player.ACTION_RANGE)) && door.PlayerIsLookingTo())
                 {
                     int? screenId = door.TryOpen();
                     if (screenId.HasValue)

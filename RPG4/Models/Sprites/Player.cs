@@ -52,21 +52,21 @@ namespace RPG4.Models.Sprites
         /// <summary>
         /// Graphic rendering when recovering.
         /// </summary>
-        public ISpriteGraphic RecoveryGraphic { get { return InitialPlayerStatus.RECOVERY_GRAPHIC; } }
+        public ISpriteGraphic RecoveryGraphic { get { return Constants.Player.RECOVERY_GRAPHIC; } }
 
         /// <summary>
         /// Constructor.
         /// </summary>
-        /// <remarks>Every initial values come from <see cref="InitialPlayerStatus"/>.</remarks>
+        /// <remarks>Every initial values come from <see cref="Constants.Player"/>.</remarks>
         public Player() : base(
-            InitialPlayerStatus.INITIAL_PLAYER_X,
-            InitialPlayerStatus.INITIAL_PLAYER_Y,
-            InitialPlayerStatus.SPRITE_SIZE_X,
-            InitialPlayerStatus.SPRITE_SIZE_Y,
-            InitialPlayerStatus.GRAPHIC,
-            InitialPlayerStatus.MAXIMAL_LIFE_POINTS,
-            InitialPlayerStatus.HIT_LIFE_POINT_COST,
-            InitialPlayerStatus.INITIAL_PLAYER_SPEED)
+            Constants.Player.INITIAL_PLAYER_X,
+            Constants.Player.INITIAL_PLAYER_Y,
+            Constants.Player.SPRITE_SIZE_X,
+            Constants.Player.SPRITE_SIZE_Y,
+            Constants.Player.GRAPHIC,
+            Constants.Player.MAXIMAL_LIFE_POINTS,
+            Constants.Player.HIT_LIFE_POINT_COST,
+            Constants.Player.INITIAL_PLAYER_SPEED)
         {
             _creationHashcode = DateTime.Now.ToString(Constants.UNIQUE_TIMESTAMP_PATTERN).GetHashCode();
 
@@ -75,7 +75,7 @@ namespace RPG4.Models.Sprites
             HitSprite = null;
             _recoveryManager = null;
             _hitElapser = null;
-            _currentWeaponHitDelay = InitialPlayerStatus.SWORD_HIT_DELAY;
+            _currentWeaponHitDelay = Constants.Player.SWORD_HIT_DELAY;
             Direction = DirectionEnum.Right;
             _movementTimeManager = new Elapser();
         }
@@ -106,7 +106,7 @@ namespace RPG4.Models.Sprites
             {
                 foreach (var chest in Engine.Default.CurrentScreen.ClosedChests)
                 {
-                    if (chest.Overlap(ResizeToRatio(InitialPlayerStatus.ACTION_RANGE)) && chest.PlayerIsLookingTo())
+                    if (chest.Overlap(ResizeToRatio(Constants.Player.ACTION_RANGE)) && chest.PlayerIsLookingTo())
                     {
                         chest.TryOpen();
                         break;
@@ -134,7 +134,7 @@ namespace RPG4.Models.Sprites
                 if (cumuledLifePoints.Greater(0))
                 {
                     Hit(cumuledLifePoints);
-                    _recoveryManager = new Elapser(InitialPlayerStatus.RECOVERY_TIME);
+                    _recoveryManager = new Elapser(Constants.Player.RECOVERY_TIME);
                 }
             }
         }

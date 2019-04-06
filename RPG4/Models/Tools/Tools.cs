@@ -4,7 +4,7 @@ using System;
 using System.Text;
 using System.Windows;
 
-namespace RPG4
+namespace RPG4.Models
 {
     /// <summary>
     /// Tool methods. 
