@@ -1,4 +1,5 @@
-﻿using RPG4.Models.Graphic;
+﻿using RPG4.Models.Enums;
+using RPG4.Models.Graphic;
 using RPG4.Models.Sprites;
 using System;
 using System.Collections.Generic;
@@ -71,11 +72,11 @@ namespace RPG4.Models
         /// </summary>
         public const double PIT_FALL_IN_OVERLAP_RATIO = 0.5;
         /// <summary>
-        /// Speed ratio when walking on <see cref="FloorTypeEnum.Water"/>.
+        /// Speed ratio when walking on <see cref="FloorType.Water"/>.
         /// </summary>
         public const double FLOOR_WATER_SPEED_RATIO = 0.5;
         /// <summary>
-        /// Speed ratio when walking on <see cref="FloorTypeEnum.Ice"/>.
+        /// Speed ratio when walking on <see cref="FloorType.Ice"/>.
         /// </summary>
         public const double FLOOR_ICE_SPEED_RATIO = 1.2;
 
@@ -115,13 +116,13 @@ namespace RPG4.Models
             /// <summary>
             /// Initial list of items in the inventory.
             /// </summary>
-            public static readonly IReadOnlyDictionary<ItemEnum, int> INVENTORY_ITEMS = new Dictionary<ItemEnum, int>
+            public static readonly IReadOnlyDictionary<Enums.ItemType, int> INVENTORY_ITEMS = new Dictionary<Enums.ItemType, int>
             {
-                { ItemEnum.Lamp, 1 },
-                { ItemEnum.SmallLifePotion, 3 },
-                { ItemEnum.MediumLifePotion, 1 },
-                { ItemEnum.LargeLifePotion, 1 },
-                { ItemEnum.Bomb, 1 }
+                { Enums.ItemType.Lamp, 1 },
+                { Enums.ItemType.SmallLifePotion, 3 },
+                { Enums.ItemType.MediumLifePotion, 1 },
+                { Enums.ItemType.LargeLifePotion, 1 },
+                { Enums.ItemType.Bomb, 1 }
             };
             /// <summary>
             /// Initial coins.

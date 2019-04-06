@@ -1,4 +1,5 @@
-﻿using RPG4.Models.Graphic;
+﻿using RPG4.Models.Enums;
+using RPG4.Models.Graphic;
 using System.Linq;
 
 namespace RPG4.Models.Sprites
@@ -9,7 +10,7 @@ namespace RPG4.Models.Sprites
     public class Chest : Sprite
     {
         private int? _keyId;
-        private ItemEnum? _itemId;
+        private Enums.ItemType? _itemId;
         private int _quantity;
         private ISpriteGraphic _openGraphic;
         private int? _keyIdContainer;

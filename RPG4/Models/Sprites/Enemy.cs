@@ -2,6 +2,7 @@
 using System.Windows;
 using System.Linq;
 using System;
+using RPG4.Models.Enums;
 
 namespace RPG4.Models.Sprites
 {
@@ -16,11 +17,11 @@ namespace RPG4.Models.Sprites
         private Elapser _movementTimeManager;
         // Movement path.
         private Path _path;
-        
+
         /// <summary>
-        /// Loot <see cref="ItemEnum"/>; <c>Null</c> for coin.
+        /// Loot <see cref="Enums.ItemType"/>; <c>Null</c> for coin.
         /// </summary>
-        public ItemEnum? LootItemId { get; private set; }
+        public Enums.ItemType? LootItemId { get; private set; }
         /// <summary>
         /// Loot quantity.
         /// </summary>

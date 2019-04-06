@@ -1,9 +1,9 @@
-﻿namespace RPG4.Models
+﻿namespace RPG4.Models.Enums
 {
     /// <summary>
     /// Enumeration of item identifiers.
     /// </summary>
-    public enum ItemEnum
+    public enum ItemType
     {
         /// <summary>
         /// Bomb item identifier.

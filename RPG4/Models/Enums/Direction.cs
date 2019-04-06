@@ -1,9 +1,9 @@
-﻿namespace RPG4.Models
+﻿namespace RPG4.Models.Enums
 {
     /// <summary>
     /// Enumeration of directions through screens
     /// </summary>
-    public enum DirectionEnum
+    public enum Direction
     {
         /// <summary>
         /// Top-left

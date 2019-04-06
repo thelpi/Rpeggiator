@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using RPG4.Models.Enums;
+using System.Linq;
 
 namespace RPG4.Models.Sprites
 {
@@ -99,7 +100,7 @@ namespace RPG4.Models.Sprites
         {
             if (screen.Structures.Any(ss => ss.Overlap(this))
                 || screen.Pits.Any(r => r.CanFallIn(this) && (GetType() == typeof(Enemy) || r.Deadly))
-                || CurrentFloor.FloorType == FloorTypeEnum.Lava)
+                || CurrentFloor.FloorType == FloorType.Lava)
             {
                 CurrentLifePoints = 0;
             }

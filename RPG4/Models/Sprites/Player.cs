@@ -1,4 +1,5 @@
-﻿using RPG4.Models.Exceptions;
+﻿using RPG4.Models.Enums;
+using RPG4.Models.Exceptions;
 using RPG4.Models.Graphic;
 using System;
 using System.Collections.Generic;
@@ -28,7 +29,7 @@ namespace RPG4.Models.Sprites
         /// <summary>
         /// When coming into a new screen, indicates the direction relative to the former screen.
         /// </summary>
-        public DirectionEnum? NewScreenEntrance { get; private set; }
+        public Direction? NewScreenEntrance { get; private set; }
         /// <summary>
         /// Inventory.
         /// </summary>
@@ -48,7 +49,7 @@ namespace RPG4.Models.Sprites
         /// <summary>
         /// Indicates the sprite direction.
         /// </summary>
-        public DirectionEnum Direction { get; private set; }
+        public Direction Direction { get; private set; }
         /// <summary>
         /// Graphic rendering when recovering.
         /// </summary>
@@ -76,7 +77,7 @@ namespace RPG4.Models.Sprites
             _recoveryManager = null;
             _hitElapser = null;
             _currentWeaponHitDelay = Constants.Player.SWORD_HIT_DELAY;
-            Direction = DirectionEnum.Right;
+            Direction = Direction.Right;
             _movementTimeManager = new Elapser();
         }
 
@@ -182,32 +183,32 @@ namespace RPG4.Models.Sprites
 
             switch (keys.Direction)
             {
-                case DirectionEnum.Bottom:
+                case Direction.Bottom:
                     newTop += distance;
                     break;
-                case DirectionEnum.BottomLeft:
+                case Direction.BottomLeft:
                     newTop += Tools.FrameDiagonalDistance(distance);
                     newLeft -= Tools.FrameDiagonalDistance(distance);
                     break;
-                case DirectionEnum.BottomRight:
+                case Direction.BottomRight:
                     newTop += Tools.FrameDiagonalDistance(distance);
                     newLeft += Tools.FrameDiagonalDistance(distance);
                     break;
-                case DirectionEnum.Top:
+                case Direction.Top:
                     newTop -= distance;
                     break;
-                case DirectionEnum.TopLeft:
+                case Direction.TopLeft:
                     newTop -= Tools.FrameDiagonalDistance(distance);
                     newLeft -= Tools.FrameDiagonalDistance(distance);
                     break;
-                case DirectionEnum.TopRight:
+                case Direction.TopRight:
                     newTop -= Tools.FrameDiagonalDistance(distance);
                     newLeft += Tools.FrameDiagonalDistance(distance);
                     break;
-                case DirectionEnum.Left:
+                case Direction.Left:
                     newLeft -= distance;
                     break;
-                case DirectionEnum.Right:
+                case Direction.Right:
                     newLeft += distance;
                     break;
             }
@@ -271,17 +272,17 @@ namespace RPG4.Models.Sprites
                 newPosition.X = Engine.Default.CurrentScreen.Width - Width;
                 if (goUp)
                 {
-                    NewScreenEntrance = DirectionEnum.TopLeft;
+                    NewScreenEntrance = Direction.TopLeft;
                     newPosition.Y = Engine.Default.CurrentScreen.Height - Height;
                 }
                 else if (goDown)
                 {
-                    NewScreenEntrance = DirectionEnum.BottomLeft;
+                    NewScreenEntrance = Direction.BottomLeft;
                     newPosition.Y = 0;
                 }
                 else
                 {
-                    NewScreenEntrance = DirectionEnum.Left;
+                    NewScreenEntrance = Direction.Left;
                 }
             }
             else if (goRight)
@@ -289,27 +290,27 @@ namespace RPG4.Models.Sprites
                 newPosition.X = 0;
                 if (goUp)
                 {
-                    NewScreenEntrance = DirectionEnum.TopRight;
+                    NewScreenEntrance = Direction.TopRight;
                     newPosition.Y = Engine.Default.CurrentScreen.Height - Height;
                 }
                 else if (goDown)
                 {
-                    NewScreenEntrance = DirectionEnum.BottomRight;
+                    NewScreenEntrance = Direction.BottomRight;
                     newPosition.Y = 0;
                 }
                 else
                 {
-                    NewScreenEntrance = DirectionEnum.Right;
+                    NewScreenEntrance = Direction.Right;
                 }
             }
             else if (goUp)
             {
-                NewScreenEntrance = DirectionEnum.Top;
+                NewScreenEntrance = Direction.Top;
                 newPosition.Y = Engine.Default.CurrentScreen.Height - Height;
             }
             else
             {
-                NewScreenEntrance = DirectionEnum.Bottom;
+                NewScreenEntrance = Direction.Bottom;
                 newPosition.Y = 0;
             }
 
@@ -344,32 +345,32 @@ namespace RPG4.Models.Sprites
                 double hitY = Y;
                 switch (Direction)
                 {
-                    case DirectionEnum.Bottom:
+                    case Direction.Bottom:
                         hitY += Height;
                         break;
-                    case DirectionEnum.BottomLeft:
+                    case Direction.BottomLeft:
                         hitY += Height;
                         hitX -= Width;
                         break;
-                    case DirectionEnum.BottomRight:
+                    case Direction.BottomRight:
                         hitY += Height;
                         hitX += Width;
                         break;
-                    case DirectionEnum.Left:
+                    case Direction.Left:
                         hitX -= Width;
                         break;
-                    case DirectionEnum.Right:
+                    case Direction.Right:
                         hitX += Width;
                         break;
-                    case DirectionEnum.TopRight:
+                    case Direction.TopRight:
                         hitY -= Height;
                         hitX += Width;
                         break;
-                    case DirectionEnum.TopLeft:
+                    case Direction.TopLeft:
                         hitY -= Height;
                         hitX -= Width;
                         break;
-                    case DirectionEnum.Top:
+                    case Direction.Top:
                         hitY -= Height;
                         break;
                 }

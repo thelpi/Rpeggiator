@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using RPG4.Models.Enums;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace RPG4.Models.Sprites
@@ -12,7 +13,7 @@ namespace RPG4.Models.Sprites
         // List of each instancied screen.
         private static List<Screen> _screens = new List<Screen>();
 
-        private Dictionary<DirectionEnum, int> _neighboringScreens;
+        private Dictionary<Direction, int> _neighboringScreens;
         private List<PermanentStructure> _permanentStructures;
         private List<Gate> _gates;
         private List<Rift> _rifts;
@@ -181,16 +182,16 @@ namespace RPG4.Models.Sprites
                 _pickableItems.Add(new PickableItem(itemJson));
             }
             dynamic neighboringScreens = screenJsonDatas.NeighboringScreens;
-            _neighboringScreens = new Dictionary<DirectionEnum, int>
+            _neighboringScreens = new Dictionary<Direction, int>
             {
-                { DirectionEnum.Bottom, (int)neighboringScreens.Bottom },
-                { DirectionEnum.BottomLeft, (int)neighboringScreens.BottomLeft },
-                { DirectionEnum.BottomRight, (int)neighboringScreens.BottomRight },
-                { DirectionEnum.Left, (int)neighboringScreens.Left },
-                { DirectionEnum.Right, (int)neighboringScreens.Right },
-                { DirectionEnum.Top, (int)neighboringScreens.Top },
-                { DirectionEnum.TopLeft, (int)neighboringScreens.TopLeft },
-                { DirectionEnum.TopRight, (int)neighboringScreens.TopRight },
+                { Direction.Bottom, (int)neighboringScreens.Bottom },
+                { Direction.BottomLeft, (int)neighboringScreens.BottomLeft },
+                { Direction.BottomRight, (int)neighboringScreens.BottomRight },
+                { Direction.Left, (int)neighboringScreens.Left },
+                { Direction.Right, (int)neighboringScreens.Right },
+                { Direction.Top, (int)neighboringScreens.Top },
+                { Direction.TopLeft, (int)neighboringScreens.TopLeft },
+                { Direction.TopRight, (int)neighboringScreens.TopRight },
             };
         }
 
@@ -264,11 +265,11 @@ namespace RPG4.Models.Sprites
         }
 
         /// <summary>
-        /// Gets the next <see cref="Screen"/> from a <see cref="DirectionEnum"/>.
+        /// Gets the next <see cref="Screen"/> from a <see cref="Direction"/>.
         /// </summary>
-        /// <param name="direction"><see cref="DirectionEnum"/></param>
+        /// <param name="direction"><see cref="Direction"/></param>
         /// <returns><see cref="Screen"/></returns>
-        public Screen GetNextScreenFromDirection(DirectionEnum direction)
+        public Screen GetNextScreenFromDirection(Direction direction)
         {
             return GetScreen(_neighboringScreens[direction]);
         }

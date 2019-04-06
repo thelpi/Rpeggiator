@@ -1,4 +1,5 @@
-﻿using RPG4.Models.Graphic;
+﻿using RPG4.Models.Enums;
+using RPG4.Models.Graphic;
 
 namespace RPG4.Models.Sprites
 {
@@ -8,9 +9,9 @@ namespace RPG4.Models.Sprites
     public class Floor : Sprite
     {
         /// <summary>
-        /// <see cref="FloorTypeEnum"/>
+        /// <see cref="Enums.FloorType"/>
         /// </summary>
-        public FloorTypeEnum FloorType { get; private set; }
+        public FloorType FloorType { get; private set; }
         /// <summary>
         /// Influence on speed (ratio).
         /// </summary>
@@ -28,14 +29,14 @@ namespace RPG4.Models.Sprites
             FloorType = floorJsonDatas.FloorType;
             switch (FloorType)
             {
-                case FloorTypeEnum.Lava:
+                case FloorType.Lava:
                     Graphic = new PlainBrushGraphic("#B22222");
                     break;
-                case FloorTypeEnum.Water:
+                case FloorType.Water:
                     Graphic = new PlainBrushGraphic("#0000FF");
                     SpeedRatio = Constants.FLOOR_WATER_SPEED_RATIO;
                     break;
-                case FloorTypeEnum.Ice:
+                case FloorType.Ice:
                     Graphic = new PlainBrushGraphic("#ADD8E6");
                     SpeedRatio = Constants.FLOOR_ICE_SPEED_RATIO;
                     break;

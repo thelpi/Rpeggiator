@@ -1,4 +1,5 @@
-﻿using RPG4.Models.Sprites;
+﻿using RPG4.Models.Enums;
+using RPG4.Models.Sprites;
 using System.Collections.Generic;
 using System.Linq;
 using System.Windows;
@@ -11,7 +12,7 @@ namespace RPG4.Models
     public class Inventory
     {
         private List<InventoryItem> _items;
-        private Dictionary<ItemEnum, int> _maxQuantityByItem;
+        private Dictionary<Enums.ItemType, int> _maxQuantityByItem;
         private int _creationHashcode;
         private List<int> _keyring;
 
@@ -22,7 +23,7 @@ namespace RPG4.Models
         /// <summary>
         /// Maximal quantity carriable for each item.
         /// </summary>
-        public IReadOnlyDictionary<ItemEnum, int> MaxQuantityByItem { get { return _maxQuantityByItem; } }
+        public IReadOnlyDictionary<Enums.ItemType, int> MaxQuantityByItem { get { return _maxQuantityByItem; } }
         /// <summary>
         /// Indicates if the lamp item is currently used.
         /// </summary>
@@ -43,7 +44,7 @@ namespace RPG4.Models
         {
             _creationHashcode = creationHashcode;
             _items = new List<InventoryItem>();
-            _maxQuantityByItem = new Dictionary<ItemEnum, int>();
+            _maxQuantityByItem = new Dictionary<Enums.ItemType, int>();
             LampIsOn = false;
             foreach (var itemId in Constants.Player.INVENTORY_ITEMS.Keys)
             {
@@ -56,10 +57,10 @@ namespace RPG4.Models
         /// <summary>
         /// Tries to add or replace an item in the inventory.
         /// </summary>
-        /// <param name="itemId"><see cref="ItemEnum"/>; <c>Null</c> for coins</param>
+        /// <param name="itemId"><see cref="Enums.ItemType"/>; <c>Null</c> for coins</param>
         /// <param name="quantity">Quantity.</param>
         /// <returns><c>True</c> if the item has been added; <c>False</c> otherwise.</returns>
-        public int TryAdd(ItemEnum? itemId, int quantity)
+        public int TryAdd(Enums.ItemType? itemId, int quantity)
         {
             if (!itemId.HasValue)
             {
@@ -140,19 +141,19 @@ namespace RPG4.Models
 
             switch (item.BaseItem.Id)
             {
-                case ItemEnum.Bomb:
+                case Enums.ItemType.Bomb:
                     droppedItem = new ActionnedBomb(ComputeBombDroppingCoordinates());
                     break;
-                case ItemEnum.SmallLifePotion:
+                case Enums.ItemType.SmallLifePotion:
                     Engine.Default.Player.DrinkLifePotion(_creationHashcode, Constants.Inventory.SMALL_LIFE_POTION_RECOVERY_LIFE_POINTS);
                     break;
-                case ItemEnum.MediumLifePotion:
+                case Enums.ItemType.MediumLifePotion:
                     Engine.Default.Player.DrinkLifePotion(_creationHashcode, Constants.Inventory.MEDIUM_LIFE_POTION_RECOVERY_LIFE_POINTS);
                     break;
-                case ItemEnum.LargeLifePotion:
+                case Enums.ItemType.LargeLifePotion:
                     Engine.Default.Player.DrinkLifePotion(_creationHashcode, Constants.Inventory.LARGE_LIFE_POTION_RECOVERY_LIFE_POINTS);
                     break;
-                case ItemEnum.Lamp:
+                case Enums.ItemType.Lamp:
                     LampIsOn = !LampIsOn;
                     break;
             }
@@ -172,28 +173,28 @@ namespace RPG4.Models
             Point pt = new Point(sprite.X, sprite.Y);
             switch (sprite.Direction)
             {
-                case DirectionEnum.BottomLeft:
+                case Direction.BottomLeft:
                     pt.Y = sprite.BottomRightY - Constants.Bomb.HEIGHT;
                     break;
-                case DirectionEnum.Bottom:
+                case Direction.Bottom:
                     pt.X = sprite.X + (sprite.Width / 2);
                     pt.Y = sprite.BottomRightY - Constants.Bomb.HEIGHT;
                     break;
-                case DirectionEnum.BottomRight:
+                case Direction.BottomRight:
                     pt.X = sprite.BottomRightX - Constants.Bomb.WIDTH;
                     pt.Y = sprite.BottomRightY - Constants.Bomb.HEIGHT;
                     break;
-                case DirectionEnum.Right:
+                case Direction.Right:
                     pt.X = sprite.BottomRightX - Constants.Bomb.WIDTH;
                     pt.Y = sprite.Y + (sprite.Height / 2);
                     break;
-                case DirectionEnum.TopRight:
+                case Direction.TopRight:
                     pt.X = sprite.BottomRightX - Constants.Bomb.WIDTH;
                     break;
-                case DirectionEnum.Top:
+                case Direction.Top:
                     pt.X = sprite.X + (sprite.Width / 2);
                     break;
-                case DirectionEnum.Left:
+                case Direction.Left:
                     pt.Y = sprite.Y + (sprite.Height / 2);
                     break;
             }
@@ -203,18 +204,18 @@ namespace RPG4.Models
         /// <summary>
         /// Checks if an item can be used in the context.
         /// </summary>
-        /// <param name="itemId"><see cref="ItemEnum"/></param>
+        /// <param name="itemId"><see cref="Enums.ItemType"/></param>
         /// <returns><c>True</c> if it can be used; <c>False</c> otherwise.</returns>
-        private bool ItemCanBeUseInContext(ItemEnum itemId)
+        private bool ItemCanBeUseInContext(Enums.ItemType itemId)
         {
             switch (itemId)
             {
-                case ItemEnum.Bomb:
+                case Enums.ItemType.Bomb:
                     // example : not underwater
                     break;
-                case ItemEnum.SmallLifePotion:
-                case ItemEnum.MediumLifePotion:
-                case ItemEnum.LargeLifePotion:
+                case Enums.ItemType.SmallLifePotion:
+                case Enums.ItemType.MediumLifePotion:
+                case Enums.ItemType.LargeLifePotion:
                     if (Engine.Default.Player.CurrentLifePoints.Equal(Engine.Default.Player.MaximalLifePoints))
                     {
                         return false;
@@ -229,9 +230,9 @@ namespace RPG4.Models
         /// Sets the maximal quantity storable for an <see cref="InventoryItem"/>.
         /// </summary>
         /// <remarks>The storage capacity can't be decrease.</remarks>
-        /// <param name="itemId"><see cref="ItemEnum"/></param>
+        /// <param name="itemId"><see cref="Enums.ItemType"/></param>
         /// <param name="maxQuantity">Maximal quantity.</param>
-        private void SetItemMaxQuantity(ItemEnum itemId, int maxQuantity)
+        private void SetItemMaxQuantity(Enums.ItemType itemId, int maxQuantity)
         {
             if (_maxQuantityByItem.ContainsKey(itemId))
             {

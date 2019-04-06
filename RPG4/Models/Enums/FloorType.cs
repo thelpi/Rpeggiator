@@ -1,9 +1,9 @@
-﻿namespace RPG4.Models
+﻿namespace RPG4.Models.Enums
 {
     /// <summary>
     /// Represents a type of floor.
     /// </summary>
-    public enum FloorTypeEnum
+    public enum FloorType
     {
         /// <summary>
         /// Ground.

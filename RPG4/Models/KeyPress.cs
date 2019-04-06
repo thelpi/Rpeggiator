@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using RPG4.Models.Enums;
+using System.Linq;
 
 namespace RPG4.Models
 {
@@ -10,7 +11,7 @@ namespace RPG4.Models
         /// <summary>
         /// Indicates the direction if arrow keys are pressed.
         /// </summary>
-        public DirectionEnum? Direction { get; private set; }
+        public Direction? Direction { get; private set; }
         /// <summary>
         /// Indicates if the hit button is pressed.
         /// </summary>
@@ -31,7 +32,7 @@ namespace RPG4.Models
         {
             get
             {
-                return GoDirection(DirectionEnum.Left, DirectionEnum.TopLeft, DirectionEnum.BottomLeft);
+                return GoDirection(Enums.Direction.Left, Enums.Direction.TopLeft, Enums.Direction.BottomLeft);
             }
         }
         /// <summary>
@@ -42,7 +43,7 @@ namespace RPG4.Models
         {
             get
             {
-                return GoDirection(DirectionEnum.Right, DirectionEnum.TopRight, DirectionEnum.BottomRight);
+                return GoDirection(Enums.Direction.Right, Enums.Direction.TopRight, Enums.Direction.BottomRight);
             }
         }
         /// <summary>
@@ -53,7 +54,7 @@ namespace RPG4.Models
         {
             get
             {
-                return GoDirection(DirectionEnum.Top, DirectionEnum.TopLeft, DirectionEnum.TopRight);
+                return GoDirection(Enums.Direction.Top, Enums.Direction.TopLeft, Enums.Direction.TopRight);
             }
         }
         /// <summary>
@@ -64,7 +65,7 @@ namespace RPG4.Models
         {
             get
             {
-                return GoDirection(DirectionEnum.Bottom, DirectionEnum.BottomLeft, DirectionEnum.BottomRight);
+                return GoDirection(Enums.Direction.Bottom, Enums.Direction.BottomLeft, Enums.Direction.BottomRight);
             }
         }
 
@@ -100,40 +101,40 @@ namespace RPG4.Models
 
             if (up)
             {
-                Direction = DirectionEnum.Top;
+                Direction = Enums.Direction.Top;
                 if (right)
                 {
-                    Direction = DirectionEnum.TopRight;
+                    Direction = Enums.Direction.TopRight;
                 }
                 else if (left)
                 {
-                    Direction = DirectionEnum.TopLeft;
+                    Direction = Enums.Direction.TopLeft;
                 }
             }
             else if (down)
             {
-                Direction = DirectionEnum.Bottom;
+                Direction = Enums.Direction.Bottom;
                 if (right)
                 {
-                    Direction = DirectionEnum.BottomRight;
+                    Direction = Enums.Direction.BottomRight;
                 }
                 else if (left)
                 {
-                    Direction = DirectionEnum.BottomLeft;
+                    Direction = Enums.Direction.BottomLeft;
                 }
             }
             else if (right)
             {
-                Direction = DirectionEnum.Right;
+                Direction = Enums.Direction.Right;
             }
             else if (left)
             {
-                Direction = DirectionEnum.Left;
+                Direction = Enums.Direction.Left;
             }
         }
 
         // Indicates if the general direction is one of the input array.
-        private bool GoDirection(params DirectionEnum[] dirs)
+        private bool GoDirection(params Direction[] dirs)
         {
             return Direction.HasValue && dirs.Contains(Direction.Value);
         }

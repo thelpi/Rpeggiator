@@ -1,4 +1,5 @@
-﻿using RPG4.Models.Graphic;
+﻿using RPG4.Models.Enums;
+using RPG4.Models.Graphic;
 using System.Collections.Generic;
 using System.Linq;
 using System.Windows;
@@ -173,8 +174,8 @@ namespace RPG4.Models.Sprites
         /// </summary>
         /// <param name="spriteInMotion"><see cref="Sprite"/> in motion.</param>
         /// <param name="positionToCheck">Position to check.</param>
-        /// <returns><see cref="DirectionEnum"/> <paramref name="spriteInMotion"/> come before its overlaps; <c>Null</c> if no overlap.</returns>
-        public DirectionEnum? DirectionSourceOfOverlap(Sprite spriteInMotion, Point positionToCheck)
+        /// <returns><see cref="Direction"/> <paramref name="spriteInMotion"/> come before its overlaps; <c>Null</c> if no overlap.</returns>
+        public Direction? DirectionSourceOfOverlap(Sprite spriteInMotion, Point positionToCheck)
         {
             Sprite spriteInPosition = spriteInMotion.CopyToPosition(positionToCheck);
 
@@ -195,28 +196,28 @@ namespace RPG4.Models.Sprites
             {
                 // in diagonal exactly right on a corner.
                 return fromLeft ?
-                    (fromTop ? DirectionEnum.TopLeft : DirectionEnum.BottomLeft)
-                    : (fromTop ? DirectionEnum.TopRight : DirectionEnum.BottomRight);
+                    (fromTop ? Direction.TopLeft : Direction.BottomLeft)
+                    : (fromTop ? Direction.TopRight : Direction.BottomRight);
             }
             else if (oldOverlapY.Equal(0))
             {
                 // Y move only.
-                return fromTop ? DirectionEnum.Top : DirectionEnum.Bottom;
+                return fromTop ? Direction.Top : Direction.Bottom;
             }
             else if (oldOverlapX.Equal(0))
             {
                 // X move only.
-                return fromLeft ? DirectionEnum.Left : DirectionEnum.Right;
+                return fromLeft ? Direction.Left : Direction.Right;
             }
             else if (newOverlapX.Greater(newOverlapY))
             {
                 // X move prior to Y move.
-                return fromLeft ? DirectionEnum.Left : DirectionEnum.Right;
+                return fromLeft ? Direction.Left : Direction.Right;
             }
             else
             {
                 // Y move prior to X move.
-                return fromTop ? DirectionEnum.Top : DirectionEnum.Bottom;
+                return fromTop ? Direction.Top : Direction.Bottom;
             }
         }
 
@@ -276,21 +277,21 @@ namespace RPG4.Models.Sprites
 
             switch (p.Direction)
             {
-                case DirectionEnum.Top:
+                case Direction.Top:
                     return BottomRightY.LowerEqual(p.Y) && ComputeHorizontalOverlap(p).Greater(0);
-                case DirectionEnum.Bottom:
+                case Direction.Bottom:
                     return Y.GreaterEqual(p.BottomRightY) && ComputeHorizontalOverlap(p).Greater(0);
-                case DirectionEnum.Right:
+                case Direction.Right:
                     return X.GreaterEqual(p.BottomRightX) && ComputeVerticalOverlap(p).Greater(0);
-                case DirectionEnum.Left:
+                case Direction.Left:
                     return BottomRightX.LowerEqual(p.X) && ComputeVerticalOverlap(p).Greater(0);
-                case DirectionEnum.BottomLeft:
+                case Direction.BottomLeft:
                     return BottomRightX.LowerEqual(p.X) && Y.GreaterEqual(p.BottomRightY);
-                case DirectionEnum.BottomRight:
+                case Direction.BottomRight:
                     return X.GreaterEqual(p.BottomRightX) && Y.GreaterEqual(p.BottomRightY);
-                case DirectionEnum.TopLeft:
+                case Direction.TopLeft:
                     return BottomRightX.LowerEqual(p.X) && BottomRightY.LowerEqual(p.Y);
-                case DirectionEnum.TopRight:
+                case Direction.TopRight:
                     return X.GreaterEqual(p.BottomRightX) && BottomRightY.LowerEqual(p.Y);
             }
 

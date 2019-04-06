@@ -1,4 +1,5 @@
-﻿using RPG4.Models.Sprites;
+﻿using RPG4.Models.Enums;
+using RPG4.Models.Sprites;
 using System.Collections.Generic;
 using System.Linq;
 using System.Windows;
@@ -113,7 +114,7 @@ namespace RPG4.Models
             _counterClockGetAround = _counterClockGetAround ?? Tools.GetRandomNumber(0, 2) == 0;
 
             // Gets the direction the sprite comes from, relative to the structure.
-            DirectionEnum generalDirection = overlapStruct.DirectionSourceOfOverlap(owner, newPosition).Value;
+            Direction generalDirection = overlapStruct.DirectionSourceOfOverlap(owner, newPosition).Value;
             AdjustOverlapDirectionFromGetAroundDirection(ref generalDirection);
 
             Point tmpPt = new Point();
@@ -125,19 +126,19 @@ namespace RPG4.Models
             {
                 switch (generalDirection)
                 {
-                    case DirectionEnum.Top:
+                    case Direction.Top:
                         tmpPt.X = _counterClockGetAround.Value ? overlapStruct.X - owner.Width : overlapStruct.BottomRightX;
                         tmpPt.Y = overlapStruct.Y - owner.Height;
                         break;
-                    case DirectionEnum.Bottom:
+                    case Direction.Bottom:
                         tmpPt.X = _counterClockGetAround.Value ? overlapStruct.BottomRightX : overlapStruct.X - owner.Width;
                         tmpPt.Y = overlapStruct.BottomRightY;
                         break;
-                    case DirectionEnum.Left:
+                    case Direction.Left:
                         tmpPt.X = overlapStruct.X - owner.Width;
                         tmpPt.Y = _counterClockGetAround.Value ? overlapStruct.BottomRightY : overlapStruct.Y - owner.Height;
                         break;
-                    case DirectionEnum.Right:
+                    case Direction.Right:
                         tmpPt.X = overlapStruct.BottomRightX;
                         tmpPt.Y = _counterClockGetAround.Value ? overlapStruct.Y - owner.Height : overlapStruct.BottomRightY;
                         break;
@@ -164,7 +165,7 @@ namespace RPG4.Models
         }
 
         // Force a straightforward direction, depending on "_counterClockGetAround",  when the direction is a corner.
-        private void AdjustOverlapDirectionFromGetAroundDirection(ref DirectionEnum direction)
+        private void AdjustOverlapDirectionFromGetAroundDirection(ref Direction direction)
         {
             if (!_counterClockGetAround.HasValue)
             {
@@ -173,17 +174,17 @@ namespace RPG4.Models
 
             switch (direction)
             {
-                case DirectionEnum.BottomLeft:
-                    direction = _counterClockGetAround.Value ? DirectionEnum.Bottom : DirectionEnum.Left;
+                case Direction.BottomLeft:
+                    direction = _counterClockGetAround.Value ? Direction.Bottom : Direction.Left;
                     break;
-                case DirectionEnum.BottomRight:
-                    direction = _counterClockGetAround.Value ? DirectionEnum.Right : DirectionEnum.Bottom;
+                case Direction.BottomRight:
+                    direction = _counterClockGetAround.Value ? Direction.Right : Direction.Bottom;
                     break;
-                case DirectionEnum.TopLeft:
-                    direction = _counterClockGetAround.Value ? DirectionEnum.Left : DirectionEnum.Top;
+                case Direction.TopLeft:
+                    direction = _counterClockGetAround.Value ? Direction.Left : Direction.Top;
                     break;
-                case DirectionEnum.TopRight:
-                    direction = _counterClockGetAround.Value ? DirectionEnum.Top : DirectionEnum.Right;
+                case Direction.TopRight:
+                    direction = _counterClockGetAround.Value ? Direction.Top : Direction.Right;
                     break;
             }
         }

@@ -85,12 +85,12 @@
     <Compile Include="Models\Sprites\BombExplosion.cs" />
     <Compile Include="Models\Sprites\Chest.cs" />
     <Compile Include="Models\Sprites\Door.cs" />
-    <Compile Include="Models\FloorTypeEnum.cs" />
+    <Compile Include="Models\Enums\FloorType.cs" />
     <Compile Include="Models\Sprites\Floor.cs" />
     <Compile Include="Models\Sprites\WeaponHit.cs" />
     <Compile Include="Models\Sprites\Screen.cs" />
     <Compile Include="Models\Sprites\ActionnedBomb.cs" />
-    <Compile Include="Models\DirectionEnum.cs" />
+    <Compile Include="Models\Enums\Direction.cs" />
     <Compile Include="Models\Sprites\ActionnedItem.cs" />
     <Compile Include="Models\Sprites\Pit.cs" />
     <Compile Include="Models\Sprites\PickableItem.cs" />
@@ -100,7 +100,7 @@
     <Compile Include="Models\Item.cs" />
     <Compile Include="Models\Sprites\GateTrigger.cs" />
     <Compile Include="Models\Sprites\FloorTrigger.cs" />
-    <Compile Include="Models\ItemEnum.cs" />
+    <Compile Include="Models\Enums\ItemType.cs" />
     <Compile Include="Models\Sprites\LifeSprite.cs" />
     <Compile Include="Models\Sprites\Player.cs" />
     <Compile Include="Models\Sprites\Enemy.cs" />

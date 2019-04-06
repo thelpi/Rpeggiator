@@ -1,4 +1,5 @@
-﻿using RPG4.Models.Graphic;
+﻿using RPG4.Models.Enums;
+using RPG4.Models.Graphic;
 using System.Collections.Generic;
 
 namespace RPG4.Models
@@ -12,9 +13,9 @@ namespace RPG4.Models
         private static List<Item> _items = null;
 
         /// <summary>
-        /// <see cref="ItemEnum"/>
+        /// <see cref="ItemType"/>
         /// </summary>
-        public ItemEnum Id { get; private set; }
+        public ItemType Id { get; private set; }
         /// <summary>
         /// Name.
         /// </summary>
@@ -40,11 +41,11 @@ namespace RPG4.Models
         private Item() { }
 
         /// <summary>
-        /// Gets an <see cref="Item"/> by its <see cref="ItemEnum"/>.
+        /// Gets an <see cref="Item"/> by its <see cref="Enums.ItemType"/>.
         /// </summary>
-        /// <param name="itemId"><see cref="ItemEnum"/></param>
+        /// <param name="itemId"><see cref="Enums.ItemType"/></param>
         /// <returns><see cref="Item"/></returns>
-        public static Item GetItem(ItemEnum itemId)
+        public static Item GetItem(Enums.ItemType itemId)
         {
             if (_items == null)
             {
@@ -60,7 +61,7 @@ namespace RPG4.Models
             _items = new List<Item>();
             _items.Add(new Item
             {
-                Id = ItemEnum.Bomb,
+                Id = Enums.ItemType.Bomb,
                 Name = "Bomb",
                 Unique = false,
                 UseDelay = 1000,
@@ -69,7 +70,7 @@ namespace RPG4.Models
             });
             _items.Add(new Item
             {
-                Id = ItemEnum.SmallLifePotion,
+                Id = Enums.ItemType.SmallLifePotion,
                 Name = "Life potion (small)",
                 Unique = false,
                 UseDelay = 500,
@@ -78,7 +79,7 @@ namespace RPG4.Models
             });
             _items.Add(new Item
             {
-                Id = ItemEnum.MediumLifePotion,
+                Id = Enums.ItemType.MediumLifePotion,
                 Name = "Life potion (medium)",
                 Unique = false,
                 UseDelay = 500,
@@ -87,7 +88,7 @@ namespace RPG4.Models
             });
             _items.Add(new Item
             {
-                Id = ItemEnum.LargeLifePotion,
+                Id = Enums.ItemType.LargeLifePotion,
                 Name = "Life potion (large)",
                 Unique = false,
                 UseDelay = 500,
@@ -96,7 +97,7 @@ namespace RPG4.Models
             });
             _items.Add(new Item
             {
-                Id = ItemEnum.Lamp,
+                Id = Enums.ItemType.Lamp,
                 Name = "Lamp",
                 Unique = true,
                 UseDelay = 0,
