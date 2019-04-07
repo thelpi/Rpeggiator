@@ -185,13 +185,9 @@ namespace RPG4.Models.Sprites
             _neighboringScreens = new Dictionary<Direction, int>
             {
                 { Direction.Bottom, (int)neighboringScreens.Bottom },
-                { Direction.BottomLeft, (int)neighboringScreens.BottomLeft },
-                { Direction.BottomRight, (int)neighboringScreens.BottomRight },
                 { Direction.Left, (int)neighboringScreens.Left },
                 { Direction.Right, (int)neighboringScreens.Right },
-                { Direction.Top, (int)neighboringScreens.Top },
-                { Direction.TopLeft, (int)neighboringScreens.TopLeft },
-                { Direction.TopRight, (int)neighboringScreens.TopRight },
+                { Direction.Top, (int)neighboringScreens.Top }
             };
         }
 
@@ -271,6 +267,24 @@ namespace RPG4.Models.Sprites
         /// <returns><see cref="Screen"/></returns>
         public Screen GetNextScreenFromDirection(Direction direction)
         {
+            // Ensures a non-corner direction.
+            if (direction == Direction.BottomLeft)
+            {
+                direction = Direction.Left;
+            }
+            else if (direction == Direction.BottomRight)
+            {
+                direction = Direction.Bottom;
+            }
+            else if (direction == Direction.TopLeft)
+            {
+                direction = Direction.Top;
+            }
+            else if (direction == Direction.TopRight)
+            {
+                direction = Direction.Right;
+            }
+
             return GetScreen(_neighboringScreens[direction]);
         }
     }

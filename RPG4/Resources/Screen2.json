@@ -48,6 +48,14 @@
       "Height": 40,
       "GraphicType": "PlainBrushGraphic",
       "HexColor": "#FF006400"
+    },
+    {
+      "X": 400,
+      "Y": 590,
+      "Width": 80,
+      "Height": 10,
+      "GraphicType": "PlainBrushGraphic",
+      "HexColor": "#FF006400"
     }
   ],
   "Chests": [],
@@ -88,13 +96,9 @@
     }
   ],
   "NeighboringScreens": {
-    "TopLeft": 1,
     "Top": 1,
-    "TopRight": 1,
     "Right": 1,
-    "BottomRight": 1,
     "Bottom": 1,
-    "BottomLeft": 1,
     "Left": 1
   },
   "Items": [

@@ -77,13 +77,9 @@
   "Enemies": [],
   "GateTriggers": [],
   "NeighboringScreens": {
-    "TopLeft": 3,
     "Top": 3,
-    "TopRight": 3,
     "Right": 3,
-    "BottomRight": 3,
     "Bottom": 3,
-    "BottomLeft": 3,
     "Left": 3
   },
   "Items": [],

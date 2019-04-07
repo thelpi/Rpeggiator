@@ -75,13 +75,9 @@
   ],
   "GateTriggers": [],
   "NeighboringScreens": {
-    "TopLeft": 2,
     "Top": 2,
-    "TopRight": 2,
     "Right": 2,
-    "BottomRight": 2,
     "Bottom": 2,
-    "BottomLeft": 2,
     "Left": 2
   },
   "Items": [
