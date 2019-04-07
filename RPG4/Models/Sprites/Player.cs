@@ -50,10 +50,8 @@ namespace RPG4.Models.Sprites
         /// Indicates the sprite direction.
         /// </summary>
         public Direction Direction { get; private set; }
-        /// <summary>
-        /// Graphic rendering when recovering.
-        /// </summary>
-        public ISpriteGraphic RecoveryGraphic { get { return Constants.Player.RECOVERY_GRAPHIC; } }
+        /// <inheritdoc />
+        public override ISpriteGraphic Graphic { get { return IsRecovering ? Constants.Player.RECOVERY_GRAPHIC : base.Graphic; } }
 
         /// <summary>
         /// Constructor.
@@ -85,7 +83,7 @@ namespace RPG4.Models.Sprites
         public override void BehaviorAtNewFrame()
         {
             NewScreenEntrance = null;
-            Point newPosition = ComputeTheoreticalMove();
+            Point newPosition = Tools.ComputeMovementNextPointInDirection(X, Y, _movementTimeManager.Distance(Speed), Engine.Default.KeyPress.Direction);
 
             // If any movement.
             if (!newPosition.X.Equal(X) || !newPosition.Y.Equal(Y))
@@ -167,54 +165,6 @@ namespace RPG4.Models.Sprites
         }
 
         #region Position management private methods
-
-        /// <summary>
-        /// Computes the next theoretical position.
-        /// </summary>
-        /// <returns>The new position coordinates, which might be the same as current coordinates.</returns>
-        private Point ComputeTheoreticalMove()
-        {
-            // Shortcut.
-            KeyPress keys = Engine.Default.KeyPress;
-
-            double newTop = Y;
-            double newLeft = X;
-            double distance = _movementTimeManager.Distance(Speed);
-
-            switch (keys.Direction)
-            {
-                case Direction.Bottom:
-                    newTop += distance;
-                    break;
-                case Direction.BottomLeft:
-                    newTop += Tools.FrameDiagonalDistance(distance);
-                    newLeft -= Tools.FrameDiagonalDistance(distance);
-                    break;
-                case Direction.BottomRight:
-                    newTop += Tools.FrameDiagonalDistance(distance);
-                    newLeft += Tools.FrameDiagonalDistance(distance);
-                    break;
-                case Direction.Top:
-                    newTop -= distance;
-                    break;
-                case Direction.TopLeft:
-                    newTop -= Tools.FrameDiagonalDistance(distance);
-                    newLeft -= Tools.FrameDiagonalDistance(distance);
-                    break;
-                case Direction.TopRight:
-                    newTop -= Tools.FrameDiagonalDistance(distance);
-                    newLeft += Tools.FrameDiagonalDistance(distance);
-                    break;
-                case Direction.Left:
-                    newLeft -= distance;
-                    break;
-                case Direction.Right:
-                    newLeft += distance;
-                    break;
-            }
-
-            return new Point(newLeft, newTop);
-        }
 
         /// <summary>
         /// Checks, for a theoretical new position, if its avoid every solid structures of the screen; the position might be edited.

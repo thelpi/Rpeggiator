@@ -1,8 +1,10 @@
 ﻿using RPG4.Models.Enums;
 using RPG4.Models.Graphic;
 using RPG4.Models.Sprites;
+using RPG4.Properties;
 using System;
 using System.Collections.Generic;
+using System.Windows.Media;
 
 namespace RPG4.Models
 {
@@ -135,15 +137,15 @@ namespace RPG4.Models
             /// <summary>
             /// Hit graphic rendering.
             /// </summary>
-            public static readonly ISpriteGraphic HIT_GRAPHIC = new ImageBrushGraphic("Sword");
+            public static readonly ISpriteGraphic HIT_GRAPHIC = new ImageBrushGraphic(nameof(Resources.Sword));
             /// <summary>
             /// Graphic rendering.
             /// </summary>
-            public static readonly ISpriteGraphic GRAPHIC = new ImageBrushGraphic("Player");
+            public static readonly ISpriteGraphic GRAPHIC = new ImageBrushGraphic(nameof(Resources.Player));
             /// <summary>
             /// Recovery graphic rendering.
             /// </summary>
-            public static readonly ISpriteGraphic RECOVERY_GRAPHIC = new ImageBrushGraphic("PlayerRecovery");
+            public static readonly ISpriteGraphic RECOVERY_GRAPHIC = new ImageBrushGraphic(nameof(Resources.PlayerRecovery));
             /// <summary>
             /// Player recovery time span, in milliseconds.
             /// </summary>
@@ -201,7 +203,7 @@ namespace RPG4.Models
             /// <summary>
             /// Coin graphic.
             /// </summary>
-            public static readonly ISpriteGraphic COIN_GRAPHIC = new ImageBrushGraphic("Coin");
+            public static readonly ISpriteGraphic COIN_GRAPHIC = new ImageBrushGraphic(nameof(Resources.Coin));
             /// <summary>
             /// Delay between two uses of a specific item, in milliseconds.
             /// </summary>
@@ -241,7 +243,7 @@ namespace RPG4.Models
             /// <summary>
             /// <see cref="ActionnedBomb"/> graphic rendering.
             /// </summary>
-            public static readonly ISpriteGraphic GRAPHIC_RENDERING = new ImageBrushGraphic("Bomb");
+            public static readonly ISpriteGraphic GRAPHIC_RENDERING = new ImageBrushGraphic(nameof(Resources.Bomb));
             /// <summary>
             /// Indicates the life points cost when a bomb explodes nearby.
             /// </summary>
@@ -253,7 +255,30 @@ namespace RPG4.Models
             /// <summary>
             /// <see cref="ActionnedBomb"/> explosion graphic rendering.
             /// </summary>
-            public static readonly ISpriteGraphic EXPLOSION_GRAPHIC_RENDERING = new PlainBrushGraphic("#FFFF4500");
+            public static readonly ISpriteGraphic EXPLOSION_GRAPHIC_RENDERING = new PlainBrushGraphic(Colors.OrangeRed);
+        }
+
+        /// <summary>
+        /// Set of constants relatives to <see cref="ActionnedArrow"/>.
+        /// </summary>
+        public static class Arrow
+        {
+            /// <summary>
+            /// Width.
+            /// </summary>
+            public const double WIDTH = 20;
+            /// <summary>
+            /// Height.
+            /// </summary>
+            public const double HEIGHT = 20;
+            /// <summary>
+            /// Arrow speed, in pixels by second.
+            /// </summary>
+            public const double SPEED = 20;
+            /// <summary>
+            /// <see cref="ActionnedArrow"/> graphic rendering.
+            /// </summary>
+            public static readonly ISpriteGraphic GRAPHIC_RENDERING = new ImageBrushGraphic(nameof(Resources.Arrow));
         }
     }
 }

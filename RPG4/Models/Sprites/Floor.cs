@@ -30,14 +30,14 @@ namespace RPG4.Models.Sprites
             switch (FloorType)
             {
                 case FloorType.Lava:
-                    Graphic = new PlainBrushGraphic("#B22222");
+                    Graphic = new PlainBrushGraphic(System.Windows.Media.Colors.Firebrick);
                     break;
                 case FloorType.Water:
-                    Graphic = new PlainBrushGraphic("#0000FF");
+                    Graphic = new PlainBrushGraphic(System.Windows.Media.Colors.Blue);
                     SpeedRatio = Constants.FLOOR_WATER_SPEED_RATIO;
                     break;
                 case FloorType.Ice:
-                    Graphic = new PlainBrushGraphic("#ADD8E6");
+                    Graphic = new PlainBrushGraphic(System.Windows.Media.Colors.LightBlue);
                     SpeedRatio = Constants.FLOOR_ICE_SPEED_RATIO;
                     break;
                 default:

@@ -14,7 +14,7 @@ namespace RPG4.Models.Graphic
         private SolidColorBrush _brush = null;
 
         /// <summary>
-        /// Constructor
+        /// Constructor.
         /// </summary>
         /// <param name="hexadecimalColor">The hexadecimal value of the color.</param>
         public PlainBrushGraphic(string hexadecimalColor)
@@ -24,6 +24,15 @@ namespace RPG4.Models.Graphic
                 hexadecimalColor = string.Concat("#", hexadecimalColor);
             }
             _hexadecimalColor = hexadecimalColor;
+        }
+
+        /// <summary>
+        /// Constructor.
+        /// </summary>
+        /// <param name="c"><see cref="Color"/></param>
+        public PlainBrushGraphic(Color c)
+        {
+            _hexadecimalColor = string.Format("#{0:X2}{1:X2}{2:X2}{3:X2}", c.A, c.R, c.G, c.B);
         }
 
         /// <inheritdoc />

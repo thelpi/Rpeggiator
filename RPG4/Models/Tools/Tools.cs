@@ -237,5 +237,53 @@ namespace RPG4.Models
         {
             return a.Equal(b) || a.Greater(b);
         }
+
+        /// <summary>
+        /// Computes, for a given <see cref="Enums.Direction"/>, distance, and starting position, the next position.
+        /// </summary>
+        /// <param name="x">Starting position X-axis.</param>
+        /// <param name="y">Starting position Y-axis.</param>
+        /// <param name="distance">Distance to do (pixels).</param>
+        /// <param name="direction"><see cref="Enums.Direction"/>; can be <c>Null</c> (no move).</param>
+        /// <returns>The next position.</returns>
+        public static Point ComputeMovementNextPointInDirection(double x, double y, double distance, Enums.Direction? direction)
+        {
+            // Shortcut.
+            KeyPress keys = Engine.Default.KeyPress;
+
+            switch (direction)
+            {
+                case Enums.Direction.Bottom:
+                    y += distance;
+                    break;
+                case Enums.Direction.BottomLeft:
+                    y += FrameDiagonalDistance(distance);
+                    x -= FrameDiagonalDistance(distance);
+                    break;
+                case Enums.Direction.BottomRight:
+                    y += FrameDiagonalDistance(distance);
+                    x += FrameDiagonalDistance(distance);
+                    break;
+                case Enums.Direction.Top:
+                    y -= distance;
+                    break;
+                case Enums.Direction.TopLeft:
+                    y -= FrameDiagonalDistance(distance);
+                    x -= FrameDiagonalDistance(distance);
+                    break;
+                case Enums.Direction.TopRight:
+                    y -= FrameDiagonalDistance(distance);
+                    x += FrameDiagonalDistance(distance);
+                    break;
+                case Enums.Direction.Left:
+                    x -= distance;
+                    break;
+                case Enums.Direction.Right:
+                    x += distance;
+                    break;
+            }
+
+            return new Point(x, y);
+        }
     }
 }

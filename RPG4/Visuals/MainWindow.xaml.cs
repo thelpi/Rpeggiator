@@ -186,15 +186,8 @@ namespace RPG4.Visuals
             rctPlayer.SetValue(Canvas.TopProperty, Engine.Default.Player.Y);
             rctPlayer.SetValue(Canvas.LeftProperty, Engine.Default.Player.X);
 
-            if (Engine.Default.Player.IsRecovering)
-            {
-                rctPlayer.Fill = Engine.Default.Player.RecoveryGraphic.GetRenderingBrush();
-            }
-            else
-            {
-                rctPlayer.Fill = Engine.Default.Player.Graphic.GetRenderingBrush();
-            }
-            
+            rctPlayer.Fill = Engine.Default.Player.Graphic.GetRenderingBrush();
+
             if (Engine.Default.Player.IsHitting)
             {
                 DrawSizedPoint(Engine.Default.Player.HitSprite);

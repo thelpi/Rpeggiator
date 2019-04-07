@@ -82,6 +82,7 @@
     <Compile Include="Models\Graphic\SpriteGraphic.cs" />
     <Compile Include="Models\Path.cs" />
     <Compile Include="Models\PathStep.cs" />
+    <Compile Include="Models\Sprites\ActionnedArrow.cs" />
     <Compile Include="Models\Sprites\BombExplosion.cs" />
     <Compile Include="Models\Sprites\Chest.cs" />
     <Compile Include="Models\Sprites\Door.cs" />
