@@ -22,8 +22,6 @@ namespace RPG4.Models.Sprites
         private Elapser _movementTimeManager;
         // Lifetime manager for the current hit with the current weapon.
         private Elapser _hitElapser;
-        // Recovery time manager.
-        private Elapser _recoveryManager;
         // Hashcode associated to the instance timestamp.
         private int _creationHashcode;
         /// <summary>
@@ -34,10 +32,6 @@ namespace RPG4.Models.Sprites
         /// Inventory.
         /// </summary>
         public Inventory Inventory { get; private set; }
-        /// <summary>
-        /// Indicates the player is currently recovering from an hit.
-        /// </summary>
-        public bool IsRecovering { get { return _recoveryManager?.Elapsed == false; } }
         /// <summary>
         /// Indicates if the player is currently hitting.
         /// </summary>
@@ -50,8 +44,6 @@ namespace RPG4.Models.Sprites
         /// Indicates the sprite direction.
         /// </summary>
         public Direction Direction { get; private set; }
-        /// <inheritdoc />
-        public override ISpriteGraphic Graphic { get { return IsRecovering ? Constants.Player.RECOVERY_GRAPHIC : base.Graphic; } }
 
         /// <summary>
         /// Constructor.
@@ -65,14 +57,15 @@ namespace RPG4.Models.Sprites
             Constants.Player.GRAPHIC,
             Constants.Player.MAXIMAL_LIFE_POINTS,
             Constants.Player.HIT_LIFE_POINT_COST,
-            Constants.Player.INITIAL_PLAYER_SPEED)
+            Constants.Player.INITIAL_PLAYER_SPEED,
+            Constants.Player.RECOVERY_TIME,
+            Constants.Player.RECOVERY_GRAPHIC)
         {
             _creationHashcode = DateTime.Now.ToString(Constants.UNIQUE_TIMESTAMP_PATTERN).GetHashCode();
 
             NewScreenEntrance = null;
             Inventory = new Inventory(_creationHashcode);
             HitSprite = null;
-            _recoveryManager = null;
             _hitElapser = null;
             _currentWeaponHitDelay = Constants.Player.SWORD_HIT_DELAY;
             Direction = Direction.Right;
@@ -110,31 +103,6 @@ namespace RPG4.Models.Sprites
                         chest.TryOpen();
                         break;
                     }
-                }
-            }
-        }
-
-        /// <summary>
-        /// Checks if the instance has been hit.
-        /// </summary>
-        public void CheckIfHasBeenHit()
-        {
-            // currently recovering ?
-            if (_recoveryManager?.Elapsed == true)
-            {
-                _recoveryManager = null;
-            }
-
-            if (_recoveryManager == null)
-            {
-                // checks hits by enemies or bombs
-                double cumuledLifePoints = Engine.Default.CheckHitByEnemiesOnPlayer()
-                    + Engine.Default.CurrentScreen.OverlapAnExplodingBomb(this);
-
-                if (cumuledLifePoints.Greater(0))
-                {
-                    Hit(cumuledLifePoints);
-                    _recoveryManager = new Elapser(Constants.Player.RECOVERY_TIME);
                 }
             }
         }

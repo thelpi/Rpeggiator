@@ -233,14 +233,24 @@ namespace RPG4.Models.Sprites
         }
 
         /// <summary>
-        /// Checks if a bomb (or several) is currently exploding near to a <see cref="Sprite"/>.
+        /// Checks if a bomb (or several) is currently exploding near to <paramref name="sprite"/>.
         /// </summary>
-        /// <typeparam name="T">Type of sprite requirement (must inherit from <see cref="IExplodable"/>).</typeparam>
+        /// <typeparam name="T">Sprite type; must inherit from <see cref="IExplodable"/>.</typeparam>
         /// <param name="sprite"><see cref="Sprite"/></param>
         /// <returns>Life points lost.</returns>
         public double OverlapAnExplodingBomb<T>(T sprite) where T : Sprite, IExplodable
         {
-            return _actionnedItems.Where(di => di is ActionnedBomb).Sum(b => (b as ActionnedBomb).GetLifePointCost(sprite));
+            return _actionnedItems.Where(di => di is ActionnedBomb).Sum(b => (b as ActionnedBomb).GetLifePointsCost(sprite));
+        }
+
+        /// <summary>
+        /// Checks if an arrow (or several) has reached the specified <paramref name="sprite"/>.
+        /// </summary>
+        /// <param name="sprite"><see cref="Sprite"/></param>
+        /// <returns>Life points lost.</returns>
+        public double OverlapAnArrow(LifeSprite sprite)
+        {
+            return _actionnedItems.Where(di => di is ActionnedArrow).Sum(b => (b as ActionnedArrow).GetLifePointsCost(sprite));
         }
 
         /// <summary>

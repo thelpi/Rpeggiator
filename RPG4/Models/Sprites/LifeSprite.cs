@@ -1,4 +1,5 @@
 ﻿using RPG4.Models.Enums;
+using RPG4.Models.Graphic;
 using System.Linq;
 
 namespace RPG4.Models.Sprites
@@ -10,7 +11,14 @@ namespace RPG4.Models.Sprites
     /// <seealso cref="IExplodable"/>
     public class LifeSprite : Sprite, IExplodable
     {
+        // Original speed.
         private double _originalSpeed;
+        // Recovery time manager.
+        private Elapser _recoveryManager;
+        // Recovery time, in milliseconds.
+        private double _recoveryTime;
+        // Recovery graphic.
+        private ISpriteGraphic _recoveryGraphic;
 
         /// <summary>
         /// Maximal number of life points.
@@ -26,6 +34,8 @@ namespace RPG4.Models.Sprites
         public double HitLifePointCost { get; private set; }
         /// <inheritdoc />
         public double ExplosionLifePointCost { get { return Constants.Bomb.EXPLOSION_LIFE_POINT_COST; } }
+        /// <inheritdoc />
+        public double ArrowLifePointCost { get { return Constants.Arrow.LIFE_POINT_COST; } }
         /// <summary>
         /// Inferred; current speed (i.e. distance, in pixels, by second)
         /// </summary>
@@ -48,6 +58,12 @@ namespace RPG4.Models.Sprites
                 ) ?? Engine.Default.CurrentScreen;
             }
         }
+        /// <summary>
+        /// Indicates the player is currently recovering from an hit.
+        /// </summary>
+        public bool IsRecovering { get { return _recoveryManager?.Elapsed == false; } }
+        /// <inheritdoc />
+        public override ISpriteGraphic Graphic { get { return IsRecovering ? Constants.Player.RECOVERY_GRAPHIC : base.Graphic; } }
 
         /// <summary>
         /// Constructor.
@@ -60,14 +76,19 @@ namespace RPG4.Models.Sprites
         /// <param name="maximalLifePoints"><see cref="MaximalLifePoints"/></param>
         /// <param name="hitLifePointCost"><see cref="HitLifePointCost"/></param>
         /// <param name="speed"><see cref="_originalSpeed"/></param>
+        /// <param name="recoveryTime"><see cref="_recoveryTime"/></param>
+        /// <param name="recoveryGraphic"><see cref="_recoveryGraphic"/></param>
         protected LifeSprite(double x, double y, double width, double height, Graphic.ISpriteGraphic graphic,
-            double maximalLifePoints, double hitLifePointCost, double speed)
+            double maximalLifePoints, double hitLifePointCost, double speed, double recoveryTime, ISpriteGraphic recoveryGraphic)
             : base(x, y, width, height, graphic)
         {
             MaximalLifePoints = maximalLifePoints;
             CurrentLifePoints = maximalLifePoints;
             HitLifePointCost = hitLifePointCost;
             _originalSpeed = speed;
+            _recoveryManager = null;
+            _recoveryTime = recoveryTime;
+            _recoveryGraphic = recoveryGraphic;
         }
 
         /// <summary>
@@ -80,15 +101,9 @@ namespace RPG4.Models.Sprites
             CurrentLifePoints = MaximalLifePoints;
             HitLifePointCost = lifeSpriteJson.HitLifePointCost;
             _originalSpeed = lifeSpriteJson.Speed;
-        }
-
-        /// <summary>
-        /// Recomputes <see cref="CurrentLifePoints"/> after an hit.
-        /// </summary>
-        /// <param name="lifePoints">Life points lost in the process.</param>
-        protected void Hit(double lifePoints)
-        {
-            CurrentLifePoints -= lifePoints;
+            // TODO : set both values in JSON.
+            _recoveryTime = 0;
+            _recoveryGraphic = null;
         }
 
         /// <summary>
@@ -119,6 +134,47 @@ namespace RPG4.Models.Sprites
                 CurrentLifePoints += lifePoints;
                 CurrentLifePoints = CurrentLifePoints.Greater(MaximalLifePoints) ? MaximalLifePoints : CurrentLifePoints;
             }
+        }
+
+        /// <summary>
+        /// Checks if the instance has been hit.
+        /// </summary>
+        /// <returns><c>True</c> if has been hit; <c>False</c> otherwise.</returns>
+        public virtual bool CheckIfHasBeenHit()
+        {
+            // currently recovering ?
+            if (_recoveryManager?.Elapsed == true)
+            {
+                _recoveryManager = null;
+            }
+
+            if (_recoveryManager == null)
+            {
+                double cumuledLifePoints = Engine.Default.CurrentScreen.OverlapAnExplodingBomb(this);
+                cumuledLifePoints += Engine.Default.CurrentScreen.OverlapAnArrow(this);
+
+                // TODO : fix this IF
+                if (GetType() == typeof(Enemy))
+                {
+                    if (Engine.Default.Player.IsHitting && Overlap(Engine.Default.Player.HitSprite))
+                    {
+                        cumuledLifePoints += Engine.Default.Player.HitLifePointCost;
+                    }
+                }
+                else
+                {
+                    cumuledLifePoints += Engine.Default.CheckHitByEnemiesOnPlayer();
+                }
+
+                if (cumuledLifePoints.Greater(0))
+                {
+                    CurrentLifePoints -= cumuledLifePoints;
+                    _recoveryManager = _recoveryTime > 0 ? new Elapser(_recoveryTime) : null;
+                    return true;
+                }
+            }
+
+            return false;
         }
     }
 }

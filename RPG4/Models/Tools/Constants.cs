@@ -272,13 +272,17 @@ namespace RPG4.Models
             /// </summary>
             public const double HEIGHT = 20;
             /// <summary>
-            /// Arrow speed, in pixels by second.
+            /// Speed, in pixels by second.
             /// </summary>
             public const double SPEED = 20;
             /// <summary>
-            /// <see cref="ActionnedArrow"/> graphic rendering.
+            /// Graphic rendering.
             /// </summary>
             public static readonly ISpriteGraphic GRAPHIC_RENDERING = new ImageBrushGraphic(nameof(Resources.Arrow));
+            /// <summary>
+            /// Life points cost.
+            /// </summary>
+            public const double LIFE_POINT_COST = 3;
         }
     }
 }

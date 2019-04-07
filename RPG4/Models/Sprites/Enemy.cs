@@ -60,32 +60,15 @@ namespace RPG4.Models.Sprites
             _movementTimeManager.Reset();
         }
 
-        /// <summary>
-        /// Checks if the instance has been hit.
-        /// </summary>
-        public void CheckIfHasBeenHit()
+        /// <inheritdoc />
+        public override bool CheckIfHasBeenHit()
         {
-            bool hasBeenHit = false;
-
-            // hit by player ?
-            if (Engine.Default.Player.IsHitting && Overlap(Engine.Default.Player.HitSprite))
-            {
-                Hit(Engine.Default.Player.HitLifePointCost);
-                hasBeenHit = true;
-            }
-
-            // hit by a bomb ?
-            double lifePointCostByBomb = Engine.Default.CurrentScreen.OverlapAnExplodingBomb(this);
-            if (lifePointCostByBomb.Greater(0))
-            {
-                Hit(lifePointCostByBomb);
-                hasBeenHit = true;
-            }
-
-            if (hasBeenHit)
+            if (base.CheckIfHasBeenHit())
             {
                 _path.ReversePath();
+                return true;
             }
+            return false;
         }
     }
 }

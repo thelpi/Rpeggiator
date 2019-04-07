@@ -55,12 +55,12 @@ namespace RPG4.Models.Sprites
         }
 
         /// <summary>
-        /// Gets the life points nearby the specified instance, at the specific frame (not global).
+        /// Gets the lifepoints cost for the specified <paramref name="sprite"/>, if the bomb is currently exploding nearby.
         /// </summary>
-        /// <typeparam name="T">Type of sprite requirement (must inherit from <see cref="IExplodable"/>).</typeparam>
-        /// <param name="sprite"><see cref="Sprite"/>.</param>
+        /// <typeparam name="T">Type of sprite. Must inherit from <see cref="IExplodable"/>.</typeparam>
+        /// <param name="sprite"><see cref="Sprite"/></param>
         /// <returns>Life points cost.</returns>
-        public double GetLifePointCost<T>(T sprite) where T : Sprite, IExplodable
+        public double GetLifePointsCost<T>(T sprite) where T : Sprite, IExplodable
         {
             return IsExploding && ExplosionSprite.Overlap(sprite) ? sprite.ExplosionLifePointCost : 0;
         }
