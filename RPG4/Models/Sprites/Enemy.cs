@@ -35,7 +35,7 @@ namespace RPG4.Models.Sprites
         {
             _movementTimeManager = new Elapser();
             List<Point> points = new List<Point> { TopLeftCorner };
-            foreach (var jsonPath in enemyJson.Path)
+            foreach (dynamic jsonPath in enemyJson.Path)
             {
                 points.Add(new Point((double)jsonPath.X, (double)jsonPath.Y));
             }

@@ -34,7 +34,7 @@ namespace RPG4.Models.Graphic
 
                 using (MemoryStream memory = new MemoryStream())
                 {
-                    var bitmap = (System.Drawing.Bitmap)Properties.Resources.ResourceManager.GetObject(_imagePath);
+                    System.Drawing.Bitmap bitmap = (System.Drawing.Bitmap)Properties.Resources.ResourceManager.GetObject(_imagePath);
                     bitmap.Save(memory, ImageFormat.Png);
                     memory.Position = 0;
                     bitmapImage.BeginInit();

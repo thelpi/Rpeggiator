@@ -61,9 +61,9 @@ namespace RPG4.Visuals
                     try
                     {
                         // check pressed keys
-                        var pressedKeys = (KeyPress)Dispatcher.Invoke(new KeyPressHandler(delegate ()
+                        KeyPress pressedKeys = (KeyPress)Dispatcher.Invoke(new KeyPressHandler(delegate ()
                         {
-                            var kp = new KeyPress(
+                            KeyPress kp = new KeyPress(
                                 Keyboard.IsKeyDown(Key.Up),
                                 Keyboard.IsKeyDown(Key.Down),
                                 Keyboard.IsKeyDown(Key.Right),
@@ -132,11 +132,11 @@ namespace RPG4.Visuals
         // Draws each permanent structures inside the main canvas
         private void DrawPermanentStructures()
         {
-            foreach (var s in Engine.Default.CurrentScreen.PermanentStructures)
+            foreach (PermanentStructure s in Engine.Default.CurrentScreen.PermanentStructures)
             {
                 DrawSizedPoint(s, fixedId: true);
             }
-            foreach (var f in Engine.Default.CurrentScreen.Floors)
+            foreach (Floor f in Engine.Default.CurrentScreen.Floors)
             {
                 DrawSizedPoint(f, fixedId: true);
             }
@@ -197,11 +197,11 @@ namespace RPG4.Visuals
 
             #endregion Player
 
-            foreach (var sprite in Engine.Default.CurrentScreen.AnimatedSprites)
+            foreach (Sprite sprite in Engine.Default.CurrentScreen.AnimatedSprites)
             {
                 if (sprite.GetType() == typeof(ActionnedBomb))
                 {
-                    var halo = (sprite as ActionnedBomb).ExplosionSprite;
+                    BombExplosion halo = (sprite as ActionnedBomb).ExplosionSprite;
                     if (halo != null)
                     {
                         DrawSizedPoint(halo);
@@ -221,8 +221,8 @@ namespace RPG4.Visuals
             pgbPlayerLifePoints.Value = Engine.Default.Player.CurrentLifePoints;
             for (int i = 0; i < Constants.Inventory.SIZE; i++)
             {
-                var itemSlotRct = (Rectangle)FindName(string.Format("rctItem{0}", i));
-                var itemSlotTxt = (TextBlock)FindName(string.Format("txbItem{0}", i));
+                Rectangle itemSlotRct = (Rectangle)FindName(string.Format("rctItem{0}", i));
+                TextBlock itemSlotTxt = (TextBlock)FindName(string.Format("txbItem{0}", i));
                 if (Engine.Default.Player.Inventory.Items.Count < (i + 1))
                 {
                     itemSlotRct.Fill = Brushes.AliceBlue;
@@ -230,7 +230,7 @@ namespace RPG4.Visuals
                 }
                 else
                 {
-                    var item = Engine.Default.Player.Inventory.Items.ElementAt(i);
+                    InventoryItem item = Engine.Default.Player.Inventory.Items.ElementAt(i);
                     itemSlotTxt.Text = item.Quantity.ToString().PadLeft(3, '0');
                     itemSlotRct.Fill = item.BaseItem.LootGraphic.GetRenderingBrush();
                 }
@@ -285,7 +285,7 @@ namespace RPG4.Visuals
 
         private void SetLightAndDarkness()
         {
-            var currentHour = Engine.Default.Hour;
+            double currentHour = Engine.Default.Hour;
 
             double darknessOpacity = Engine.Default.CurrentScreen.DarknessOpacity;
 
@@ -317,10 +317,10 @@ namespace RPG4.Visuals
 
             if (Engine.Default.Player.Inventory.LampIsOn)
             {
-                var pt = new Point(Engine.Default.Player.CenterPoint.X / Engine.Default.CurrentScreen.Width,
+                Point pt = new Point(Engine.Default.Player.CenterPoint.X / Engine.Default.CurrentScreen.Width,
                     Engine.Default.Player.CenterPoint.Y / Engine.Default.CurrentScreen.Height);
 
-                var lampBrush = new RadialGradientBrush(Colors.Transparent, Colors.Black);
+                RadialGradientBrush lampBrush = new RadialGradientBrush(Colors.Transparent, Colors.Black);
                 lampBrush.Center = pt;
                 lampBrush.GradientOrigin = pt;
                 lampBrush.RadiusX = 0.2 * (Engine.Default.CurrentScreen.Height / Engine.Default.CurrentScreen.Width);

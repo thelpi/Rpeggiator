@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System.Collections.Generic;
+using System.Linq;
 
 namespace RPG4.Models.Sprites
 {
@@ -31,7 +32,7 @@ namespace RPG4.Models.Sprites
         /// <inheritdoc />
         public override void BehaviorAtNewFrame()
         {
-            var triggersOn = Engine.Default.CurrentScreen.GetTriggersForSpecifiedGate(this);
+            IReadOnlyCollection<GateTrigger> triggersOn = Engine.Default.CurrentScreen.GetTriggersForSpecifiedGate(this);
 
             if (triggersOn.Any())
             {

@@ -46,7 +46,7 @@ namespace RPG4.Models
             _items = new List<InventoryItem>();
             _maxQuantityByItem = new Dictionary<Enums.ItemType, int>();
             LampIsOn = false;
-            foreach (var itemId in Constants.Player.INVENTORY_ITEMS.Keys)
+            foreach (ItemType itemId in Constants.Player.INVENTORY_ITEMS.Keys)
             {
                 TryAdd(itemId, Constants.Player.INVENTORY_ITEMS[itemId]);
             }
@@ -118,14 +118,14 @@ namespace RPG4.Models
                 return null;
             }
 
-            var inventorySlotId = Engine.Default.KeyPress.InventorySlotId.Value;
+            int inventorySlotId = Engine.Default.KeyPress.InventorySlotId.Value;
 
             if (inventorySlotId >= _items.Count)
             {
                 return null;
             }
 
-            var item = _items.ElementAt(inventorySlotId);
+            InventoryItem item = _items.ElementAt(inventorySlotId);
 
             if (!ItemCanBeUseInContext(item.BaseItem.Id) || !item.TryPick())
             {
@@ -168,7 +168,7 @@ namespace RPG4.Models
         private Point ComputeBombDroppingCoordinates()
         {
             // Just a shortcut.
-            var sprite = Engine.Default.Player;
+            Player sprite = Engine.Default.Player;
 
             Point pt = new Point(sprite.X, sprite.Y);
             switch (sprite.Direction)

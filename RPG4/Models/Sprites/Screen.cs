@@ -114,7 +114,7 @@ namespace RPG4.Models.Sprites
 
             dynamic screenJsonDatas = Tools.GetScreenDatasFromIndex(id);
 
-            var screen = new Screen(id, screenJsonDatas);
+            Screen screen = new Screen(id, screenJsonDatas);
 
             _screens.Add(screen);
 

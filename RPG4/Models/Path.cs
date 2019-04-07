@@ -60,7 +60,7 @@ namespace RPG4.Models
         private bool CheckNewPointValidityInContext(Sprite owner, Point nextPt)
         {
             // Checks if the new point overlap a structure (or more) of the screen.
-            var overlapStructs = Engine.Default.CurrentScreen.Structures.Where(s => s.Overlap(owner.CopyToPosition(nextPt))).ToList();
+            List<Sprite> overlapStructs = Engine.Default.CurrentScreen.Structures.Where(s => s.Overlap(owner.CopyToPosition(nextPt))).ToList();
             if (overlapStructs.Count > 0)
             {
                 if (overlapStructs.Count > 1 || !ComputeExtraStepToAvoidStructure(owner, nextPt, overlapStructs.First()))

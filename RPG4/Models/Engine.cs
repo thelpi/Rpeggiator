@@ -1,5 +1,6 @@
 ﻿using RPG4.Models.Sprites;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace RPG4.Models
@@ -128,7 +129,7 @@ namespace RPG4.Models
         {
             if (KeyPress.InventorySlotId.HasValue)
             {
-                var itemDropped = Player.Inventory.UseItem();
+                ActionnedItem itemDropped = Player.Inventory.UseItem();
                 if (itemDropped != null)
                 {
                     CurrentScreen.AddDroppedItem(itemDropped);
@@ -139,7 +140,7 @@ namespace RPG4.Models
         // Checks for items to pick on the current position.
         private void CollectPickableItems()
         {
-            var items = CurrentScreen.PickableItems.Where(it => it.Overlap(Player)).ToList();
+            List<PickableItem> items = CurrentScreen.PickableItems.Where(it => it.Overlap(Player)).ToList();
             items.ForEach(i => i.Pick());
             CurrentScreen.CheckPickableItemsQuantities();
         }
@@ -162,7 +163,7 @@ namespace RPG4.Models
         {
             // checks hit (for each enemy, life points lost is cumulable)
             double cumuledLifePoints = 0;
-            foreach (var enemy in CurrentScreen.Enemies)
+            foreach (Enemy enemy in CurrentScreen.Enemies)
             {
                 if (Player.Overlap(enemy))
                 {
@@ -186,7 +187,7 @@ namespace RPG4.Models
                 return null;
             }
 
-            foreach (var door in CurrentScreen.Doors)
+            foreach (Door door in CurrentScreen.Doors)
             {
                 if (door.Overlap(Player.ResizeToRatio(Constants.Player.ACTION_RANGE)) && door.PlayerIsLookingTo())
                 {

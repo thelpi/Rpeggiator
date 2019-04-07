@@ -103,7 +103,7 @@ namespace RPG4.Models.Sprites
             // Single action at a time.
             if (Engine.Default.KeyPress.PressAction)
             {
-                foreach (var chest in Engine.Default.CurrentScreen.ClosedChests)
+                foreach (Chest chest in Engine.Default.CurrentScreen.ClosedChests)
                 {
                     if (chest.Overlap(ResizeToRatio(Constants.Player.ACTION_RANGE)) && chest.PlayerIsLookingTo())
                     {
@@ -128,7 +128,8 @@ namespace RPG4.Models.Sprites
             if (_recoveryManager == null)
             {
                 // checks hits by enemies or bombs
-                var cumuledLifePoints = Engine.Default.CheckHitByEnemiesOnPlayer() + Engine.Default.CurrentScreen.OverlapAnExplodingBomb(this);
+                double cumuledLifePoints = Engine.Default.CheckHitByEnemiesOnPlayer()
+                    + Engine.Default.CurrentScreen.OverlapAnExplodingBomb(this);
 
                 if (cumuledLifePoints.Greater(0))
                 {
@@ -173,8 +174,8 @@ namespace RPG4.Models.Sprites
         /// <exception cref="InfiniteOverlapCheckException"><see cref="Messages.InfiniteOverlapCheckExceptionMessage"/></exception>
         private void CheckPotentialOverlapAndAdjustPosition(ref Point newPosition)
         {
-            var forbiddens = new List<Point>();
-            var findGoodSpot = false;
+            List<Point> forbiddens = new List<Point>();
+            bool findGoodSpot = false;
             while (!findGoodSpot)
             {
                 Sprite currentPt = CopyToPosition(newPosition);

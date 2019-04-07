@@ -20,7 +20,7 @@ namespace RPG4.Models
         /// <returns>Dynamic screen datas.</returns>
         public static dynamic GetScreenDatasFromIndex(int screenIndex)
         {
-            var jsonBytes = (byte[])Resources.ResourceManager.GetObject(string.Format("Screen{0}", screenIndex));
+            byte[] jsonBytes = (byte[])Resources.ResourceManager.GetObject(string.Format("Screen{0}", screenIndex));
             return JsonConvert.DeserializeObject(Encoding.UTF8.GetString(jsonBytes));
         }
 
@@ -82,7 +82,7 @@ namespace RPG4.Models
                 return pStart;
             }
 
-            var linearProperties = GetLinearFunctionFromPoints(pStart, pDest);
+            Tuple<double, double> linearProperties = GetLinearFunctionFromPoints(pStart, pDest);
 
             if (linearProperties == null)
             {
@@ -103,7 +103,7 @@ namespace RPG4.Models
             double b = linearProperties.Item2;
             double x1 = pStart.X;
             double y1 = pStart.Y;
-            var quadraticSolution = ResolveQuadraticEquation(
+            Tuple<double, double> quadraticSolution = ResolveQuadraticEquation(
                 1 + a * a,
                 -2 * x1 + 2 * a * b - 2 * a * y1,
                 x1 * x1 + b * b - 2 * b * y1 + y1 * y1 - d * d
