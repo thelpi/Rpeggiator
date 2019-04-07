@@ -1,8 +1,5 @@
 ﻿using System.Collections.Generic;
 using System.Windows;
-using System.Linq;
-using System;
-using RPG4.Models.Enums;
 
 namespace RPG4.Models.Sprites
 {
@@ -10,7 +7,6 @@ namespace RPG4.Models.Sprites
     /// Represents an enemy.
     /// </summary>
     /// <seealso cref="LifeSprite"/>
-    /// <see cref="IExplodable"/>
     public class Enemy : LifeSprite
     {
         // Movement time manager.

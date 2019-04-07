@@ -21,5 +21,15 @@
         /// <param name="graphic"><see cref="Sprite.Graphic"/></param>
         protected ActionnedItem(double x, double y, double width, double height, Graphic.ISpriteGraphic graphic)
             : base(x, y, width, height, graphic) { }
+
+        /// <summary>
+        /// Overriden; Gets the lifepoints cost for the specified <paramref name="sprite"/>, if this instance hits it.
+        /// </summary>
+        /// <param name="sprite"><see cref="DamageableSprite"/></param>
+        /// <returns>Life points cost.</returns>
+        public virtual double GetLifePointsCost(DamageableSprite sprite)
+        {
+            return 0;
+        }
     }
 }

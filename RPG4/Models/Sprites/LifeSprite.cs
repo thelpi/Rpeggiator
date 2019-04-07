@@ -7,9 +7,8 @@ namespace RPG4.Models.Sprites
     /// <summary>
     /// Represents a living <see cref="Sprite"/> (player, enemies, pngs...).
     /// </summary>
-    /// <seealso cref="Sprite"/>
-    /// <seealso cref="IExplodable"/>
-    public class LifeSprite : Sprite, IExplodable
+    /// <seealso cref="DamageableSprite"/>
+    public class LifeSprite : DamageableSprite
     {
         // Original speed.
         private double _originalSpeed;
@@ -25,17 +24,9 @@ namespace RPG4.Models.Sprites
         /// </summary>
         public double MaximalLifePoints { get; private set; }
         /// <summary>
-        /// Current number of life points.
-        /// </summary>
-        public double CurrentLifePoints { get; private set; }
-        /// <summary>
         /// When hitting, indicates the life points cost on the enemy.
         /// </summary>
         public double HitLifePointCost { get; private set; }
-        /// <inheritdoc />
-        public double ExplosionLifePointCost { get { return Constants.Bomb.EXPLOSION_LIFE_POINT_COST; } }
-        /// <inheritdoc />
-        public double ArrowLifePointCost { get { return Constants.Arrow.LIFE_POINT_COST; } }
         /// <summary>
         /// Inferred; current speed (i.e. distance, in pixels, by second)
         /// </summary>
@@ -78,17 +69,18 @@ namespace RPG4.Models.Sprites
         /// <param name="speed"><see cref="_originalSpeed"/></param>
         /// <param name="recoveryTime"><see cref="_recoveryTime"/></param>
         /// <param name="recoveryGraphic"><see cref="_recoveryGraphic"/></param>
-        protected LifeSprite(double x, double y, double width, double height, Graphic.ISpriteGraphic graphic,
+        protected LifeSprite(double x, double y, double width, double height, ISpriteGraphic graphic,
             double maximalLifePoints, double hitLifePointCost, double speed, double recoveryTime, ISpriteGraphic recoveryGraphic)
-            : base(x, y, width, height, graphic)
+            : base(x, y, width, height, graphic, maximalLifePoints)
         {
             MaximalLifePoints = maximalLifePoints;
-            CurrentLifePoints = maximalLifePoints;
             HitLifePointCost = hitLifePointCost;
             _originalSpeed = speed;
             _recoveryManager = null;
             _recoveryTime = recoveryTime;
             _recoveryGraphic = recoveryGraphic;
+            ExplosionLifePointCost = Constants.Bomb.EXPLOSION_LIFE_POINT_COST;
+            ArrowLifePointCost = Constants.Arrow.LIFE_POINT_COST;
         }
 
         /// <summary>
@@ -150,8 +142,7 @@ namespace RPG4.Models.Sprites
 
             if (_recoveryManager == null)
             {
-                double cumuledLifePoints = Engine.Default.CurrentScreen.OverlapAnExplodingBomb(this);
-                cumuledLifePoints += Engine.Default.CurrentScreen.OverlapAnArrow(this);
+                double cumuledLifePoints = Engine.Default.CurrentScreen.HitByAnActionnedItem(this);
 
                 // TODO : fix this IF
                 if (GetType() == typeof(Enemy))

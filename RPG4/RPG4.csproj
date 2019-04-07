@@ -85,6 +85,7 @@
     <Compile Include="Models\Sprites\ActionnedArrow.cs" />
     <Compile Include="Models\Sprites\BombExplosion.cs" />
     <Compile Include="Models\Sprites\Chest.cs" />
+    <Compile Include="Models\Sprites\DamageableSprite.cs" />
     <Compile Include="Models\Sprites\Door.cs" />
     <Compile Include="Models\Enums\FloorType.cs" />
     <Compile Include="Models\Sprites\Floor.cs" />
@@ -95,7 +96,6 @@
     <Compile Include="Models\Sprites\ActionnedItem.cs" />
     <Compile Include="Models\Sprites\Pit.cs" />
     <Compile Include="Models\Sprites\PickableItem.cs" />
-    <Compile Include="Models\IExplodable.cs" />
     <Compile Include="Models\Inventory.cs" />
     <Compile Include="Models\InventoryItem.cs" />
     <Compile Include="Models\Item.cs" />

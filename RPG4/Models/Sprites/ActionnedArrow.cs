@@ -50,12 +50,8 @@ namespace RPG4.Models.Sprites
                 || Engine.Default.CurrentScreen.Structures.Any(s => Overlap(s));
         }
 
-        /// <summary>
-        /// Gets the lifepoints cost for the specified <paramref name="sprite"/>, if the arrow has reached it.
-        /// </summary>
-        /// <param name="sprite"><see cref="LifeSprite"/></param>
-        /// <returns>Life points cost.</returns>
-        public double GetLifePointsCost(LifeSprite sprite)
+        /// <inheritdoc />
+        public override double GetLifePointsCost(DamageableSprite sprite)
         {
             return Overlap(sprite) ? sprite.ArrowLifePointCost : 0;
         }

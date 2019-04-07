@@ -217,7 +217,7 @@ namespace RPG4.Models.Sprites
                 }
                 return death;
             });
-            _rifts.RemoveAll(r => r.LifePoints.LowerEqual(0));
+            _rifts.RemoveAll(r => r.CurrentLifePoints.LowerEqual(0));
             _actionnedItems.RemoveAll(di => di.IsDone || Structures.Any(cw => cw.Overlap(di)));
             _pickableItems.RemoveAll(pi => pi.Disapear);
         }
@@ -233,24 +233,13 @@ namespace RPG4.Models.Sprites
         }
 
         /// <summary>
-        /// Checks if a bomb (or several) is currently exploding near to <paramref name="sprite"/>.
+        /// Computes the life points cost when a <see cref="DamageableSprite"/> is hitten by an <see cref="ActionnedItem"/> of the screen.
         /// </summary>
-        /// <typeparam name="T">Sprite type; must inherit from <see cref="IExplodable"/>.</typeparam>
-        /// <param name="sprite"><see cref="Sprite"/></param>
-        /// <returns>Life points lost.</returns>
-        public double OverlapAnExplodingBomb<T>(T sprite) where T : Sprite, IExplodable
+        /// <param name="sprite"><see cref="DamageableSprite"/></param>
+        /// <returns>Cumuled life points cost.</returns>
+        public double HitByAnActionnedItem(DamageableSprite sprite)
         {
-            return _actionnedItems.Where(di => di is ActionnedBomb).Sum(b => (b as ActionnedBomb).GetLifePointsCost(sprite));
-        }
-
-        /// <summary>
-        /// Checks if an arrow (or several) has reached the specified <paramref name="sprite"/>.
-        /// </summary>
-        /// <param name="sprite"><see cref="Sprite"/></param>
-        /// <returns>Life points lost.</returns>
-        public double OverlapAnArrow(LifeSprite sprite)
-        {
-            return _actionnedItems.Where(di => di is ActionnedArrow).Sum(b => (b as ActionnedArrow).GetLifePointsCost(sprite));
+            return _actionnedItems.Sum(b => b.GetLifePointsCost(sprite));
         }
 
         /// <summary>
