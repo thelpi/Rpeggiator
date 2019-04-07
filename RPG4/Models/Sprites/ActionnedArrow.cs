@@ -42,12 +42,10 @@ namespace RPG4.Models.Sprites
 
             // Checks if hit enemies.
             // Checks if hit player.
-            // Checks if hit structures.
             // Checks if outside screen.
             _hitOrAway = Engine.Default.CurrentScreen.Enemies.Any(e => Overlap(e))
                 || Overlap(Engine.Default.Player)
-                || !IsInside(Engine.Default.CurrentScreen)
-                || Engine.Default.CurrentScreen.Structures.Any(s => Overlap(s));
+                || !IsInside(Engine.Default.CurrentScreen);
         }
 
         /// <inheritdoc />

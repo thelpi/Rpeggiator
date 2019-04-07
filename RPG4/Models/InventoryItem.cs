@@ -18,19 +18,29 @@ namespace RPG4.Models
         /// Remaining quantity.
         /// </summary>
         public int Quantity { get; private set; }
+        /// <summary>
+        /// Displayable remaining quantity.
+        /// </summary>
+        public int DisplayableQuantity
+        {
+            get
+            {
+                return Engine.Default.Player.Inventory.QuantityOf(BaseItem.Type);
+            }
+        }
 
         /// <summary>
         /// Constructor.
         /// </summary>
         /// <param name="itemId"><see cref="BaseItem"/> identifier.</param>
-        public InventoryItem(Enums.ItemType itemId) : this(itemId, 1) { }
+        public InventoryItem(ItemType itemId) : this(itemId, 1) { }
 
         /// <summary>
         /// Constructor.
         /// </summary>
         /// <param name="itemId"><see cref="BaseItem"/> identifier.</param>
         /// <param name="quantity"><see cref="Quantity"/>; ignored if the item is marked as unique.</param>
-        public InventoryItem(Enums.ItemType itemId, int quantity)
+        public InventoryItem(ItemType itemId, int quantity)
         {
             BaseItem = Item.GetItem(itemId);
             Quantity = BaseItem.Unique ? 1 : quantity;

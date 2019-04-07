@@ -344,7 +344,7 @@ namespace RPG4.Models.Sprites
                     typeof(PickableItem), typeof(Chest), typeof(PermanentStructure) } },
                 { 3, new System.Type[] { typeof(Enemy), typeof(Player) } },
                 { 4, new System.Type[] { typeof(BombExplosion), } },
-                { 5, new System.Type[] { typeof(ActionnedBomb), typeof(WeaponHit) } }
+                { 5, new System.Type[] { typeof(ActionnedBomb), typeof(WeaponHit), typeof(ActionnedArrow) } }
             };
 
             foreach (int zIndexKey in typesByZIndex.Keys)

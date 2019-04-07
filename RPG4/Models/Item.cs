@@ -2,6 +2,7 @@
 using RPG4.Models.Graphic;
 using RPG4.Properties;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace RPG4.Models
 {
@@ -16,7 +17,7 @@ namespace RPG4.Models
         /// <summary>
         /// <see cref="ItemType"/>
         /// </summary>
-        public ItemType Id { get; private set; }
+        public ItemType Type { get; private set; }
         /// <summary>
         /// Name.
         /// </summary>
@@ -37,6 +38,10 @@ namespace RPG4.Models
         /// <see cref="ISpriteGraphic"/> as loot.
         /// </summary>
         public ISpriteGraphic LootGraphic { get; private set; }
+        /// <summary>
+        /// If this item is ammunitions for another item, indicates this item.
+        /// </summary>
+        public ItemType? AmmoFor { get; private set; }
 
         // Private constructor. Only the method "BuildItemList" can create items.
         private Item() { }
@@ -54,7 +59,23 @@ namespace RPG4.Models
                 BuildItemList();
             }
 
-            return _items.Find(item => item.Id == itemId);
+            return _items.Find(item => item.Type == itemId);
+        }
+
+        /// <summary>
+        /// Gets every <see cref="Item"/> which are used as ammo by the specified <paramref name="itemId"/>
+        /// </summary>
+        /// <remarks>Calls <see cref="BuildItemList"/> if never called before.</remarks>
+        /// <param name="itemId"><see cref="ItemType"/></param>
+        /// <returns>List of <see cref="Item"/> used as ammo.</returns>
+        public static IReadOnlyCollection<Item> GetAmmoItem(ItemType itemId)
+        {
+            if (_items == null)
+            {
+                BuildItemList();
+            }
+
+            return _items.Where(it => it.AmmoFor == itemId).ToList();
         }
 
         // Creates an instance of every items.
@@ -63,7 +84,7 @@ namespace RPG4.Models
             _items = new List<Item>();
             _items.Add(new Item
             {
-                Id = ItemType.Bomb,
+                Type = ItemType.Bomb,
                 Name = Names.ItemBomb,
                 Unique = false,
                 InitialMaximalQuantity = 20,
@@ -71,7 +92,7 @@ namespace RPG4.Models
             });
             _items.Add(new Item
             {
-                Id = ItemType.SmallLifePotion,
+                Type = ItemType.SmallLifePotion,
                 Name = Names.ItemLifePotionSmall,
                 Unique = false,
                 InitialMaximalQuantity = 12,
@@ -79,7 +100,7 @@ namespace RPG4.Models
             });
             _items.Add(new Item
             {
-                Id = ItemType.MediumLifePotion,
+                Type = ItemType.MediumLifePotion,
                 Name = Names.ItemLifePotionMedium,
                 Unique = false,
                 InitialMaximalQuantity = 6,
@@ -87,7 +108,7 @@ namespace RPG4.Models
             });
             _items.Add(new Item
             {
-                Id = ItemType.LargeLifePotion,
+                Type = ItemType.LargeLifePotion,
                 Name = Names.ItemLifePotionLarge,
                 Unique = false,
                 InitialMaximalQuantity = 3,
@@ -95,28 +116,29 @@ namespace RPG4.Models
             });
             _items.Add(new Item
             {
-                Id = ItemType.Lamp,
+                Type = ItemType.Lamp,
                 Name = Names.ItemLamp,
                 Unique = true,
                 LootGraphic = new ImageBrushGraphic(nameof(Resources.Lamp))
             });
             _items.Add(new Item
             {
-                Id = ItemType.Bow,
+                Type = ItemType.Bow,
                 Name = Names.ItemBow,
                 Unique = true,
                 LootGraphic = new ImageBrushGraphic(nameof(Resources.Bow))
             });
             _items.Add(new Item
             {
-                Id = ItemType.Arrow,
+                Type = ItemType.Arrow,
                 Name = Names.ItemArrow,
                 Unique = false,
                 InitialMaximalQuantity = 20,
-                LootGraphic = new ImageBrushGraphic(nameof(Resources.Arrow))
+                LootGraphic = new ImageBrushGraphic(nameof(Resources.Arrow)),
+                AmmoFor = ItemType.Bow
             });
             // Sets the use delay for every items of the list.
-            _items.ForEach(item => item.UseDelay = Constants.Item.DELAY_BETWEEN_USE[item.Id]);
+            _items.ForEach(item => item.UseDelay = Constants.Item.DELAY_BETWEEN_USE[item.Type]);
         }
     }
 }

@@ -223,15 +223,15 @@ namespace RPG4.Visuals
             {
                 Rectangle itemSlotRct = (Rectangle)FindName(string.Format("rctItem{0}", i));
                 TextBlock itemSlotTxt = (TextBlock)FindName(string.Format("txbItem{0}", i));
-                if (Engine.Default.Player.Inventory.Items.Count < (i + 1))
+                if (Engine.Default.Player.Inventory.DisplayableItems.Count < (i + 1))
                 {
                     itemSlotRct.Fill = Brushes.AliceBlue;
                     itemSlotTxt.Text = "000";
                 }
                 else
                 {
-                    InventoryItem item = Engine.Default.Player.Inventory.Items.ElementAt(i);
-                    itemSlotTxt.Text = item.Quantity.ToString().PadLeft(3, '0');
+                    InventoryItem item = Engine.Default.Player.Inventory.DisplayableItems.ElementAt(i);
+                    itemSlotTxt.Text = item.DisplayableQuantity.ToString().PadLeft(3, '0');
                     itemSlotRct.Fill = item.BaseItem.LootGraphic.GetRenderingBrush();
                 }
             }

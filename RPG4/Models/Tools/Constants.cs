@@ -118,13 +118,15 @@ namespace RPG4.Models
             /// <summary>
             /// Initial list of items in the inventory.
             /// </summary>
-            public static readonly IReadOnlyDictionary<Enums.ItemType, int> INVENTORY_ITEMS = new Dictionary<Enums.ItemType, int>
+            public static readonly IReadOnlyDictionary<ItemType, int> INVENTORY_ITEMS = new Dictionary<ItemType, int>
             {
-                { Enums.ItemType.Lamp, 1 },
-                { Enums.ItemType.SmallLifePotion, 3 },
-                { Enums.ItemType.MediumLifePotion, 1 },
-                { Enums.ItemType.LargeLifePotion, 1 },
-                { Enums.ItemType.Bomb, 1 }
+                { ItemType.Lamp, 1 },
+                { ItemType.SmallLifePotion, 3 },
+                { ItemType.MediumLifePotion, 1 },
+                { ItemType.LargeLifePotion, 1 },
+                { ItemType.Bomb, 1 },
+                { ItemType.Bow, 1 },
+                { ItemType.Arrow, 10 }
             };
             /// <summary>
             /// Initial coins.
