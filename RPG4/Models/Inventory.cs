@@ -172,7 +172,7 @@ namespace RPG4.Models
                     break;
                 case ItemType.Bow:
                     droppedItem = new ActionnedArrow(ComputeDropCoordinates(Constants.Arrow.WIDTH, Constants.Arrow.HEIGHT),
-                        Engine.Default.Player.Direction);
+                        Engine.Default.Player.Direction, Engine.Default.Player);
                     break;
             }
 

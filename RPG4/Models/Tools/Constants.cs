@@ -276,7 +276,7 @@ namespace RPG4.Models
             /// <summary>
             /// Speed, in pixels by second.
             /// </summary>
-            public const double SPEED = 20;
+            public const double SPEED = 250;
             /// <summary>
             /// Graphic rendering.
             /// </summary>

@@ -71,6 +71,21 @@
       "ImagePath": "Enemy",
       "LootItemId": null,
       "LootQuantity": 10
+    },
+    {
+      "X": 600,
+      "Y": 50,
+      "Width": 40,
+      "Height": 40,
+      "Speed": 150,
+      "HourRotation": true,
+      "MaximalLifePoints": 4,
+      "HitLifePointCost": 5,
+      "Path": [],
+      "GraphicType": "ImageBrushGraphic",
+      "ImagePath": "Enemy",
+      "LootItemId": "Arrow",
+      "LootQuantity": 1
     }
   ],
   "GateTriggers": [],

@@ -266,10 +266,14 @@
     </Resource>
   </ItemGroup>
   <ItemGroup>
-    <None Include="Resources\Bow.png" />
+    <Resource Include="Resources\Bow.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Resource>
   </ItemGroup>
   <ItemGroup>
-    <None Include="Resources\Arrow.png" />
+    <Resource Include="Resources\Arrow.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Resource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

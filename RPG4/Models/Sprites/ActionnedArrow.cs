@@ -13,6 +13,7 @@ namespace RPG4.Models.Sprites
         private Direction _direction;
         private Elapser _elapser;
         private bool _hitOrAway;
+        private LifeSprite _thrownBy;
 
         /// <inheritdoc />
         public override bool IsDone { get { return _hitOrAway; } }
@@ -22,13 +23,15 @@ namespace RPG4.Models.Sprites
         /// </summary>
         /// <param name="point">Starting <see cref="Point"/>.</param>
         /// <param name="direction"><see cref="Direction"/></param>
-        public ActionnedArrow(Point point, Direction direction) : base(point.X, point.Y,
+        /// <param name="thrownBy"><see cref="LifeSprite"/> who throws the arrow.</param>
+        public ActionnedArrow(Point point, Direction direction, LifeSprite thrownBy) : base(point.X, point.Y,
             Constants.Arrow.WIDTH, Constants.Arrow.HEIGHT,
             Constants.Arrow.GRAPHIC_RENDERING)
         {
             _direction = direction;
             _elapser = new Elapser();
             _hitOrAway = false;
+            _thrownBy = thrownBy;
         }
 
         /// <inheritdoc />
@@ -43,15 +46,15 @@ namespace RPG4.Models.Sprites
             // Checks if hit enemies.
             // Checks if hit player.
             // Checks if outside screen.
-            _hitOrAway = Engine.Default.CurrentScreen.Enemies.Any(e => Overlap(e))
-                || Overlap(Engine.Default.Player)
-                || !IsInside(Engine.Default.CurrentScreen);
+            _hitOrAway = Engine.Default.CurrentScreen.Enemies.Any(e => e != _thrownBy && Overlap(e))
+                || (Overlap(Engine.Default.Player) && Engine.Default.Player != _thrownBy)
+                || !Engine.Default.CurrentScreen.IsInside(this);
         }
 
         /// <inheritdoc />
         public override double GetLifePointsCost(DamageableSprite sprite)
         {
-            return Overlap(sprite) ? sprite.ArrowLifePointCost : 0;
+            return Overlap(sprite) && sprite != _thrownBy ? sprite.ArrowLifePointCost : 0;
         }
     }
 }

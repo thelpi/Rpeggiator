@@ -93,7 +93,10 @@ namespace RPG4.Models.Sprites
             CurrentLifePoints = MaximalLifePoints;
             HitLifePointCost = lifeSpriteJson.HitLifePointCost;
             _originalSpeed = lifeSpriteJson.Speed;
-            // TODO : set both values in JSON.
+            ExplosionLifePointCost = Constants.Bomb.EXPLOSION_LIFE_POINT_COST;
+            ArrowLifePointCost = Constants.Arrow.LIFE_POINT_COST;
+            // TODO : set values in JSON.
+            _recoveryManager = null;
             _recoveryTime = 0;
             _recoveryGraphic = null;
         }

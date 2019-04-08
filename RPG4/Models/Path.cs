@@ -22,7 +22,7 @@ namespace RPG4.Models
         public Path(params Point[] points)
         {
             _steps = points.Select(p => new PathStep(p, true)).ToList();
-            _currentStepIndex = 1;
+            _currentStepIndex = GetNextStepIndex();
         }
 
         /// <summary>
@@ -79,8 +79,9 @@ namespace RPG4.Models
                 _currentStepIndex = GetNextStepIndex();
                 CleanTemporarySteps();
             }
+            
             // The owner is an enemy and has the player in his line of sight
-            else if (owner.GetType() == typeof(Enemy)
+            if (owner.GetType() == typeof(Enemy)
                 && owner.CopyToPosition(nextPt).Overlap(Engine.Default.Player.ResizeToRatio(Constants.PLAYER_SIZE_RATIO_TO_TRIGGER_ENEMY)))
             {
                 // Inserts a pursue step.
