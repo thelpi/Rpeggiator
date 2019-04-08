@@ -9,7 +9,7 @@ namespace RPG4
     {
         private void Application_Startup(object sender, StartupEventArgs e)
         {
-            new Visuals.MainWindow().ShowDialog();
+            new Visuals.IntroWindow().ShowDialog();
         }
     }
 }

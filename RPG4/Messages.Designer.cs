@@ -61,6 +61,33 @@ namespace RPG4 {
         }
         
         /// <summary>
+        ///   Recherche une chaîne localisée semblable à Quitter..
+        /// </summary>
+        internal static string BtnExitMessage {
+            get {
+                return ResourceManager.GetString("BtnExitMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Recherche une chaîne localisée semblable à Editer un écran..
+        /// </summary>
+        internal static string BtnScreenEditorMessage {
+            get {
+                return ResourceManager.GetString("BtnScreenEditorMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Recherche une chaîne localisée semblable à Démarrer une nouvelle partie..
+        /// </summary>
+        internal static string BtnStartGameMessage {
+            get {
+                return ResourceManager.GetString("BtnStartGameMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Recherche une chaîne localisée semblable à The method can&apos;t find a position which avoid every structures..
         /// </summary>
         internal static string InfiniteOverlapCheckExceptionMessage {

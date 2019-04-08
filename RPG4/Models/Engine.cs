@@ -27,6 +27,14 @@ namespace RPG4.Models
             }
         }
 
+        /// <summary>
+        /// Ensures the creation of a new engine.
+        /// </summary>
+        public static void NewEngine()
+        {
+            _engine = null;
+        }
+
         private Screen _currentScreen;
         private DateTime _beginTimestamp;
 

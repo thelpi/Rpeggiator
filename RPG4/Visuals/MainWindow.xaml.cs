@@ -42,8 +42,9 @@ namespace RPG4.Visuals
             InitializeComponent();
 
             // Size of the player never changes.
-            rctPlayer.Height = Engine.Default.Player.Height;
-            rctPlayer.Width = Engine.Default.Player.Width;
+            // For perforamnce reason, it's better to not initialize the engine inside the window constructor.
+            rctPlayer.Height = Constants.Player.SPRITE_SIZE_Y;
+            rctPlayer.Width = Constants.Player.SPRITE_SIZE_X;
             rctPlayer.Uid = _playerUid;
 
             rctDarkness.Uid = _darknessUid;
@@ -125,6 +126,8 @@ namespace RPG4.Visuals
             worker.RunWorkerCompleted += delegate (object sender, RunWorkerCompletedEventArgs e)
             {
                 MessageBox.Show(e.Result == null ? "You die !" : e.Result.ToString());
+                Engine.NewEngine();
+                Close();
             };
             worker.RunWorkerAsync();
         }
