@@ -55,6 +55,8 @@ namespace RPG4.Visuals
             };
             worker.DoWork += delegate (object sender, DoWorkEventArgs e)
             {
+                Engine.ResetEngine();
+
                 Stopwatch stopWatch = new Stopwatch();
                 while (true)
                 {
@@ -126,7 +128,6 @@ namespace RPG4.Visuals
             worker.RunWorkerCompleted += delegate (object sender, RunWorkerCompletedEventArgs e)
             {
                 MessageBox.Show(e.Result == null ? "You die !" : e.Result.ToString());
-                Engine.NewEngine();
                 Close();
             };
             worker.RunWorkerAsync();

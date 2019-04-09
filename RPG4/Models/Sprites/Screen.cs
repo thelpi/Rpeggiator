@@ -10,9 +10,6 @@ namespace RPG4.Models.Sprites
     /// <seealso cref="Floor"/>
     public class Screen : Floor
     {
-        // List of each instancied screen.
-        private static List<Screen> _screens = new List<Screen>();
-
         private Dictionary<Direction, int> _neighboringScreens;
         private List<PermanentStructure> _permanentStructures;
         private List<Gate> _gates;
@@ -101,32 +98,11 @@ namespace RPG4.Models.Sprites
         }
 
         /// <summary>
-        /// Gets a screen by its identifier.
-        /// </summary>
-        /// <param name="id"><see cref="Id"/></param>
-        /// <returns><see cref="Screen"/></returns>
-        public static Screen GetScreen(int id)
-        {
-            if (_screens.Any(s => s.Id == id))
-            {
-                return _screens.First(s => s.Id == id);
-            }
-
-            dynamic screenJsonDatas = Tools.GetScreenDatasFromIndex(id);
-
-            Screen screen = new Screen(id, screenJsonDatas);
-
-            _screens.Add(screen);
-
-            return screen;
-        }
-
-        /// <summary>
-        /// Private constructor.
+        /// Constructor.
         /// </summary>
         /// <param name="id"><see cref="Id"/></param>
         /// <param name="screenJsonDatas">Screen json datas.</param>
-        private Screen(int id, dynamic screenJsonDatas) : base((object)screenJsonDatas)
+        public Screen(int id, dynamic screenJsonDatas) : base((object)screenJsonDatas)
         {
             Id = id;
             _permanentStructures = new List<PermanentStructure>();
@@ -260,11 +236,11 @@ namespace RPG4.Models.Sprites
         }
 
         /// <summary>
-        /// Gets the next <see cref="Screen"/> from a <see cref="Direction"/>.
+        /// Gets the next <see cref="Screen"/> identifier from a <see cref="Direction"/>.
         /// </summary>
         /// <param name="direction"><see cref="Direction"/></param>
-        /// <returns><see cref="Screen"/></returns>
-        public Screen GetNextScreenFromDirection(Direction direction)
+        /// <returns><see cref="Screen"/> identifier.</returns>
+        public int GetNextScreenIdFromDirection(Direction direction)
         {
             // Ensures a non-corner direction.
             if (direction == Direction.BottomLeft)
@@ -284,7 +260,7 @@ namespace RPG4.Models.Sprites
                 direction = Direction.Right;
             }
 
-            return GetScreen(_neighboringScreens[direction]);
+            return _neighboringScreens[direction];
         }
     }
 }

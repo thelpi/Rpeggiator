@@ -30,13 +30,15 @@ namespace RPG4.Models
         /// <summary>
         /// Ensures the creation of a new engine.
         /// </summary>
-        public static void NewEngine()
+        public static void ResetEngine()
         {
             _engine = null;
         }
 
         private Screen _currentScreen;
         private DateTime _beginTimestamp;
+        // List of each instancied screen.
+        private List<Screen> _screens = new List<Screen>();
 
         /// <summary>
         /// <see cref="KeyPress"/>
@@ -87,7 +89,28 @@ namespace RPG4.Models
         {
             _beginTimestamp = DateTime.Now;
             Player = new Player();
-            CurrentScreen = Screen.GetScreen(screenId);
+            CurrentScreen = GetOrCreatetScreen(screenId);
+        }
+
+        /// <summary>
+        /// Gets or creates a screen by its identifier.
+        /// </summary>
+        /// <param name="id"><see cref="Screen.Id"/></param>
+        /// <returns><see cref="Screen"/></returns>
+        public Screen GetOrCreatetScreen(int id)
+        {
+            if (_screens.Any(s => s.Id == id))
+            {
+                return _screens.First(s => s.Id == id);
+            }
+
+            dynamic screenJsonDatas = Tools.GetScreenDatasFromIndex(id);
+
+            Screen screen = new Screen(id, screenJsonDatas);
+
+            _screens.Add(screen);
+
+            return screen;
         }
 
         /// <summary>
@@ -108,7 +131,7 @@ namespace RPG4.Models
             // At last, every possiblities to change screen.
             if (Player.NewScreenEntrance.HasValue)
             {
-                CurrentScreen = CurrentScreen.GetNextScreenFromDirection(Player.NewScreenEntrance.Value);
+                CurrentScreen = GetOrCreatetScreen(CurrentScreen.GetNextScreenIdFromDirection(Player.NewScreenEntrance.Value));
             }
             else
             {
@@ -119,14 +142,14 @@ namespace RPG4.Models
                     // The position must be set before to get to the screen.
                     // Otherwise, the door got in the first method will be from the new screen.
                     Player.SetPositionRelativeToDoorGoThrough(doorId.Value);
-                    CurrentScreen = Screen.GetScreen(newScreenByDoor.Value);
+                    CurrentScreen = GetOrCreatetScreen(newScreenByDoor.Value);
                 }
                 else
                 {
                     Pit pit = CurrentScreen.Pits.FirstOrDefault(p => p.ScreenIndexEntrance.HasValue && p.CanFallIn(Player));
                     if (pit != null)
                     {
-                        CurrentScreen = Screen.GetScreen(pit.ScreenIndexEntrance.Value);
+                        CurrentScreen = GetOrCreatetScreen(pit.ScreenIndexEntrance.Value);
                     }
                 }
             }
