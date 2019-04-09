@@ -32,7 +32,7 @@ namespace RPG4.Models.Graphic
         /// <param name="c"><see cref="Color"/></param>
         public PlainBrushGraphic(Color c)
         {
-            _hexadecimalColor = string.Format("#{0:X2}{1:X2}{2:X2}{3:X2}", c.A, c.R, c.G, c.B);
+            _hexadecimalColor = Tools.HexFromColor(c);
         }
 
         /// <inheritdoc />

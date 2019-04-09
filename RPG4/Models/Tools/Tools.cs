@@ -285,5 +285,15 @@ namespace RPG4.Models
 
             return new Point(x, y);
         }
+
+        /// <summary>
+        /// Gets the Hexadecimal color value of a <see cref="System.Windows.Media.Color"/>.
+        /// </summary>
+        /// <param name="c"><see cref="System.Windows.Media.Color"/></param>
+        /// <returns>Hexadecimal color value.</returns>
+        public static string HexFromColor(System.Windows.Media.Color c)
+        {
+            return string.Format("#{0:X2}{1:X2}{2:X2}{3:X2}", c.A, c.R, c.G, c.B);
+        }
     }
 }

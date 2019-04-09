@@ -7,6 +7,6 @@
         mc:Ignorable="d"
         Title="ScreenEditorWindow" Height="450" Width="800">
     <Grid>
-        
+        <Button Name="btnTest" Height="25" Width="100" Content="Go pour test" Click="btnTest_Click" />
     </Grid>
 </Window>

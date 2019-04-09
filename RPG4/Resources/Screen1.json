@@ -91,7 +91,7 @@
   "GateTriggers": [],
   "NeighboringScreens": {
     "Top": 2,
-    "Right": 2,
+    "Right": 4,
     "Bottom": 2,
     "Left": 2
   },
