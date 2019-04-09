@@ -10,7 +10,7 @@ namespace RPG4.Models.Sprites
     public class FloorTrigger : Sprite
     {
         // Action duration, in milliseconds.
-        private readonly double _actionDuration;
+        private double _actionDuration;
         // Trigger time manager.
         private Elapser _triggerTimeManager;
         // Activated graphic.

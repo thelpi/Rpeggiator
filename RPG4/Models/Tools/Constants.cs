@@ -98,7 +98,7 @@ namespace RPG4.Models
             /// <summary>
             /// Intial player's speed, in pixels by second.
             /// </summary>
-            public static readonly double INITIAL_PLAYER_SPEED = 200;
+            public const double INITIAL_PLAYER_SPEED = 200;
             /// <summary>
             /// Size of the player on X-axis.
             /// </summary>
@@ -110,7 +110,7 @@ namespace RPG4.Models
             /// <summary>
             /// Delay between two hits with the sword, in milliseconds.
             /// </summary>
-            public static readonly double SWORD_HIT_DELAY = 500;
+            public const double SWORD_HIT_DELAY = 500;
             /// <summary>
             /// Hit life points cost on enemies.
             /// </summary>
@@ -237,11 +237,11 @@ namespace RPG4.Models
             /// <summary>
             /// Milliseconds while pending explosion.
             /// </summary>
-            public static readonly double TIME_WHILE_PENDING = 2000;
+            public const double TIME_WHILE_PENDING = 2000;
             /// <summary>
             /// Milliseconds while exploding.
             /// </summary>
-            public static readonly double TIME_WHILE_EXPLODING = 500;
+            public const double TIME_WHILE_EXPLODING = 500;
             /// <summary>
             /// <see cref="ActionnedBomb"/> graphic rendering.
             /// </summary>

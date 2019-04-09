@@ -12,7 +12,7 @@ namespace RPG4.Models.Sprites
         /// <summary>
         /// Indicates the value of <see cref="Activated"/> when no active trigger.
         /// </summary>
-        private readonly bool _defaultActivated;
+        private bool _defaultActivated;
 
         /// <summary>
         /// Indicates if the gate is currently activated.
