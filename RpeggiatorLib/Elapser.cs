@@ -5,7 +5,7 @@ namespace RpeggiatorLib
     /// <summary>
     /// Lifetime event manager.
     /// </summary>
-    public class Elapser
+    internal class Elapser
     {
         private DateTime _timestamp;
         private double _lifetime;
@@ -14,7 +14,7 @@ namespace RpeggiatorLib
         /// <summary>
         /// Inferred; indicates if the instance is elapsed.
         /// </summary>
-        public bool Elapsed
+        internal bool Elapsed
         {
             get
             {
@@ -25,13 +25,13 @@ namespace RpeggiatorLib
         /// <summary>
         /// Constructor.
         /// </summary>
-        public Elapser() : this(double.PositiveInfinity) { }
+        internal Elapser() : this(double.PositiveInfinity) { }
 
         /// <summary>
         /// Constructor.
         /// </summary>
         /// <param name="lifetime">Lifetime, in milliseconds.</param>
-        public Elapser(double lifetime)
+        internal Elapser(double lifetime)
         {
             _timestamp = DateTime.Now;
             _lifetime = lifetime;
@@ -42,7 +42,7 @@ namespace RpeggiatorLib
         /// </summary>
         /// <param name="pixelsBySecond">Speed; pixels by second.</param>
         /// <returns>The distance, in pixels.</returns>
-        public double Distance(double pixelsBySecond)
+        internal double Distance(double pixelsBySecond)
         {
             double distance = (DateTime.Now - (_latestTimestamp ?? DateTime.Now)).TotalMilliseconds * (pixelsBySecond / 1000);
             _latestTimestamp = DateTime.Now;
@@ -52,7 +52,7 @@ namespace RpeggiatorLib
         /// <summary>
         /// Reset the instance.
         /// </summary>
-        public void Reset()
+        internal void Reset()
         {
             _latestTimestamp = null;
         }

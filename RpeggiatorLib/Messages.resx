@@ -120,6 +120,9 @@
   <data name="InfiniteOverlapCheckExceptionMessage" xml:space="preserve">
     <value>The method can't find a position which avoid every structures.</value>
   </data>
+  <data name="InvalidInventorySlotIdExceptionMessage" xml:space="preserve">
+    <value>The inventory slot id is invalid.</value>
+  </data>
   <data name="NoQuadraticSolutionExceptionMessage" xml:space="preserve">
     <value>Unable to resolve this quadratic equation.</value>
   </data>

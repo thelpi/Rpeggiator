@@ -79,8 +79,14 @@ namespace RpeggiatorLib
         /// <param name="hit"><see cref="PressHit"/></param>
         /// <param name="action"><see cref="PressAction"/></param>
         /// <param name="inventorySlotId"><see cref="InventorySlotId"/></param>
+        /// <exception cref="System.ArgumentException"><see cref="Messages.InvalidInventorySlotIdExceptionMessage"/></exception>
         public KeyPress(bool up, bool down, bool right, bool left, bool hit, bool action, int? inventorySlotId)
         {
+            if (inventorySlotId.HasValue && (inventorySlotId.Value < 0 || inventorySlotId.Value >= Constants.Inventory.SIZE))
+            {
+                throw new System.ArgumentException(Messages.InvalidInventorySlotIdExceptionMessage, nameof(inventorySlotId));
+            }
+
             PressHit = hit;
             PressAction = action;
             InventorySlotId = inventorySlotId;

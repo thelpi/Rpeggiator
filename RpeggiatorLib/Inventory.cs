@@ -1,9 +1,7 @@
-﻿using RpeggiatorLib.Enums;
-using RpeggiatorLib.Sprites;
-using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Windows;
+using RpeggiatorLib.Enums;
+using RpeggiatorLib.Sprites;
 
 namespace RpeggiatorLib
 {
@@ -27,7 +25,6 @@ namespace RpeggiatorLib
                 return _items.Where(it => !it.BaseItem.AmmoFor.HasValue).ToList();
             }
         }
-
         /// <summary>
         /// Maximal quantity carriable for each item.
         /// </summary>
@@ -48,7 +45,7 @@ namespace RpeggiatorLib
         /// <summary>
         /// Constructor.
         /// </summary>
-        public Inventory(int creationHashcode)
+        internal Inventory(int creationHashcode)
         {
             _creationHashcode = creationHashcode;
             _items = new List<InventoryItem>();
@@ -68,7 +65,7 @@ namespace RpeggiatorLib
         /// <param name="itemId"><see cref="Enums.ItemType"/>; <c>Null</c> for coins</param>
         /// <param name="quantity">Quantity.</param>
         /// <returns><c>True</c> if the item has been added; <c>False</c> otherwise.</returns>
-        public int TryAdd(ItemType? itemId, int quantity)
+        internal int TryAdd(ItemType? itemId, int quantity)
         {
             if (!itemId.HasValue)
             {
@@ -107,7 +104,7 @@ namespace RpeggiatorLib
         /// Adds a key to the <see cref="Keyring"/>.
         /// </summary>
         /// <param name="keyId">Key identifier.</param>
-        public void AddToKeyring(int keyId)
+        internal void AddToKeyring(int keyId)
         {
             if (!_keyring.Contains(keyId))
             {
@@ -119,7 +116,7 @@ namespace RpeggiatorLib
         /// Uses an item of the inventory.
         /// </summary>
         /// <returns><see cref="ActionnedItem"/>; <c>Null</c> if item dropped.</returns>
-        public ActionnedItem UseItem()
+        internal ActionnedItem UseItem()
         {
             if (!Engine.Default.KeyPress.InventorySlotId.HasValue)
             {
@@ -135,12 +132,11 @@ namespace RpeggiatorLib
 
             InventoryItem item = DisplayableItems.ElementAt(inventorySlotId);
 
-            IReadOnlyCollection<Item> baseitemList = Item.GetAmmoItem(item.BaseItem.Type);
+            Item ammoItemBase = Item.GetAmmoItem(item.BaseItem.Type);
+            
+            InventoryItem ammoItem = _items.FirstOrDefault(it => ammoItemBase == it.BaseItem);
 
-            // TODO : ugly; mutualisable; the current ammo should be set manually by the player.
-            InventoryItem ammoItem = _items.Where(it => baseitemList.Contains(it.BaseItem)).OrderByDescending(it => it.Quantity).FirstOrDefault();
-
-            if (!ItemCanBeUseInContext(item.BaseItem.Type) || (baseitemList.Count > 0 ? (ammoItem == null || !ammoItem.TryPick()) : !item.TryPick()))
+            if (!ItemCanBeUseInContext(item.BaseItem.Type) || (ammoItemBase != null ? (ammoItem == null || !ammoItem.TryPick()) : !item.TryPick()))
             {
                 return null;
             }
@@ -179,33 +175,20 @@ namespace RpeggiatorLib
             return droppedItem;
         }
 
-        /// <summary>
-        /// Gets the current quantity of an <see cref="InventoryItem"/> by its <see cref="ItemType"/>.
-        /// </summary>
-        /// <param name="value"><see cref="ItemType"/></param>
-        /// <returns>Quantity.</returns>
-        public int QuantityOf(ItemType value)
+        // Gets the current quantity of an InventoryItem by its ItemType.
+        internal int QuantityOf(ItemType value)
         {
-            IReadOnlyCollection<Item> baseitemList = Item.GetAmmoItem(value);
+            Item ammoItemBase = Item.GetAmmoItem(value);
 
-            if (baseitemList.Count == 0)
+            if (ammoItemBase == null)
             {
                 return _items.First(it => it.BaseItem.Type == value).Quantity;
             }
-
-            // TODO : ugly; mutualisable; the current ammo should be set manually by the player.
-            return _items
-                .Where(it => baseitemList.Contains(it.BaseItem))
-                .OrderByDescending(it => it.Quantity)
-                .FirstOrDefault()?.Quantity ?? 0;
+            
+            return _items.FirstOrDefault(it => ammoItemBase == it.BaseItem)?.Quantity ?? 0;
         }
 
-        /// <summary>
-        /// Computes drop coordinates.
-        /// </summary>
-        /// <param name="width">Item sprite width.</param>
-        /// <param name="height">Item sprite height.</param>
-        /// <returns>Coordinates point.</returns>
+        // Computes drop coordinates.
         private Point ComputeDropCoordinates(double width, double height)
         {
             // Just a shortcut.
@@ -242,11 +225,7 @@ namespace RpeggiatorLib
             return pt;
         }
 
-        /// <summary>
-        /// Checks if an item can be used in the context.
-        /// </summary>
-        /// <param name="itemId"><see cref="ItemType"/></param>
-        /// <returns><c>True</c> if it can be used; <c>False</c> otherwise.</returns>
+        // Checks if an item can be used in the context.
         private bool ItemCanBeUseInContext(ItemType itemId)
         {
             switch (itemId)
@@ -278,12 +257,7 @@ namespace RpeggiatorLib
             return true;
         }
 
-        /// <summary>
-        /// Sets the maximal quantity storable for an <see cref="InventoryItem"/>.
-        /// </summary>
-        /// <remarks>The storage capacity can't be decrease.</remarks>
-        /// <param name="itemId"><see cref="ItemType"/></param>
-        /// <param name="maxQuantity">Maximal quantity.</param>
+        // Sets the maximal quantity storable for an InventoryItem.
         private void SetItemMaxQuantity(ItemType itemId, int maxQuantity)
         {
             if (_maxQuantityByItem.ContainsKey(itemId))

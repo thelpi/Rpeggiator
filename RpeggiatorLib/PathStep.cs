@@ -1,12 +1,11 @@
 ﻿using RpeggiatorLib.Sprites;
-using System.Windows;
 
 namespace RpeggiatorLib
 {
     /// <summary>
     /// Represents a <see cref="Path"/> step.
     /// </summary>
-    public class PathStep
+    internal class PathStep
     {
         /// <summary>
         /// <see cref="Point"/>
@@ -26,7 +25,7 @@ namespace RpeggiatorLib
         /// </summary>
         /// <param name="point"><see cref="Point"/></param>
         /// <param name="permanent"><see cref="Permanent"/></param>
-        public PathStep(Point point, bool permanent) : this(point, permanent, false) { }
+        internal PathStep(Point point, bool permanent) : this(point, permanent, false) { }
 
         // Private constructor.
         private PathStep(Point point, bool permanent, bool pursue)
@@ -41,7 +40,7 @@ namespace RpeggiatorLib
         /// </summary>
         /// <param name="spriteToPursue"><see cref="Sprite"/> to pursue.</param>
         /// <returns><see cref="PathStep"/></returns>
-        public static PathStep CreatePursueStep(Sprite spriteToPursue)
+        internal static PathStep CreatePursueStep(Sprite spriteToPursue)
         {
             return new PathStep(spriteToPursue.TopLeftCorner, false, true);
         }

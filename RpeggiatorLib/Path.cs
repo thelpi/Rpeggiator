@@ -1,15 +1,14 @@
-﻿using RpeggiatorLib.Enums;
-using RpeggiatorLib.Sprites;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Windows;
+using RpeggiatorLib.Enums;
+using RpeggiatorLib.Sprites;
 
 namespace RpeggiatorLib
 {
     /// <summary>
     /// Represents a path.
     /// </summary>
-    public class Path
+    internal class Path
     {
         private List<PathStep> _steps;
         private int _currentStepIndex;
@@ -19,7 +18,7 @@ namespace RpeggiatorLib
         /// Constructor.
         /// </summary>
         /// <param name="points">Sorted permanent points collection.</param>
-        public Path(params Point[] points)
+        internal Path(params Point[] points)
         {
             _steps = points.Select(p => new PathStep(p, true)).ToList();
             _currentStepIndex = GetNextStepIndex();
@@ -31,7 +30,7 @@ namespace RpeggiatorLib
         /// <param name="owner"><see cref="Sprite"/></param>
         /// <param name="distance">Distance, in pixels.</param>
         /// <returns><see cref="Point"/></returns>
-        public Point ComputeNextPosition(Sprite owner, double distance)
+        internal Point ComputeNextPosition(Sprite owner, double distance)
         {
             // Gets the theoretical point. 
             Point newPoint = Tools.GetPointOnLine(owner.TopLeftCorner, _steps[_currentStepIndex].Point, distance, true);
@@ -50,7 +49,7 @@ namespace RpeggiatorLib
         /// <summary>
         /// Reverses path steps.
         /// </summary>
-        public void ReversePath()
+        internal void ReversePath()
         {
             _steps.Reverse();
             _currentStepIndex = _steps.Count - 1 - _currentStepIndex;

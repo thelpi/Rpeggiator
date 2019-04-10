@@ -55,6 +55,10 @@ namespace RpeggiatorLib
         /// </summary>
         public const int NIGHT_DUSK_HOUR = 20;
         /// <summary>
+        /// First in-game day hour start.
+        /// </summary>
+        public const int FIRST_DAY_HOUR_START = 6;
+        /// <summary>
         /// Size ratio, compared to <see cref="Engine.Player"/>, which triggers pursue by enemies.
         /// </summary>
         public const double PLAYER_SIZE_RATIO_TO_TRIGGER_ENEMY = 3;

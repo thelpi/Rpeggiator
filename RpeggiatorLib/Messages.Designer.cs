@@ -70,6 +70,15 @@ namespace RpeggiatorLib {
         }
         
         /// <summary>
+        ///   Recherche une chaîne localisée semblable à The inventory slot id is invalid..
+        /// </summary>
+        internal static string InvalidInventorySlotIdExceptionMessage {
+            get {
+                return ResourceManager.GetString("InvalidInventorySlotIdExceptionMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Recherche une chaîne localisée semblable à Unable to resolve this quadratic equation..
         /// </summary>
         internal static string NoQuadraticSolutionExceptionMessage {

@@ -1,7 +1,7 @@
-﻿using RpeggiatorLib.Sprites;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using RpeggiatorLib.Sprites;
 
 namespace RpeggiatorLib
 {
@@ -37,7 +37,6 @@ namespace RpeggiatorLib
 
         private Screen _currentScreen;
         private DateTime _beginTimestamp;
-        // List of each instancied screen.
         private List<Screen> _screens = new List<Screen>();
 
         /// <summary>
@@ -80,7 +79,7 @@ namespace RpeggiatorLib
             {
                 double totalHours = (DateTime.Now - _beginTimestamp).TotalHours * Constants.TIME_RATIO;
                 int totalHoursFloored = (int)Math.Floor(totalHours);
-                return (totalHoursFloored % 24) + (totalHours - totalHoursFloored);
+                return (totalHoursFloored % 24) + (totalHours - totalHoursFloored) + Constants.FIRST_DAY_HOUR_START;
             }
         }
 
@@ -89,15 +88,11 @@ namespace RpeggiatorLib
         {
             _beginTimestamp = DateTime.Now;
             Player = new Player();
-            CurrentScreen = GetOrCreatetScreen(screenId);
+            CurrentScreen = GetOrCreateScreen(screenId);
         }
 
-        /// <summary>
-        /// Gets or creates a screen by its identifier.
-        /// </summary>
-        /// <param name="id"><see cref="Screen.Id"/></param>
-        /// <returns><see cref="Screen"/></returns>
-        public Screen GetOrCreatetScreen(int id)
+        // Gets or creates a screen by its identifier.
+        private Screen GetOrCreateScreen(int id)
         {
             if (_screens.Any(s => s.Id == id))
             {
@@ -117,9 +112,10 @@ namespace RpeggiatorLib
         /// Refresh the status of every components at new frame.
         /// </summary>
         /// <param name="keys"><see cref="KeyPress"/></param>
+        /// <exception cref="ArgumentNullException">The argument <paramref name="keys"/> is <c>Null</c>.</exception>
         public void CheckEngineAtNewFrame(KeyPress keys)
         {
-            KeyPress = keys;
+            KeyPress = keys ?? throw new ArgumentNullException(nameof(keys));
 
             Player.BehaviorAtNewFrame();
             Player.CheckIfHasBeenHit();
@@ -131,7 +127,7 @@ namespace RpeggiatorLib
             // At last, every possiblities to change screen.
             if (Player.NewScreenEntrance.HasValue)
             {
-                CurrentScreen = GetOrCreatetScreen(CurrentScreen.GetNextScreenIdFromDirection(Player.NewScreenEntrance.Value));
+                CurrentScreen = GetOrCreateScreen(CurrentScreen.GetNextScreenIdFromDirection(Player.NewScreenEntrance.Value));
             }
             else
             {
@@ -142,14 +138,14 @@ namespace RpeggiatorLib
                     // The position must be set before to get to the screen.
                     // Otherwise, the door got in the first method will be from the new screen.
                     Player.SetPositionRelativeToDoorGoThrough(doorId.Value);
-                    CurrentScreen = GetOrCreatetScreen(newScreenByDoor.Value);
+                    CurrentScreen = GetOrCreateScreen(newScreenByDoor.Value);
                 }
                 else
                 {
                     Pit pit = CurrentScreen.Pits.FirstOrDefault(p => p.ScreenIndexEntrance.HasValue && p.CanFallIn(Player));
                     if (pit != null)
                     {
-                        CurrentScreen = GetOrCreatetScreen(pit.ScreenIndexEntrance.Value);
+                        CurrentScreen = GetOrCreateScreen(pit.ScreenIndexEntrance.Value);
                     }
                 }
             }
@@ -181,7 +177,7 @@ namespace RpeggiatorLib
         /// </summary>
         /// <param name="trigger"><see cref="FloorTrigger"/></param>
         /// <returns><c>True</c> if triggered; <c>False</c> otherwise.</returns>
-        public bool IsTriggered(FloorTrigger trigger)
+        internal bool IsTriggered(FloorTrigger trigger)
         {
             return trigger.Overlap(Player) || CurrentScreen.Enemies.Any(e => trigger.Overlap(e));
         }
@@ -190,7 +186,7 @@ namespace RpeggiatorLib
         /// Checks hit(s) made by enemies on player.
         /// </summary>
         /// <returns>Potential cost in life points.</returns>
-        public double CheckHitByEnemiesOnPlayer()
+        internal double CheckHitByEnemiesOnPlayer()
         {
             // checks hit (for each enemy, life points lost is cumulable)
             double cumuledLifePoints = 0;
@@ -204,12 +200,8 @@ namespace RpeggiatorLib
             return cumuledLifePoints;
         }
 
-        /// <summary>
-        /// Checks if a door to a new screen has been opened.
-        /// </summary>
-        /// <param name="doorId">ByRef; door identifier.</param>
-        /// <returns>New <see cref="Screen"/> identifier.</returns>
-        public int? CheckForDoorOpened(out int? doorId)
+        // Checks if a door to a new screen has been opened.
+        private int? CheckForDoorOpened(out int? doorId)
         {
             doorId = null;
 

@@ -19,7 +19,7 @@
         /// </summary>
         /// <param name="x"><see cref="X"/></param>
         /// <param name="y"><see cref="Y"/></param>
-        public Point(double x, double y)
+        internal Point(double x, double y)
         {
             X = x;
             Y = y;

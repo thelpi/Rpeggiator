@@ -51,7 +51,7 @@ namespace RpeggiatorLib
         /// <remarks>Calls <see cref="BuildItemList"/> if never called before.</remarks>
         /// <param name="itemId"><see cref="ItemType"/></param>
         /// <returns><see cref="Item"/></returns>
-        public static Item GetItem(ItemType itemId)
+        internal static Item GetItem(ItemType itemId)
         {
             if (_items == null)
             {
@@ -62,19 +62,18 @@ namespace RpeggiatorLib
         }
 
         /// <summary>
-        /// Gets every <see cref="Item"/> which are used as ammo by the specified <paramref name="itemId"/>
+        /// Gets the single <see cref="Item"/> which is used as ammo by the specified <paramref name="itemType"/>
         /// </summary>
-        /// <remarks>Calls <see cref="BuildItemList"/> if never called before.</remarks>
-        /// <param name="itemId"><see cref="ItemType"/></param>
-        /// <returns>List of <see cref="Item"/> used as ammo.</returns>
-        public static IReadOnlyCollection<Item> GetAmmoItem(ItemType itemId)
+        /// <param name="itemType"><see cref="ItemType"/></param>
+        /// <returns>The <see cref="Item"/> or <c>Null</c>.</returns>
+        internal static Item GetAmmoItem(ItemType itemType)
         {
             if (_items == null)
             {
                 BuildItemList();
             }
 
-            return _items.Where(it => it.AmmoFor == itemId).ToList();
+            return _items.SingleOrDefault(it => it.AmmoFor == itemType);
         }
 
         // Creates an instance of every items.
