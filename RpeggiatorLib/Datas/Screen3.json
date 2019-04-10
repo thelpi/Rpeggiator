@@ -1,0 +1,104 @@
+{
+  "X": 0,
+  "Y": 0,
+  "Width": 800,
+  "Height": 600,
+  "FloorType": "Ground",
+  "GraphicType": "PlainBrushGraphic",
+  "HexColor": "#FFFFEFD5",
+  "AreaDarknessOpacity": 0,
+  "Floors": [
+    {
+      "X": 150,
+      "Y": 150,
+      "Width": 300,
+      "Height": 200,
+      "FloorType": "Water"
+    },
+    {
+      "X": 460,
+      "Y": 150,
+      "Width": 150,
+      "Height": 200,
+      "FloorType": "Lava"
+    },
+    {
+      "X": 200,
+      "Y": 360,
+      "Width": 400,
+      "Height": 100,
+      "FloorType": "Ice"
+    }
+  ],
+  "PermanentStructures": [
+    {
+      "X": 0,
+      "Y": 0,
+      "Width": 800,
+      "Height": 20,
+      "GraphicType": "PlainBrushGraphic",
+      "HexColor": "#FF006400"
+    },
+    {
+      "X": 780,
+      "Y": 20,
+      "Width": 20,
+      "Height": 560,
+      "GraphicType": "PlainBrushGraphic",
+      "HexColor": "#FF006400"
+    },
+    {
+      "X": 0,
+      "Y": 20,
+      "Width": 20,
+      "Height": 560,
+      "GraphicType": "PlainBrushGraphic",
+      "HexColor": "#FF006400"
+    },
+    {
+      "X": 0,
+      "Y": 580,
+      "Width": 400,
+      "Height": 20,
+      "GraphicType": "PlainBrushGraphic",
+      "HexColor": "#FF006400"
+    },
+    {
+      "X": 480,
+      "Y": 580,
+      "Width": 320,
+      "Height": 20,
+      "GraphicType": "PlainBrushGraphic",
+      "HexColor": "#FF006400"
+    }
+  ],
+  "Chests": [],
+  "Gates": [],
+  "Enemies": [],
+  "GateTriggers": [],
+  "NeighboringScreens": {
+    "Top": 3,
+    "Right": 3,
+    "Bottom": 3,
+    "Left": 3
+  },
+  "Items": [],
+  "Rifts": [],
+  "Pits": [],
+  "Doors": [
+    {
+      "X": 400,
+      "Y": 580,
+      "Width": 80,
+      "Height": 20,
+      "GraphicType": "PlainBrushGraphic",
+      "HexColor": "#D2691E",
+      "ScreenId": 1,
+      "KeyId": 1,
+      /* TODO : should be relative to the player size */
+      "PlayerGoThroughX": 400,
+      "PlayerGoThroughY": 20,
+      "Id": 1
+    }
+  ]
+}

@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace RPG4 {
+namespace RpeggiatorLib {
     using System;
     
     
@@ -39,7 +39,7 @@ namespace RPG4 {
         internal static global::System.Resources.ResourceManager ResourceManager {
             get {
                 if (object.ReferenceEquals(resourceMan, null)) {
-                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("RPG4.Messages", typeof(Messages).Assembly);
+                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("RpeggiatorLib.Messages", typeof(Messages).Assembly);
                     resourceMan = temp;
                 }
                 return resourceMan;
@@ -61,29 +61,38 @@ namespace RPG4 {
         }
         
         /// <summary>
-        ///   Recherche une chaîne localisée semblable à Quitter..
+        ///   Recherche une chaîne localisée semblable à The method can&apos;t find a position which avoid every structures..
         /// </summary>
-        internal static string BtnExitMessage {
+        internal static string InfiniteOverlapCheckExceptionMessage {
             get {
-                return ResourceManager.GetString("BtnExitMessage", resourceCulture);
+                return ResourceManager.GetString("InfiniteOverlapCheckExceptionMessage", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Recherche une chaîne localisée semblable à Editer un écran..
+        ///   Recherche une chaîne localisée semblable à Unable to resolve this quadratic equation..
         /// </summary>
-        internal static string BtnScreenEditorMessage {
+        internal static string NoQuadraticSolutionExceptionMessage {
             get {
-                return ResourceManager.GetString("BtnScreenEditorMessage", resourceCulture);
+                return ResourceManager.GetString("NoQuadraticSolutionExceptionMessage", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Recherche une chaîne localisée semblable à Démarrer une nouvelle partie..
+        ///   Recherche une chaîne localisée semblable à This sub-type of graphic should be implemented..
         /// </summary>
-        internal static string BtnStartGameMessage {
+        internal static string NotImplementedGraphicExceptionMessage {
             get {
-                return ResourceManager.GetString("BtnStartGameMessage", resourceCulture);
+                return ResourceManager.GetString("NotImplementedGraphicExceptionMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Recherche une chaîne localisée semblable à The Z-index property for this subtype has not been implemented..
+        /// </summary>
+        internal static string NotImplementedZindexTypeExceptionMessage {
+            get {
+                return ResourceManager.GetString("NotImplementedZindexTypeExceptionMessage", resourceCulture);
             }
         }
     }

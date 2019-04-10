@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace RPG4 {
+namespace RpeggiatorLib {
     using System;
     
     
@@ -22,14 +22,14 @@ namespace RPG4 {
     [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "15.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
-    internal class Messages {
+    internal class Names {
         
         private static global::System.Resources.ResourceManager resourceMan;
         
         private static global::System.Globalization.CultureInfo resourceCulture;
         
         [global::System.Diagnostics.CodeAnalysis.SuppressMessageAttribute("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
-        internal Messages() {
+        internal Names() {
         }
         
         /// <summary>
@@ -39,7 +39,7 @@ namespace RPG4 {
         internal static global::System.Resources.ResourceManager ResourceManager {
             get {
                 if (object.ReferenceEquals(resourceMan, null)) {
-                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("RPG4.Messages", typeof(Messages).Assembly);
+                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("RpeggiatorLib.Names", typeof(Names).Assembly);
                     resourceMan = temp;
                 }
                 return resourceMan;
@@ -61,29 +61,65 @@ namespace RPG4 {
         }
         
         /// <summary>
-        ///   Recherche une chaîne localisée semblable à Quitter..
+        ///   Recherche une chaîne localisée semblable à Arrows.
         /// </summary>
-        internal static string BtnExitMessage {
+        internal static string ItemArrow {
             get {
-                return ResourceManager.GetString("BtnExitMessage", resourceCulture);
+                return ResourceManager.GetString("ItemArrow", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Recherche une chaîne localisée semblable à Editer un écran..
+        ///   Recherche une chaîne localisée semblable à Bombs.
         /// </summary>
-        internal static string BtnScreenEditorMessage {
+        internal static string ItemBomb {
             get {
-                return ResourceManager.GetString("BtnScreenEditorMessage", resourceCulture);
+                return ResourceManager.GetString("ItemBomb", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Recherche une chaîne localisée semblable à Démarrer une nouvelle partie..
+        ///   Recherche une chaîne localisée semblable à Bow.
         /// </summary>
-        internal static string BtnStartGameMessage {
+        internal static string ItemBow {
             get {
-                return ResourceManager.GetString("BtnStartGameMessage", resourceCulture);
+                return ResourceManager.GetString("ItemBow", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Recherche une chaîne localisée semblable à Lamp.
+        /// </summary>
+        internal static string ItemLamp {
+            get {
+                return ResourceManager.GetString("ItemLamp", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Recherche une chaîne localisée semblable à Life potion (large).
+        /// </summary>
+        internal static string ItemLifePotionLarge {
+            get {
+                return ResourceManager.GetString("ItemLifePotionLarge", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Recherche une chaîne localisée semblable à Life potion (medium).
+        /// </summary>
+        internal static string ItemLifePotionMedium {
+            get {
+                return ResourceManager.GetString("ItemLifePotionMedium", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Recherche une chaîne localisée semblable à Life potion (small).
+        /// </summary>
+        internal static string ItemLifePotionSmall {
+            get {
+                return ResourceManager.GetString("ItemLifePotionSmall", resourceCulture);
             }
         }
     }

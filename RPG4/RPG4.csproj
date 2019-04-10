@@ -39,7 +39,8 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <Prefer32Bit>false</Prefer32Bit>
-    <DocumentationFile>bin\Debug\RPG4.xml</DocumentationFile>
+    <DocumentationFile>
+    </DocumentationFile>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <PlatformTarget>AnyCPU</PlatformTarget>
@@ -53,8 +54,9 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Microsoft.CSharp" />
-    <Reference Include="Newtonsoft.Json, Version=12.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
-      <HintPath>..\packages\Newtonsoft.Json.12.0.1\lib\net45\Newtonsoft.Json.dll</HintPath>
+    <Reference Include="Newtonsoft.Json, Version=6.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\RpeggiatorLib\bin\Debug\Newtonsoft.Json.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
@@ -74,57 +76,17 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
-    <Compile Include="Models\Elapser.cs" />
-    <Compile Include="Models\Exceptions\InfiniteOverlapCheckException.cs" />
-    <Compile Include="Models\Exceptions\NoQuadraticSolutionException.cs" />
-    <Compile Include="Models\Graphic\ImageBrushGraphic.cs" />
-    <Compile Include="Models\Graphic\PlainBrushGraphic.cs" />
-    <Compile Include="Models\Graphic\SpriteGraphic.cs" />
-    <Compile Include="Models\Path.cs" />
-    <Compile Include="Models\PathStep.cs" />
-    <Compile Include="Models\Sprites\ActionnedArrow.cs" />
-    <Compile Include="Models\Sprites\BombExplosion.cs" />
-    <Compile Include="Models\Sprites\Chest.cs" />
-    <Compile Include="Models\Sprites\DamageableSprite.cs" />
-    <Compile Include="Models\Sprites\Door.cs" />
-    <Compile Include="Models\Enums\FloorType.cs" />
-    <Compile Include="Models\Sprites\Floor.cs" />
-    <Compile Include="Models\Sprites\WeaponHit.cs" />
-    <Compile Include="Models\Sprites\Screen.cs" />
-    <Compile Include="Models\Sprites\ActionnedBomb.cs" />
-    <Compile Include="Models\Enums\Direction.cs" />
-    <Compile Include="Models\Sprites\ActionnedItem.cs" />
-    <Compile Include="Models\Sprites\Pit.cs" />
-    <Compile Include="Models\Sprites\PickableItem.cs" />
-    <Compile Include="Models\Inventory.cs" />
-    <Compile Include="Models\InventoryItem.cs" />
-    <Compile Include="Models\Item.cs" />
-    <Compile Include="Models\Sprites\GateTrigger.cs" />
-    <Compile Include="Models\Sprites\FloorTrigger.cs" />
-    <Compile Include="Models\Enums\ItemType.cs" />
-    <Compile Include="Models\Sprites\LifeSprite.cs" />
-    <Compile Include="Models\Sprites\Player.cs" />
-    <Compile Include="Models\Sprites\Enemy.cs" />
-    <Compile Include="Models\Sprites\Rift.cs" />
-    <Compile Include="Models\Sprites\Sprite.cs" />
-    <Compile Include="Models\Sprites\Gate.cs" />
-    <Compile Include="Models\Sprites\PermanentStructure.cs" />
     <Compile Include="Messages.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>Messages.resx</DependentUpon>
-    </Compile>
-    <Compile Include="Names.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>Names.resx</DependentUpon>
     </Compile>
     <Compile Include="Properties\Resources.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
-    <Compile Include="Models\Tools\Tools.cs" />
+    <Compile Include="Tools.cs" />
     <Compile Include="Visuals\ScreenEditorWindow.xaml.cs">
       <DependentUpon>ScreenEditorWindow.xaml</DependentUpon>
     </Compile>
@@ -140,8 +102,6 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Models\KeyPress.cs" />
-    <Compile Include="Models\Tools\Constants.cs" />
     <Compile Include="Visuals\IntroWindow.xaml.cs">
       <DependentUpon>IntroWindow.xaml</DependentUpon>
     </Compile>
@@ -155,7 +115,6 @@
     </Page>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Models\Engine.cs" />
     <Compile Include="Properties\AssemblyInfo.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -168,17 +127,12 @@
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Messages.Designer.cs</LastGenOutput>
     </EmbeddedResource>
-    <EmbeddedResource Include="Names.resx">
-      <Generator>ResXFileCodeGenerator</Generator>
-      <LastGenOutput>Names.Designer.cs</LastGenOutput>
-    </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <SubType>Designer</SubType>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
     <None Include="app.config" />
-    <None Include="packages.config" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
@@ -289,6 +243,12 @@
     <Resource Include="Resources\Arrow.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Resource>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\RpeggiatorLib\RpeggiatorLib.csproj">
+      <Project>{5a088996-27f1-4a63-941a-5a14b67d6111}</Project>
+      <Name>RpeggiatorLib</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

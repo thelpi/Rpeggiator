@@ -83,8 +83,8 @@ namespace RPG4.Visuals
             int topScreenId = 1;
             int leftScreenId = 1;
             int rightScreenId = 1;
-            Models.Enums.FloorType floorTYpe = Models.Enums.FloorType.Ground;
-            string graphicType = nameof(Models.Graphic.PlainBrushGraphic);
+            RpeggiatorLib.Enums.FloorType floorTYpe = RpeggiatorLib.Enums.FloorType.Ground;
+            string graphicType = nameof(RpeggiatorLib.Graphic.PlainBrushGraphic);
             System.Windows.Media.Color backgroundColor = Colors.PapayaWhip;
             double darknessOpacity = 0;
             List<string> otherProperties = new List<string>
@@ -92,7 +92,7 @@ namespace RPG4.Visuals
                 "Floors", "Doors",  "Chests", "Gates", "Enemies",
                 "GateTriggers", "Items", "Rifts", "Pits"
             };
-            string permStructgraphicType = nameof(Models.Graphic.PlainBrushGraphic);
+            string permStructgraphicType = nameof(RpeggiatorLib.Graphic.PlainBrushGraphic);
             System.Windows.Media.Color permStructColor = Colors.Black;
 
             StringBuilder fullContent = new StringBuilder();
@@ -113,11 +113,11 @@ namespace RPG4.Visuals
                     writer.WritePropertyName("Height");
                     writer.WriteValue(bitmap.Height);
                     writer.WritePropertyName("FloorType");
-                    writer.WriteValue(Enum.GetName(typeof(Models.Enums.FloorType), floorTYpe));
+                    writer.WriteValue(Enum.GetName(typeof(RpeggiatorLib.Enums.FloorType), floorTYpe));
                     writer.WritePropertyName("GraphicType");
                     writer.WriteValue(graphicType);
                     writer.WritePropertyName("HexColor");
-                    writer.WriteValue(Models.Tools.HexFromColor(backgroundColor));
+                    writer.WriteValue(RpeggiatorLib.Tools.HexFromColor(backgroundColor));
                     writer.WritePropertyName("AreaDarknessOpacity");
                     writer.WriteValue(darknessOpacity);
                     writer.WritePropertyName("PermanentStructures");
@@ -136,7 +136,7 @@ namespace RPG4.Visuals
                         writer.WritePropertyName("GraphicType");
                         writer.WriteValue(permStructgraphicType);
                         writer.WritePropertyName("HexColor");
-                        writer.WriteValue(Models.Tools.HexFromColor(permStructColor));
+                        writer.WriteValue(RpeggiatorLib.Tools.HexFromColor(permStructColor));
                         writer.WriteEndObject();
                     }
                     writer.WriteEnd();

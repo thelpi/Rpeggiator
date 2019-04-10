@@ -1,5 +1,5 @@
-﻿using RPG4.Models;
-using RPG4.Models.Sprites;
+﻿using RpeggiatorLib;
+using RpeggiatorLib.Sprites;
 using System;
 using System.ComponentModel;
 using System.Diagnostics;
@@ -111,7 +111,7 @@ namespace RPG4.Visuals
                 {
                     _currentScreenIndex = Engine.Default.CurrentScreenId;
 
-                    cvsMain.Background = Engine.Default.CurrentScreen.Graphic.GetRenderingBrush();
+                    cvsMain.Background = Tools.GetRenderingBrush(Engine.Default.CurrentScreen.Graphic);
                     cvsMain.Height = Engine.Default.CurrentScreen.Height;
                     cvsMain.Width = Engine.Default.CurrentScreen.Width;
 
@@ -151,7 +151,7 @@ namespace RPG4.Visuals
         {
             Rectangle rct = new Rectangle
             {
-                Fill = sp.Graphic.GetRenderingBrush(),
+                Fill = Tools.GetRenderingBrush(sp.Graphic),
                 Width = sp.Width,
                 Height = sp.Height
             };
@@ -190,7 +190,7 @@ namespace RPG4.Visuals
             rctPlayer.SetValue(Canvas.TopProperty, Engine.Default.Player.Y);
             rctPlayer.SetValue(Canvas.LeftProperty, Engine.Default.Player.X);
 
-            rctPlayer.Fill = Engine.Default.Player.Graphic.GetRenderingBrush();
+            rctPlayer.Fill = Tools.GetRenderingBrush(Engine.Default.Player.Graphic);
 
             if (Engine.Default.Player.IsHitting)
             {
@@ -236,7 +236,7 @@ namespace RPG4.Visuals
                 {
                     InventoryItem item = Engine.Default.Player.Inventory.DisplayableItems.ElementAt(i);
                     itemSlotTxt.Text = item.DisplayableQuantity.ToString().PadLeft(3, '0');
-                    itemSlotRct.Fill = item.BaseItem.LootGraphic.GetRenderingBrush();
+                    itemSlotRct.Fill = Tools.GetRenderingBrush(item.BaseItem.LootGraphic);
                 }
             }
             txtCoins.Text = Engine.Default.Player.Inventory.Coins.ToString().PadLeft(3, '0');
@@ -321,7 +321,8 @@ namespace RPG4.Visuals
 
             if (Engine.Default.Player.Inventory.LampIsOn)
             {
-                Point pt = new Point(Engine.Default.Player.CenterPoint.X / Engine.Default.CurrentScreen.Width,
+                System.Windows.Point pt = new System.Windows.Point(
+                    Engine.Default.Player.CenterPoint.X / Engine.Default.CurrentScreen.Width,
                     Engine.Default.Player.CenterPoint.Y / Engine.Default.CurrentScreen.Height);
 
                 RadialGradientBrush lampBrush = new RadialGradientBrush(Colors.Transparent, Colors.Black);

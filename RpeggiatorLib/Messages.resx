@@ -117,13 +117,16 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="BtnExitMessage" xml:space="preserve">
-    <value>Quitter.</value>
+  <data name="InfiniteOverlapCheckExceptionMessage" xml:space="preserve">
+    <value>The method can't find a position which avoid every structures.</value>
   </data>
-  <data name="BtnScreenEditorMessage" xml:space="preserve">
-    <value>Editer un écran.</value>
+  <data name="NoQuadraticSolutionExceptionMessage" xml:space="preserve">
+    <value>Unable to resolve this quadratic equation.</value>
   </data>
-  <data name="BtnStartGameMessage" xml:space="preserve">
-    <value>Démarrer une nouvelle partie.</value>
+  <data name="NotImplementedGraphicExceptionMessage" xml:space="preserve">
+    <value>This sub-type of graphic should be implemented.</value>
+  </data>
+  <data name="NotImplementedZindexTypeExceptionMessage" xml:space="preserve">
+    <value>The Z-index property for this subtype has not been implemented.</value>
   </data>
 </root>
