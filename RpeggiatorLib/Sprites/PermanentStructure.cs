@@ -10,6 +10,7 @@
         /// Constructor.
         /// </summary>
         /// <param name="datas">Dynamic json datas.</param>
-        public PermanentStructure(dynamic datas) : base((object)datas) { }
+        public PermanentStructure(dynamic datas)
+            : base((double)datas.X, (double)datas.Y, (double)datas.Width, (double)datas.Height) { }
     }
 }

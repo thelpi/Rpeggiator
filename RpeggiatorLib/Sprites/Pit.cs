@@ -19,10 +19,12 @@
         /// <summary>
         /// Constructor.
         /// </summary>
-        /// <param name="sizedPointJson">The json dynamic object.</param>
-        public Pit(dynamic sizedPointJson) : base((object)sizedPointJson)
+        /// <param name="pitJsonDatas">The json dynamic object.</param>
+        public Pit(dynamic pitJsonDatas)
+            : base((double)pitJsonDatas.X, (double)pitJsonDatas.Y,
+                  (double)pitJsonDatas.Width, (double)pitJsonDatas.Height)
         {
-            ScreenIndexEntrance = sizedPointJson.ScreenIndexEntrance;
+            ScreenIndexEntrance = pitJsonDatas.ScreenIndexEntrance;
         }
 
         /// <summary>

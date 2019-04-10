@@ -176,7 +176,7 @@ namespace RpeggiatorLib.Sprites
         }
 
         /// <inheritdoc />
-        public override void BehaviorAtNewFrame()
+        internal override void BehaviorAtNewFrame()
         {
             _enemies.ForEach(enemy => enemy.BehaviorAtNewFrame());
             _gateTriggers.ForEach(gt => gt.BehaviorAtNewFrame());

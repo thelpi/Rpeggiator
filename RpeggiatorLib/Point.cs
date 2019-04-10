@@ -3,16 +3,16 @@
     /// <summary>
     /// Represents a point coordinates.
     /// </summary>
-    public struct Point
+    internal struct Point
     {
         /// <summary>
         /// X-axis coordinate.
         /// </summary>
-        public double X { get; set; }
+        internal double X { get; set; }
         /// <summary>
         /// Y-axis coordinate.
         /// </summary>
-        public double Y { get; set; }
+        internal double Y { get; set; }
 
         /// <summary>
         /// Constructor.

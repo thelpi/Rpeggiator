@@ -29,7 +29,8 @@ namespace RpeggiatorLib.Sprites
         /// Constructor.
         /// </summary>
         /// <param name="doorJsonDatas">Door json datas.</param>
-        public Door(dynamic doorJsonDatas) : base((object)doorJsonDatas)
+        public Door(dynamic doorJsonDatas)
+            : base((double)doorJsonDatas.X, (double)doorJsonDatas.Y, (double)doorJsonDatas.Width, (double)doorJsonDatas.Height)
         {
             _keyId = doorJsonDatas.KeyId;
             _screenId = doorJsonDatas.ScreenId;

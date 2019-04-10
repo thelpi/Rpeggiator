@@ -12,11 +12,11 @@ namespace RpeggiatorLib.Exceptions
         /// <summary>
         /// Starting point.
         /// </summary>
-        public Point StartingPoint { get; private set; }
+        internal Point StartingPoint { get; private set; }
         /// <summary>
         /// Destination point.
         /// </summary>
-        public Point DestinationPoint { get; private set; }
+        internal Point DestinationPoint { get; private set; }
         /// <summary>
         /// Distance.
         /// </summary>
@@ -28,7 +28,7 @@ namespace RpeggiatorLib.Exceptions
         /// <param name="startingPoint"><see cref="StartingPoint"/></param>
         /// <param name="destinationPoint"><see cref="DestinationPoint"/></param>
         /// <param name="distance"><see cref="Distance"/></param>
-        public NoQuadraticSolutionException(Point startingPoint, Point destinationPoint, double distance)
+        internal NoQuadraticSolutionException(Point startingPoint, Point destinationPoint, double distance)
             : base(Messages.NoQuadraticSolutionExceptionMessage)
         {
             StartingPoint = startingPoint;

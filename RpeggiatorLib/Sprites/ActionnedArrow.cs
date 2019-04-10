@@ -1,5 +1,4 @@
 ﻿using System.Linq;
-using System.Windows;
 using RpeggiatorLib.Enums;
 
 namespace RpeggiatorLib.Sprites
@@ -24,8 +23,8 @@ namespace RpeggiatorLib.Sprites
         /// <param name="point">Starting <see cref="Point"/>.</param>
         /// <param name="direction"><see cref="Direction"/></param>
         /// <param name="thrownBy"><see cref="LifeSprite"/> who throws the arrow.</param>
-        public ActionnedArrow(Point point, Direction direction, LifeSprite thrownBy) : base(point.X, point.Y,
-            Constants.Arrow.WIDTH, Constants.Arrow.HEIGHT)
+        internal ActionnedArrow(Point point, Direction direction, LifeSprite thrownBy)
+            : base(point.X, point.Y, Constants.Arrow.WIDTH, Constants.Arrow.HEIGHT)
         {
             _direction = direction;
             _elapser = new Elapser();
@@ -34,7 +33,7 @@ namespace RpeggiatorLib.Sprites
         }
 
         /// <inheritdoc />
-        public override void BehaviorAtNewFrame()
+        internal override void BehaviorAtNewFrame()
         {
             base.BehaviorAtNewFrame();
 

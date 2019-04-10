@@ -23,14 +23,15 @@ namespace RpeggiatorLib.Sprites
         /// Constructor.
         /// </summary>
         /// <param name="gateJson">The json dynamic object.</param>
-        public Gate(dynamic gateJson) : base((object)gateJson)
+        public Gate(dynamic gateJson)
+            : base((double)gateJson.X, (double)gateJson.Y, (double)gateJson.Width, (double)gateJson.Height)
         {
             Activated = gateJson.Activated;
             _defaultActivated = gateJson.Activated;
         }
 
         /// <inheritdoc />
-        public override void BehaviorAtNewFrame()
+        internal override void BehaviorAtNewFrame()
         {
             IReadOnlyCollection<GateTrigger> triggersOn = Engine.Default.CurrentScreen.GetTriggersForSpecifiedGate(this);
 

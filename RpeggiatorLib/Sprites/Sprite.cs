@@ -18,6 +18,10 @@ namespace RpeggiatorLib.Sprites
         /// </summary>
         public double Y { get; protected set; }
         /// <summary>
+        /// Z-axis layer when displayed.
+        /// </summary>
+        public int Z { get; private set; }
+        /// <summary>
         /// Width
         /// </summary>
         public double Width { get; protected set; }
@@ -25,15 +29,11 @@ namespace RpeggiatorLib.Sprites
         /// Height
         /// </summary>
         public double Height { get; protected set; }
-        /// <summary>
-        /// Z-axis layer when displayed.
-        /// </summary>
-        public int ZIndex { get; private set; }
 
         /// <summary>
         /// Inferred; top left corner coordinates.
         /// </summary>
-        public Point TopLeftCorner { get { return new Point(X, Y); } }
+        internal Point TopLeftCorner { get { return new Point(X, Y); } }
         /// <summary>
         /// Inferred; BottomRightX
         /// </summary>
@@ -47,18 +47,13 @@ namespace RpeggiatorLib.Sprites
         /// </summary>
         public double Surface { get { return Width * Height; } }
         /// <summary>
-        /// Inferred; Center point.
+        /// Inferred; Center point X-axis.
         /// </summary>
-        public Point CenterPoint { get { return new Point(X + (Width / 2), Y + (Height / 2)); } }
-
+        public double CenterPointX { get { return X + (Width / 2); } }
         /// <summary>
-        /// Constructor.
+        /// Inferred; Center point Y-axis.
         /// </summary>
-        /// <param name="datas">The json dynamic object.</param>
-        protected Sprite(dynamic datas) : this((double)datas.X, (double)datas.Y, (double)datas.Width, (double)datas.Height)
-        {
-
-        }
+        public double CenterPointY { get { return Y + (Height / 2); } }
 
         /// <summary>
         /// Constructor.
@@ -70,7 +65,7 @@ namespace RpeggiatorLib.Sprites
         protected Sprite(double x, double y, double width, double height)
             : this(x, y, width, height, 0)
         {
-            ZIndex = GetZIndexBySubType();
+            Z = GetZIndexBySubType();
         }
 
         // Private constructor.
@@ -80,7 +75,7 @@ namespace RpeggiatorLib.Sprites
             Y = y;
             Width = width;
             Height = height;
-            ZIndex = zIndex;
+            Z = zIndex;
         }
 
         /// <summary>
@@ -88,9 +83,9 @@ namespace RpeggiatorLib.Sprites
         /// </summary>
         /// <param name="newPosition">The new position.</param>
         /// <returns>The new instance.</returns>
-        public Sprite CopyToPosition(Point newPosition)
+        internal Sprite CopyToPosition(Point newPosition)
         {
-            return new Sprite(newPosition.X, newPosition.Y, Width, Height, ZIndex);
+            return new Sprite(newPosition.X, newPosition.Y, Width, Height, Z);
         }
 
         /// <summary>
@@ -99,7 +94,7 @@ namespace RpeggiatorLib.Sprites
         /// <param name="other">The second instance.</param>
         /// <param name="overlapMinimalRatio">Optionnal; The minimal ratio of this instance's surface which overlap the second instance.</param>
         /// <returns><c>True</c> if overlaps; <c>False</c> otherwise.</returns>
-        public bool Overlap(Sprite other, double overlapMinimalRatio = 0)
+        internal bool Overlap(Sprite other, double overlapMinimalRatio = 0)
         {
             double surfaceCovered = ComputeHorizontalOverlap(other) * ComputeVerticalOverlap(other);
 
@@ -116,7 +111,7 @@ namespace RpeggiatorLib.Sprites
         /// <summary>
         /// Overridden; behavior of the instance at new frame.
         /// </summary>
-        public virtual void BehaviorAtNewFrame()
+        internal virtual void BehaviorAtNewFrame()
         {
             // no default behavior to implement
         }
@@ -129,7 +124,7 @@ namespace RpeggiatorLib.Sprites
         /// <param name="goLeft">Indicates if the second instance is going to the left.</param>
         /// <param name="goUp">Indicates if the second instance is going up.</param>
         /// <returns>A <see cref="Point"/> indicating the new position for the second instance if overlapping; A fake <see cref="Point"/> otherwise.</returns>
-        public Point CheckOverlapAndAdjustPosition(Sprite currentPt, Sprite originalPt, bool? goLeft, bool? goUp)
+        internal Point CheckOverlapAndAdjustPosition(Sprite currentPt, Sprite originalPt, bool? goLeft, bool? goUp)
         {
             if (Overlap(currentPt))
             {
@@ -148,7 +143,7 @@ namespace RpeggiatorLib.Sprites
         /// <param name="spriteInMotion"><see cref="Sprite"/> in motion.</param>
         /// <param name="positionToCheck">Position to check.</param>
         /// <returns><see cref="Direction"/> <paramref name="spriteInMotion"/> come before its overlaps; <c>Null</c> if no overlap.</returns>
-        public Direction? DirectionSourceOfOverlap(Sprite spriteInMotion, Point positionToCheck)
+        internal Direction? DirectionSourceOfOverlap(Sprite spriteInMotion, Point positionToCheck)
         {
             Sprite spriteInPosition = spriteInMotion.CopyToPosition(positionToCheck);
 
@@ -199,12 +194,12 @@ namespace RpeggiatorLib.Sprites
         /// </summary>
         /// <param name="ratio">The size ratio.</param>
         /// <returns>The sprite copy.</returns>
-        public Sprite ResizeToRatio(double ratio)
+        internal Sprite ResizeToRatio(double ratio)
         {
             double a = ((1 - ratio) / 2);
             double newX = X + (a * Width);
             double newY = Y + (a * Height);
-            return new Sprite(newX, newY, Width * ratio, Height * ratio, ZIndex);
+            return new Sprite(newX, newY, Width * ratio, Height * ratio, Z);
         }
 
         /// <summary>
@@ -213,7 +208,7 @@ namespace RpeggiatorLib.Sprites
         /// </summary>
         /// <param name="other"><see cref="Sprite"/> to check.</param>
         /// <returns><c>True</c> if is inside; <c>False</c> otherwise.</returns>
-        public bool IsInside(Sprite other)
+        internal bool IsInside(Sprite other)
         {
             return other.X.GreaterEqual(X)
                 && other.BottomRightX.LowerEqual(BottomRightX)
@@ -229,7 +224,7 @@ namespace RpeggiatorLib.Sprites
         /// <param name="nextX">New point X-axis.</param>
         /// <param name="nextY">New point Y-axis.</param>
         /// <returns><c>True</c> if <paramref name="pointToCheck"/> is crossed; <c>False</c> otherwise.</returns>
-        public bool CheckPointIsCrossed(Point pointToCheck, double nextX, double nextY)
+        internal bool CheckPointIsCrossed(Point pointToCheck, double nextX, double nextY)
         {
             bool xIsCrossed = (X.LowerEqual(pointToCheck.X) && nextX.GreaterEqual(pointToCheck.X))
                 || (X.GreaterEqual(pointToCheck.X) && nextX.LowerEqual(pointToCheck.X));
@@ -243,7 +238,7 @@ namespace RpeggiatorLib.Sprites
         /// Checks if the <see cref="Engine.Player"/> is currently looking this instance.
         /// </summary>
         /// <returns><c>True</c> if looking; <c>False</c> otherwise.</returns>
-        public bool PlayerIsLookingTo()
+        internal bool PlayerIsLookingTo()
         {
             // Shortcut.
             Player p = Engine.Default.Player;

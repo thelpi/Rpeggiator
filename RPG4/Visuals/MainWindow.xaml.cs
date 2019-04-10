@@ -160,7 +160,7 @@ namespace RPG4.Visuals
             rct.SetValue(Canvas.TopProperty, sp.Y);
             rct.SetValue(Canvas.LeftProperty, sp.X);
 
-            Panel.SetZIndex(rct, sp.ZIndex);
+            Panel.SetZIndex(rct, sp.Z);
 
             cvsMain.Children.Add(rct);
         }
@@ -198,7 +198,7 @@ namespace RPG4.Visuals
                 DrawSizedPoint(Engine.Default.Player.HitSprite);
             }
 
-            Panel.SetZIndex(rctPlayer, Engine.Default.Player.ZIndex);
+            Panel.SetZIndex(rctPlayer, Engine.Default.Player.Z);
 
             #endregion Player
 
@@ -295,8 +295,8 @@ namespace RPG4.Visuals
             if (Engine.Default.Player.Inventory.LampIsOn)
             {
                 System.Windows.Point pt = new System.Windows.Point(
-                    Engine.Default.Player.CenterPoint.X / Engine.Default.CurrentScreen.Width,
-                    Engine.Default.Player.CenterPoint.Y / Engine.Default.CurrentScreen.Height);
+                    Engine.Default.Player.CenterPointX / Engine.Default.CurrentScreen.Width,
+                    Engine.Default.Player.CenterPointY / Engine.Default.CurrentScreen.Height);
 
                 RadialGradientBrush lampBrush = new RadialGradientBrush(Colors.Transparent, Colors.Black);
                 lampBrush.Center = pt;

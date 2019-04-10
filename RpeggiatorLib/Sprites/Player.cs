@@ -66,7 +66,7 @@ namespace RpeggiatorLib.Sprites
         }
 
         /// <inheritdoc />
-        public override void BehaviorAtNewFrame()
+        internal override void BehaviorAtNewFrame()
         {
             NewScreenEntrance = null;
             Point newPosition = Tools.ComputeMovementNextPointInDirection(X, Y, _movementTimeManager.Distance(Speed), Engine.Default.KeyPress.Direction);

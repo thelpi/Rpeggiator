@@ -26,7 +26,7 @@ namespace RpeggiatorLib.Exceptions
         /// <param name="callerSprite"><see cref="CallerSprite"/></param>
         /// <param name="structures"><see cref="Structures"/></param>
         /// <param name="newPosition"><paramref name="callerSprite"/> new position.</param>
-        public InfiniteOverlapCheckException(Sprite callerSprite, IReadOnlyCollection<Sprite> structures, Point newPosition)
+        internal InfiniteOverlapCheckException(Sprite callerSprite, IReadOnlyCollection<Sprite> structures, Point newPosition)
             : this(callerSprite.CopyToPosition(newPosition), structures) { }
 
         /// <summary>
@@ -34,7 +34,7 @@ namespace RpeggiatorLib.Exceptions
         /// </summary>
         /// <param name="callerSprite"><see cref="CallerSprite"/></param>
         /// <param name="structures"><see cref="Structures"/></param>
-        public InfiniteOverlapCheckException(Sprite callerSprite, IReadOnlyCollection<Sprite> structures)
+        internal InfiniteOverlapCheckException(Sprite callerSprite, IReadOnlyCollection<Sprite> structures)
             : base(Messages.InfiniteOverlapCheckExceptionMessage)
         {
             CallerSprite = callerSprite;

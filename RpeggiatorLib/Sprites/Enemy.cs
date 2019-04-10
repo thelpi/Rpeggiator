@@ -41,7 +41,7 @@ namespace RpeggiatorLib.Sprites
         }
 
         /// <inheritdoc />
-        public override void BehaviorAtNewFrame()
+        internal override void BehaviorAtNewFrame()
         {
             Point pt = _path.ComputeNextPosition(this, _movementTimeManager.Distance(Speed));
             X = pt.X;

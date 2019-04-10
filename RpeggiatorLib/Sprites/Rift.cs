@@ -18,7 +18,7 @@
         }
 
         /// <inheritdoc />
-        public override void BehaviorAtNewFrame()
+        internal override void BehaviorAtNewFrame()
         {
             CurrentLifePoints -= Engine.Default.CurrentScreen.HitByAnActionnedItem(this);
         }

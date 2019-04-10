@@ -28,7 +28,7 @@
         /// Constructor.
         /// </summary>
         /// <param name="point">Drop coordinates.</param>
-        public ActionnedBomb(Point point) : base(point.X, point.Y,
+        internal ActionnedBomb(Point point) : base(point.X, point.Y,
             Constants.Bomb.WIDTH, Constants.Bomb.HEIGHT)
         {
             _pendingTimeManager = new Elapser(Constants.Bomb.TIME_WHILE_PENDING);
@@ -36,7 +36,7 @@
         }
 
         /// <inheritdoc />
-        public override void BehaviorAtNewFrame()
+        internal override void BehaviorAtNewFrame()
         {
             // Explosion beginning.
             if (_explodingTimeManager == null && _pendingTimeManager.Elapsed)

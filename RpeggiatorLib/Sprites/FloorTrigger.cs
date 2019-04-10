@@ -29,7 +29,7 @@
         }
 
         /// <inheritdoc />
-        public override void BehaviorAtNewFrame()
+        internal override void BehaviorAtNewFrame()
         {
             if (Engine.Default.IsTriggered(this))
             {

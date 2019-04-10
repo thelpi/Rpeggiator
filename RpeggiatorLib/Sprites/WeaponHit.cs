@@ -13,7 +13,7 @@
         /// <param name="y"><see cref="Sprite.Y"/></param>
         /// <param name="width"><see cref="Sprite.Width"/></param>
         /// <param name="height"><see cref="Sprite.Height"/></param>
-        public WeaponHit(double x, double y, double width, double height)
+        internal WeaponHit(double x, double y, double width, double height)
             : base(x, y, width, height) { }
     }
 }

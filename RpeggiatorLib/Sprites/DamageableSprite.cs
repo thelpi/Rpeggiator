@@ -23,7 +23,9 @@
         /// Constructor.
         /// </summary>
         /// <param name="damageableSpriteJson">The json dynamic object.</param>
-        public DamageableSprite(dynamic damageableSpriteJson) : base((object)damageableSpriteJson) { }
+        public DamageableSprite(dynamic damageableSpriteJson)
+            : base((double)damageableSpriteJson.X, (double)damageableSpriteJson.Y,
+                  (double)damageableSpriteJson.Width, (double)damageableSpriteJson.Height) { }
 
         /// <summary>
         /// Constructor.
