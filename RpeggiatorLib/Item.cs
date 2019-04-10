@@ -1,7 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using RpeggiatorLib.Enums;
-using RpeggiatorLib.Graphic;
 
 namespace RpeggiatorLib
 {
@@ -33,10 +32,6 @@ namespace RpeggiatorLib
         /// Maximal quantity initially carriable in the <see cref="Inventory"/>.
         /// </summary>
         public int InitialMaximalQuantity { get; private set; }
-        /// <summary>
-        /// <see cref="ISpriteGraphic"/> as loot.
-        /// </summary>
-        public ISpriteGraphic LootGraphic { get; private set; }
         /// <summary>
         /// If this item is ammunitions for another item, indicates this item.
         /// </summary>
@@ -85,46 +80,40 @@ namespace RpeggiatorLib
                 Type = ItemType.Bomb,
                 Name = Names.ItemBomb,
                 Unique = false,
-                InitialMaximalQuantity = 20,
-                LootGraphic = new ImageBrushGraphic("Bomb")
+                InitialMaximalQuantity = 20
             });
             _items.Add(new Item
             {
                 Type = ItemType.SmallLifePotion,
                 Name = Names.ItemLifePotionSmall,
                 Unique = false,
-                InitialMaximalQuantity = 12,
-                LootGraphic = new ImageBrushGraphic("LifePotionSmall")
+                InitialMaximalQuantity = 12
             });
             _items.Add(new Item
             {
                 Type = ItemType.MediumLifePotion,
                 Name = Names.ItemLifePotionMedium,
                 Unique = false,
-                InitialMaximalQuantity = 6,
-                LootGraphic = new ImageBrushGraphic("LifePotionMedium")
+                InitialMaximalQuantity = 6
             });
             _items.Add(new Item
             {
                 Type = ItemType.LargeLifePotion,
                 Name = Names.ItemLifePotionLarge,
                 Unique = false,
-                InitialMaximalQuantity = 3,
-                LootGraphic = new ImageBrushGraphic("LifePotionLarge")
+                InitialMaximalQuantity = 3
             });
             _items.Add(new Item
             {
                 Type = ItemType.Lamp,
                 Name = Names.ItemLamp,
-                Unique = true,
-                LootGraphic = new ImageBrushGraphic("Lamp")
+                Unique = true
             });
             _items.Add(new Item
             {
                 Type = ItemType.Bow,
                 Name = Names.ItemBow,
-                Unique = true,
-                LootGraphic = new ImageBrushGraphic("Bow")
+                Unique = true
             });
             _items.Add(new Item
             {
@@ -132,7 +121,6 @@ namespace RpeggiatorLib
                 Name = Names.ItemArrow,
                 Unique = false,
                 InitialMaximalQuantity = 20,
-                LootGraphic = new ImageBrushGraphic("Arrow"),
                 AmmoFor = ItemType.Bow
             });
             // Sets the use delay for every items of the list.

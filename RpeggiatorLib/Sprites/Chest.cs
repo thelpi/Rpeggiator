@@ -1,6 +1,4 @@
-﻿using RpeggiatorLib.Enums;
-using RpeggiatorLib.Graphic;
-using System.Linq;
+﻿using System.Linq;
 
 namespace RpeggiatorLib.Sprites
 {
@@ -12,15 +10,12 @@ namespace RpeggiatorLib.Sprites
         private int? _keyId;
         private Enums.ItemType? _itemId;
         private int _quantity;
-        private ISpriteGraphic _openGraphic;
         private int? _keyIdContainer;
 
         /// <summary>
         /// Indicates if the chest is open.
         /// </summary>
         public bool IsOpen { get; private set; }
-        /// <inheritdoc />
-        public override ISpriteGraphic Graphic { get { return IsOpen ? _openGraphic : base.Graphic; } }
 
         /// <summary>
         /// Constructor.
@@ -34,8 +29,6 @@ namespace RpeggiatorLib.Sprites
             _quantity = chestJsonDatas.Quantity;
             _keyId = chestJsonDatas.KeyId;
             _keyIdContainer = chestJsonDatas.KeyIdContainer;
-            Graphic = new ImageBrushGraphic("Chest");
-            _openGraphic = new ImageBrushGraphic("OpenChest");
         }
 
         /// <summary>

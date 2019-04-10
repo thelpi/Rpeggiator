@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Drawing.Imaging;
 using System.IO;
 using System.Windows.Media;
@@ -8,12 +9,22 @@ namespace RPG4
 {
     internal static class Tools
     {
-        private static Dictionary<RpeggiatorLib.Graphic.ISpriteGraphic, Brush> _toto =
-            new Dictionary<RpeggiatorLib.Graphic.ISpriteGraphic, Brush>();
+        private static Random _rdm = new Random(DateTime.Now.Millisecond);
 
-        public static Brush GetRenderingBrush(RpeggiatorLib.Graphic.ISpriteGraphic graphic)
+        private static Dictionary<RpeggiatorLib.Sprites.Sprite, Brush> _toto =
+            new Dictionary<RpeggiatorLib.Sprites.Sprite, Brush>();
+
+        public static Brush GetRenderingBrush(RpeggiatorLib.Sprites.Sprite sprite)
         {
-            if (!_toto.ContainsKey(graphic))
+            if (!_toto.ContainsKey(sprite))
+            {
+                _toto.Add(sprite, new SolidColorBrush(Color.FromRgb((byte)_rdm.Next(0, byte.MaxValue + 1),
+                    (byte)_rdm.Next(0, byte.MaxValue + 1),
+                    (byte)_rdm.Next(0, byte.MaxValue + 1))));
+            }
+
+            return _toto[sprite];
+            /*if (!_toto.ContainsKey(graphic))
             {
                 if (graphic.GetType() == typeof(RpeggiatorLib.Graphic.ImageBrushGraphic))
                 {
@@ -45,7 +56,7 @@ namespace RPG4
                     throw new System.NotImplementedException();
                 }
             }
-            return _toto[graphic];
+            return _toto[graphic];*/
         }
     }
 }

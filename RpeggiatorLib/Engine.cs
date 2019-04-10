@@ -225,5 +225,43 @@ namespace RpeggiatorLib
 
             return null;
         }
+
+        /// <summary>
+        /// Gets the <see cref="CurrentScreen"/> opacity, depending on the day / hour and the <see cref="Screen"/> proeprties.
+        /// </summary>
+        /// <returns>The opacity value.</returns>
+        public double GetCurrentScreenOpacity()
+        {
+            double currentHour = Hour;
+
+            // after dawn, before dusk
+            double dayTimeDarknessOpacity;
+            if (currentHour.GreaterEqual(Constants.NIGHT_DAWN_HOUR) && currentHour.Lower(Constants.NIGHT_DUSK_HOUR))
+            {
+                dayTimeDarknessOpacity = 0;
+            }
+            // in the darkness peak
+            else if (currentHour.GreaterEqual(Constants.NIGHT_PEAK_HOUR_BEGIN) || currentHour.Lower(Constants.NIGHT_PEAK_HOUR_END))
+            {
+                dayTimeDarknessOpacity = Constants.NIGHT_DARKNESS_OPACITY;
+            }
+            // between dusk and darkness peak
+            else if (currentHour.GreaterEqual(Constants.NIGHT_DUSK_HOUR) && currentHour.Lower(Constants.NIGHT_PEAK_HOUR_BEGIN))
+            {
+                double nightProgressionRatio = (currentHour - Constants.NIGHT_DUSK_HOUR) / (Constants.NIGHT_PEAK_HOUR_BEGIN - Constants.NIGHT_DUSK_HOUR);
+                dayTimeDarknessOpacity = Constants.NIGHT_DARKNESS_OPACITY * nightProgressionRatio;
+            }
+            // between darkness peak and dawn
+            else
+            {
+                double nightProgressionRatio = 1 - ((currentHour - Constants.NIGHT_PEAK_HOUR_END) / (Constants.NIGHT_DAWN_HOUR - Constants.NIGHT_PEAK_HOUR_END));
+                dayTimeDarknessOpacity = Constants.NIGHT_DARKNESS_OPACITY * nightProgressionRatio;
+            }
+
+            // Shortcut.
+            double darknessOpacity = CurrentScreen.DarknessOpacity;
+
+            return darknessOpacity.Greater(dayTimeDarknessOpacity) ? darknessOpacity : dayTimeDarknessOpacity;
+        }
     }
 }

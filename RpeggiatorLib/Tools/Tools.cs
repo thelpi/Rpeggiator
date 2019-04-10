@@ -1,8 +1,6 @@
 ﻿using System;
 using System.IO;
-using System.Linq;
 using System.Reflection;
-using System.Text;
 using Newtonsoft.Json;
 
 namespace RpeggiatorLib
@@ -10,7 +8,7 @@ namespace RpeggiatorLib
     /// <summary>
     /// Tool methods. 
     /// </summary>
-    public static class Tools
+    internal static class Tools
     {
         private static Random _random = new Random(DateTime.Now.Millisecond);
 
@@ -19,7 +17,7 @@ namespace RpeggiatorLib
         /// </summary>
         /// <param name="screenIndex">Screen index.</param>
         /// <returns>Dynamic screen datas.</returns>
-        public static dynamic GetScreenDatasFromIndex(int screenIndex)
+        internal static dynamic GetScreenDatasFromIndex(int screenIndex)
         {
             string jsonRawContent;
 
@@ -42,7 +40,7 @@ namespace RpeggiatorLib
         /// </summary>
         /// <param name="frameDistance">Distance made straightforward.</param>
         /// <returns>Diagonal distance.</returns>
-        public static double FrameDiagonalDistance(double frameDistance)
+        internal static double FrameDiagonalDistance(double frameDistance)
         {
             return Math.Sqrt((frameDistance * frameDistance) / 2);
         }
@@ -54,7 +52,7 @@ namespace RpeggiatorLib
         /// <param name="b">Second known number.</param>
         /// <param name="c">Third known number.</param>
         /// <returns>A tuple of solutions; or <c>Null</c> if no solution.</returns>
-        public static Tuple<double, double> ResolveQuadraticEquation(double a, double b, double c)
+        internal static Tuple<double, double> ResolveQuadraticEquation(double a, double b, double c)
         {
             double delta = (b*b)-(4*a*c);
 
@@ -70,7 +68,7 @@ namespace RpeggiatorLib
         /// <param name="p1">First point.</param>
         /// <param name="p2">Second point.</param>
         /// <returns>Slope and initial ordinate; <c>Null</c> if both points have the same abscissa.</returns>
-        public static Tuple<double, double> GetLinearFunctionFromPoints(Point p1, Point p2)
+        internal static Tuple<double, double> GetLinearFunctionFromPoints(Point p1, Point p2)
         {
             if (p2.X.Equal(p1.X))
             {
@@ -88,7 +86,7 @@ namespace RpeggiatorLib
         /// <param name="d">The distance, in pixels.</param>
         /// <param name="shrinkToDestination">Optionnal; <c>True</c> to not go further than <paramref name="pDest"/>; <c>False</c> otherwise.</param>
         /// <returns>Coordinates of the point.</returns>
-        public static Point GetPointOnLine(Point pStart, Point pDest, double d, bool shrinkToDestination = false)
+        internal static Point GetPointOnLine(Point pStart, Point pDest, double d, bool shrinkToDestination = false)
         {
             if (d == 0)
             {
@@ -182,18 +180,9 @@ namespace RpeggiatorLib
         /// <param name="minIncluded">Minimal value (included).</param>
         /// <param name="maxExcluded">Maximal value (excluded).</param>
         /// <returns>Random <see cref="int"/>.</returns>
-        public static int GetRandomNumber(int minIncluded, int maxExcluded)
+        internal static int GetRandomNumber(int minIncluded, int maxExcluded)
         {
             return _random.Next(minIncluded, maxExcluded);
-        }
-
-        /// <summary>
-        /// Gets a random <see cref="double"/> between 0 (included) and 1 (excluded).
-        /// </summary>
-        /// <returns>Random <see cref="double"/>.</returns>
-        public static double GetRandomNumber()
-        {
-            return _random.NextDouble();
         }
 
         /// <summary>
@@ -202,7 +191,7 @@ namespace RpeggiatorLib
         /// <param name="a">First value.</param>
         /// <param name="b">Second value.</param>
         /// <returns><c>True</c> if equals; <c>False</c> otherwise.</returns>
-        public static bool Equal(this double a, double b)
+        internal static bool Equal(this double a, double b)
         {
             return Math.Abs(a - b) < Constants.TYPE_DOUBLE_COMPARISON_TOLERANCE;
         }
@@ -213,7 +202,7 @@ namespace RpeggiatorLib
         /// <param name="a">First value.</param>
         /// <param name="b">Second value.</param>
         /// <returns><c>True</c> if <paramref name="a"/> is lower; <c>False</c> otherwise.</returns>
-        public static bool Lower(this double a, double b)
+        internal static bool Lower(this double a, double b)
         {
             return a < b && Math.Abs(a - b) >= Constants.TYPE_DOUBLE_COMPARISON_TOLERANCE;
         }
@@ -224,7 +213,7 @@ namespace RpeggiatorLib
         /// <param name="a">First value.</param>
         /// <param name="b">Second value.</param>
         /// <returns><c>True</c> if <paramref name="a"/> is greater; <c>False</c> otherwise.</returns>
-        public static bool Greater(this double a, double b)
+        internal static bool Greater(this double a, double b)
         {
             return a > b && Math.Abs(a - b) >= Constants.TYPE_DOUBLE_COMPARISON_TOLERANCE;
         }
@@ -235,7 +224,7 @@ namespace RpeggiatorLib
         /// <param name="a">First value.</param>
         /// <param name="b">Second value.</param>
         /// <returns><c>True</c> if <paramref name="a"/> is lower or equals; <c>False</c> otherwise.</returns>
-        public static bool LowerEqual(this double a, double b)
+        internal static bool LowerEqual(this double a, double b)
         {
             return a.Equal(b) || a.Lower(b);
         }
@@ -246,7 +235,7 @@ namespace RpeggiatorLib
         /// <param name="a">First value.</param>
         /// <param name="b">Second value.</param>
         /// <returns><c>True</c> if <paramref name="a"/> is greater or equals; <c>False</c> otherwise.</returns>
-        public static bool GreaterEqual(this double a, double b)
+        internal static bool GreaterEqual(this double a, double b)
         {
             return a.Equal(b) || a.Greater(b);
         }
@@ -259,7 +248,7 @@ namespace RpeggiatorLib
         /// <param name="distance">Distance to do (pixels).</param>
         /// <param name="direction"><see cref="Enums.Direction"/>; can be <c>Null</c> (no move).</param>
         /// <returns>The next position.</returns>
-        public static Point ComputeMovementNextPointInDirection(double x, double y, double distance, Enums.Direction? direction)
+        internal static Point ComputeMovementNextPointInDirection(double x, double y, double distance, Enums.Direction? direction)
         {
             // Shortcut.
             KeyPress keys = Engine.Default.KeyPress;
@@ -297,16 +286,6 @@ namespace RpeggiatorLib
             }
 
             return new Point(x, y);
-        }
-
-        /// <summary>
-        /// Gets the Hexadecimal color value of a <see cref="System.Windows.Media.Color"/>.
-        /// </summary>
-        /// <param name="c"><see cref="System.Windows.Media.Color"/></param>
-        /// <returns>Hexadecimal color value.</returns>
-        public static string HexFromColor(System.Windows.Media.Color c)
-        {
-            return string.Format("#{0:X2}{1:X2}{2:X2}{3:X2}", c.A, c.R, c.G, c.B);
         }
     }
 }

@@ -23,7 +23,9 @@ namespace RPG4.Visuals
             InitializeComponent();
         }
 
-        private void btnTest_Click(object sender, RoutedEventArgs e)
+        private void btnTest_Click(object sender, RoutedEventArgs e) { }
+
+        /*private void btnTest_Click(object sender, RoutedEventArgs e)
         {
             System.Drawing.Color black = System.Drawing.Color.FromArgb(Colors.Black.A, Colors.Black.R, Colors.Black.G, Colors.Black.B);
 
@@ -167,7 +169,7 @@ namespace RPG4.Visuals
             {
                 sw.WriteLine(fullContent.ToString());
             }
-        }
+        }*/
     }
 
     public class Rien

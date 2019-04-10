@@ -12,7 +12,6 @@ namespace RpeggiatorLib
     {
         private List<InventoryItem> _items;
         private Dictionary<ItemType, int> _maxQuantityByItem;
-        private int _creationHashcode;
         private List<int> _keyring;
 
         /// <summary>
@@ -41,13 +40,16 @@ namespace RpeggiatorLib
         /// Keyring.
         /// </summary>
         public IReadOnlyCollection<int> Keyring { get { return _keyring; } }
+        /// <summary>
+        /// Inventory max size.
+        /// </summary>
+        public int InventoryMaxSize { get { return Constants.Inventory.SIZE; } }
 
         /// <summary>
         /// Constructor.
         /// </summary>
-        internal Inventory(int creationHashcode)
+        internal Inventory()
         {
-            _creationHashcode = creationHashcode;
             _items = new List<InventoryItem>();
             _maxQuantityByItem = new Dictionary<ItemType, int>();
             LampIsOn = false;
@@ -155,13 +157,13 @@ namespace RpeggiatorLib
                     droppedItem = new ActionnedBomb(ComputeDropCoordinates(Constants.Bomb.WIDTH, Constants.Bomb.HEIGHT));
                     break;
                 case ItemType.SmallLifePotion:
-                    Engine.Default.Player.DrinkLifePotion(_creationHashcode, Constants.Inventory.SMALL_LIFE_POTION_RECOVERY_LIFE_POINTS);
+                    Engine.Default.Player.DrinkLifePotion(Constants.Inventory.SMALL_LIFE_POTION_RECOVERY_LIFE_POINTS);
                     break;
                 case ItemType.MediumLifePotion:
-                    Engine.Default.Player.DrinkLifePotion(_creationHashcode, Constants.Inventory.MEDIUM_LIFE_POTION_RECOVERY_LIFE_POINTS);
+                    Engine.Default.Player.DrinkLifePotion(Constants.Inventory.MEDIUM_LIFE_POTION_RECOVERY_LIFE_POINTS);
                     break;
                 case ItemType.LargeLifePotion:
-                    Engine.Default.Player.DrinkLifePotion(_creationHashcode, Constants.Inventory.LARGE_LIFE_POTION_RECOVERY_LIFE_POINTS);
+                    Engine.Default.Player.DrinkLifePotion(Constants.Inventory.LARGE_LIFE_POTION_RECOVERY_LIFE_POINTS);
                     break;
                 case ItemType.Lamp:
                     LampIsOn = !LampIsOn;

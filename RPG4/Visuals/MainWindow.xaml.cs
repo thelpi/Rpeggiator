@@ -27,6 +27,8 @@ namespace RPG4.Visuals
     {
         private const string _playerUid = "PlayerUid";
         private const string _darknessUid = "DarknessUid";
+        private const string UNIQUE_TIMESTAMP_PATTERN = "fffffff";
+        private const double MIN_DELAY_BETWEEN_FRAMES = 10;
 
         private bool _hitKeyPressed;
         private bool _actionKeyPressed;
@@ -41,10 +43,6 @@ namespace RPG4.Visuals
         {
             InitializeComponent();
 
-            // Size of the player never changes.
-            // For perforamnce reason, it's better to not initialize the engine inside the window constructor.
-            rctPlayer.Height = Constants.Player.SPRITE_SIZE_Y;
-            rctPlayer.Width = Constants.Player.SPRITE_SIZE_X;
             rctPlayer.Uid = _playerUid;
 
             rctDarkness.Uid = _darknessUid;
@@ -98,8 +96,8 @@ namespace RPG4.Visuals
                         return;
                     }
                     stopWatch.Stop();
-                    double stayToElapse = Constants.MIN_DELAY_BETWEEN_FRAMES - stopWatch.Elapsed.TotalMilliseconds;
-                    if (stayToElapse.Greater(0))
+                    double stayToElapse = MIN_DELAY_BETWEEN_FRAMES - stopWatch.Elapsed.TotalMilliseconds;
+                    if (stayToElapse > 0)
                     {
                         Thread.Sleep((int)stayToElapse);
                     }
@@ -111,7 +109,7 @@ namespace RPG4.Visuals
                 {
                     _currentScreenIndex = Engine.Default.CurrentScreenId;
 
-                    cvsMain.Background = Tools.GetRenderingBrush(Engine.Default.CurrentScreen.Graphic);
+                    cvsMain.Background = Tools.GetRenderingBrush(Engine.Default.CurrentScreen);
                     cvsMain.Height = Engine.Default.CurrentScreen.Height;
                     cvsMain.Width = Engine.Default.CurrentScreen.Width;
 
@@ -151,13 +149,13 @@ namespace RPG4.Visuals
         {
             Rectangle rct = new Rectangle
             {
-                Fill = Tools.GetRenderingBrush(sp.Graphic),
+                Fill = Tools.GetRenderingBrush(sp),
                 Width = sp.Width,
                 Height = sp.Height
             };
             if (fixedId)
             {
-                rct.Uid = DateTime.Now.ToString(Constants.UNIQUE_TIMESTAMP_PATTERN);
+                rct.Uid = DateTime.Now.ToString(UNIQUE_TIMESTAMP_PATTERN);
             }
             rct.SetValue(Canvas.TopProperty, sp.Y);
             rct.SetValue(Canvas.LeftProperty, sp.X);
@@ -187,10 +185,13 @@ namespace RPG4.Visuals
 
             #region Player
 
+            rctPlayer.Height = Engine.Default.Player.Height;
+            rctPlayer.Width = Engine.Default.Player.Width;
+
             rctPlayer.SetValue(Canvas.TopProperty, Engine.Default.Player.Y);
             rctPlayer.SetValue(Canvas.LeftProperty, Engine.Default.Player.X);
 
-            rctPlayer.Fill = Tools.GetRenderingBrush(Engine.Default.Player.Graphic);
+            rctPlayer.Fill = Tools.GetRenderingBrush(Engine.Default.Player);
 
             if (Engine.Default.Player.IsHitting)
             {
@@ -223,7 +224,7 @@ namespace RPG4.Visuals
         {
             pgbPlayerLifePoints.Maximum = Engine.Default.Player.MaximalLifePoints;
             pgbPlayerLifePoints.Value = Engine.Default.Player.CurrentLifePoints;
-            for (int i = 0; i < Constants.Inventory.SIZE; i++)
+            for (int i = 0; i < Engine.Default.Player.Inventory.InventoryMaxSize; i++)
             {
                 Rectangle itemSlotRct = (Rectangle)FindName(string.Format("rctItem{0}", i));
                 TextBlock itemSlotTxt = (TextBlock)FindName(string.Format("txbItem{0}", i));
@@ -236,7 +237,7 @@ namespace RPG4.Visuals
                 {
                     InventoryItem item = Engine.Default.Player.Inventory.DisplayableItems.ElementAt(i);
                     itemSlotTxt.Text = item.DisplayableQuantity.ToString().PadLeft(3, '0');
-                    itemSlotRct.Fill = Tools.GetRenderingBrush(item.BaseItem.LootGraphic);
+                    //itemSlotRct.Fill = Tools.GetRenderingBrush(item.BaseItem); // .LootGraphic
                 }
             }
             txtCoins.Text = Engine.Default.Player.Inventory.Coins.ToString().PadLeft(3, '0');
@@ -255,7 +256,7 @@ namespace RPG4.Visuals
                     _hitKeyPressed = true;
                     break;
                 case Key.D0:
-                    _inventoryKeyPressed = Constants.Inventory.SIZE - 1;
+                    _inventoryKeyPressed = Engine.Default.Player.Inventory.InventoryMaxSize - 1;
                     break;
                 case Key.D1:
                     _inventoryKeyPressed = 0;
@@ -289,35 +290,7 @@ namespace RPG4.Visuals
 
         private void SetLightAndDarkness()
         {
-            double currentHour = Engine.Default.Hour;
-
-            double darknessOpacity = Engine.Default.CurrentScreen.DarknessOpacity;
-
-            // after dawn, before dusk
-            double dayTimeDarknessOpacity;
-            if (currentHour.GreaterEqual(Constants.NIGHT_DAWN_HOUR) && currentHour.Lower(Constants.NIGHT_DUSK_HOUR))
-            {
-                dayTimeDarknessOpacity = 0;
-            }
-            // in the darkness peak
-            else if (currentHour.GreaterEqual(Constants.NIGHT_PEAK_HOUR_BEGIN) || currentHour.Lower(Constants.NIGHT_PEAK_HOUR_END))
-            {
-                dayTimeDarknessOpacity = Constants.NIGHT_DARKNESS_OPACITY;
-            }
-            // between dusk and darkness peak
-            else if (currentHour.GreaterEqual(Constants.NIGHT_DUSK_HOUR) && currentHour.Lower(Constants.NIGHT_PEAK_HOUR_BEGIN))
-            {
-                double nightProgressionRatio = (currentHour - Constants.NIGHT_DUSK_HOUR) / (Constants.NIGHT_PEAK_HOUR_BEGIN - Constants.NIGHT_DUSK_HOUR);
-                dayTimeDarknessOpacity = Constants.NIGHT_DARKNESS_OPACITY * nightProgressionRatio;
-            }
-            // between darkness peak and dawn
-            else
-            {
-                double nightProgressionRatio = 1 - ((currentHour - Constants.NIGHT_PEAK_HOUR_END) / (Constants.NIGHT_DAWN_HOUR - Constants.NIGHT_PEAK_HOUR_END));
-                dayTimeDarknessOpacity = Constants.NIGHT_DARKNESS_OPACITY * nightProgressionRatio;
-            }
-
-            rctDarkness.Opacity = darknessOpacity.Greater(dayTimeDarknessOpacity) ? darknessOpacity : dayTimeDarknessOpacity;
+            rctDarkness.Opacity = Engine.Default.GetCurrentScreenOpacity();
 
             if (Engine.Default.Player.Inventory.LampIsOn)
             {

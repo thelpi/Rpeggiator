@@ -1,6 +1,4 @@
-﻿using RpeggiatorLib.Graphic;
-
-namespace RpeggiatorLib.Sprites
+﻿namespace RpeggiatorLib.Sprites
 {
     /// <summary>
     /// Represents a trigger which can be activated by walking on it.
@@ -13,15 +11,11 @@ namespace RpeggiatorLib.Sprites
         private double _actionDuration;
         // Trigger time manager.
         private Elapser _triggerTimeManager;
-        // Activated graphic.
-        private ISpriteGraphic _activatedGraphic;
 
         /// <summary>
         /// Indicates if the trigger is currently activated.
         /// </summary>
         public bool IsActivated { get { return _triggerTimeManager?.Elapsed == false; } }
-        /// <inheritdoc />
-        public override ISpriteGraphic Graphic { get { return IsActivated ? _activatedGraphic : base.Graphic; } }
 
         /// <summary>
         /// Constructor.
@@ -32,8 +26,6 @@ namespace RpeggiatorLib.Sprites
             (double)triggerJson.Width, (double)triggerJson.Height)
         {
             _actionDuration = triggerJson.ActionDuration;
-            base.Graphic = new ImageBrushGraphic("TriggerOff");
-            _activatedGraphic = new ImageBrushGraphic("TriggerOn");
         }
 
         /// <inheritdoc />

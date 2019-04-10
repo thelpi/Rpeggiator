@@ -1,6 +1,4 @@
-﻿using RpeggiatorLib.Graphic;
-
-namespace RpeggiatorLib.Sprites
+﻿namespace RpeggiatorLib.Sprites
 {
     /// <summary>
     /// Represents a sprite which can be damaged.
@@ -34,10 +32,9 @@ namespace RpeggiatorLib.Sprites
         /// <param name="y"><see cref="Sprite.Y"/></param>
         /// <param name="width"><see cref="Sprite.Width"/></param>
         /// <param name="height"><see cref="Sprite.Height"/></param>
-        /// <param name="graphic"><see cref="Sprite.Graphic"/></param>
         /// <param name="lifepoints"><see cref="CurrentLifePoints"/></param>
-        public DamageableSprite(double x, double y, double width, double height, ISpriteGraphic graphic, double lifepoints) 
-            : base(x, y, width, height, graphic)
+        public DamageableSprite(double x, double y, double width, double height, double lifepoints) 
+            : base(x, y, width, height)
         {
             CurrentLifePoints = lifepoints;
         }

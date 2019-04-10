@@ -1,5 +1,4 @@
 ﻿using RpeggiatorLib.Enums;
-using RpeggiatorLib.Graphic;
 using System;
 
 namespace RpeggiatorLib.Sprites
@@ -30,16 +29,15 @@ namespace RpeggiatorLib.Sprites
         /// <param name="floorItemJson">The json dynamic object.</param>
         public PickableItem(dynamic floorItemJson) : base(
             (double)floorItemJson.X, (double)floorItemJson.Y,
-            Constants.Item.LOOT_WIDTH, Constants.Item.LOOT_HEIGHT,
-            Item.GetItem((Enums.ItemType)floorItemJson.ItemId).LootGraphic)
+            Constants.Item.LOOT_WIDTH, Constants.Item.LOOT_HEIGHT)
         {
             _itemId = floorItemJson.ItemId;
             Quantity = floorItemJson.Quantity;
         }
 
         // Private constructor.
-        private PickableItem(double x, double y, double with, double height, ISpriteGraphic graphic,
-            Enums.ItemType? itemId, int quantity, double? timeBeForeDisapear) : base(x, y, with, height, graphic)
+        private PickableItem(double x, double y, double with, double height,
+            Enums.ItemType? itemId, int quantity, double? timeBeForeDisapear) : base(x, y, with, height)
         {
             _itemId = itemId;
             Quantity = quantity;
@@ -63,7 +61,6 @@ namespace RpeggiatorLib.Sprites
                 enemy.Y + (enemy.Height / 2) - (Constants.Item.LOOT_HEIGHT / 2),
                 Constants.Item.LOOT_WIDTH,
                 Constants.Item.LOOT_HEIGHT,
-                itemId.HasValue ? Item.GetItem(itemId.Value).LootGraphic : Constants.Item.COIN_GRAPHIC,
                 itemId,
                 quantity,
                 Constants.Item.LOOT_LIFETIME);

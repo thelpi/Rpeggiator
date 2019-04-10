@@ -1,6 +1,5 @@
-﻿using RpeggiatorLib.Enums;
-using RpeggiatorLib.Graphic;
-using System.Linq;
+﻿using System.Linq;
+using RpeggiatorLib.Enums;
 
 namespace RpeggiatorLib.Sprites
 {
@@ -16,8 +15,6 @@ namespace RpeggiatorLib.Sprites
         private Elapser _recoveryManager;
         // Recovery time, in milliseconds.
         private double _recoveryTime;
-        // Recovery graphic.
-        private ISpriteGraphic _recoveryGraphic;
 
         /// <summary>
         /// Maximal number of life points.
@@ -53,8 +50,6 @@ namespace RpeggiatorLib.Sprites
         /// Indicates the player is currently recovering from an hit.
         /// </summary>
         public bool IsRecovering { get { return _recoveryManager?.Elapsed == false; } }
-        /// <inheritdoc />
-        public override ISpriteGraphic Graphic { get { return IsRecovering ? Constants.Player.RECOVERY_GRAPHIC : base.Graphic; } }
 
         /// <summary>
         /// Constructor.
@@ -63,22 +58,19 @@ namespace RpeggiatorLib.Sprites
         /// <param name="y"><see cref="Sprite.Y"/></param>
         /// <param name="width"><see cref="Sprite.Width"/></param>
         /// <param name="height"><see cref="Sprite.Height"/></param>
-        /// <param name="graphic"><see cref="Sprite.Graphic"/></param>
         /// <param name="maximalLifePoints"><see cref="MaximalLifePoints"/></param>
         /// <param name="hitLifePointCost"><see cref="HitLifePointCost"/></param>
         /// <param name="speed"><see cref="_originalSpeed"/></param>
         /// <param name="recoveryTime"><see cref="_recoveryTime"/></param>
-        /// <param name="recoveryGraphic"><see cref="_recoveryGraphic"/></param>
-        protected LifeSprite(double x, double y, double width, double height, ISpriteGraphic graphic,
-            double maximalLifePoints, double hitLifePointCost, double speed, double recoveryTime, ISpriteGraphic recoveryGraphic)
-            : base(x, y, width, height, graphic, maximalLifePoints)
+        protected LifeSprite(double x, double y, double width, double height,
+            double maximalLifePoints, double hitLifePointCost, double speed, double recoveryTime)
+            : base(x, y, width, height, maximalLifePoints)
         {
             MaximalLifePoints = maximalLifePoints;
             HitLifePointCost = hitLifePointCost;
             _originalSpeed = speed;
             _recoveryManager = null;
             _recoveryTime = recoveryTime;
-            _recoveryGraphic = recoveryGraphic;
             ExplosionLifePointCost = Constants.Bomb.EXPLOSION_LIFE_POINT_COST;
             ArrowLifePointCost = Constants.Arrow.LIFE_POINT_COST;
         }
@@ -98,7 +90,6 @@ namespace RpeggiatorLib.Sprites
             // TODO : set values in JSON.
             _recoveryManager = null;
             _recoveryTime = 0;
-            _recoveryGraphic = null;
         }
 
         /// <summary>

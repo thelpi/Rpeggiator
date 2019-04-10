@@ -55,9 +55,6 @@
     <Compile Include="Enums\ItemType.cs" />
     <Compile Include="Exceptions\InfiniteOverlapCheckException.cs" />
     <Compile Include="Exceptions\NoQuadraticSolutionException.cs" />
-    <Compile Include="Graphic\ImageBrushGraphic.cs" />
-    <Compile Include="Graphic\PlainBrushGraphic.cs" />
-    <Compile Include="Graphic\SpriteGraphic.cs" />
     <Compile Include="Inventory.cs" />
     <Compile Include="InventoryItem.cs" />
     <Compile Include="Item.cs" />

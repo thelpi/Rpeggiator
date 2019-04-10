@@ -1,8 +1,6 @@
-﻿using RpeggiatorLib.Enums;
-using RpeggiatorLib.Graphic;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Windows;
+using RpeggiatorLib.Enums;
 
 namespace RpeggiatorLib.Sprites
 {
@@ -27,10 +25,6 @@ namespace RpeggiatorLib.Sprites
         /// Height
         /// </summary>
         public double Height { get; protected set; }
-        /// <summary>
-        /// Graphic rendering.
-        /// </summary>
-        public virtual ISpriteGraphic Graphic { get; protected set; }
         /// <summary>
         /// Z-axis layer when displayed.
         /// </summary>
@@ -63,17 +57,7 @@ namespace RpeggiatorLib.Sprites
         /// <param name="datas">The json dynamic object.</param>
         protected Sprite(dynamic datas) : this((double)datas.X, (double)datas.Y, (double)datas.Width, (double)datas.Height)
         {
-            switch ((string)datas.GraphicType)
-            {
-                case nameof(ImageBrushGraphic):
-                    Graphic = new ImageBrushGraphic((string)datas.ImagePath);
-                    break;
-                case nameof(PlainBrushGraphic):
-                    Graphic = new PlainBrushGraphic((string)datas.HexColor);
-                    break;
-                default:
-                    throw new System.NotImplementedException(Messages.NotImplementedGraphicExceptionMessage);
-            }
+
         }
 
         /// <summary>
@@ -83,30 +67,19 @@ namespace RpeggiatorLib.Sprites
         /// <param name="y"><see cref="Y"/></param>
         /// <param name="width"><see cref="Width"/></param>
         /// <param name="height"><see cref="Height"/></param>
-        protected Sprite(double x, double y, double width, double height) : this(x, y, width, height, null) { }
-
-        /// <summary>
-        /// Constructor.
-        /// </summary>
-        /// <param name="x"><see cref="X"/></param>
-        /// <param name="y"><see cref="Y"/></param>
-        /// <param name="width"><see cref="Width"/></param>
-        /// <param name="height"><see cref="Height"/></param>
-        /// <param name="graphic"><see cref="Graphic"/></param>
-        protected Sprite(double x, double y, double width, double height, ISpriteGraphic graphic)
-            : this(x, y, width, height, graphic, 0)
+        protected Sprite(double x, double y, double width, double height)
+            : this(x, y, width, height, 0)
         {
             ZIndex = GetZIndexBySubType();
         }
 
         // Private constructor.
-        private Sprite(double x, double y, double width, double height, ISpriteGraphic graphic, int zIndex)
+        private Sprite(double x, double y, double width, double height, int zIndex)
         {
             X = x;
             Y = y;
             Width = width;
             Height = height;
-            Graphic = graphic;
             ZIndex = zIndex;
         }
 
@@ -117,7 +90,7 @@ namespace RpeggiatorLib.Sprites
         /// <returns>The new instance.</returns>
         public Sprite CopyToPosition(Point newPosition)
         {
-            return new Sprite(newPosition.X, newPosition.Y, Width, Height, Graphic, ZIndex);
+            return new Sprite(newPosition.X, newPosition.Y, Width, Height, ZIndex);
         }
 
         /// <summary>
@@ -231,7 +204,7 @@ namespace RpeggiatorLib.Sprites
             double a = ((1 - ratio) / 2);
             double newX = X + (a * Width);
             double newY = Y + (a * Height);
-            return new Sprite(newX, newY, Width * ratio, Height * ratio, Graphic, ZIndex);
+            return new Sprite(newX, newY, Width * ratio, Height * ratio, ZIndex);
         }
 
         /// <summary>

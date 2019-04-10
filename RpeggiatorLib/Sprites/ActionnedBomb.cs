@@ -1,7 +1,4 @@
-﻿using RpeggiatorLib.Graphic;
-using System.Windows;
-
-namespace RpeggiatorLib.Sprites
+﻿namespace RpeggiatorLib.Sprites
 {
     /// <summary>
     /// Represents the bomb item when dropped on the floor.
@@ -32,8 +29,7 @@ namespace RpeggiatorLib.Sprites
         /// </summary>
         /// <param name="point">Drop coordinates.</param>
         public ActionnedBomb(Point point) : base(point.X, point.Y,
-            Constants.Bomb.WIDTH, Constants.Bomb.HEIGHT,
-            Constants.Bomb.GRAPHIC_RENDERING)
+            Constants.Bomb.WIDTH, Constants.Bomb.HEIGHT)
         {
             _pendingTimeManager = new Elapser(Constants.Bomb.TIME_WHILE_PENDING);
             ExplosionSprite = null;

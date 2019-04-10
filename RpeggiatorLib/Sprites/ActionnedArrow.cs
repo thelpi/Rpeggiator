@@ -25,8 +25,7 @@ namespace RpeggiatorLib.Sprites
         /// <param name="direction"><see cref="Direction"/></param>
         /// <param name="thrownBy"><see cref="LifeSprite"/> who throws the arrow.</param>
         public ActionnedArrow(Point point, Direction direction, LifeSprite thrownBy) : base(point.X, point.Y,
-            Constants.Arrow.WIDTH, Constants.Arrow.HEIGHT,
-            Constants.Arrow.GRAPHIC_RENDERING)
+            Constants.Arrow.WIDTH, Constants.Arrow.HEIGHT)
         {
             _direction = direction;
             _elapser = new Elapser();

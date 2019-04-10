@@ -14,6 +14,6 @@
         /// <param name="width"><see cref="Sprite.Width"/></param>
         /// <param name="height"><see cref="Sprite.Height"/></param>
         public WeaponHit(double x, double y, double width, double height)
-            : base(x, y, width, height, Constants.Player.HIT_GRAPHIC) { }
+            : base(x, y, width, height) { }
     }
 }

@@ -1,5 +1,4 @@
 ﻿using RpeggiatorLib.Enums;
-using RpeggiatorLib.Graphic;
 
 namespace RpeggiatorLib.Sprites
 {
@@ -27,33 +26,6 @@ namespace RpeggiatorLib.Sprites
         {
             SpeedRatio = 1;
             FloorType = floorJsonDatas.FloorType;
-            switch (FloorType)
-            {
-                case FloorType.Lava:
-                    Graphic = new PlainBrushGraphic(System.Windows.Media.Colors.Firebrick);
-                    break;
-                case FloorType.Water:
-                    Graphic = new PlainBrushGraphic(System.Windows.Media.Colors.Blue);
-                    SpeedRatio = Constants.FLOOR_WATER_SPEED_RATIO;
-                    break;
-                case FloorType.Ice:
-                    Graphic = new PlainBrushGraphic(System.Windows.Media.Colors.LightBlue);
-                    SpeedRatio = Constants.FLOOR_ICE_SPEED_RATIO;
-                    break;
-                default:
-                    switch ((string)floorJsonDatas.GraphicType)
-                    {
-                        case nameof(ImageBrushGraphic):
-                            Graphic = new ImageBrushGraphic((string)floorJsonDatas.ImagePath);
-                            break;
-                        case nameof(PlainBrushGraphic):
-                            Graphic = new PlainBrushGraphic((string)floorJsonDatas.HexColor);
-                            break;
-                        default:
-                            throw new System.NotImplementedException(Messages.NotImplementedGraphicExceptionMessage);
-                    }
-                    break;
-            }
         }
     }
 }

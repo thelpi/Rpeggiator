@@ -1,6 +1,5 @@
 ﻿using RpeggiatorLib.Enums;
 using RpeggiatorLib.Exceptions;
-using RpeggiatorLib.Graphic;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -22,8 +21,6 @@ namespace RpeggiatorLib.Sprites
         private Elapser _movementTimeManager;
         // Lifetime manager for the current hit with the current weapon.
         private Elapser _hitElapser;
-        // Hashcode associated to the instance timestamp.
-        private int _creationHashcode;
         /// <summary>
         /// When coming into a new screen, indicates the direction relative to the former screen.
         /// </summary>
@@ -54,17 +51,13 @@ namespace RpeggiatorLib.Sprites
             Constants.Player.INITIAL_PLAYER_Y,
             Constants.Player.SPRITE_SIZE_X,
             Constants.Player.SPRITE_SIZE_Y,
-            Constants.Player.GRAPHIC,
             Constants.Player.MAXIMAL_LIFE_POINTS,
             Constants.Player.HIT_LIFE_POINT_COST,
             Constants.Player.INITIAL_PLAYER_SPEED,
-            Constants.Player.RECOVERY_TIME,
-            Constants.Player.RECOVERY_GRAPHIC)
+            Constants.Player.RECOVERY_TIME)
         {
-            _creationHashcode = DateTime.Now.ToString(Constants.UNIQUE_TIMESTAMP_PATTERN).GetHashCode();
-
             NewScreenEntrance = null;
-            Inventory = new Inventory(_creationHashcode);
+            Inventory = new Inventory();
             HitSprite = null;
             _hitElapser = null;
             _currentWeaponHitDelay = Constants.Player.SWORD_HIT_DELAY;
@@ -110,15 +103,9 @@ namespace RpeggiatorLib.Sprites
         /// <summary>
         /// Update the player lifepoints after drinking a potion.
         /// </summary>
-        /// <param name="creationHashcode">Ensure the call is made by the player <see cref="Inventory"/>.</param>
         /// <param name="recoveryPoints">Lifepoints gained.</param>
-        public void DrinkLifePotion(int creationHashcode, double recoveryPoints)
+        public void DrinkLifePotion(double recoveryPoints)
         {
-            if (_creationHashcode != creationHashcode)
-            {
-                return;
-            }
-
             RegenerateLifePoints(recoveryPoints);
         }
 
