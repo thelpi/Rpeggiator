@@ -26,7 +26,7 @@
         /// </summary>
         /// <param name="sprite"><see cref="DamageableSprite"/></param>
         /// <returns>Life points cost.</returns>
-        public virtual double GetLifePointsCost(DamageableSprite sprite)
+        internal virtual double GetLifePointsCost(DamageableSprite sprite)
         {
             return 0;
         }

@@ -29,7 +29,7 @@ namespace RpeggiatorLib.Sprites
         /// Constructor.
         /// </summary>
         /// <param name="doorJsonDatas">Door json datas.</param>
-        public Door(dynamic doorJsonDatas)
+        internal Door(dynamic doorJsonDatas)
             : base((double)doorJsonDatas.X, (double)doorJsonDatas.Y, (double)doorJsonDatas.Width, (double)doorJsonDatas.Height)
         {
             _keyId = doorJsonDatas.KeyId;
@@ -43,7 +43,7 @@ namespace RpeggiatorLib.Sprites
         /// Tries to open the door.
         /// </summary>
         /// <returns>The <see cref="Screen"/> identifier; <c>Null</c> if failure.</returns>
-        public int? TryOpen()
+        internal int? TryOpen()
         {
             if (!_keyId.HasValue || Engine.Default.Player.Inventory.Keyring.Any(k => k == _keyId))
             {

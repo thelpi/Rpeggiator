@@ -50,7 +50,7 @@ namespace RpeggiatorLib.Sprites
         }
 
         /// <inheritdoc />
-        public override double GetLifePointsCost(DamageableSprite sprite)
+        internal override double GetLifePointsCost(DamageableSprite sprite)
         {
             return Overlap(sprite) && sprite != _thrownBy ? sprite.ArrowLifePointCost : 0;
         }

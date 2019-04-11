@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using System.Windows;
 
 namespace RpeggiatorLib.Sprites
 {
@@ -27,7 +26,7 @@ namespace RpeggiatorLib.Sprites
         /// Constructor.
         /// </summary>
         /// <param name="enemyJson">The json dynamic object.</param>
-        public Enemy(dynamic enemyJson) : base((object)enemyJson)
+        internal Enemy(dynamic enemyJson) : base((object)enemyJson)
         {
             _movementTimeManager = new Elapser();
             List<Point> points = new List<Point> { TopLeftCorner };
@@ -51,13 +50,13 @@ namespace RpeggiatorLib.Sprites
         /// <summary>
         /// Freeze the instance movements by reseting the <see cref="Elapser"/>.
         /// </summary>
-        public void Freeze()
+        internal void Freeze()
         {
             _movementTimeManager.Reset();
         }
 
         /// <inheritdoc />
-        public override bool CheckIfHasBeenHit()
+        internal override bool CheckIfHasBeenHit()
         {
             if (base.CheckIfHasBeenHit())
             {

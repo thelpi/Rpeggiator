@@ -102,7 +102,7 @@ namespace RpeggiatorLib.Sprites
         /// </summary>
         /// <param name="id"><see cref="Id"/></param>
         /// <param name="screenJsonDatas">Screen json datas.</param>
-        public Screen(int id, dynamic screenJsonDatas) : base((object)screenJsonDatas)
+        internal Screen(int id, dynamic screenJsonDatas) : base((object)screenJsonDatas)
         {
             Id = id;
             _permanentStructures = new List<PermanentStructure>();
@@ -170,7 +170,7 @@ namespace RpeggiatorLib.Sprites
         /// <summary>
         /// Checks quantity of each <see cref="PickableItem"/>.
         /// </summary>
-        public void CheckPickableItemsQuantities()
+        internal void CheckPickableItemsQuantities()
         {
             _pickableItems.RemoveAll(pi => pi.Quantity <= 0);
         }
@@ -203,7 +203,7 @@ namespace RpeggiatorLib.Sprites
         /// </summary>
         /// <param name="gate"><see cref="Gate"/></param>
         /// <returns>List of <see cref="GateTrigger"/>.</returns>
-        public IReadOnlyCollection<GateTrigger> GetTriggersForSpecifiedGate(Gate gate)
+        internal IReadOnlyCollection<GateTrigger> GetTriggersForSpecifiedGate(Gate gate)
         {
             return _gateTriggers.Where(gt => gt.GateIndex == _gates.IndexOf(gate) && gt.IsActivated).ToList();
         }
@@ -213,7 +213,7 @@ namespace RpeggiatorLib.Sprites
         /// </summary>
         /// <param name="sprite"><see cref="DamageableSprite"/></param>
         /// <returns>Cumuled life points cost.</returns>
-        public double HitByAnActionnedItem(DamageableSprite sprite)
+        internal double HitByAnActionnedItem(DamageableSprite sprite)
         {
             return _actionnedItems.Sum(b => b.GetLifePointsCost(sprite));
         }
@@ -221,7 +221,7 @@ namespace RpeggiatorLib.Sprites
         /// <summary>
         /// Freeze movements for every <see cref="Enemies"/>.
         /// </summary>
-        public void FreezeEnemies()
+        internal void FreezeEnemies()
         {
             _enemies.ForEach(e => e.Freeze());
         }
@@ -230,7 +230,7 @@ namespace RpeggiatorLib.Sprites
         /// Adds an <see cref="ActionnedItem"/>
         /// </summary>
         /// <param name="itemDropped"><see cref="ActionnedItem"/> to add.</param>
-        public void AddDroppedItem(ActionnedItem itemDropped)
+        internal void AddDroppedItem(ActionnedItem itemDropped)
         {
             _actionnedItems.Add(itemDropped);
         }
@@ -240,7 +240,7 @@ namespace RpeggiatorLib.Sprites
         /// </summary>
         /// <param name="direction"><see cref="Direction"/></param>
         /// <returns><see cref="Screen"/> identifier.</returns>
-        public int GetNextScreenIdFromDirection(Direction direction)
+        internal int GetNextScreenIdFromDirection(Direction direction)
         {
             // Ensures a non-corner direction.
             if (direction == Direction.BottomLeft)

@@ -10,7 +10,7 @@
         /// Constructor.
         /// </summary>
         /// <param name="riftJson">The json dynamic object.</param>
-        public Rift(dynamic riftJson) : base((object)riftJson)
+        internal Rift(dynamic riftJson) : base((object)riftJson)
         {
             ExplosionLifePointCost = Constants.RIFT_EXPLOSION_LIFE_POINT_COST;
             ArrowLifePointCost = 0;

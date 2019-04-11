@@ -84,7 +84,7 @@ namespace RPG4.Visuals
 
                         (sender as BackgroundWorker).ReportProgress(0);
 
-                        if (Engine.Default.Player.CheckDeath(Engine.Default.CurrentScreen))
+                        if (Engine.Default.PlayerIsDead())
                         {
                             e.Result = null;
                             return;

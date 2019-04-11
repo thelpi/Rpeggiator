@@ -23,7 +23,7 @@
         /// Constructor.
         /// </summary>
         /// <param name="damageableSpriteJson">The json dynamic object.</param>
-        public DamageableSprite(dynamic damageableSpriteJson)
+        protected DamageableSprite(dynamic damageableSpriteJson)
             : base((double)damageableSpriteJson.X, (double)damageableSpriteJson.Y,
                   (double)damageableSpriteJson.Width, (double)damageableSpriteJson.Height) { }
 
@@ -35,7 +35,7 @@
         /// <param name="width"><see cref="Sprite.Width"/></param>
         /// <param name="height"><see cref="Sprite.Height"/></param>
         /// <param name="lifepoints"><see cref="CurrentLifePoints"/></param>
-        public DamageableSprite(double x, double y, double width, double height, double lifepoints) 
+        protected DamageableSprite(double x, double y, double width, double height, double lifepoints) 
             : base(x, y, width, height)
         {
             CurrentLifePoints = lifepoints;

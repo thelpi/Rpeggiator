@@ -20,9 +20,8 @@ namespace RpeggiatorLib.Sprites
         /// Constructor.
         /// </summary>
         /// <param name="floorJsonDatas">Floor json datas.</param>
-        public Floor(dynamic floorJsonDatas) : base(
-            (double)floorJsonDatas.X, (double)floorJsonDatas.Y,
-            (double)floorJsonDatas.Width, (double)floorJsonDatas.Height)
+        internal Floor(dynamic floorJsonDatas)
+            : base((double)floorJsonDatas.X, (double)floorJsonDatas.Y, (double)floorJsonDatas.Width, (double)floorJsonDatas.Height)
         {
             SpeedRatio = 1;
             FloorType = floorJsonDatas.FloorType;

@@ -97,7 +97,7 @@ namespace RpeggiatorLib.Sprites
         /// </summary>
         /// <param name="screen"><see cref="Screen"/></param>
         /// <returns><c>True</c> if death; <c>False</c> otherwise.</returns>
-        public bool CheckDeath(Screen screen)
+        internal bool CheckDeath(Screen screen)
         {
             if (screen.Structures.Any(ss => ss.Overlap(this))
                 || screen.Pits.Any(r => r.CanFallIn(this) && (GetType() == typeof(Enemy) || r.Deadly))
@@ -126,7 +126,7 @@ namespace RpeggiatorLib.Sprites
         /// Checks if the instance has been hit.
         /// </summary>
         /// <returns><c>True</c> if has been hit; <c>False</c> otherwise.</returns>
-        public virtual bool CheckIfHasBeenHit()
+        internal virtual bool CheckIfHasBeenHit()
         {
             // currently recovering ?
             if (_recoveryManager?.Elapsed == true)

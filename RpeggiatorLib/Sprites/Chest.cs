@@ -21,7 +21,7 @@ namespace RpeggiatorLib.Sprites
         /// Constructor.
         /// </summary>
         /// <param name="chestJsonDatas">Chest json datas.</param>
-        public Chest(dynamic chestJsonDatas) : base(
+        internal Chest(dynamic chestJsonDatas) : base(
             (double)chestJsonDatas.X, (double)chestJsonDatas.Y,
             (double)chestJsonDatas.Width, (double)chestJsonDatas.Height)
         {
@@ -34,7 +34,7 @@ namespace RpeggiatorLib.Sprites
         /// <summary>
         /// Tries to open the chest.
         /// </summary>
-        public void TryOpen()
+        internal void TryOpen()
         {
             if (!IsOpen && (!_keyId.HasValue || Engine.Default.Player.Inventory.Keyring.Contains(_keyId.Value)))
             {

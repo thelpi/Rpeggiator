@@ -18,7 +18,7 @@
         /// Constructor.
         /// </summary>
         /// <param name="gatetriggerJson">The json dynamic object.</param>
-        public GateTrigger(dynamic gatetriggerJson) : base((object)gatetriggerJson)
+        internal GateTrigger(dynamic gatetriggerJson) : base((object)gatetriggerJson)
         {
             GateIndex = gatetriggerJson.GateIndex;
             AppearOnActivation = gatetriggerJson.AppearOnActivation;

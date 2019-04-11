@@ -1,9 +1,7 @@
-﻿using RpeggiatorLib.Enums;
-using RpeggiatorLib.Exceptions;
-using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Windows;
+using RpeggiatorLib.Enums;
+using RpeggiatorLib.Exceptions;
 
 namespace RpeggiatorLib.Sprites
 {
@@ -46,7 +44,7 @@ namespace RpeggiatorLib.Sprites
         /// Constructor.
         /// </summary>
         /// <remarks>Every initial values come from <see cref="Constants.Player"/>.</remarks>
-        public Player() : base(
+        internal Player() : base(
             Constants.Player.INITIAL_PLAYER_X,
             Constants.Player.INITIAL_PLAYER_Y,
             Constants.Player.SPRITE_SIZE_X,
@@ -104,7 +102,7 @@ namespace RpeggiatorLib.Sprites
         /// Update the player lifepoints after drinking a potion.
         /// </summary>
         /// <param name="recoveryPoints">Lifepoints gained.</param>
-        public void DrinkLifePotion(double recoveryPoints)
+        internal void DrinkLifePotion(double recoveryPoints)
         {
             RegenerateLifePoints(recoveryPoints);
         }
@@ -113,7 +111,7 @@ namespace RpeggiatorLib.Sprites
         /// Resets player position when he goes through a door and changes screen.
         /// </summary>
         /// <param name="doorId">The door identifier.</param>
-        public void SetPositionRelativeToDoorGoThrough(int doorId)
+        internal void SetPositionRelativeToDoorGoThrough(int doorId)
         {
             Door doorInNewScreen = Engine.Default.CurrentScreen.Doors.First(d => d.Id == doorId);
             X = doorInNewScreen.PlayerGoThroughX;

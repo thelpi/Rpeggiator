@@ -51,7 +51,7 @@
         }
 
         /// <inheritdoc />
-        public override double GetLifePointsCost(DamageableSprite sprite)
+        internal override double GetLifePointsCost(DamageableSprite sprite)
         {
             return IsExploding && ExplosionSprite.Overlap(sprite) ? sprite.ExplosionLifePointCost : 0;
         }

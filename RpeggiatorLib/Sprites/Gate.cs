@@ -23,7 +23,7 @@ namespace RpeggiatorLib.Sprites
         /// Constructor.
         /// </summary>
         /// <param name="gateJson">The json dynamic object.</param>
-        public Gate(dynamic gateJson)
+        internal Gate(dynamic gateJson)
             : base((double)gateJson.X, (double)gateJson.Y, (double)gateJson.Width, (double)gateJson.Height)
         {
             Activated = gateJson.Activated;

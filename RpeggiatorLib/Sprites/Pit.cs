@@ -20,7 +20,7 @@
         /// Constructor.
         /// </summary>
         /// <param name="pitJsonDatas">The json dynamic object.</param>
-        public Pit(dynamic pitJsonDatas)
+        internal Pit(dynamic pitJsonDatas)
             : base((double)pitJsonDatas.X, (double)pitJsonDatas.Y,
                   (double)pitJsonDatas.Width, (double)pitJsonDatas.Height)
         {
@@ -32,7 +32,7 @@
         /// </summary>
         /// <param name="other">The instance to check.</param>
         /// <returns><c>True</c> if <paramref name="other"/> falls in; <c>False</c> otherwise.</returns>
-        public bool CanFallIn(Sprite other)
+        internal bool CanFallIn(Sprite other)
         {
             return Width.GreaterEqual(other.Width) && Height.GreaterEqual(other.Height) && Overlap(other, Constants.PIT_FALL_IN_OVERLAP_RATIO);
         }

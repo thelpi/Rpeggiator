@@ -263,5 +263,14 @@ namespace RpeggiatorLib
 
             return darknessOpacity.Greater(dayTimeDarknessOpacity) ? darknessOpacity : dayTimeDarknessOpacity;
         }
+
+        /// <summary>
+        /// CHecks if the <see cref="Player"/> is dead.
+        /// </summary>
+        /// <returns><c>True</c> if dead; <c>False</c> otherwise.</returns>
+        public bool PlayerIsDead()
+        {
+            return Player.CheckDeath(CurrentScreen);
+        }
     }
 }
