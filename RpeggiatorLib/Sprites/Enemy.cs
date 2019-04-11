@@ -16,7 +16,7 @@ namespace RpeggiatorLib.Sprites
         /// <summary>
         /// Loot <see cref="Enums.ItemType"/>; <c>Null</c> for coin.
         /// </summary>
-        public Enums.ItemType? LootItemId { get; private set; }
+        public Enums.ItemType? LootItemType { get; private set; }
         /// <summary>
         /// Loot quantity.
         /// </summary>
@@ -35,7 +35,7 @@ namespace RpeggiatorLib.Sprites
                 points.Add(new Point((double)jsonPath.X, (double)jsonPath.Y));
             }
             _path = new Path(points.ToArray());
-            LootItemId = enemyJson.LootItemId;
+            LootItemType = enemyJson.LootItemType;
             LootQuantity = enemyJson.LootQuantity;
         }
 

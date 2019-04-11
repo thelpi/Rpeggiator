@@ -221,46 +221,6 @@ namespace RPG4.Properties {
         }
         
         /// <summary>
-        ///   Recherche une ressource localisée de type System.Byte[].
-        /// </summary>
-        internal static byte[] Screen1 {
-            get {
-                object obj = ResourceManager.GetObject("Screen1", resourceCulture);
-                return ((byte[])(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Recherche une ressource localisée de type System.Byte[].
-        /// </summary>
-        internal static byte[] Screen2 {
-            get {
-                object obj = ResourceManager.GetObject("Screen2", resourceCulture);
-                return ((byte[])(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Recherche une ressource localisée de type System.Byte[].
-        /// </summary>
-        internal static byte[] Screen3 {
-            get {
-                object obj = ResourceManager.GetObject("Screen3", resourceCulture);
-                return ((byte[])(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Recherche une ressource localisée de type System.Byte[].
-        /// </summary>
-        internal static byte[] Screen4 {
-            get {
-                object obj = ResourceManager.GetObject("Screen4", resourceCulture);
-                return ((byte[])(obj));
-            }
-        }
-        
-        /// <summary>
         ///   Recherche une ressource localisée de type System.Drawing.Bitmap.
         /// </summary>
         internal static System.Drawing.Bitmap Sword {

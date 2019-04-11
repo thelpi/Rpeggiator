@@ -109,7 +109,7 @@ namespace RPG4.Visuals
                 {
                     _currentScreenIndex = Engine.Default.CurrentScreenId;
 
-                    cvsMain.Background = Tools.GetRenderingBrush(Engine.Default.CurrentScreen);
+                    cvsMain.Background = SpriteRendering.GetRenderingBrush(Engine.Default.CurrentScreen);
                     cvsMain.Height = Engine.Default.CurrentScreen.Height;
                     cvsMain.Width = Engine.Default.CurrentScreen.Width;
 
@@ -149,7 +149,7 @@ namespace RPG4.Visuals
         {
             Rectangle rct = new Rectangle
             {
-                Fill = Tools.GetRenderingBrush(sp),
+                Fill = SpriteRendering.GetRenderingBrush(sp),
                 Width = sp.Width,
                 Height = sp.Height
             };
@@ -191,7 +191,7 @@ namespace RPG4.Visuals
             rctPlayer.SetValue(Canvas.TopProperty, Engine.Default.Player.Y);
             rctPlayer.SetValue(Canvas.LeftProperty, Engine.Default.Player.X);
 
-            rctPlayer.Fill = Tools.GetRenderingBrush(Engine.Default.Player);
+            rctPlayer.Fill = SpriteRendering.GetRenderingBrush(Engine.Default.Player);
 
             if (Engine.Default.Player.IsHitting)
             {
@@ -237,7 +237,7 @@ namespace RPG4.Visuals
                 {
                     InventoryItem item = Engine.Default.Player.Inventory.DisplayableItems.ElementAt(i);
                     itemSlotTxt.Text = item.DisplayableQuantity.ToString().PadLeft(3, '0');
-                    //itemSlotRct.Fill = Tools.GetRenderingBrush(item.BaseItem); // .LootGraphic
+                    itemSlotRct.Fill = SpriteRendering.BrushFromItemType(item.BaseItem.Type);
                 }
             }
             txtCoins.Text = Engine.Default.Player.Inventory.Coins.ToString().PadLeft(3, '0');

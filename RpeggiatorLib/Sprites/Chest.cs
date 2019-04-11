@@ -8,7 +8,7 @@ namespace RpeggiatorLib.Sprites
     public class Chest : Sprite
     {
         private int? _keyId;
-        private Enums.ItemType? _itemId;
+        private Enums.ItemType? _itemType;
         private int _quantity;
         private int? _keyIdContainer;
 
@@ -25,7 +25,7 @@ namespace RpeggiatorLib.Sprites
             (double)chestJsonDatas.X, (double)chestJsonDatas.Y,
             (double)chestJsonDatas.Width, (double)chestJsonDatas.Height)
         {
-            _itemId = chestJsonDatas.ItemId;
+            _itemType = chestJsonDatas.ItemType;
             _quantity = chestJsonDatas.Quantity;
             _keyId = chestJsonDatas.KeyId;
             _keyIdContainer = chestJsonDatas.KeyIdContainer;
@@ -45,7 +45,7 @@ namespace RpeggiatorLib.Sprites
                 }
                 else
                 {
-                    Engine.Default.Player.Inventory.TryAdd(_itemId, _quantity);
+                    Engine.Default.Player.Inventory.TryAdd(_itemType, _quantity);
                 }
             }
         }

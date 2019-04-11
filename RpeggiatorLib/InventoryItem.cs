@@ -32,17 +32,17 @@ namespace RpeggiatorLib
         /// <summary>
         /// Constructor.
         /// </summary>
-        /// <param name="itemId"><see cref="BaseItem"/> identifier.</param>
-        internal InventoryItem(ItemType itemId) : this(itemId, 1) { }
+        /// <param name="itemType"><see cref="ItemType"/>.</param>
+        internal InventoryItem(ItemType itemType) : this(itemType, 1) { }
 
         /// <summary>
         /// Constructor.
         /// </summary>
-        /// <param name="itemId"><see cref="BaseItem"/> identifier.</param>
+        /// <param name="itemType"><see cref="ItemType"/>.</param>
         /// <param name="quantity"><see cref="Quantity"/>; ignored if the item is marked as unique.</param>
-        internal InventoryItem(ItemType itemId, int quantity)
+        internal InventoryItem(ItemType itemType, int quantity)
         {
-            BaseItem = Item.GetItem(itemId);
+            BaseItem = Item.GetItem(itemType);
             Quantity = BaseItem.Unique ? 1 : quantity;
         }
 

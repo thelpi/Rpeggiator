@@ -1,24 +1,24 @@
 ﻿namespace RpeggiatorLib.Enums
 {
     /// <summary>
-    /// Enumeration of item identifiers.
+    /// Enumeration of item types.
     /// </summary>
     public enum ItemType
     {
         /// <summary>
-        /// Bomb item identifier.
+        /// Bomb item.
         /// </summary>
         Bomb = 1,
         /// <summary>
-        /// Small life potion identifier.
+        /// Small life potion.
         /// </summary>
         SmallLifePotion,
         /// <summary>
-        /// Medium life potion identifier.
+        /// Medium life potion.
         /// </summary>
         MediumLifePotion,
         /// <summary>
-        /// Large life potion identifier.
+        /// Large life potion.
         /// </summary>
         LargeLifePotion,
         /// <summary>

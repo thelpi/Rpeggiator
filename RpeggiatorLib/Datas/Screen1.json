@@ -32,7 +32,7 @@
       "Y": "380",
       "Width": 40,
       "Height": 40,
-      "ItemId": null,
+      "ItemType": null,
       "Quantity": 10,
       "KeyId": null,
       "KeyIdContainer": 1
@@ -69,7 +69,7 @@
       ],
       "GraphicType": "ImageBrushGraphic",
       "ImagePath": "Enemy",
-      "LootItemId": null,
+      "LootItemType": null,
       "LootQuantity": 10
     },
     {
@@ -84,7 +84,7 @@
       "Path": [],
       "GraphicType": "ImageBrushGraphic",
       "ImagePath": "Enemy",
-      "LootItemId": "Arrow",
+      "LootItemType": "Arrow",
       "LootQuantity": 1
     }
   ],

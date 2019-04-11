@@ -10,8 +10,6 @@ namespace RpeggiatorLib.Sprites
     {
         // Time manager.
         private Elapser _timeManager;
-        // Null for coins.
-        private ItemType? _itemId;
 
         /// <summary>
         /// Indicates the quantity.
@@ -21,6 +19,10 @@ namespace RpeggiatorLib.Sprites
         /// Inferred; indicates the item can be removed from the <see cref="Screen"/>.
         /// </summary>
         public bool Disapear { get { return _timeManager?.Elapsed == true; } }
+        /// <summary>
+        /// <see cref="ItemType"/>. <c>Null</c> for coins.
+        /// </summary>
+        public ItemType? ItemType { get; private set; }
 
         /// <summary>
         /// Constructor.
@@ -30,15 +32,15 @@ namespace RpeggiatorLib.Sprites
             (double)floorItemJson.X, (double)floorItemJson.Y,
             Constants.Item.LOOT_WIDTH, Constants.Item.LOOT_HEIGHT)
         {
-            _itemId = floorItemJson.ItemId;
+            ItemType = floorItemJson.ItemType;
             Quantity = floorItemJson.Quantity;
         }
 
         // Private constructor.
         private PickableItem(double x, double y, double with, double height,
-            ItemType? itemId, int quantity, double? timeBeForeDisapear) : base(x, y, with, height)
+            ItemType? itemType, int quantity, double? timeBeForeDisapear) : base(x, y, with, height)
         {
-            _itemId = itemId;
+            ItemType = itemType;
             Quantity = quantity;
             if (timeBeForeDisapear.HasValue)
             {
@@ -50,17 +52,17 @@ namespace RpeggiatorLib.Sprites
         /// Builds an instance from enemy's loot.
         /// </summary>
         /// <param name="enemy"><see cref="Enemy"/></param>
-        /// <param name="itemId"><see cref="Enums.ItemType"/>; <c>Null</c> for coin.</param>
+        /// <param name="itemType"><see cref="Enums.ItemType"/>; <c>Null</c> for coin.</param>
         /// <param name="quantity">Quantity looted.</param>
         /// <returns><see cref="PickableItem"/></returns>
-        internal static PickableItem Loot(Enemy enemy, Enums.ItemType? itemId, int quantity)
+        internal static PickableItem Loot(Enemy enemy, ItemType? itemType, int quantity)
         {
             return new PickableItem(
                 enemy.X + (enemy.Width / 2) - (Constants.Item.LOOT_WIDTH / 2),
                 enemy.Y + (enemy.Height / 2) - (Constants.Item.LOOT_HEIGHT / 2),
                 Constants.Item.LOOT_WIDTH,
                 Constants.Item.LOOT_HEIGHT,
-                itemId,
+                itemType,
                 quantity,
                 Constants.Item.LOOT_LIFETIME);
         }
@@ -70,7 +72,7 @@ namespace RpeggiatorLib.Sprites
         /// </summary>
         internal void Pick()
         {
-            Quantity = Engine.Default.Player.Inventory.TryAdd(_itemId, Quantity);
+            Quantity = Engine.Default.Player.Inventory.TryAdd(ItemType, Quantity);
         }
     }
 }

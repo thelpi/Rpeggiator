@@ -82,7 +82,7 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
-    <Compile Include="Tools.cs" />
+    <Compile Include="SpriteRendering.cs" />
     <Compile Include="Visuals\ScreenEditorWindow.xaml.cs">
       <DependentUpon>ScreenEditorWindow.xaml</DependentUpon>
     </Compile>
@@ -133,8 +133,6 @@
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
     </None>
-    <None Include="Resources\Screen3.json" />
-    <None Include="Resources\Screen4.json" />
   </ItemGroup>
   <ItemGroup>
     <BootstrapperPackage Include="Microsoft.Net.Framework.3.5.SP1">
@@ -144,8 +142,6 @@
     </BootstrapperPackage>
   </ItemGroup>
   <ItemGroup>
-    <None Include="Resources\Screen1.json" />
-    <None Include="Resources\Screen2.json" />
     <Resource Include="Resources\Sword.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Resource>

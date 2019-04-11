@@ -53,9 +53,9 @@ namespace RpeggiatorLib
             _items = new List<InventoryItem>();
             _maxQuantityByItem = new Dictionary<ItemType, int>();
             LampIsOn = false;
-            foreach (ItemType itemId in Constants.Player.INVENTORY_ITEMS.Keys)
+            foreach (ItemType itemType in Constants.Player.INVENTORY_ITEMS.Keys)
             {
-                TryAdd(itemId, Constants.Player.INVENTORY_ITEMS[itemId]);
+                TryAdd(itemType, Constants.Player.INVENTORY_ITEMS[itemType]);
             }
             Coins = Constants.Player.COINS;
             _keyring = new List<int>();
@@ -64,12 +64,12 @@ namespace RpeggiatorLib
         /// <summary>
         /// Tries to add or replace an item in the inventory.
         /// </summary>
-        /// <param name="itemId"><see cref="Enums.ItemType"/>; <c>Null</c> for coins</param>
+        /// <param name="itemType"><see cref="Enums.ItemType"/>; <c>Null</c> for coins</param>
         /// <param name="quantity">Quantity.</param>
         /// <returns><c>True</c> if the item has been added; <c>False</c> otherwise.</returns>
-        internal int TryAdd(ItemType? itemId, int quantity)
+        internal int TryAdd(ItemType? itemType, int quantity)
         {
-            if (!itemId.HasValue)
+            if (!itemType.HasValue)
             {
                 int toReachLimit = Constants.Inventory.COINS_LIMIT - Coins;
                 if (toReachLimit == 0 || toReachLimit < quantity)
@@ -86,14 +86,14 @@ namespace RpeggiatorLib
 
             int remaining = 0;
 
-            if (_items.Any(item => item.BaseItem.Type == itemId.Value))
+            if (_items.Any(item => item.BaseItem.Type == itemType.Value))
             {
-                remaining = _items.First(item => item.BaseItem.Type == itemId.Value).TryStore(quantity, _maxQuantityByItem[itemId.Value]);
+                remaining = _items.First(item => item.BaseItem.Type == itemType.Value).TryStore(quantity, _maxQuantityByItem[itemType.Value]);
             }
             else if (_items.Count < Constants.Inventory.SIZE)
             {
-                _items.Add(new InventoryItem(itemId.Value, quantity));
-                SetItemMaxQuantity(itemId.Value, Item.GetItem(itemId.Value).InitialMaximalQuantity);
+                _items.Add(new InventoryItem(itemType.Value, quantity));
+                SetItemMaxQuantity(itemType.Value, Item.GetItem(itemType.Value).InitialMaximalQuantity);
             }
             else
             {
@@ -228,9 +228,9 @@ namespace RpeggiatorLib
         }
 
         // Checks if an item can be used in the context.
-        private bool ItemCanBeUseInContext(ItemType itemId)
+        private bool ItemCanBeUseInContext(ItemType itemType)
         {
-            switch (itemId)
+            switch (itemType)
             {
                 case ItemType.Bomb:
                     if (Engine.Default.Player.CurrentFloor.FloorType == FloorType.Water)
@@ -260,18 +260,18 @@ namespace RpeggiatorLib
         }
 
         // Sets the maximal quantity storable for an InventoryItem.
-        private void SetItemMaxQuantity(ItemType itemId, int maxQuantity)
+        private void SetItemMaxQuantity(ItemType itemType, int maxQuantity)
         {
-            if (_maxQuantityByItem.ContainsKey(itemId))
+            if (_maxQuantityByItem.ContainsKey(itemType))
             {
-                if (_maxQuantityByItem[itemId] < maxQuantity)
+                if (_maxQuantityByItem[itemType] < maxQuantity)
                 {
-                    _maxQuantityByItem[itemId] = maxQuantity;
+                    _maxQuantityByItem[itemType] = maxQuantity;
                 }
             }
             else
             {
-                _maxQuantityByItem.Add(itemId, maxQuantity);
+                _maxQuantityByItem.Add(itemType, maxQuantity);
             }
         }
     }

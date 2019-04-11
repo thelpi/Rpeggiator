@@ -189,7 +189,7 @@ namespace RpeggiatorLib.Sprites
                 bool death = e.CheckDeath(this);
                 if (death && e.LootQuantity > 0)
                 {
-                    _pickableItems.Add(PickableItem.Loot(e, e.LootItemId, e.LootQuantity));
+                    _pickableItems.Add(PickableItem.Loot(e, e.LootItemType, e.LootQuantity));
                 }
                 return death;
             });

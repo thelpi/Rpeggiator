@@ -44,16 +44,16 @@ namespace RpeggiatorLib
         /// Gets an <see cref="Item"/> by its <see cref="ItemType"/>.
         /// </summary>
         /// <remarks>Calls <see cref="BuildItemList"/> if never called before.</remarks>
-        /// <param name="itemId"><see cref="ItemType"/></param>
+        /// <param name="itemType"><see cref="ItemType"/></param>
         /// <returns><see cref="Item"/></returns>
-        internal static Item GetItem(ItemType itemId)
+        internal static Item GetItem(ItemType itemType)
         {
             if (_items == null)
             {
                 BuildItemList();
             }
 
-            return _items.Find(item => item.Type == itemId);
+            return _items.Find(item => item.Type == itemType);
         }
 
         /// <summary>
