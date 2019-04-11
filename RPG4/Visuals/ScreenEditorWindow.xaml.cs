@@ -6,7 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Windows;
 using System.Windows.Media;
-using Newtonsoft.Json;
+//using Newtonsoft.Json;
 
 namespace RPG4.Visuals
 {
