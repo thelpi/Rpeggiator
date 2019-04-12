@@ -156,13 +156,13 @@ namespace RpeggiatorLib
                 case ItemType.Bomb:
                     droppedItem = new ActionnedBomb(ComputeDropCoordinates(Constants.Bomb.WIDTH, Constants.Bomb.HEIGHT));
                     break;
-                case ItemType.SmallLifePotion:
+                case ItemType.LifePotionSmall:
                     Engine.Default.Player.DrinkLifePotion(Constants.Inventory.SMALL_LIFE_POTION_RECOVERY_LIFE_POINTS);
                     break;
-                case ItemType.MediumLifePotion:
+                case ItemType.LifePotionMedium:
                     Engine.Default.Player.DrinkLifePotion(Constants.Inventory.MEDIUM_LIFE_POTION_RECOVERY_LIFE_POINTS);
                     break;
-                case ItemType.LargeLifePotion:
+                case ItemType.LifePotionLarge:
                     Engine.Default.Player.DrinkLifePotion(Constants.Inventory.LARGE_LIFE_POTION_RECOVERY_LIFE_POINTS);
                     break;
                 case ItemType.Lamp:
@@ -238,9 +238,9 @@ namespace RpeggiatorLib
                         return false;
                     }
                     break;
-                case ItemType.SmallLifePotion:
-                case ItemType.MediumLifePotion:
-                case ItemType.LargeLifePotion:
+                case ItemType.LifePotionSmall:
+                case ItemType.LifePotionMedium:
+                case ItemType.LifePotionLarge:
                     if (Engine.Default.Player.CurrentLifePoints.Equal(Engine.Default.Player.MaximalLifePoints))
                     {
                         return false;

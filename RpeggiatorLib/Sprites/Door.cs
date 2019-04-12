@@ -1,4 +1,5 @@
 ﻿using System.Linq;
+using RpeggiatorLib.Render;
 
 namespace RpeggiatorLib.Sprites
 {
@@ -10,6 +11,7 @@ namespace RpeggiatorLib.Sprites
     {
         private int? _keyId;
         private int _screenId;
+        private ISpriteRender _renderLocked;
 
         /// <summary>
         /// Identifier.
@@ -28,6 +30,8 @@ namespace RpeggiatorLib.Sprites
         /// Inferred; indicates if the door is locked (the <see cref="Player"/> doesn't have the key).
         /// </summary>
         public bool Locked { get { return !TryOpen().HasValue; } }
+        /// <inheritdoc />
+        public override ISpriteRender Render { get { return Locked ? _renderLocked : _render; } }
 
         /// <summary>
         /// Constructor.
@@ -41,6 +45,8 @@ namespace RpeggiatorLib.Sprites
             Id = doorJsonDatas.Id;
             PlayerGoThroughX = doorJsonDatas.PlayerGoThroughX;
             PlayerGoThroughY = doorJsonDatas.PlayerGoThroughY;
+            _render = new ImageRender("Door");
+            _renderLocked = new ImageRender("DoorLocked");
         }
 
         /// <summary>

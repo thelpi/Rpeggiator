@@ -1,7 +1,9 @@
 ﻿using System;
 using System.IO;
 using System.Reflection;
+using System.Windows.Media;
 using Newtonsoft.Json;
+using RpeggiatorLib.Enums;
 
 namespace RpeggiatorLib
 {
@@ -13,6 +15,16 @@ namespace RpeggiatorLib
         private static Random _random = new Random(DateTime.Now.Millisecond);
 
         /// <summary>
+        /// Transforms a <see cref="Color"/> to its hexadecimal representation.
+        /// </summary>
+        /// <param name="color"><see cref="Color"/></param>
+        /// <returns>hexadecimal color value.</returns>
+        internal static string HexFromColor(Color color)
+        {
+            return string.Format("#{0:X2}{1:X2}{2:X2}{3:X2}", color.A, color.R, color.G, color.B);
+        }
+
+        /// <summary>
         /// Gets the screen datas by its index.
         /// </summary>
         /// <param name="screenIndex">Screen index.</param>
@@ -20,11 +32,10 @@ namespace RpeggiatorLib
         internal static dynamic GetScreenDatasFromIndex(int screenIndex)
         {
             string jsonRawContent;
-
-            Assembly assembly = Assembly.GetExecutingAssembly();
+            
             string resourceName = string.Format(Constants.SCREEN_RESSOURCE_FILE_FORMAT, screenIndex);
 
-            using (Stream stream = assembly.GetManifestResourceStream(resourceName))
+            using (Stream stream = Assembly.GetExecutingAssembly().GetManifestResourceStream(resourceName))
             {
                 using (StreamReader reader = new StreamReader(stream))
                 {

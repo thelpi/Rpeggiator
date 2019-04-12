@@ -2,6 +2,7 @@
 using System.Linq;
 using RpeggiatorLib.Enums;
 using RpeggiatorLib.Exceptions;
+using RpeggiatorLib.Render;
 
 namespace RpeggiatorLib.Sprites
 {
@@ -19,6 +20,9 @@ namespace RpeggiatorLib.Sprites
         private Elapser _movementTimeManager;
         // Lifetime manager for the current hit with the current weapon.
         private Elapser _hitElapser;
+        // Render while recovering.
+        private ISpriteRender _renderRecovery;
+
         /// <summary>
         /// When coming into a new screen, indicates the direction relative to the former screen.
         /// </summary>
@@ -39,6 +43,8 @@ namespace RpeggiatorLib.Sprites
         /// Indicates the sprite direction.
         /// </summary>
         public Direction Direction { get; private set; }
+        /// <inheritdoc />
+        public override ISpriteRender Render { get { return IsRecovering ? _renderRecovery : _render; } }
 
         /// <summary>
         /// Constructor.
@@ -61,6 +67,8 @@ namespace RpeggiatorLib.Sprites
             _currentWeaponHitDelay = Constants.Player.SWORD_HIT_DELAY;
             Direction = Direction.Right;
             _movementTimeManager = new Elapser();
+            _render = new ImageRender("Player");
+            _renderRecovery = new ImageRender("PlayerRecovery");
         }
 
         /// <inheritdoc />

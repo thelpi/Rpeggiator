@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using RpeggiatorLib.Enums;
+using RpeggiatorLib.Render;
 
 namespace RpeggiatorLib.Sprites
 {
@@ -9,6 +10,11 @@ namespace RpeggiatorLib.Sprites
     /// </summary>
     public class Sprite
     {
+        /// <summary>
+        /// Default <see cref="ISpriteRender"/>.
+        /// </summary>
+        protected ISpriteRender _render;
+
         /// <summary>
         /// X
         /// </summary>
@@ -29,6 +35,10 @@ namespace RpeggiatorLib.Sprites
         /// Height
         /// </summary>
         public double Height { get; protected set; }
+        /// <summary>
+        /// Overridden; <see cref="_render"/>
+        /// </summary>
+        public virtual ISpriteRender Render { get { return _render; } }
 
         /// <summary>
         /// Inferred; top left corner coordinates.

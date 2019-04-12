@@ -1,4 +1,6 @@
-﻿namespace RpeggiatorLib.Sprites
+﻿using RpeggiatorLib.Render;
+
+namespace RpeggiatorLib.Sprites
 {
     /// <summary>
     /// Represents a pit, which has two possible deadly for <see cref="Player"/> and <see cref="Enemy"/>
@@ -25,6 +27,7 @@
                   (double)pitJsonDatas.Width, (double)pitJsonDatas.Height)
         {
             ScreenIndexEntrance = pitJsonDatas.ScreenIndexEntrance;
+            _render = new ImageRender("Pit");
         }
 
         /// <summary>

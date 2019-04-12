@@ -1,4 +1,6 @@
-﻿namespace RpeggiatorLib.Sprites
+﻿using RpeggiatorLib.Render;
+
+namespace RpeggiatorLib.Sprites
 {
     /// <summary>
     /// Represents a rift (destroyable structure).
@@ -15,6 +17,7 @@
             ExplosionLifePointCost = Constants.RIFT_EXPLOSION_LIFE_POINT_COST;
             ArrowLifePointCost = 0;
             CurrentLifePoints = riftJson.LifePoints;
+            _render = new PlainRender(Tools.HexFromColor(System.Windows.Media.Colors.Thistle));
         }
 
         /// <inheritdoc />

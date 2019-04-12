@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using RpeggiatorLib.Render;
 
 namespace RpeggiatorLib.Sprites
 {
@@ -28,6 +29,7 @@ namespace RpeggiatorLib.Sprites
         {
             Activated = gateJson.Activated;
             _defaultActivated = gateJson.Activated;
+            _render = new PlainRender(Tools.HexFromColor(System.Windows.Media.Colors.Silver));
         }
 
         /// <inheritdoc />

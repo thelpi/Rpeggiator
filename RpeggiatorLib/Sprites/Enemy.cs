@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using RpeggiatorLib.Render;
 
 namespace RpeggiatorLib.Sprites
 {
@@ -37,6 +38,7 @@ namespace RpeggiatorLib.Sprites
             _path = new Path(points.ToArray());
             LootItemType = enemyJson.LootItemType;
             LootQuantity = enemyJson.LootQuantity;
+            _render = new ImageRender("Enemy");
         }
 
         /// <inheritdoc />

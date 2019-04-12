@@ -1,5 +1,6 @@
 ﻿using System.Linq;
 using RpeggiatorLib.Enums;
+using RpeggiatorLib.Render;
 
 namespace RpeggiatorLib.Sprites
 {
@@ -30,6 +31,7 @@ namespace RpeggiatorLib.Sprites
             _elapser = new Elapser();
             _hitOrAway = false;
             _thrownBy = thrownBy;
+            _render = new ImageRender("Arrow");
         }
 
         /// <inheritdoc />

@@ -12,15 +12,15 @@
         /// <summary>
         /// Small life potion.
         /// </summary>
-        SmallLifePotion,
+        LifePotionSmall,
         /// <summary>
         /// Medium life potion.
         /// </summary>
-        MediumLifePotion,
+        LifePotionMedium,
         /// <summary>
         /// Large life potion.
         /// </summary>
-        LargeLifePotion,
+        LifePotionLarge,
         /// <summary>
         /// Lamp.
         /// </summary>

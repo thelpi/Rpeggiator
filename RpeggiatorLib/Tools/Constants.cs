@@ -6,12 +6,16 @@ namespace RpeggiatorLib
     /// <summary>
     /// Set of constants
     /// </summary>
-    public static class Constants
+    internal static class Constants
     {
         /// <summary>
         /// Filename format to get screen JSON datas.
         /// </summary>
         internal const string SCREEN_RESSOURCE_FILE_FORMAT = "RpeggiatorLib.Datas.Screen{0}.json";
+        /// <summary>
+        /// Filename format to get image datas.
+        /// </summary>
+        internal const string IMAGE_RESSOURCE_FILE_FORMAT = "RpeggiatorLib.Datas.Images.{0}.png";
         /// <summary>
         /// Player's moves history max count.
         /// </summary>
@@ -116,9 +120,9 @@ namespace RpeggiatorLib
             internal static readonly IReadOnlyDictionary<ItemType, int> INVENTORY_ITEMS = new Dictionary<ItemType, int>
             {
                 { ItemType.Lamp, 1 },
-                { ItemType.SmallLifePotion, 3 },
-                { ItemType.MediumLifePotion, 1 },
-                { ItemType.LargeLifePotion, 1 },
+                { ItemType.LifePotionSmall, 3 },
+                { ItemType.LifePotionMedium, 1 },
+                { ItemType.LifePotionLarge, 1 },
                 { ItemType.Bomb, 1 },
                 { ItemType.Bow, 1 },
                 { ItemType.Arrow, 10 }
@@ -191,9 +195,9 @@ namespace RpeggiatorLib
             internal static readonly IReadOnlyDictionary<ItemType, int> DELAY_BETWEEN_USE = new Dictionary<ItemType, int>
             {
                 { ItemType.Bomb, 500 },
-                { ItemType.LargeLifePotion, 500 },
-                { ItemType.MediumLifePotion, 500 },
-                { ItemType.SmallLifePotion, 500 },
+                { ItemType.LifePotionLarge, 500 },
+                { ItemType.LifePotionMedium, 500 },
+                { ItemType.LifePotionSmall, 500 },
                 { ItemType.Lamp, 0 },
                 { ItemType.Bow, 1000 },
                 { ItemType.Arrow, 0 }

@@ -44,8 +44,9 @@ namespace RPG4.Visuals
             InitializeComponent();
 
             rctPlayer.Uid = _playerUid;
-
             rctDarkness.Uid = _darknessUid;
+            rctCoin.Fill = RpeggiatorLib.Render.ImageRender.CoinMenuRender().GetRenderBrush();
+            rctKeyring.Fill = RpeggiatorLib.Render.ImageRender.KeyringMenuRender().GetRenderBrush();
 
             BackgroundWorker worker = new BackgroundWorker
             {
@@ -109,7 +110,7 @@ namespace RPG4.Visuals
                 {
                     _currentScreenIndex = Engine.Default.CurrentScreenId;
 
-                    cvsMain.Background = SpriteRendering.GetRenderingBrush(Engine.Default.CurrentScreen);
+                    cvsMain.Background = Engine.Default.CurrentScreen.Render.GetRenderBrush();
                     cvsMain.Height = Engine.Default.CurrentScreen.Height;
                     cvsMain.Width = Engine.Default.CurrentScreen.Width;
 
@@ -149,7 +150,7 @@ namespace RPG4.Visuals
         {
             Rectangle rct = new Rectangle
             {
-                Fill = SpriteRendering.GetRenderingBrush(sp),
+                Fill = sp.Render.GetRenderBrush(),
                 Width = sp.Width,
                 Height = sp.Height
             };
@@ -191,7 +192,7 @@ namespace RPG4.Visuals
             rctPlayer.SetValue(Canvas.TopProperty, Engine.Default.Player.Y);
             rctPlayer.SetValue(Canvas.LeftProperty, Engine.Default.Player.X);
 
-            rctPlayer.Fill = SpriteRendering.GetRenderingBrush(Engine.Default.Player);
+            rctPlayer.Fill = Engine.Default.Player.Render.GetRenderBrush();
 
             if (Engine.Default.Player.IsHitting)
             {
@@ -237,7 +238,7 @@ namespace RPG4.Visuals
                 {
                     InventoryItem item = Engine.Default.Player.Inventory.DisplayableItems.ElementAt(i);
                     itemSlotTxt.Text = item.DisplayableQuantity.ToString().PadLeft(3, '0');
-                    itemSlotRct.Fill = SpriteRendering.BrushFromItemType(item.BaseItem.Type);
+                    itemSlotRct.Fill = item.Render.GetRenderBrush();
                 }
             }
             txtCoins.Text = Engine.Default.Player.Inventory.Coins.ToString().PadLeft(3, '0');

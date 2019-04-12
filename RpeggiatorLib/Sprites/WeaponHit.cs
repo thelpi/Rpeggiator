@@ -1,4 +1,6 @@
-﻿namespace RpeggiatorLib.Sprites
+﻿using RpeggiatorLib.Render;
+
+namespace RpeggiatorLib.Sprites
 {
     /// <summary>
     /// Represents the weapon hit sprite.
@@ -14,6 +16,9 @@
         /// <param name="width"><see cref="Sprite.Width"/></param>
         /// <param name="height"><see cref="Sprite.Height"/></param>
         internal WeaponHit(double x, double y, double width, double height)
-            : base(x, y, width, height) { }
+            : base(x, y, width, height)
+        {
+            _render = new ImageRender("Sword");
+        }
     }
 }

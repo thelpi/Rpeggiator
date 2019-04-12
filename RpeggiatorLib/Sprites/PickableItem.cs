@@ -1,4 +1,5 @@
 ﻿using RpeggiatorLib.Enums;
+using RpeggiatorLib.Render;
 
 namespace RpeggiatorLib.Sprites
 {
@@ -28,13 +29,11 @@ namespace RpeggiatorLib.Sprites
         /// Constructor.
         /// </summary>
         /// <param name="floorItemJson">The json dynamic object.</param>
-        internal PickableItem(dynamic floorItemJson) : base(
+        internal PickableItem(dynamic floorItemJson) : this(
             (double)floorItemJson.X, (double)floorItemJson.Y,
-            Constants.Item.LOOT_WIDTH, Constants.Item.LOOT_HEIGHT)
-        {
-            ItemType = floorItemJson.ItemType;
-            Quantity = floorItemJson.Quantity;
-        }
+            Constants.Item.LOOT_WIDTH, Constants.Item.LOOT_HEIGHT,
+            (ItemType?)floorItemJson.ItemType, (int)floorItemJson.Quantity, null)
+        { }
 
         // Private constructor.
         private PickableItem(double x, double y, double with, double height,
@@ -46,6 +45,8 @@ namespace RpeggiatorLib.Sprites
             {
                 _timeManager = new Elapser(timeBeForeDisapear.Value);
             }
+
+            _render = new ImageRender(itemType.HasValue ? ItemType.Value.ToString() : "Coin");
         }
 
         /// <summary>

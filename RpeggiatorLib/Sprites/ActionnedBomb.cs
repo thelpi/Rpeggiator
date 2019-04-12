@@ -1,4 +1,6 @@
-﻿namespace RpeggiatorLib.Sprites
+﻿using RpeggiatorLib.Render;
+
+namespace RpeggiatorLib.Sprites
 {
     /// <summary>
     /// Represents the bomb item when dropped on the floor.
@@ -33,6 +35,7 @@
         {
             _pendingTimeManager = new Elapser(Constants.Bomb.TIME_WHILE_PENDING);
             ExplosionSprite = null;
+            _render = new ImageRender("Bomb");
         }
 
         /// <inheritdoc />

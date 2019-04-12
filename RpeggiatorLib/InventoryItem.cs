@@ -1,4 +1,5 @@
 ﻿using RpeggiatorLib.Enums;
+using RpeggiatorLib.Render;
 
 namespace RpeggiatorLib
 {
@@ -28,6 +29,10 @@ namespace RpeggiatorLib
                 return Engine.Default.Player.Inventory.QuantityOf(BaseItem.Type);
             }
         }
+        /// <summary>
+        /// <see cref="ISpriteRender"/>
+        /// </summary>
+        public ISpriteRender Render { get; private set; }
 
         /// <summary>
         /// Constructor.
@@ -44,6 +49,7 @@ namespace RpeggiatorLib
         {
             BaseItem = Item.GetItem(itemType);
             Quantity = BaseItem.Unique ? 1 : quantity;
+            Render = new ImageRender(BaseItem.Type.ToString());
         }
 
         /// <summary>

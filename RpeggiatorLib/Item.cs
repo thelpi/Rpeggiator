@@ -84,21 +84,21 @@ namespace RpeggiatorLib
             });
             _items.Add(new Item
             {
-                Type = ItemType.SmallLifePotion,
+                Type = ItemType.LifePotionSmall,
                 Name = Names.ItemLifePotionSmall,
                 Unique = false,
                 InitialMaximalQuantity = 12
             });
             _items.Add(new Item
             {
-                Type = ItemType.MediumLifePotion,
+                Type = ItemType.LifePotionMedium,
                 Name = Names.ItemLifePotionMedium,
                 Unique = false,
                 InitialMaximalQuantity = 6
             });
             _items.Add(new Item
             {
-                Type = ItemType.LargeLifePotion,
+                Type = ItemType.LifePotionLarge,
                 Name = Names.ItemLifePotionLarge,
                 Unique = false,
                 InitialMaximalQuantity = 3
