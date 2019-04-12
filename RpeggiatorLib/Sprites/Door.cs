@@ -24,6 +24,10 @@ namespace RpeggiatorLib.Sprites
         /// The <see cref="Player"/> Y-axis position when he goes through the door and changes screen.
         /// </summary>
         public double PlayerGoThroughY { get; private set; }
+        /// <summary>
+        /// Inferred; indicates if the door is locked (the <see cref="Player"/> doesn't have the key).
+        /// </summary>
+        public bool Locked { get { return !TryOpen().HasValue; } }
 
         /// <summary>
         /// Constructor.
