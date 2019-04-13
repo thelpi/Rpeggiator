@@ -10,13 +10,16 @@ namespace RpeggiatorLib.Sprites
     /// <seealso cref="ActionnedItem"/>
     public class ActionnedArrow : ActionnedItem
     {
-        private Direction _direction;
         private Elapser _elapser;
         private bool _hitOrAway;
         private LifeSprite _thrownBy;
 
         /// <inheritdoc />
         public override bool IsDone { get { return _hitOrAway; } }
+        /// <summary>
+        /// <see cref="Direction"/> of the arrow.
+        /// </summary>
+        public Direction Direction { get; private set; }
 
         /// <summary>
         /// Constructor.
@@ -27,11 +30,11 @@ namespace RpeggiatorLib.Sprites
         internal ActionnedArrow(Point point, Direction direction, LifeSprite thrownBy)
             : base(point.X, point.Y, Constants.Arrow.WIDTH, Constants.Arrow.HEIGHT)
         {
-            _direction = direction;
+            Direction = direction;
             _elapser = new Elapser();
             _hitOrAway = false;
             _thrownBy = thrownBy;
-            _render = new ImageRender("Arrow");
+            _render = new ImageDirectionRender("Arrow", this, nameof(Direction));
         }
 
         /// <inheritdoc />
@@ -39,7 +42,7 @@ namespace RpeggiatorLib.Sprites
         {
             base.BehaviorAtNewFrame();
 
-            Point nextPos = Tools.ComputeMovementNextPointInDirection(X, Y, _elapser.Distance(Constants.Arrow.SPEED), _direction);
+            Point nextPos = Tools.ComputeMovementNextPointInDirection(X, Y, _elapser.Distance(Constants.Arrow.SPEED), Direction);
             X = nextPos.X;
             Y = nextPos.Y;
 

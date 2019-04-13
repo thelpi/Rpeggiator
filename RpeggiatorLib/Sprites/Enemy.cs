@@ -29,6 +29,7 @@ namespace RpeggiatorLib.Sprites
         /// <param name="enemyJson">The json dynamic object.</param>
         internal Enemy(dynamic enemyJson) : base((object)enemyJson)
         {
+            Direction = enemyJson.DefaultDirection;
             _movementTimeManager = new Elapser();
             List<Point> points = new List<Point> { TopLeftCorner };
             foreach (dynamic jsonPath in enemyJson.Path)
@@ -69,8 +70,8 @@ namespace RpeggiatorLib.Sprites
         // Sets the position from the new position compared to the current position.
         private void SetCoordinatesDirection(Point newPoint)
         {
-            bool? fromLeft = newPoint.X.Greater(X);
-            bool? fromTop = newPoint.Y.Greater(Y);
+            bool? fromLeft = newPoint.X.Equal(X) ? (bool?)null : newPoint.X.Greater(X);
+            bool? fromTop = newPoint.Y.Equal(Y) ? (bool?)null : newPoint.Y.Greater(Y);
 
             if (fromLeft == true)
             {

@@ -49,6 +49,7 @@
       "HourRotation": true,
       "MaximalLifePoints": 4,
       "HitLifePointCost": 5,
+      "DefaultDirection": "BottomRight",
       "Path": [
         {
           "X": 730,
@@ -81,6 +82,7 @@
       "HourRotation": true,
       "MaximalLifePoints": 4,
       "HitLifePointCost": 5,
+      "DefaultDirection": "Bottom",
       "Path": [],
       "GraphicType": "ImageBrushGraphic",
       "ImagePath": "Enemy",
