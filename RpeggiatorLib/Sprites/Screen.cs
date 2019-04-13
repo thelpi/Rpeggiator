@@ -135,7 +135,7 @@ namespace RpeggiatorLib.Sprites
             }
             foreach (dynamic chestJson in screenJsonDatas.Chests)
             {
-                _chests.Add(new Chest(chestJson));
+                _chests.Add(Chest.FromDynamic(chestJson));
             }
             foreach (dynamic doorJson in screenJsonDatas.Doors)
             {
