@@ -66,8 +66,8 @@
       "Width": 100,
       "Height": 40,
       "Activated": true,
-      "GraphicType": "PlainBrushGraphic",
-      "HexColor": "#FFDCDCDC"
+      "RenderType": "PlainRender",
+      "RenderValue": "#FFDCDCDC"
     }
   ],
   "Enemies": [
@@ -80,7 +80,11 @@
       "Height": 20,
       "ActionDuration": 5000,
       "GateIndex": 0,
-      "AppearOnActivation": false
+      "AppearOnActivation": false,
+      "RenderType": "ImageRender",
+      "RenderValue": "TriggerOff",
+      "OnRenderType": "ImageRender",
+      "OnRenderValue": "TriggerOn"
     },
     {
       "X": 160,
@@ -90,9 +94,10 @@
       "ActionDuration": 5000,
       "GateIndex": 0,
       "AppearOnActivation": false,
-      "GraphicType": "ImageBrushGraphic",
-      "ImagePath": "TriggerOff",
-      "GraphicValueActivated": "TriggerOn"
+      "RenderType": "ImageRender",
+      "RenderValue": "TriggerOff",
+      "OnRenderType": "ImageRender",
+      "OnRenderValue": "TriggerOn"
     }
   ],
   "NeighboringScreens": {
@@ -117,8 +122,8 @@
       "Width": 50,
       "Height": 50,
       "ScreenIndexEntrance": 1,
-      "GraphicType": "ImageBrushGraphic",
-      "ImagePath": "Pit"
+      "RenderType": "ImageRender",
+      "RenderValue": "Pit"
     }
   ],
   "Doors": []

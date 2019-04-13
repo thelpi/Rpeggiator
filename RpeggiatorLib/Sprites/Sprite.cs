@@ -355,7 +355,7 @@ namespace RpeggiatorLib.Sprites
                     typeof(PickableItem), typeof(Chest), typeof(PermanentStructure) } },
                 { 3, new System.Type[] { typeof(Enemy), typeof(Player) } },
                 { 4, new System.Type[] { typeof(BombExplosion), } },
-                { 5, new System.Type[] { typeof(ActionnedBomb), typeof(WeaponHit), typeof(ActionnedArrow) } }
+                { 5, new System.Type[] { typeof(ActionnedBomb), typeof(SwordHit), typeof(ActionnedArrow) } }
             };
 
             foreach (int zIndexKey in typesByZIndex.Keys)

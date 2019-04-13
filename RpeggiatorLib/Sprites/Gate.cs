@@ -21,15 +21,30 @@ namespace RpeggiatorLib.Sprites
         public bool Activated { get; private set; }
 
         /// <summary>
+        /// Creates an instance from json datas.
+        /// </summary>
+        /// <param name="datas">Json datas.</param>
+        /// <returns><see cref="Gate"/></returns>
+        internal static Gate FromDynamic(dynamic datas)
+        {
+            Gate g = new Gate((double)datas.X, (double)datas.Y, (double)datas.Width, (double)datas.Height, (bool)datas.Activated);
+            g.SetRenderFromDynamic((object)datas);
+            return g;
+        }
+
+        /// <summary>
         /// Constructor.
         /// </summary>
-        /// <param name="gateJson">The json dynamic object.</param>
-        internal Gate(dynamic gateJson)
-            : base((double)gateJson.X, (double)gateJson.Y, (double)gateJson.Width, (double)gateJson.Height)
+        /// <param name="x"><see cref="Sprite.X"/></param>
+        /// <param name="y"><see cref="Sprite.Y"/></param>
+        /// <param name="width"><see cref="Sprite.Width"/></param>
+        /// <param name="height"><see cref="Sprite.Height"/></param>
+        /// <param name="activated"><see cref="Activated"/></param>
+        internal Gate(double x, double y, double width, double height, bool activated)
+            : base(x, y, width, height)
         {
-            Activated = gateJson.Activated;
-            _defaultActivated = gateJson.Activated;
-            _render = new PlainRender(Tools.HexFromColor(System.Windows.Media.Colors.Silver));
+            Activated = activated;
+            _defaultActivated = activated;
         }
 
         /// <inheritdoc />

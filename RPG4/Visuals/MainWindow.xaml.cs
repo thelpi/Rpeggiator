@@ -198,7 +198,7 @@ namespace RPG4.Visuals
 
             if (_engine.Player.IsHitting)
             {
-                DrawSizedPoint(_engine.Player.HitSprite);
+                DrawSizedPoint(_engine.Player.SwordHitSprite);
             }
 
             Panel.SetZIndex(rctPlayer, _engine.Player.Z);

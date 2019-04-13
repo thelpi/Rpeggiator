@@ -116,7 +116,7 @@ namespace RpeggiatorLib.Sprites
             }
             foreach (dynamic gateJson in datas.Gates)
             {
-                s._gates.Add(new Gate(gateJson));
+                s._gates.Add(Gate.FromDynamic(gateJson));
             }
             foreach (dynamic riftJson in datas.Rifts)
             {
@@ -124,7 +124,7 @@ namespace RpeggiatorLib.Sprites
             }
             foreach (dynamic pitJson in datas.Pits)
             {
-                s._pits.Add(new Pit(pitJson));
+                s._pits.Add(Pit.FromDynamic(pitJson));
             }
             foreach (dynamic chestJson in datas.Chests)
             {
@@ -144,11 +144,11 @@ namespace RpeggiatorLib.Sprites
             }
             foreach (dynamic gatetriggerJson in datas.GateTriggers)
             {
-                s._gateTriggers.Add(new GateTrigger(gatetriggerJson));
+                s._gateTriggers.Add(GateTrigger.FromDynamic(gatetriggerJson));
             }
             foreach (dynamic itemJson in datas.Items)
             {
-                s._pickableItems.Add(new PickableItem(itemJson));
+                s._pickableItems.Add(PickableItem.FromDynamic(itemJson));
             }
             dynamic neighboringScreens = datas.NeighboringScreens;
             s._neighboringScreens = new Dictionary<Direction, int>

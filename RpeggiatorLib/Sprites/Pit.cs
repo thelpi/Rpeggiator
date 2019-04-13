@@ -19,15 +19,30 @@ namespace RpeggiatorLib.Sprites
         public int? ScreenIndexEntrance { get; private set; }
 
         /// <summary>
+        /// Creates an instance from json datas.
+        /// </summary>
+        /// <param name="datas">Json datas.</param>
+        /// <returns><see cref="Pit"/></returns>
+        internal static Pit FromDynamic(dynamic datas)
+        {
+            Pit p = new Pit((double)datas.X, (double)datas.Y, (double)datas.Width, (double)datas.Height, 
+                (int?)datas.ScreenIndexEntrance);
+            p.SetRenderFromDynamic((object)datas);
+            return p;
+        }
+
+        /// <summary>
         /// Constructor.
         /// </summary>
-        /// <param name="pitJsonDatas">The json dynamic object.</param>
-        internal Pit(dynamic pitJsonDatas)
-            : base((double)pitJsonDatas.X, (double)pitJsonDatas.Y,
-                  (double)pitJsonDatas.Width, (double)pitJsonDatas.Height)
+        /// <param name="x"><see cref="Sprite.X"/></param>
+        /// <param name="y"><see cref="Sprite.Y"/></param>
+        /// <param name="width"><see cref="Sprite.Width"/></param>
+        /// <param name="height"><see cref="Sprite.Height"/></param>
+        /// <param name="screenIndexEntrance"><see cref="ScreenIndexEntrance"/></param>
+        internal Pit(double x, double y, double width, double height, int? screenIndexEntrance)
+            : base(x, y, width, height)
         {
-            ScreenIndexEntrance = pitJsonDatas.ScreenIndexEntrance;
-            _render = new ImageRender("Pit");
+            ScreenIndexEntrance = screenIndexEntrance;
         }
 
         /// <summary>

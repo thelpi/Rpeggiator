@@ -15,7 +15,9 @@ namespace RpeggiatorLib.Sprites
         /// <returns><see cref="Rift"/></returns>
         internal static Rift FromDynamic(dynamic datas)
         {
-            return new Rift((double)datas.X, (double)datas.Y, (double)datas.Width, (double)datas.Height, (double)datas.LifePoints);
+            Rift r = new Rift((double)datas.X, (double)datas.Y, (double)datas.Width, (double)datas.Height, (double)datas.LifePoints);
+            r.SetRenderFromDynamic((object)datas);
+            return r;
         }
 
         /// <summary>
@@ -32,7 +34,6 @@ namespace RpeggiatorLib.Sprites
             ExplosionLifePointCost = Constants.RIFT_EXPLOSION_LIFE_POINT_COST;
             ArrowLifePointCost = 0;
             CurrentLifePoints = lifepoints;
-            _render = new PlainRender(Tools.HexFromColor(System.Windows.Media.Colors.Thistle));
         }
 
         /// <inheritdoc />

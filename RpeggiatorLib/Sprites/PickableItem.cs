@@ -26,27 +26,14 @@ namespace RpeggiatorLib.Sprites
         public ItemType? ItemType { get; private set; }
 
         /// <summary>
-        /// Constructor.
+        /// Creates an instance from json datas.
         /// </summary>
-        /// <param name="floorItemJson">The json dynamic object.</param>
-        internal PickableItem(dynamic floorItemJson) : this(
-            (double)floorItemJson.X, (double)floorItemJson.Y,
-            Constants.Item.LOOT_WIDTH, Constants.Item.LOOT_HEIGHT,
-            (ItemType?)floorItemJson.ItemType, (int)floorItemJson.Quantity, null)
-        { }
-
-        // Private constructor.
-        private PickableItem(double x, double y, double with, double height,
-            ItemType? itemType, int quantity, double? timeBeForeDisapear) : base(x, y, with, height)
+        /// <param name="datas">Json datas.</param>
+        /// <returns><see cref="PickableItem"/></returns>
+        internal static PickableItem FromDynamic(dynamic datas)
         {
-            ItemType = itemType;
-            Quantity = quantity;
-            if (timeBeForeDisapear.HasValue)
-            {
-                _timeManager = new Elapser(timeBeForeDisapear.Value);
-            }
-
-            _render = new ImageRender(itemType.HasValue ? ItemType.Value.ToString() : "Coin");
+            return new PickableItem((double)datas.X, (double)datas.Y, Constants.Item.LOOT_WIDTH, Constants.Item.LOOT_HEIGHT,
+                (ItemType?)datas.ItemType, (int)datas.Quantity, null);
         }
 
         /// <summary>
@@ -66,6 +53,30 @@ namespace RpeggiatorLib.Sprites
                 itemType,
                 quantity,
                 Constants.Item.LOOT_LIFETIME);
+        }
+
+        /// <summary>
+        /// Constructor.
+        /// </summary>
+        /// <param name="x"><see cref="Sprite.X"/></param>
+        /// <param name="y"><see cref="Sprite.Y"/></param>
+        /// <param name="width"><see cref="Sprite.Width"/></param>
+        /// <param name="height"><see cref="Sprite.Height"/></param>
+        /// <param name="itemType"><see cref="ItemType"/></param>
+        /// <param name="quantity"><see cref="Quantity"/></param>
+        /// <param name="timeBeForeDisapear"><see cref="_timeManager"/> lifetime, in milliseconds.</param>
+        protected PickableItem(double x, double y, double width, double height,
+            ItemType? itemType, int quantity, double? timeBeForeDisapear)
+            : base(x, y, width, height)
+        {
+            ItemType = itemType;
+            Quantity = quantity;
+            if (timeBeForeDisapear.HasValue)
+            {
+                _timeManager = new Elapser(timeBeForeDisapear.Value);
+            }
+
+            _render = new ImageRender(itemType.HasValue ? ItemType.Value.ToString() : nameof(Filename.Coin));
         }
 
         /// <summary>

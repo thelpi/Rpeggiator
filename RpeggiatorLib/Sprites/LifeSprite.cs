@@ -137,7 +137,7 @@ namespace RpeggiatorLib.Sprites
                 // TODO : fix this IF
                 if (GetType() == typeof(Enemy))
                 {
-                    if (Engine.Default.Player.IsHitting && Overlap(Engine.Default.Player.HitSprite))
+                    if (Engine.Default.Player.IsHitting && Overlap(Engine.Default.Player.SwordHitSprite))
                     {
                         cumuledLifePoints += Engine.Default.Player.HitLifePointCost;
                     }

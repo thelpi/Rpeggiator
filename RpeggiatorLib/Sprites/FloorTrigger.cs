@@ -20,12 +20,15 @@
         /// <summary>
         /// Constructor.
         /// </summary>
-        /// <param name="triggerJson">The json dynamic object.</param>
-        protected FloorTrigger(dynamic triggerJson) : base(
-            (double)triggerJson.X, (double)triggerJson.Y,
-            (double)triggerJson.Width, (double)triggerJson.Height)
+        /// <param name="x"><see cref="Sprite.X"/></param>
+        /// <param name="y"><see cref="Sprite.Y"/></param>
+        /// <param name="width"><see cref="Sprite.Width"/></param>
+        /// <param name="height"><see cref="Sprite.Height"/></param>
+        /// <param name="actionDuration"><see cref="_actionDuration"/></param>
+        protected FloorTrigger(double x, double y, double width, double height, double actionDuration)
+            : base(x, y, width, height)
         {
-            _actionDuration = triggerJson.ActionDuration;
+            _actionDuration = actionDuration;
         }
 
         /// <inheritdoc />

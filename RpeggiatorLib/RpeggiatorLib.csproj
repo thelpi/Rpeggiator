@@ -105,7 +105,7 @@
     <Compile Include="Sprites\Rift.cs" />
     <Compile Include="Sprites\Screen.cs" />
     <Compile Include="Sprites\Sprite.cs" />
-    <Compile Include="Sprites\WeaponHit.cs" />
+    <Compile Include="Sprites\SwordHit.cs" />
     <Compile Include="Tools\Constants.cs" />
     <Compile Include="Tools\Tools.cs" />
   </ItemGroup>

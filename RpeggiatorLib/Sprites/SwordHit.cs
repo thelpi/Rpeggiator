@@ -3,10 +3,10 @@
 namespace RpeggiatorLib.Sprites
 {
     /// <summary>
-    /// Represents the weapon hit sprite.
+    /// Represents the sword hit sprite.
     /// </summary>
     /// <seealso cref="Sprite"/>
-    public class WeaponHit : Sprite
+    public class SwordHit : Sprite
     {
         /// <summary>
         /// Constructor.
@@ -15,10 +15,10 @@ namespace RpeggiatorLib.Sprites
         /// <param name="y"><see cref="Sprite.Y"/></param>
         /// <param name="width"><see cref="Sprite.Width"/></param>
         /// <param name="height"><see cref="Sprite.Height"/></param>
-        internal WeaponHit(double x, double y, double width, double height)
+        internal SwordHit(double x, double y, double width, double height)
             : base(x, y, width, height)
         {
-            _render = new ImageRender("Sword");
+            _render = new ImageRender(nameof(Enums.Filename.Sword));
         }
 
         /// <summary>

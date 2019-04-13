@@ -36,7 +36,7 @@ namespace RpeggiatorLib.Sprites
         /// <summary>
         /// Hit <see cref="Sprite"/>.
         /// </summary>
-        public WeaponHit HitSprite { get; private set; }
+        public SwordHit SwordHitSprite { get; private set; }
         /// <inheritdoc />
         public override ISpriteRender Render { get { return RecoveryRenderSwitch(); } }
         /// <summary>
@@ -57,13 +57,13 @@ namespace RpeggiatorLib.Sprites
             Constants.Player.HIT_LIFE_POINT_COST,
             Constants.Player.INITIAL_PLAYER_SPEED,
             Constants.Player.RECOVERY_TIME,
-            "Player",
-            "PlayerRecovery",
+            nameof(Filename.Player),
+            nameof(Filename.PlayerRecovery),
             Direction.Right)
         {
             NewScreenEntrance = null;
             Inventory = new Inventory();
-            HitSprite = null;
+            SwordHitSprite = null;
             _hitElapser = null;
             _currentWeaponHitDelay = Constants.Player.SWORD_HIT_DELAY;
             _movementTimeManager = new Elapser();
@@ -281,7 +281,7 @@ namespace RpeggiatorLib.Sprites
                         hitY -= Height;
                         break;
                 }
-                HitSprite = new WeaponHit(hitX, hitY, Width, Height);
+                SwordHitSprite = new SwordHit(hitX, hitY, Width, Height);
             }
             else if (_hitElapser?.Elapsed == true)
             {
@@ -289,10 +289,10 @@ namespace RpeggiatorLib.Sprites
             }
             if (_hitElapser == null)
             {
-                HitSprite = null;
+                SwordHitSprite = null;
             }
 
-            HitSprite?.AdjustToPlayer();
+            SwordHitSprite?.AdjustToPlayer();
         }
     }
 }
