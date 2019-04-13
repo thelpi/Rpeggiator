@@ -1,5 +1,6 @@
 ﻿using System.Linq;
 using RpeggiatorLib.Enums;
+using RpeggiatorLib.Render;
 
 namespace RpeggiatorLib.Sprites
 {
@@ -15,6 +16,8 @@ namespace RpeggiatorLib.Sprites
         private Elapser _recoveryManager;
         // Recovery time, in milliseconds.
         private double _recoveryTime;
+        // Render while recovering.
+        private ISpriteRender _renderRecovery;
 
         /// <summary>
         /// Maximal number of life points.
@@ -66,8 +69,10 @@ namespace RpeggiatorLib.Sprites
         /// <param name="hitLifePointCost"><see cref="HitLifePointCost"/></param>
         /// <param name="speed"><see cref="_originalSpeed"/></param>
         /// <param name="recoveryTime"><see cref="_recoveryTime"/></param>
-        protected LifeSprite(double x, double y, double width, double height,
-            double maximalLifePoints, double hitLifePointCost, double speed, double recoveryTime)
+        /// <param name="renderFilename">File name for <see cref="Sprite._render"/>.</param>
+        /// <param name="renderRecoveryFilename">File name for <see cref="_renderRecovery"/>.</param>
+        protected LifeSprite(double x, double y, double width, double height, double maximalLifePoints, double hitLifePointCost,
+            double speed, double recoveryTime, string renderFilename, string renderRecoveryFilename)
             : base(x, y, width, height, maximalLifePoints)
         {
             MaximalLifePoints = maximalLifePoints;
@@ -77,13 +82,18 @@ namespace RpeggiatorLib.Sprites
             _recoveryTime = recoveryTime;
             ExplosionLifePointCost = Constants.Bomb.EXPLOSION_LIFE_POINT_COST;
             ArrowLifePointCost = Constants.Arrow.LIFE_POINT_COST;
+            _render = new ImageDirectionRender(renderFilename, this, nameof(Direction));
+            _renderRecovery = new ImageDirectionRender(renderRecoveryFilename, this, nameof(Direction));
         }
 
         /// <summary>
         /// Constructor.
         /// </summary>
         /// <param name="lifeSpriteJson">The json dynamic object.</param>
-        protected LifeSprite(dynamic lifeSpriteJson) : base((object)lifeSpriteJson)
+        /// <param name="renderFilename">File name for <see cref="Sprite._render"/>.</param>
+        /// <param name="renderRecoveryFilename">File name for <see cref="_renderRecovery"/>.</param>
+        protected LifeSprite(dynamic lifeSpriteJson, string renderFilename, string renderRecoveryFilename)
+            : base((object)lifeSpriteJson)
         {
             MaximalLifePoints = lifeSpriteJson.MaximalLifePoints;
             CurrentLifePoints = MaximalLifePoints;
@@ -94,6 +104,8 @@ namespace RpeggiatorLib.Sprites
             // TODO : set values in JSON.
             _recoveryManager = null;
             _recoveryTime = 0;
+            _render = new ImageDirectionRender(renderFilename, this, nameof(Direction));
+            _renderRecovery = new ImageDirectionRender(renderRecoveryFilename, this, nameof(Direction));
         }
 
         /// <summary>
@@ -164,6 +176,15 @@ namespace RpeggiatorLib.Sprites
             }
 
             return false;
+        }
+
+        /// <summary>
+        /// Creates an altenation between <see cref="Sprite._render"/> and <see cref="_renderRecovery"/>.
+        /// </summary>
+        /// <returns>Current <see cref="ISpriteRender"/>.</returns>
+        internal ISpriteRender RecoveryRenderSwitch()
+        {
+            return IsRecovering ? ((_recoveryManager.ElapsedMilliseconds / 100) % 2 == 0 ? _render : _renderRecovery) : _render;
         }
     }
 }

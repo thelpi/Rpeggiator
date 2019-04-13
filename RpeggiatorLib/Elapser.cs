@@ -21,6 +21,16 @@ namespace RpeggiatorLib
                 return (DateTime.Now - _timestamp).TotalMilliseconds.GreaterEqual(_lifetime);
             }
         }
+        /// <summary>
+        /// Inferred; indicates the number of milliseconds elapsed.
+        /// </summary>
+        internal int ElapsedMilliseconds
+        {
+            get
+            {
+                return Convert.ToInt32(Math.Floor((DateTime.Now - _timestamp).TotalMilliseconds));
+            }
+        }
 
         /// <summary>
         /// Constructor.

@@ -27,7 +27,7 @@ namespace RpeggiatorLib.Sprites
         /// Constructor.
         /// </summary>
         /// <param name="enemyJson">The json dynamic object.</param>
-        internal Enemy(dynamic enemyJson) : base((object)enemyJson)
+        internal Enemy(dynamic enemyJson) : base((object)enemyJson, "Enemy", "Enemy")
         {
             Direction = enemyJson.DefaultDirection;
             _movementTimeManager = new Elapser();
@@ -39,7 +39,6 @@ namespace RpeggiatorLib.Sprites
             _path = new Path(points.ToArray());
             LootItemType = enemyJson.LootItemType;
             LootQuantity = enemyJson.LootQuantity;
-            _render = new ImageDirectionRender("Enemy", this, nameof(Direction));
         }
 
         /// <inheritdoc />

@@ -20,8 +20,6 @@ namespace RpeggiatorLib.Sprites
         private Elapser _movementTimeManager;
         // Lifetime manager for the current hit with the current weapon.
         private Elapser _hitElapser;
-        // Render while recovering.
-        private ISpriteRender _renderRecovery;
 
         /// <summary>
         /// When coming into a new screen, indicates the direction relative to the former screen.
@@ -40,7 +38,7 @@ namespace RpeggiatorLib.Sprites
         /// </summary>
         public WeaponHit HitSprite { get; private set; }
         /// <inheritdoc />
-        public override ISpriteRender Render { get { return IsRecovering ? _renderRecovery : _render; } }
+        public override ISpriteRender Render { get { return RecoveryRenderSwitch(); } }
 
         /// <summary>
         /// Constructor.
@@ -54,7 +52,9 @@ namespace RpeggiatorLib.Sprites
             Constants.Player.MAXIMAL_LIFE_POINTS,
             Constants.Player.HIT_LIFE_POINT_COST,
             Constants.Player.INITIAL_PLAYER_SPEED,
-            Constants.Player.RECOVERY_TIME)
+            Constants.Player.RECOVERY_TIME,
+            "Player",
+            "PlayerRecovery")
         {
             NewScreenEntrance = null;
             Inventory = new Inventory();
@@ -63,8 +63,6 @@ namespace RpeggiatorLib.Sprites
             _currentWeaponHitDelay = Constants.Player.SWORD_HIT_DELAY;
             Direction = Direction.Right;
             _movementTimeManager = new Elapser();
-            _render = new ImageDirectionRender("Player", this, nameof(Direction));
-            _renderRecovery = new ImageDirectionRender("PlayerRecovery", this, nameof(Direction));
         }
 
         /// <inheritdoc />
