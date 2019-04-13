@@ -54,14 +54,14 @@ namespace RpeggiatorLib.Sprites
             Constants.Player.INITIAL_PLAYER_SPEED,
             Constants.Player.RECOVERY_TIME,
             "Player",
-            "PlayerRecovery")
+            "PlayerRecovery",
+            Direction.Right)
         {
             NewScreenEntrance = null;
             Inventory = new Inventory();
             HitSprite = null;
             _hitElapser = null;
             _currentWeaponHitDelay = Constants.Player.SWORD_HIT_DELAY;
-            Direction = Direction.Right;
             _movementTimeManager = new Elapser();
         }
 

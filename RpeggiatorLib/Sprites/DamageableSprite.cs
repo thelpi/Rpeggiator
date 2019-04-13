@@ -18,15 +18,6 @@
         /// <see cref="Enums.ItemType.Arrow"/> targeting life points cost.
         /// </summary>
         public double ArrowLifePointCost { get; protected set; }
-
-        /// <summary>
-        /// Constructor.
-        /// </summary>
-        /// <param name="damageableSpriteJson">The json dynamic object.</param>
-        protected DamageableSprite(dynamic damageableSpriteJson)
-            : base((double)damageableSpriteJson.X, (double)damageableSpriteJson.Y,
-                  (double)damageableSpriteJson.Width, (double)damageableSpriteJson.Height) { }
-
         /// <summary>
         /// Constructor.
         /// </summary>

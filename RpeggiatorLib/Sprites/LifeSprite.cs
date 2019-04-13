@@ -71,10 +71,12 @@ namespace RpeggiatorLib.Sprites
         /// <param name="recoveryTime"><see cref="_recoveryTime"/></param>
         /// <param name="renderFilename">File name for <see cref="Sprite._render"/>.</param>
         /// <param name="renderRecoveryFilename">File name for <see cref="_renderRecovery"/>.</param>
+        /// <param name="defaultDirection">Default <see cref="Direction"/>.</param>
         protected LifeSprite(double x, double y, double width, double height, double maximalLifePoints, double hitLifePointCost,
-            double speed, double recoveryTime, string renderFilename, string renderRecoveryFilename)
+            double speed, double recoveryTime, string renderFilename, string renderRecoveryFilename, Direction defaultDirection)
             : base(x, y, width, height, maximalLifePoints)
         {
+            Direction = defaultDirection;
             MaximalLifePoints = maximalLifePoints;
             HitLifePointCost = hitLifePointCost;
             _originalSpeed = speed;
@@ -82,28 +84,6 @@ namespace RpeggiatorLib.Sprites
             _recoveryTime = recoveryTime;
             ExplosionLifePointCost = Constants.Bomb.EXPLOSION_LIFE_POINT_COST;
             ArrowLifePointCost = Constants.Arrow.LIFE_POINT_COST;
-            _render = new ImageDirectionRender(renderFilename, this, nameof(Direction));
-            _renderRecovery = new ImageDirectionRender(renderRecoveryFilename, this, nameof(Direction));
-        }
-
-        /// <summary>
-        /// Constructor.
-        /// </summary>
-        /// <param name="lifeSpriteJson">The json dynamic object.</param>
-        /// <param name="renderFilename">File name for <see cref="Sprite._render"/>.</param>
-        /// <param name="renderRecoveryFilename">File name for <see cref="_renderRecovery"/>.</param>
-        protected LifeSprite(dynamic lifeSpriteJson, string renderFilename, string renderRecoveryFilename)
-            : base((object)lifeSpriteJson)
-        {
-            MaximalLifePoints = lifeSpriteJson.MaximalLifePoints;
-            CurrentLifePoints = MaximalLifePoints;
-            HitLifePointCost = lifeSpriteJson.HitLifePointCost;
-            _originalSpeed = lifeSpriteJson.Speed;
-            ExplosionLifePointCost = Constants.Bomb.EXPLOSION_LIFE_POINT_COST;
-            ArrowLifePointCost = Constants.Arrow.LIFE_POINT_COST;
-            // TODO : set values in JSON.
-            _recoveryManager = null;
-            _recoveryTime = 0;
             _render = new ImageDirectionRender(renderFilename, this, nameof(Direction));
             _renderRecovery = new ImageDirectionRender(renderRecoveryFilename, this, nameof(Direction));
         }

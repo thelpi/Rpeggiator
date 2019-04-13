@@ -13,8 +13,8 @@
       "Y": 49.0,
       "Width": 495.0,
       "Height": 50.0,
-      "GraphicType": "PlainBrushGraphic",
-      "HexColor": "#FF000000"
+      "RenderType": "ImageMosaicRender",
+      "RenderValue": "Tree"
     },
     {
       "X": 63.0,

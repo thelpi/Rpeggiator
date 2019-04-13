@@ -127,7 +127,7 @@ namespace RpeggiatorLib.Sprites
             }
             foreach (dynamic riftJson in screenJsonDatas.Rifts)
             {
-                _rifts.Add(new Rift(riftJson));
+                _rifts.Add(Rift.FromDynamic(riftJson));
             }
             foreach (dynamic pitJson in screenJsonDatas.Pits)
             {
@@ -147,7 +147,7 @@ namespace RpeggiatorLib.Sprites
             }
             foreach (dynamic enemyJson in screenJsonDatas.Enemies)
             {
-                _enemies.Add(new Enemy(enemyJson));
+                _enemies.Add(Enemy.FromDynamic(enemyJson));
             }
             foreach (dynamic gatetriggerJson in screenJsonDatas.GateTriggers)
             {

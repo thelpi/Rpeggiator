@@ -80,6 +80,7 @@
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
     <Compile Include="Render\ImageDirectionRender.cs" />
+    <Compile Include="Render\ImageMosaicRender.cs" />
     <Compile Include="Render\ImageRender.cs" />
     <Compile Include="Render\ISpriteRender.cs" />
     <Compile Include="Render\PlainRender.cs" />
@@ -223,6 +224,9 @@
     <EmbeddedResource Include="Datas\Images\TriggerOff.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Datas\Images\Tree.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
