@@ -9,14 +9,6 @@ namespace RpeggiatorLib
     internal static class Constants
     {
         /// <summary>
-        /// Filename format to get screen JSON datas.
-        /// </summary>
-        internal const string SCREEN_RESSOURCE_FILE_FORMAT = "RpeggiatorLib.Datas.Screen{0}.json";
-        /// <summary>
-        /// Filename format to get image datas.
-        /// </summary>
-        internal const string IMAGE_RESSOURCE_FILE_FORMAT = "RpeggiatorLib.Datas.Images.{0}.png";
-        /// <summary>
         /// Player's moves history max count.
         /// </summary>
         internal const int MOVE_HISTORY_COUNT = 50;

@@ -33,9 +33,9 @@ namespace RpeggiatorLib
         {
             string jsonRawContent;
             
-            string resourceName = string.Format(Constants.SCREEN_RESSOURCE_FILE_FORMAT, screenIndex);
+            string resourcePath = string.Format("{0}Screen{1}.json", Engine.ResourcesPath, screenIndex);
 
-            using (Stream stream = Assembly.GetExecutingAssembly().GetManifestResourceStream(resourceName))
+            using (FileStream stream = new FileStream(resourcePath, FileMode.Open, FileAccess.Read))
             {
                 using (StreamReader reader = new StreamReader(stream))
                 {

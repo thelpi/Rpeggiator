@@ -79,6 +79,15 @@ namespace RpeggiatorLib {
         }
         
         /// <summary>
+        ///   Recherche une chaîne localisée semblable à Le dossier spécifié pour les resources est invalide..
+        /// </summary>
+        internal static string InvalidResourcesPathExceptionMessage {
+            get {
+                return ResourceManager.GetString("InvalidResourcesPathExceptionMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Recherche une chaîne localisée semblable à Unable to resolve this quadratic equation..
         /// </summary>
         internal static string NoQuadraticSolutionExceptionMessage {

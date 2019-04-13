@@ -10,29 +10,31 @@ namespace RpeggiatorLib
     /// </summary>
     public class Engine
     {
-        private static Engine _engine;
+        /// <summary>
+        /// Path to resources directory.
+        /// </summary>
+        internal static string ResourcesPath { get; private set; }
 
         /// <summary>
         /// Singleton access.
         /// </summary>
-        public static Engine Default
-        {
-            get
-            {
-                if (_engine == null)
-                {
-                    _engine = new Engine(Constants.FIRST_SCREEN_INDEX);
-                }
-                return _engine;
-            }
-        }
+        internal static Engine Default { get; private set; }
 
         /// <summary>
-        /// Ensures the creation of a new engine.
+        /// Initializes a new <see cref="Engine"/>.
         /// </summary>
-        public static void ResetEngine()
+        /// <param name="resourcesPath"><see cref="ResourcesPath"/></param>
+        /// <returns><see cref="Default"/></returns>
+        public static Engine InitializeEngine(string resourcesPath)
         {
-            _engine = null;
+            if (!System.IO.Directory.Exists(resourcesPath))
+            {
+                throw new ArgumentException(Messages.InvalidResourcesPathExceptionMessage, nameof(resourcesPath));
+            }
+
+            ResourcesPath = string.Concat(resourcesPath, resourcesPath.Last() == '\\' ? string.Empty : "\\");
+            Default = new Engine(Constants.FIRST_SCREEN_INDEX);
+            return Default;
         }
 
         private Screen _currentScreen;
@@ -82,6 +84,14 @@ namespace RpeggiatorLib
                 return (totalHoursFloored % 24) + (totalHours - totalHoursFloored) + Constants.FIRST_DAY_HOUR_START;
             }
         }
+        /// <summary>
+        /// Gets the <see cref="Render.ISpriteRender"/> for inventory coins.
+        /// </summary>
+        public Render.ISpriteRender CoinMenuRender { get { return Render.ImageRender.CoinMenuRender(); } }
+        /// <summary>
+        /// Gets the <see cref="Render.ISpriteRender"/> for inventory keyring.
+        /// </summary>
+        public Render.ISpriteRender KeyringMenuRender { get { return Render.ImageRender.KeyringMenuRender(); } }
 
         // Private constructor.
         private Engine(int screenId)

@@ -50,7 +50,9 @@ namespace RpeggiatorLib.Render
         {
             BitmapImage bitmapImage = new BitmapImage();
 
-            using (Stream stream = Assembly.GetExecutingAssembly().GetManifestResourceStream(string.Format(Constants.IMAGE_RESSOURCE_FILE_FORMAT, _imageName)))
+            string resourcePath = string.Format("{0}Images\\{1}.png", Engine.ResourcesPath, _imageName);
+
+            using (FileStream stream = new FileStream(resourcePath, FileMode.Open, FileAccess.Read))
             {
                 stream.Position = 0;
                 bitmapImage.BeginInit();
@@ -118,7 +120,7 @@ namespace RpeggiatorLib.Render
         /// <see cref="ImageRender"/> specific to coins in the menu.
         /// </summary>
         /// <returns><see cref="ImageRender"/></returns>
-        public static ImageRender CoinMenuRender()
+        internal static ImageRender CoinMenuRender()
         {
             if (_coinMenuRender == null)
             {
@@ -132,7 +134,7 @@ namespace RpeggiatorLib.Render
         /// <see cref="ImageRender"/> specific to keyring in the menu.
         /// </summary>
         /// <returns><see cref="ImageRender"/></returns>
-        public static ImageRender KeyringMenuRender()
+        internal static ImageRender KeyringMenuRender()
         {
             if (_keyringMenuRender == null)
             {

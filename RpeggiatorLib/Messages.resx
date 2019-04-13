@@ -123,6 +123,9 @@
   <data name="InvalidInventorySlotIdExceptionMessage" xml:space="preserve">
     <value>The inventory slot id is invalid.</value>
   </data>
+  <data name="InvalidResourcesPathExceptionMessage" xml:space="preserve">
+    <value>Le dossier spécifié pour les resources est invalide.</value>
+  </data>
   <data name="NoQuadraticSolutionExceptionMessage" xml:space="preserve">
     <value>Unable to resolve this quadratic equation.</value>
   </data>
