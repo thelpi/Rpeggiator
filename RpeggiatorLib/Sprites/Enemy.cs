@@ -38,15 +38,13 @@ namespace RpeggiatorLib.Sprites
             _path = new Path(points.ToArray());
             LootItemType = enemyJson.LootItemType;
             LootQuantity = enemyJson.LootQuantity;
-            _render = new ImageRender("Enemy");
+            _render = new ImageDirectionRender("Enemy", this, nameof(Direction));
         }
 
         /// <inheritdoc />
         internal override void BehaviorAtNewFrame()
         {
-            Point pt = _path.ComputeNextPosition(this, _movementTimeManager.Distance(Speed));
-            X = pt.X;
-            Y = pt.Y;
+            SetCoordinatesDirection(_path.ComputeNextPosition(this, _movementTimeManager.Distance(Speed)));
         }
 
         /// <summary>
@@ -66,6 +64,62 @@ namespace RpeggiatorLib.Sprites
                 return true;
             }
             return false;
+        }
+
+        // Sets the position from the new position compared to the current position.
+        private void SetCoordinatesDirection(Point newPoint)
+        {
+            bool? fromLeft = newPoint.X.Greater(X);
+            bool? fromTop = newPoint.Y.Greater(Y);
+
+            if (fromLeft == true)
+            {
+                if (fromTop == true)
+                {
+                    Direction = Enums.Direction.BottomRight;
+                }
+                else if (fromTop == false)
+                {
+                    Direction = Enums.Direction.TopRight;
+                }
+                else
+                {
+                    Direction = Enums.Direction.Right;
+                }
+            }
+            else if (fromLeft == false)
+            {
+                if (fromTop == true)
+                {
+                    Direction = Enums.Direction.BottomLeft;
+                }
+                else if (fromTop == false)
+                {
+                    Direction = Enums.Direction.TopLeft;
+                }
+                else
+                {
+                    Direction = Enums.Direction.Left;
+                }
+            }
+            else
+            {
+                if (fromTop == true)
+                {
+                    Direction = Enums.Direction.Bottom;
+                }
+                else if (fromTop == false)
+                {
+                    Direction = Enums.Direction.Top;
+                }
+                else
+                {
+                    // No change.
+                }
+            }
+
+            X = newPoint.X;
+            Y = newPoint.Y;
         }
     }
 }

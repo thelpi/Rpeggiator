@@ -50,6 +50,10 @@ namespace RpeggiatorLib.Sprites
         /// Indicates the player is currently recovering from an hit.
         /// </summary>
         public bool IsRecovering { get { return _recoveryManager?.Elapsed == false; } }
+        /// <summary>
+        /// Indicates the sprite direction.
+        /// </summary>
+        public Direction Direction { get; protected set; }
 
         /// <summary>
         /// Constructor.

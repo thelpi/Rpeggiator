@@ -39,10 +39,6 @@ namespace RpeggiatorLib.Sprites
         /// Hit <see cref="Sprite"/>.
         /// </summary>
         public WeaponHit HitSprite { get; private set; }
-        /// <summary>
-        /// Indicates the sprite direction.
-        /// </summary>
-        public Direction Direction { get; private set; }
         /// <inheritdoc />
         public override ISpriteRender Render { get { return IsRecovering ? _renderRecovery : _render; } }
 
@@ -67,8 +63,8 @@ namespace RpeggiatorLib.Sprites
             _currentWeaponHitDelay = Constants.Player.SWORD_HIT_DELAY;
             Direction = Direction.Right;
             _movementTimeManager = new Elapser();
-            _render = new ImageRender("Player");
-            _renderRecovery = new ImageRender("PlayerRecovery");
+            _render = new ImageDirectionRender("Player", this, nameof(Direction));
+            _renderRecovery = new ImageDirectionRender("PlayerRecovery", this, nameof(Direction));
         }
 
         /// <inheritdoc />

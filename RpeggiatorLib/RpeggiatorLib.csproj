@@ -79,6 +79,7 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
+    <Compile Include="Render\ImageDirectionRender.cs" />
     <Compile Include="Render\ImageRender.cs" />
     <Compile Include="Render\ISpriteRender.cs" />
     <Compile Include="Render\PlainRender.cs" />
