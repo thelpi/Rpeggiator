@@ -45,9 +45,11 @@ namespace RpeggiatorLib.Sprites
         /// <returns><see cref="Door"/></returns>
         internal static Door FromDynamic(dynamic datas)
         {
-            return new Door((double)datas.X, (double)datas.Y, (double)datas.Width, (double)datas.Height, (int?)datas.KeyId,
+            Door d = new Door((double)datas.X, (double)datas.Y, (double)datas.Width, (double)datas.Height, (int?)datas.KeyId,
                 (int)datas.ScreenId, (int)datas.Id, (double)datas.PlayerGoThroughX, (double)datas.PlayerGoThroughY,
-                (string)datas.RenderFilename, (string)datas.RenderLockedFilename);
+                (string)datas.LockedRenderType, (string)datas.LockedRenderValue);
+            d.SetRenderFromDynamic((object)datas);
+            return d;
         }
 
         /// <summary>
@@ -62,9 +64,10 @@ namespace RpeggiatorLib.Sprites
         /// <param name="id"><see cref="Id"/></param>
         /// <param name="playerGoThroughX"><see cref="PlayerGoThroughX"/></param>
         /// <param name="playerGoThroughY"><see cref="PlayerGoThroughY"/></param>
-        /// <param name="renderFilename"><see cref="Sprite._render"/> filename.</param>
-        /// <param name="renderLockedFilename"><see cref="_renderLocked"/> filename.</param>
-        internal Door(double x, double y, double width, double height, int? keyId, int screenId, int id, double playerGoThroughX, double playerGoThroughY, string renderFilename, string renderLockedFilename)
+        /// <param name="lockedRenderType"><see cref="_renderLocked"/> render type.</param>
+        /// <param name="lockedRenderValue"><see cref="_renderLocked"/> render value.</param>
+        internal Door(double x, double y, double width, double height, int? keyId, int screenId, int id,
+            double playerGoThroughX, double playerGoThroughY, string lockedRenderType, string lockedRenderValue)
             : base(x, y, width, height)
         {
             _keyId = keyId;
@@ -72,8 +75,20 @@ namespace RpeggiatorLib.Sprites
             Id = id;
             PlayerGoThroughX = playerGoThroughX;
             PlayerGoThroughY = playerGoThroughY;
-            _render = new ImageRender(renderFilename);
-            _renderLocked = new ImageRender(renderLockedFilename);
+            switch (lockedRenderType)
+            {
+                case nameof(PlainRender):
+                    _renderLocked = new PlainRender(lockedRenderValue);
+                    break;
+                case nameof(ImageRender):
+                    _renderLocked = new ImageRender(lockedRenderValue);
+                    break;
+                case nameof(ImageMosaicRender):
+                    _renderLocked = new ImageMosaicRender(lockedRenderValue, this);
+                    break;
+                default:
+                    throw new System.NotImplementedException(Messages.NotImplementedGraphicExceptionMessage);
+            }
         }
 
         /// <summary>

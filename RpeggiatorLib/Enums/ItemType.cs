@@ -33,5 +33,6 @@
         /// Arrow.
         /// </summary>
         Arrow
+        // Expands "Filename" enumeration at the same time !
     }
 }

@@ -35,9 +35,11 @@ namespace RpeggiatorLib.Sprites
         /// <returns><see cref="Chest"/></returns>
         internal static Chest FromDynamic(dynamic datas)
         {
-            return new Chest((double)datas.X, (double)datas.Y, (double)datas.Width, (double)datas.Height,
+            Chest c = new Chest((double)datas.X, (double)datas.Y, (double)datas.Width, (double)datas.Height,
                 (Enums.ItemType?)datas.ItemType, (int)datas.Quantity, (int?)datas.KeyId, (int?)datas.KeyIdContainer,
-                (string)datas.RenderFilename, (string)datas.RenderOpenFilename);
+                (string)datas.OpenRenderType, (string)datas.OpenRenderValue);
+            c.SetRenderFromDynamic((object)datas);
+            return c;
         }
 
         /// <summary>
@@ -51,18 +53,30 @@ namespace RpeggiatorLib.Sprites
         /// <param name="quantity"><see cref="_quantity"/></param>
         /// <param name="keyId"><see cref="_keyId"/></param>
         /// <param name="keyIdContainer"><see cref="_keyIdContainer"/></param>
-        /// <param name="renderFilename"><see cref="Sprite._render"/> filename.</param>
-        /// <param name="renderOpenFilename"><see cref="_renderOpen"/> filename.</param>
+        /// <param name="openRenderType"><see cref="_renderOpen"/> render type.</param>
+        /// <param name="openRenderValue"><see cref="_renderOpen"/> render value.</param>
         internal Chest(double x, double y, double width, double height, Enums.ItemType? itemType, int quantity,
-            int? keyId, int? keyIdContainer, string renderFilename, string renderOpenFilename)
+            int? keyId, int? keyIdContainer, string openRenderType, string openRenderValue)
             : base(x, y, width, height)
         {
             _itemType = itemType;
             _quantity = quantity;
             _keyId = keyId;
             _keyIdContainer = keyIdContainer;
-            _render = new ImageRender(renderFilename);
-            _renderOpen = new ImageRender(renderOpenFilename);
+            switch (openRenderType)
+            {
+                case nameof(PlainRender):
+                    _renderOpen = new PlainRender(openRenderValue);
+                    break;
+                case nameof(ImageRender):
+                    _renderOpen = new ImageRender(openRenderValue);
+                    break;
+                case nameof(ImageMosaicRender):
+                    _renderOpen = new ImageMosaicRender(openRenderValue, this);
+                    break;
+                default:
+                    throw new System.NotImplementedException(Messages.NotImplementedGraphicExceptionMessage);
+            }
         }
 
         /// <summary>

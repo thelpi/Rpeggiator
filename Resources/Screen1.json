@@ -36,8 +36,10 @@
       "Quantity": 10,
       "KeyId": null,
       "KeyIdContainer": 1,
-      "RenderFilename": "Chest",
-      "RenderOpenFilename": "OpenChest"
+      "RenderType": "ImageRender",
+      "RenderValue": "Chest",
+      "OpenRenderType": "ImageRender",
+      "OpenRenderValue": "OpenChest"
     }
   ],
   "Gates": [],
@@ -135,8 +137,10 @@
       "PlayerGoThroughX": 400,
       "PlayerGoThroughY": 540,
       "Id": 1,
-      "RenderFilename": "Door",
-      "RenderLockedFilename": "DoorLocked"
+      "RenderType": "ImageRender",
+      "RenderValue": "Door",
+      "LockedRenderType": "ImageRender",
+      "LockedRenderValue": "DoorLocked"
     }
   ]
 }

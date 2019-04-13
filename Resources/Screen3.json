@@ -105,8 +105,10 @@
       "PlayerGoThroughX": 400,
       "PlayerGoThroughY": 20,
       "Id": 1,
-      "RenderFilename": "Door",
-      "RenderLockedFilename": "DoorLocked"
+      "RenderType": "ImageRender",
+      "RenderValue": "Door",
+      "LockedRenderType": "ImageRender",
+      "LockedRenderValue": "DoorLocked"
     }
   ]
 }

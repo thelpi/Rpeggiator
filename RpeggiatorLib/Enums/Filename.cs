@@ -32,6 +32,26 @@
         /// <summary>
         /// <see cref="Sprites.Player"/> when recovering.
         /// </summary>
-        PlayerRecovery
+        PlayerRecovery,
+        /// <summary>
+        /// <see cref="ItemType.LifePotionSmall"/>
+        /// </summary>
+        LifePotionSmall,
+        /// <summary>
+        /// <see cref="ItemType.LifePotionMedium"/>
+        /// </summary>
+        LifePotionMedium,
+        /// <summary>
+        /// <see cref="ItemType.LifePotionLarge"/>
+        /// </summary>
+        LifePotionLarge,
+        /// <summary>
+        /// <see cref="ItemType.Lamp"/>
+        /// </summary>
+        Lamp,
+        /// <summary>
+        /// <see cref="ItemType.Bow"/>
+        /// </summary>
+        Bow
     }
 }
