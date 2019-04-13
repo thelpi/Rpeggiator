@@ -25,7 +25,7 @@ namespace RPG4.Properties {
         
         [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("D:\\Ma programmation\\csharp\\Projects\\RPG4\\RpeggiatorLib\\Datas")]
+        [global::System.Configuration.DefaultSettingValueAttribute("D:\\Ma programmation\\csharp\\Projects\\RPG4\\Resources\\")]
         public string ResourcesPath {
             get {
                 return ((string)(this["ResourcesPath"]));

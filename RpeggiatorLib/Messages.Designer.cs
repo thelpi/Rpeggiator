@@ -79,7 +79,7 @@ namespace RpeggiatorLib {
         }
         
         /// <summary>
-        ///   Recherche une chaîne localisée semblable à Le dossier spécifié pour les resources est invalide..
+        ///   Recherche une chaîne localisée semblable à The specified resources path is invalid..
         /// </summary>
         internal static string InvalidResourcesPathExceptionMessage {
             get {
@@ -102,6 +102,15 @@ namespace RpeggiatorLib {
         internal static string NotImplementedGraphicExceptionMessage {
             get {
                 return ResourceManager.GetString("NotImplementedGraphicExceptionMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Recherche une chaîne localisée semblable à This virtual method ou property has not been implemented..
+        /// </summary>
+        internal static string NotImplementedVirtualExceptionMessage {
+            get {
+                return ResourceManager.GetString("NotImplementedVirtualExceptionMessage", resourceCulture);
             }
         }
         

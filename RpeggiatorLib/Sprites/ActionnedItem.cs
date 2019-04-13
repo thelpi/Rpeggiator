@@ -9,7 +9,7 @@
         /// <summary>
         /// Indicates the item use is finished.
         /// </summary>
-        public virtual bool IsDone { get { throw new System.InvalidOperationException("Should be implemented in derived class !"); } }
+        public virtual bool IsDone { get { throw new System.NotImplementedException(Messages.NotImplementedVirtualExceptionMessage); } }
 
         /// <summary>
         /// Constructor.

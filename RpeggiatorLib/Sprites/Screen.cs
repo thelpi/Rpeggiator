@@ -98,13 +98,85 @@ namespace RpeggiatorLib.Sprites
         }
 
         /// <summary>
+        /// Creates an instance, for the specified identifier, from json datas.
+        /// </summary>
+        /// <param name="id"><see cref="Id"/></param>
+        /// <param name="datas">Json datas.</param>
+        /// <returns><see cref="Screen"/></returns>
+        internal static Screen FromDynamic(int id, dynamic datas)
+        {
+            Screen s = new Screen(id, (double)datas.X, (double)datas.Y, (double)datas.Width, (double)datas.Height,
+                (FloorType)datas.FloorType, (double)datas.AreaDarknessOpacity);
+            s.SetRenderFromDynamic((object)datas);
+
+            // TODO : move this code in the constructor.
+            foreach (dynamic structureJson in datas.PermanentStructures)
+            {
+                s._permanentStructures.Add(PermanentStructure.FromDynamic(structureJson));
+            }
+            foreach (dynamic gateJson in datas.Gates)
+            {
+                s._gates.Add(new Gate(gateJson));
+            }
+            foreach (dynamic riftJson in datas.Rifts)
+            {
+                s._rifts.Add(Rift.FromDynamic(riftJson));
+            }
+            foreach (dynamic pitJson in datas.Pits)
+            {
+                s._pits.Add(new Pit(pitJson));
+            }
+            foreach (dynamic chestJson in datas.Chests)
+            {
+                s._chests.Add(Chest.FromDynamic(chestJson));
+            }
+            foreach (dynamic doorJson in datas.Doors)
+            {
+                s._doors.Add(Door.FromDynamic(doorJson));
+            }
+            foreach (dynamic floorJson in datas.Floors)
+            {
+                s._floors.Add(Floor.FromDynamic(floorJson));
+            }
+            foreach (dynamic enemyJson in datas.Enemies)
+            {
+                s._enemies.Add(Enemy.FromDynamic(enemyJson));
+            }
+            foreach (dynamic gatetriggerJson in datas.GateTriggers)
+            {
+                s._gateTriggers.Add(new GateTrigger(gatetriggerJson));
+            }
+            foreach (dynamic itemJson in datas.Items)
+            {
+                s._pickableItems.Add(new PickableItem(itemJson));
+            }
+            dynamic neighboringScreens = datas.NeighboringScreens;
+            s._neighboringScreens = new Dictionary<Direction, int>
+            {
+                { Direction.Bottom, (int)neighboringScreens.Bottom },
+                { Direction.Left, (int)neighboringScreens.Left },
+                { Direction.Right, (int)neighboringScreens.Right },
+                { Direction.Top, (int)neighboringScreens.Top }
+            };
+
+            return s;
+        }
+
+        /// <summary>
         /// Constructor.
         /// </summary>
         /// <param name="id"><see cref="Id"/></param>
-        /// <param name="screenJsonDatas">Screen json datas.</param>
-        internal Screen(int id, dynamic screenJsonDatas) : base((object)screenJsonDatas)
+        /// <param name="x"><see cref="Sprite.X"/></param>
+        /// <param name="y"><see cref="Sprite.Y"/></param>
+        /// <param name="width"><see cref="Sprite.Width"/></param>
+        /// <param name="height"><see cref="Sprite.Height"/></param>
+        /// <param name="floorType"><see cref="Floor.FloorType"/></param>
+        /// <param name="darknessOpacity"><see cref="DarknessOpacity"/></param>
+        internal Screen(int id, double x, double y, double width, double height, FloorType floorType, double darknessOpacity)
+            : base(x, y, width, height, floorType)
         {
             Id = id;
+            DarknessOpacity = darknessOpacity;
             _permanentStructures = new List<PermanentStructure>();
             _doors = new List<Door>();
             _floors = new List<Floor>();
@@ -116,55 +188,6 @@ namespace RpeggiatorLib.Sprites
             _chests = new List<Chest>();
             _pickableItems = new List<PickableItem>();
             _actionnedItems = new List<ActionnedItem>();
-            DarknessOpacity = screenJsonDatas.AreaDarknessOpacity;
-            foreach (dynamic structureJson in screenJsonDatas.PermanentStructures)
-            {
-                _permanentStructures.Add(new PermanentStructure(structureJson));
-            }
-            foreach (dynamic gateJson in screenJsonDatas.Gates)
-            {
-                _gates.Add(new Gate(gateJson));
-            }
-            foreach (dynamic riftJson in screenJsonDatas.Rifts)
-            {
-                _rifts.Add(Rift.FromDynamic(riftJson));
-            }
-            foreach (dynamic pitJson in screenJsonDatas.Pits)
-            {
-                _pits.Add(new Pit(pitJson));
-            }
-            foreach (dynamic chestJson in screenJsonDatas.Chests)
-            {
-                _chests.Add(Chest.FromDynamic(chestJson));
-            }
-            foreach (dynamic doorJson in screenJsonDatas.Doors)
-            {
-                _doors.Add(Door.FromDynamic(doorJson));
-            }
-            foreach (dynamic floorJson in screenJsonDatas.Floors)
-            {
-                _floors.Add(new Floor(floorJson));
-            }
-            foreach (dynamic enemyJson in screenJsonDatas.Enemies)
-            {
-                _enemies.Add(Enemy.FromDynamic(enemyJson));
-            }
-            foreach (dynamic gatetriggerJson in screenJsonDatas.GateTriggers)
-            {
-                _gateTriggers.Add(new GateTrigger(gatetriggerJson));
-            }
-            foreach (dynamic itemJson in screenJsonDatas.Items)
-            {
-                _pickableItems.Add(new PickableItem(itemJson));
-            }
-            dynamic neighboringScreens = screenJsonDatas.NeighboringScreens;
-            _neighboringScreens = new Dictionary<Direction, int>
-            {
-                { Direction.Bottom, (int)neighboringScreens.Bottom },
-                { Direction.Left, (int)neighboringScreens.Left },
-                { Direction.Right, (int)neighboringScreens.Right },
-                { Direction.Top, (int)neighboringScreens.Top }
-            };
         }
 
         /// <summary>

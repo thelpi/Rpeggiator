@@ -52,6 +52,7 @@
     <Compile Include="Elapser.cs" />
     <Compile Include="Engine.cs" />
     <Compile Include="Enums\Direction.cs" />
+    <Compile Include="Enums\Filename.cs" />
     <Compile Include="Enums\FloorType.cs" />
     <Compile Include="Enums\ItemType.cs" />
     <Compile Include="Exceptions\InfiniteOverlapCheckException.cs" />

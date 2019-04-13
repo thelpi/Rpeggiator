@@ -34,7 +34,7 @@ namespace RpeggiatorLib.Sprites
             _elapser = new Elapser();
             _hitOrAway = false;
             _thrownBy = thrownBy;
-            _render = new ImageDirectionRender("Arrow", this, nameof(Direction));
+            _render = new ImageDirectionRender(nameof(Filename.Arrow), this, nameof(Direction));
         }
 
         /// <inheritdoc />

@@ -35,7 +35,7 @@ namespace RpeggiatorLib.Sprites
         {
             _pendingTimeManager = new Elapser(Constants.Bomb.TIME_WHILE_PENDING);
             ExplosionSprite = null;
-            _render = new ImageRender("Bomb");
+            _render = new ImageRender(nameof(Enums.Filename.Bomb));
         }
 
         /// <inheritdoc />

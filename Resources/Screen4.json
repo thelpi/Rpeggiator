@@ -4,8 +4,8 @@
   "Width": 800,
   "Height": 600,
   "FloorType": "Ground",
-  "GraphicType": "PlainBrushGraphic",
-  "HexColor": "#FFFFEFD5",
+  "RenderType": "PlainRender",
+  "RenderValue": "#FFFFEFD5",
   "AreaDarknessOpacity": 0.0,
   "PermanentStructures": [
     {
@@ -21,32 +21,32 @@
       "Y": 50.0,
       "Width": 49.0,
       "Height": 194.0,
-      "GraphicType": "PlainBrushGraphic",
-      "HexColor": "#FF000000"
+      "RenderType": "ImageMosaicRender",
+      "RenderValue": "Tree"
     },
     {
       "X": 629.0,
       "Y": 236.0,
       "Width": 42.0,
       "Height": 284.0,
-      "GraphicType": "PlainBrushGraphic",
-      "HexColor": "#FF000000"
+      "RenderType": "ImageMosaicRender",
+      "RenderValue": "Tree"
     },
     {
       "X": 63.0,
       "Y": 327.0,
       "Width": 434.0,
       "Height": 61.0,
-      "GraphicType": "PlainBrushGraphic",
-      "HexColor": "#FF000000"
+      "RenderType": "ImageMosaicRender",
+      "RenderValue": "Tree"
     },
     {
       "X": 69.0,
       "Y": 469.0,
       "Width": 407.0,
       "Height": 56.0,
-      "GraphicType": "PlainBrushGraphic",
-      "HexColor": "#FF000000"
+      "RenderType": "ImageMosaicRender",
+      "RenderValue": "Tree"
     }
   ],
   "Floors": [],

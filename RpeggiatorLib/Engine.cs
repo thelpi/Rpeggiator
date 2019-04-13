@@ -111,7 +111,7 @@ namespace RpeggiatorLib
 
             dynamic screenJsonDatas = Tools.GetScreenDatasFromIndex(id);
 
-            Screen screen = new Screen(id, screenJsonDatas);
+            Screen screen = Screen.FromDynamic(id, screenJsonDatas);
 
             _screens.Add(screen);
 

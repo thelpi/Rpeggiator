@@ -124,13 +124,16 @@
     <value>The inventory slot id is invalid.</value>
   </data>
   <data name="InvalidResourcesPathExceptionMessage" xml:space="preserve">
-    <value>Le dossier spécifié pour les resources est invalide.</value>
+    <value>The specified resources path is invalid.</value>
   </data>
   <data name="NoQuadraticSolutionExceptionMessage" xml:space="preserve">
     <value>Unable to resolve this quadratic equation.</value>
   </data>
   <data name="NotImplementedGraphicExceptionMessage" xml:space="preserve">
     <value>This sub-type of graphic should be implemented.</value>
+  </data>
+  <data name="NotImplementedVirtualExceptionMessage" xml:space="preserve">
+    <value>This virtual method ou property has not been implemented.</value>
   </data>
   <data name="NotImplementedZindexTypeExceptionMessage" xml:space="preserve">
     <value>The Z-index property for this subtype has not been implemented.</value>

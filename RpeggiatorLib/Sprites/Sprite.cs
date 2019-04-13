@@ -96,6 +96,32 @@ namespace RpeggiatorLib.Sprites
         }
 
         /// <summary>
+        /// Creates an instance of <see cref="ISpriteRender"/> from the json datas.
+        /// </summary>
+        /// <param name="datas">Json datas.</param>
+        /// <param name="directionPropertyName">Optionnal; for the subtype <see cref="ImageDirectionRender"/>, the property name used for <see cref="Direction"/>.</param>
+        protected void SetRenderFromDynamic(dynamic datas, string directionPropertyName = null)
+        {
+            switch ((string)datas.RenderType)
+            {
+                case nameof(ImageDirectionRender):
+                    _render = new ImageDirectionRender((string)datas.RenderValue, this, directionPropertyName);
+                    break;
+                case nameof(ImageMosaicRender):
+                    _render = new ImageMosaicRender((string)datas.RenderValue, this);
+                    break;
+                case nameof(ImageRender):
+                    _render = new ImageRender((string)datas.RenderValue);
+                    break;
+                case nameof(PlainRender):
+                    _render = new PlainRender((string)datas.RenderValue);
+                    break;
+                default:
+                    throw new System.NotImplementedException(Messages.NotImplementedGraphicExceptionMessage);
+            }
+        }
+
+        /// <summary>
         /// Makes a copy of the current instance on a new position, with the same <see cref="Width"/> and <see cref="Height"/>.
         /// </summary>
         /// <param name="newPosition">The new position.</param>

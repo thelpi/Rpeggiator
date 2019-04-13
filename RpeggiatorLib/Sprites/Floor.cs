@@ -1,6 +1,4 @@
-﻿using System;
-using RpeggiatorLib.Enums;
-using RpeggiatorLib.Render;
+﻿using RpeggiatorLib.Enums;
 
 namespace RpeggiatorLib.Sprites
 {
@@ -19,37 +17,30 @@ namespace RpeggiatorLib.Sprites
         public double SpeedRatio { get; private set; }
 
         /// <summary>
+        /// Creates an instance from json datas.
+        /// </summary>
+        /// <param name="datas">Json datas.</param>
+        /// <returns><see cref="Floor"/></returns>
+        internal static Floor FromDynamic(dynamic datas)
+        {
+            Floor f = new Floor((double)datas.X, (double)datas.Y, (double)datas.Width, (double)datas.Height, (FloorType)datas.FloorType);
+            f.SetRenderFromDynamic((object)datas);
+            return f;
+        }
+
+        /// <summary>
         /// Constructor.
         /// </summary>
-        /// <param name="floorJsonDatas">Floor json datas.</param>
-        internal Floor(dynamic floorJsonDatas)
-            : base((double)floorJsonDatas.X, (double)floorJsonDatas.Y, (double)floorJsonDatas.Width, (double)floorJsonDatas.Height)
+        /// <param name="x"><see cref="Sprite.X"/></param>
+        /// <param name="y"><see cref="Sprite.Y"/></param>
+        /// <param name="width"><see cref="Sprite.Width"/></param>
+        /// <param name="height"><see cref="Sprite.Height"/></param>
+        /// <param name="floorType"><see cref="FloorType"/></param>
+        internal Floor(double x, double y, double width, double height, FloorType floorType)
+            : base(x, y, width, height)
         {
-            SpeedRatio = 1;
-            FloorType = floorJsonDatas.FloorType;
-
-            System.Windows.Media.Color c;
-            switch (FloorType)
-            {
-                case FloorType.Ground:
-                    c = System.Windows.Media.Colors.Tan;
-                    break;
-                case FloorType.Ice:
-                    c = System.Windows.Media.Colors.PaleTurquoise;
-                    SpeedRatio = Constants.FLOOR_ICE_SPEED_RATIO;
-                    break;
-                case FloorType.Lava:
-                    c = System.Windows.Media.Colors.Red;
-                    break;
-                case FloorType.Water:
-                    c = System.Windows.Media.Colors.Blue;
-                    SpeedRatio = Constants.FLOOR_WATER_SPEED_RATIO;
-                    break;
-                default:
-                    throw new NotImplementedException(Messages.NotImplementedGraphicExceptionMessage);
-            }
-
-            _render = new PlainRender(Tools.HexFromColor(c));
+            FloorType = floorType;
+            SpeedRatio = Constants.FLOOR_SPEED_RATIO[FloorType];
         }
     }
 }

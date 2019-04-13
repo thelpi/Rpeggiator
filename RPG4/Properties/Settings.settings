@@ -3,7 +3,7 @@
   <Profiles />
   <Settings>
     <Setting Name="ResourcesPath" Type="System.String" Scope="Application">
-      <Value Profile="(Default)">D:\Ma programmation\csharp\Projects\RPG4\RpeggiatorLib\Datas</Value>
+      <Value Profile="(Default)">D:\Ma programmation\csharp\Projects\RPG4\Resources\</Value>
     </Setting>
   </Settings>
 </SettingsFile>

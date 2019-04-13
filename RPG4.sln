@@ -9,6 +9,39 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RpeggiatorScreenEditor", "R
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RpeggiatorLib", "RpeggiatorLib\RpeggiatorLib.csproj", "{5A088996-27F1-4A63-941A-5A14B67D6111}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Resources", "Resources", "{CCDED375-EBCD-42C1-8FAB-DB17A6AE742A}"
+	ProjectSection(SolutionItems) = preProject
+		Resources\Screen1.json = Resources\Screen1.json
+		Resources\Screen2.json = Resources\Screen2.json
+		Resources\Screen3.json = Resources\Screen3.json
+		Resources\Screen4.json = Resources\Screen4.json
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Images", "Images", "{BC70DD2F-FCCB-4335-92D3-1AA21115CA36}"
+	ProjectSection(SolutionItems) = preProject
+		Resources\Images\Arrow.png = Resources\Images\Arrow.png
+		Resources\Images\Bomb.png = Resources\Images\Bomb.png
+		Resources\Images\Bow.png = Resources\Images\Bow.png
+		Resources\Images\Chest.png = Resources\Images\Chest.png
+		Resources\Images\Coin.png = Resources\Images\Coin.png
+		Resources\Images\Door.png = Resources\Images\Door.png
+		Resources\Images\DoorLocked.png = Resources\Images\DoorLocked.png
+		Resources\Images\Enemy.png = Resources\Images\Enemy.png
+		Resources\Images\Keyring.png = Resources\Images\Keyring.png
+		Resources\Images\Lamp.png = Resources\Images\Lamp.png
+		Resources\Images\LifePotionLarge.png = Resources\Images\LifePotionLarge.png
+		Resources\Images\LifePotionMedium.png = Resources\Images\LifePotionMedium.png
+		Resources\Images\LifePotionSmall.png = Resources\Images\LifePotionSmall.png
+		Resources\Images\OpenChest.png = Resources\Images\OpenChest.png
+		Resources\Images\Pit.png = Resources\Images\Pit.png
+		Resources\Images\Player.png = Resources\Images\Player.png
+		Resources\Images\PlayerRecovery.png = Resources\Images\PlayerRecovery.png
+		Resources\Images\Sword.png = Resources\Images\Sword.png
+		Resources\Images\Tree.png = Resources\Images\Tree.png
+		Resources\Images\TriggerOff.png = Resources\Images\TriggerOff.png
+		Resources\Images\TriggerOn.png = Resources\Images\TriggerOn.png
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -30,6 +63,9 @@ Global
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{BC70DD2F-FCCB-4335-92D3-1AA21115CA36} = {CCDED375-EBCD-42C1-8FAB-DB17A6AE742A}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {E39D0E1D-322F-430C-8FE1-8D1465ED9A06}

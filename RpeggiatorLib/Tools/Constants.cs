@@ -65,13 +65,15 @@ namespace RpeggiatorLib
         /// </summary>
         internal const double PIT_FALL_IN_OVERLAP_RATIO = 0.5;
         /// <summary>
-        /// Speed ratio when walking on <see cref="FloorType.Water"/>.
+        /// Speed ratio by <see cref="FloorType"/>
         /// </summary>
-        internal const double FLOOR_WATER_SPEED_RATIO = 0.5;
-        /// <summary>
-        /// Speed ratio when walking on <see cref="FloorType.Ice"/>.
-        /// </summary>
-        internal const double FLOOR_ICE_SPEED_RATIO = 1.2;
+        internal static readonly Dictionary<FloorType, double> FLOOR_SPEED_RATIO = new Dictionary<FloorType, double>
+        {
+            { FloorType.Ground, 1 },
+            { FloorType.Ice, 1.2 },
+            { FloorType.Lava, 0 },
+            { FloorType.Water, 0.5 }
+        };
 
         /// <summary>
         /// Set of constants to indicate player initial status (position, speed, and so forth).
