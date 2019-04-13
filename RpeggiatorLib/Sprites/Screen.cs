@@ -139,7 +139,7 @@ namespace RpeggiatorLib.Sprites
             }
             foreach (dynamic doorJson in screenJsonDatas.Doors)
             {
-                _doors.Add(new Door(doorJson));
+                _doors.Add(Door.FromDynamic(doorJson));
             }
             foreach (dynamic floorJson in screenJsonDatas.Floors)
             {

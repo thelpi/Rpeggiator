@@ -9,8 +9,11 @@ namespace RpeggiatorLib.Sprites
     /// <seealso cref="Sprite"/>
     public class Door : Sprite
     {
+        // The optionnal key identifier to unlock the door.
         private int? _keyId;
+        // The screen identifier this door is connected.
         private int _screenId;
+        // Render when locked.
         private ISpriteRender _renderLocked;
 
         /// <summary>
@@ -30,23 +33,47 @@ namespace RpeggiatorLib.Sprites
         /// Inferred; indicates if the door is locked (the <see cref="Player"/> doesn't have the key).
         /// </summary>
         public bool Locked { get { return !TryOpen().HasValue; } }
-        /// <inheritdoc />
+        /// <summary>
+        /// The render, which changes regarding if the door is locked or not.
+        /// </summary>
         public override ISpriteRender Render { get { return Locked ? _renderLocked : _render; } }
+
+        /// <summary>
+        /// Creates an instance from json datas.
+        /// </summary>
+        /// <param name="datas">Json datas.</param>
+        /// <returns><see cref="Door"/></returns>
+        internal static Door FromDynamic(dynamic datas)
+        {
+            return new Door((double)datas.X, (double)datas.Y, (double)datas.Width, (double)datas.Height, (int?)datas.KeyId,
+                (int)datas.ScreenId, (int)datas.Id, (double)datas.PlayerGoThroughX, (double)datas.PlayerGoThroughY,
+                (string)datas.RenderFilename, (string)datas.RenderLockedFilename);
+        }
 
         /// <summary>
         /// Constructor.
         /// </summary>
-        /// <param name="doorJsonDatas">Door json datas.</param>
-        internal Door(dynamic doorJsonDatas)
-            : base((double)doorJsonDatas.X, (double)doorJsonDatas.Y, (double)doorJsonDatas.Width, (double)doorJsonDatas.Height)
+        /// <param name="x"><see cref="Sprite.X"/></param>
+        /// <param name="y"><see cref="Sprite.Y"/></param>
+        /// <param name="width"><see cref="Sprite.Width"/></param>
+        /// <param name="height"><see cref="Sprite.Height"/></param>
+        /// <param name="keyId"><see cref="_keyId"/></param>
+        /// <param name="screenId"><see cref="_screenId"/></param>
+        /// <param name="id"><see cref="Id"/></param>
+        /// <param name="playerGoThroughX"><see cref="PlayerGoThroughX"/></param>
+        /// <param name="playerGoThroughY"><see cref="PlayerGoThroughY"/></param>
+        /// <param name="renderFilename"><see cref="Sprite._render"/> filename.</param>
+        /// <param name="renderLockedFilename"><see cref="_renderLocked"/> filename.</param>
+        internal Door(double x, double y, double width, double height, int? keyId, int screenId, int id, double playerGoThroughX, double playerGoThroughY, string renderFilename, string renderLockedFilename)
+            : base(x, y, width, height)
         {
-            _keyId = doorJsonDatas.KeyId;
-            _screenId = doorJsonDatas.ScreenId;
-            Id = doorJsonDatas.Id;
-            PlayerGoThroughX = doorJsonDatas.PlayerGoThroughX;
-            PlayerGoThroughY = doorJsonDatas.PlayerGoThroughY;
-            _render = new ImageRender("Door");
-            _renderLocked = new ImageRender("DoorLocked");
+            _keyId = keyId;
+            _screenId = screenId;
+            Id = id;
+            PlayerGoThroughX = playerGoThroughX;
+            PlayerGoThroughY = playerGoThroughY;
+            _render = new ImageRender(renderFilename);
+            _renderLocked = new ImageRender(renderLockedFilename);
         }
 
         /// <summary>

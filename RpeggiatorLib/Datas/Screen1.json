@@ -124,7 +124,9 @@
       /* TODO : should be relative to the player size */
       "PlayerGoThroughX": 400,
       "PlayerGoThroughY": 540,
-      "Id": 1
+      "Id": 1,
+      "RenderFilename": "Door",
+      "RenderLockedFilename": "DoorLocked"
     }
   ]
 }
