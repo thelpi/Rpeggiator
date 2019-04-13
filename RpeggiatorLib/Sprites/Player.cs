@@ -120,8 +120,7 @@ namespace RpeggiatorLib.Sprites
         internal void SetPositionRelativeToDoorGoThrough(int doorId)
         {
             Door doorInNewScreen = Engine.Default.CurrentScreen.Doors.First(d => d.Id == doorId);
-            X = doorInNewScreen.PlayerGoThroughX;
-            Y = doorInNewScreen.PlayerGoThroughY;
+            Move(doorInNewScreen.PlayerGoThroughX, doorInNewScreen.PlayerGoThroughY);
         }
 
         #region Position management private methods
@@ -238,8 +237,7 @@ namespace RpeggiatorLib.Sprites
             {
                 _moveHistory.Dequeue();
             }
-            X = newPosition.X;
-            Y = newPosition.Y;
+            Move(newPosition.X, newPosition.Y);
         }
 
         #endregion Position management private methods

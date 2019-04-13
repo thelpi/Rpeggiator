@@ -150,8 +150,7 @@ namespace RpeggiatorLib.Sprites
                 }
             }
 
-            X = newPoint.X;
-            Y = newPoint.Y;
+            Move(newPoint.X, newPoint.Y);
         }
     }
 }

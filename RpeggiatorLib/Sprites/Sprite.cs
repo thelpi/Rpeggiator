@@ -18,11 +18,11 @@ namespace RpeggiatorLib.Sprites
         /// <summary>
         /// X
         /// </summary>
-        public double X { get; protected set; }
+        public double X { get; private set; }
         /// <summary>
         /// Y
         /// </summary>
-        public double Y { get; protected set; }
+        public double Y { get; private set; }
         /// <summary>
         /// Z-axis layer when displayed.
         /// </summary>
@@ -52,10 +52,6 @@ namespace RpeggiatorLib.Sprites
         /// Inferred; BottomRightY
         /// </summary>
         public double BottomRightY { get { return Y + Height; } }
-        /// <summary>
-        /// Inferred; surface, in pixels square.
-        /// </summary>
-        public double Surface { get { return Width * Height; } }
         /// <summary>
         /// Inferred; Center point X-axis.
         /// </summary>
@@ -89,6 +85,17 @@ namespace RpeggiatorLib.Sprites
         }
 
         /// <summary>
+        /// Moves this instance.
+        /// </summary>
+        /// <param name="newX">New X-axis value.</param>
+        /// <param name="newY">New Y-axis value.</param>
+        protected void Move(double newX, double newY)
+        {
+            X = newX;
+            Y = newY;
+        }
+
+        /// <summary>
         /// Makes a copy of the current instance on a new position, with the same <see cref="Width"/> and <see cref="Height"/>.
         /// </summary>
         /// <param name="newPosition">The new position.</param>
@@ -113,7 +120,7 @@ namespace RpeggiatorLib.Sprites
                 return surfaceCovered.Greater(0);
             }
 
-            double surfaceExpectedCovered = overlapMinimalRatio * other.Surface;
+            double surfaceExpectedCovered = overlapMinimalRatio * other.Width * other.Height;
 
             return surfaceCovered.GreaterEqual(surfaceExpectedCovered);
         }

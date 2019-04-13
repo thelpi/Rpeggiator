@@ -43,8 +43,7 @@ namespace RpeggiatorLib.Sprites
             base.BehaviorAtNewFrame();
 
             Point nextPos = Tools.ComputeMovementNextPointInDirection(X, Y, _elapser.Distance(Constants.Arrow.SPEED), Direction);
-            X = nextPos.X;
-            Y = nextPos.Y;
+            Move(nextPos.X, nextPos.Y);
 
             // Checks if hit enemies.
             // Checks if hit player.

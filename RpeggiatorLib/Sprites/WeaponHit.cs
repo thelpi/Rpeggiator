@@ -28,9 +28,7 @@ namespace RpeggiatorLib.Sprites
         {
             // Shortcut.
             Player p = Engine.Default.Player;
-
-            X += p.X - (p.LatestMove?.X ?? p.X);
-            Y += p.Y - (p.LatestMove?.Y ?? p.Y);
+            Move(X + (p.X - (p.LatestMove?.X ?? p.X)), Y + (p.Y - (p.LatestMove?.Y ?? p.Y)));
         }
     }
 }
