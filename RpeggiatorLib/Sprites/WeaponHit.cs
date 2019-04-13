@@ -20,5 +20,17 @@ namespace RpeggiatorLib.Sprites
         {
             _render = new ImageRender("Sword");
         }
+
+        /// <summary>
+        /// Adjust the position of the sprite regarding to <see cref="Engine.Player"/>.
+        /// </summary>
+        internal void AdjustToPlayer()
+        {
+            // Shortcut.
+            Player p = Engine.Default.Player;
+
+            X += p.X - (p.LatestMove?.X ?? p.X);
+            Y += p.Y - (p.LatestMove?.Y ?? p.Y);
+        }
     }
 }

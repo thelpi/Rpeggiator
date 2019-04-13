@@ -39,6 +39,10 @@ namespace RpeggiatorLib.Sprites
         public WeaponHit HitSprite { get; private set; }
         /// <inheritdoc />
         public override ISpriteRender Render { get { return RecoveryRenderSwitch(); } }
+        /// <summary>
+        /// Gets the latest move.
+        /// </summary>
+        internal Point? LatestMove { get { return _moveHistory.Count > 0 ? _moveHistory.Last() : (Point?)null; } }
 
         /// <summary>
         /// Constructor.
@@ -229,12 +233,11 @@ namespace RpeggiatorLib.Sprites
         /// <param name="newPosition">The new position.</param>
         private void AssigneNewPositionAndAddToHistory(Point newPosition)
         {
-            _moveHistory.Enqueue(newPosition);
+            _moveHistory.Enqueue(new Point(X, Y));
             if (_moveHistory.Count > Constants.MOVE_HISTORY_COUNT)
             {
                 _moveHistory.Dequeue();
             }
-
             X = newPosition.X;
             Y = newPosition.Y;
         }
@@ -290,6 +293,8 @@ namespace RpeggiatorLib.Sprites
             {
                 HitSprite = null;
             }
+
+            HitSprite?.AdjustToPlayer();
         }
     }
 }
