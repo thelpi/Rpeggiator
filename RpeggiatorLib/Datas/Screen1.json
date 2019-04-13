@@ -29,7 +29,9 @@
       "ItemType": null,
       "Quantity": 10,
       "KeyId": null,
-      "KeyIdContainer": 1
+      "KeyIdContainer": 1,
+      "RenderFilename": "Chest",
+      "RenderOpenFilename": "OpenChest"
     }
   ],
   "Gates": [],
