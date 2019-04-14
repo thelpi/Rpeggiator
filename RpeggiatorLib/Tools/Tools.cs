@@ -1,9 +1,7 @@
 ﻿using System;
 using System.IO;
-using System.Reflection;
 using System.Windows.Media;
 using Newtonsoft.Json;
-using RpeggiatorLib.Enums;
 
 namespace RpeggiatorLib
 {
@@ -297,6 +295,52 @@ namespace RpeggiatorLib
             }
 
             return new Point(x, y);
+        }
+
+        /// <summary>
+        /// Checks if two <see cref="Enums.Direction"/> are opposite.
+        /// </summary>
+        /// <param name="dir1"><see cref="Enums.Direction"/></param>
+        /// <param name="dir2"><see cref="Enums.Direction"/></param>
+        /// <returns><c>True</c> if specified directions are opposite; <c>False</c> otherwise.</returns>
+        internal static bool AreOppositeDirections(Enums.Direction dir1, Enums.Direction dir2)
+        {
+            return (int)dir1 + (int)dir2 == 9;
+        }
+
+        /// <summary>
+        /// Checks if two <see cref="Enums.Direction"/> are close.
+        /// </summary>
+        /// <param name="dir1"><see cref="Enums.Direction"/></param>
+        /// <param name="dir2"><see cref="Enums.Direction"/></param>
+        /// <returns><c>True</c> if specified directions are close; <c>False</c> otherwise.</returns>
+        internal static bool AreCloseDirections(Enums.Direction dir1, Enums.Direction dir2)
+        {
+            if (dir1 == dir2)
+            {
+                return true;
+            }
+
+            switch (dir1)
+            {
+                case Enums.Direction.Bottom:
+                    return dir2 == Enums.Direction.BottomLeft || dir2 == Enums.Direction.BottomRight;
+                case Enums.Direction.BottomLeft:
+                    return dir2 == Enums.Direction.Bottom || dir2 == Enums.Direction.Left;
+                case Enums.Direction.BottomRight:
+                    return dir2 == Enums.Direction.Bottom || dir2 == Enums.Direction.Right;
+                case Enums.Direction.Left:
+                    return dir2 == Enums.Direction.TopLeft || dir2 == Enums.Direction.BottomLeft;
+                case Enums.Direction.Right:
+                    return dir2 == Enums.Direction.TopRight || dir2 == Enums.Direction.BottomRight;
+                case Enums.Direction.Top:
+                    return dir2 == Enums.Direction.TopLeft || dir2 == Enums.Direction.TopRight;
+                case Enums.Direction.TopLeft:
+                    return dir2 == Enums.Direction.Top || dir2 == Enums.Direction.Left;
+                case Enums.Direction.TopRight:
+                    return dir2 == Enums.Direction.Top || dir2 == Enums.Direction.Right;
+            }
+            return false;
         }
     }
 }

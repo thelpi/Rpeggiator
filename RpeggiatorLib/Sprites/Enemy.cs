@@ -76,7 +76,22 @@ namespace RpeggiatorLib.Sprites
         /// <inheritdoc />
         internal override void BehaviorAtNewFrame()
         {
-            SetCoordinatesDirection(_path.ComputeNextPosition(this, _movementTimeManager.Distance(Speed)));
+            Point newPositionPoint = _path.ComputeNextPosition(this, _movementTimeManager.Distance(Speed));
+            if (!TryToOverlapPlayerWithShield(newPositionPoint))
+            {
+                SetCoordinatesDirection(newPositionPoint);
+            }
+        }
+
+        // Detects if the next motion tries to overlap the player while he's holding his shield in that direction.
+        private bool TryToOverlapPlayerWithShield(Point newPositionPoint)
+        {
+            // Shortcut.
+            Player p = Engine.Default.Player;
+
+            return CopyToPosition(newPositionPoint).Overlap(p)
+                && Engine.Default.KeyPress.PressShield
+                && Tools.AreCloseDirections(p.Direction, p.DirectionSourceOfOverlap(this, newPositionPoint).Value);
         }
 
         /// <summary>

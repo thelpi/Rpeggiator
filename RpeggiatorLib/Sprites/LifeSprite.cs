@@ -57,6 +57,8 @@ namespace RpeggiatorLib.Sprites
         /// Indicates the sprite direction.
         /// </summary>
         public Direction Direction { get; protected set; }
+        /// <inheritdoc />
+        public override ISpriteRender Render { get { return RecoveryRenderSwitch(); } }
 
         /// <summary>
         /// Constructor.
@@ -159,12 +161,19 @@ namespace RpeggiatorLib.Sprites
         }
 
         /// <summary>
-        /// Creates an altenation between <see cref="Sprite._render"/> and <see cref="_renderRecovery"/>.
+        /// Creates an altenation between <see cref="Sprite._render"/> and <see cref="_renderRecovery"/> (or any render alternative).
         /// </summary>
+        /// <param name="alternativeRender">Optionnal; alternative <see cref="ISpriteRender"/> for <see cref="Sprite._render"/>.</param>
+        /// <param name="alternativeRecoveryRender">Optionnal; alternative <see cref="ISpriteRender"/> for <see cref="_renderRecovery"/>.</param>
         /// <returns>Current <see cref="ISpriteRender"/>.</returns>
-        internal ISpriteRender RecoveryRenderSwitch()
+        protected ISpriteRender RecoveryRenderSwitch(ISpriteRender alternativeRender = null, ISpriteRender alternativeRecoveryRender = null)
         {
-            return IsRecovering ? ((_recoveryManager.ElapsedMilliseconds / 100) % 2 == 0 ? _render : _renderRecovery) : _render;
+            alternativeRender = alternativeRender ?? _render;
+            alternativeRecoveryRender = alternativeRecoveryRender ?? _renderRecovery;
+            return IsRecovering ?
+                ((_recoveryManager.ElapsedMilliseconds / 100) % 2 == 0 ?
+                    alternativeRender : alternativeRecoveryRender)
+                : alternativeRender;
         }
     }
 }

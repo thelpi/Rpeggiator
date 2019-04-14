@@ -21,6 +21,10 @@ namespace RpeggiatorLib
         /// </summary>
         public bool PressAction { get; private set; }
         /// <summary>
+        /// Indicates if the shield button is pressed.
+        /// </summary>
+        public bool PressShield { get; private set; }
+        /// <summary>
         /// Indicates the inventory slot pressed.
         /// </summary>
         public int? InventorySlotId { get; private set; }
@@ -78,9 +82,10 @@ namespace RpeggiatorLib
         /// <param name="left">Indicates if left key is pressed.</param>
         /// <param name="hit"><see cref="PressHit"/></param>
         /// <param name="action"><see cref="PressAction"/></param>
+        /// <param name="shield"><see cref="PressShield"/></param>
         /// <param name="inventorySlotId"><see cref="InventorySlotId"/></param>
         /// <exception cref="System.ArgumentException"><see cref="Messages.InvalidInventorySlotIdExceptionMessage"/></exception>
-        public KeyPress(bool up, bool down, bool right, bool left, bool hit, bool action, int? inventorySlotId)
+        public KeyPress(bool up, bool down, bool right, bool left, bool hit, bool action, bool shield, int? inventorySlotId)
         {
             if (inventorySlotId.HasValue && (inventorySlotId.Value < 0 || inventorySlotId.Value >= Constants.Inventory.SIZE))
             {
@@ -89,6 +94,7 @@ namespace RpeggiatorLib
 
             PressHit = hit;
             PressAction = action;
+            PressShield = shield;
             InventorySlotId = inventorySlotId;
 
             // up and down both pressed cancel each other

@@ -181,7 +181,7 @@ namespace RpeggiatorLib.Sprites
         }
 
         /// <summary>
-        /// Computes, when a sprite in motion overlap the current instance, from which direction its comes from.
+        /// Computes, when a sprite in motion overlaps the current instance, from which direction its comes from.
         /// </summary>
         /// <param name="spriteInMotion"><see cref="Sprite"/> in motion.</param>
         /// <param name="positionToCheck">Position to check.</param>

@@ -71,6 +71,7 @@ namespace RPG4.Visuals
                                 Keyboard.IsKeyDown(Key.Left),
                                 _hitKeyPressed,
                                 _actionKeyPressed,
+                                Keyboard.IsKeyDown(Key.LeftCtrl),
                                 _inventoryKeyPressed
                             );
                             _inventoryKeyPressed = null;

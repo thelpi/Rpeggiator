@@ -3,24 +3,25 @@
     /// <summary>
     /// Enumeration of directions through screens
     /// </summary>
+    /// <remarks>If the sum of two direction values (as <see cref="int"/>) is 9, then it's opposite directions.</remarks>
     public enum Direction
     {
         /// <summary>
-        /// Top-left
+        /// Right
         /// </summary>
-        TopLeft,
-        /// <summary>
-        /// Top
-        /// </summary>
-        Top,
+        Right = 1,
         /// <summary>
         /// Top-right
         /// </summary>
         TopRight,
         /// <summary>
-        /// Right
+        /// Top
         /// </summary>
-        Right,
+        Top,
+        /// <summary>
+        /// Top-left
+        /// </summary>
+        TopLeft,
         /// <summary>
         /// Bottom-right
         /// </summary>

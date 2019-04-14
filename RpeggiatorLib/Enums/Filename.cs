@@ -34,6 +34,14 @@
         /// </summary>
         PlayerRecovery,
         /// <summary>
+        /// <see cref="Sprites.Player"/> holding his shield.
+        /// </summary>
+        PlayerShield,
+        /// <summary>
+        /// <see cref="Sprites.Player"/> when recovering, holding his shield.
+        /// </summary>
+        PlayerRecoveryShield,
+        /// <summary>
         /// <see cref="ItemType.LifePotionSmall"/>
         /// </summary>
         LifePotionSmall,
