@@ -12,10 +12,13 @@ namespace RpeggiatorLib.Sprites
         /// Constructor.
         /// </summary>
         /// <param name="bomb"><see cref="ActionnedBomb"/></param>
-        internal BombExplosion(ActionnedBomb bomb) : base(bomb.X - bomb.Width, bomb.Y - bomb.Height,
-            bomb.Width * Constants.Bomb.EXPLOSION_SIZE_RATIO, bomb.Height * Constants.Bomb.EXPLOSION_SIZE_RATIO)
+        internal BombExplosion(ActionnedBomb bomb)
+            : base(bomb.X - bomb.Width, bomb.Y - bomb.Height,
+                  bomb.Width * Constants.Bomb.EXPLOSION_SIZE_RATIO,
+                  bomb.Height * Constants.Bomb.EXPLOSION_SIZE_RATIO,
+                  new PlainRender(Tools.HexFromColor(System.Windows.Media.Colors.OrangeRed)))
         {
-            _render = new PlainRender(Tools.HexFromColor(System.Windows.Media.Colors.OrangeRed));
+            // Empty.
         }
     }
 }

@@ -17,18 +17,6 @@ namespace RpeggiatorLib.Sprites
         public double SpeedRatio { get; private set; }
 
         /// <summary>
-        /// Creates an instance from json datas.
-        /// </summary>
-        /// <param name="datas">Json datas.</param>
-        /// <returns><see cref="Floor"/></returns>
-        internal static Floor FromDynamic(dynamic datas)
-        {
-            Floor f = new Floor((double)datas.X, (double)datas.Y, (double)datas.Width, (double)datas.Height, (FloorType)datas.FloorType);
-            f.SetRenderFromDynamic((object)datas);
-            return f;
-        }
-
-        /// <summary>
         /// Constructor.
         /// </summary>
         /// <param name="x"><see cref="Sprite.X"/></param>
@@ -36,8 +24,11 @@ namespace RpeggiatorLib.Sprites
         /// <param name="width"><see cref="Sprite.Width"/></param>
         /// <param name="height"><see cref="Sprite.Height"/></param>
         /// <param name="floorType"><see cref="FloorType"/></param>
-        internal Floor(double x, double y, double width, double height, FloorType floorType)
-            : base(x, y, width, height)
+        /// <param name="renderType"><see cref="Render.ISpriteRender"/> subtype name.</param>
+        /// <param name="renderProperties">Datas required to initialize the <see cref="Render.ISpriteRender"/>.</param>
+        internal Floor(double x, double y, double width, double height,
+            FloorType floorType, string renderType, object[] renderProperties)
+            : base(x, y, width, height, renderType, renderProperties)
         {
             FloorType = floorType;
             SpeedRatio = Constants.FLOOR_SPEED_RATIO[FloorType];

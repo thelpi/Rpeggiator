@@ -18,8 +18,13 @@
         /// <param name="y"><see cref="Sprite.Y"/></param>
         /// <param name="height"><see cref="Sprite.Height"/></param>
         /// <param name="width"><see cref="Sprite.Width"/></param>
-        protected ActionnedItem(double x, double y, double width, double height)
-            : base(x, y, width, height) { }
+        /// <param name="renderType"><see cref="Render.ISpriteRender"/> subtype name.</param>
+        /// <param name="renderProperties">Datas required to initialize the <see cref="Render.ISpriteRender"/>.</param>
+        protected ActionnedItem(double x, double y, double width, double height, string renderType, params object[] renderProperties)
+            : base(x, y, width, height, renderType, renderProperties)
+        {
+            // Empty.
+        }
 
         /// <summary>
         /// Overriden; Gets the lifepoints cost for the specified <paramref name="sprite"/>, if this instance hits it.

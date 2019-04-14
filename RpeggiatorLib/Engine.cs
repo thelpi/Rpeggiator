@@ -109,9 +109,7 @@ namespace RpeggiatorLib
                 return _screens.First(s => s.Id == id);
             }
 
-            dynamic screenJsonDatas = Tools.GetScreenDatasFromIndex(id);
-
-            Screen screen = Screen.FromDynamic(id, screenJsonDatas);
+            Screen screen = SqliteMapper.Defaut.GetScreenById(id);
 
             _screens.Add(screen);
 

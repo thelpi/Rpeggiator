@@ -76,7 +76,7 @@ namespace RpeggiatorLib.Sprites
         /// <param name="defaultDirection">Default <see cref="Direction"/>.</param>
         protected LifeSprite(double x, double y, double width, double height, double maximalLifePoints, double hitLifePointCost,
             double speed, double recoveryTime, string renderFilename, string renderRecoveryFilename, Direction defaultDirection)
-            : base(x, y, width, height, maximalLifePoints)
+            : base(x, y, width, height, maximalLifePoints, nameof(ImageDirectionRender), new[] { renderFilename, nameof(Direction) })
         {
             Direction = defaultDirection;
             MaximalLifePoints = maximalLifePoints;
@@ -86,7 +86,6 @@ namespace RpeggiatorLib.Sprites
             _recoveryTime = recoveryTime;
             ExplosionLifePointCost = Constants.Bomb.EXPLOSION_LIFE_POINT_COST;
             ArrowLifePointCost = Constants.Arrow.LIFE_POINT_COST;
-            _render = new ImageDirectionRender(renderFilename, this, nameof(Direction));
             _renderRecovery = new ImageDirectionRender(renderRecoveryFilename, this, nameof(Direction));
         }
 

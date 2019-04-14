@@ -61,6 +61,15 @@ namespace RpeggiatorLib {
         }
         
         /// <summary>
+        ///   Recherche une chaîne localisée semblable à The engine has not been properly initialized..
+        /// </summary>
+        internal static string EngineNotInitializedExceptionMessage {
+            get {
+                return ResourceManager.GetString("EngineNotInitializedExceptionMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Recherche une chaîne localisée semblable à The method can&apos;t find a position which avoid every structures..
         /// </summary>
         internal static string InfiniteOverlapCheckExceptionMessage {
@@ -84,6 +93,15 @@ namespace RpeggiatorLib {
         internal static string InvalidResourcesPathExceptionMessage {
             get {
                 return ResourceManager.GetString("InvalidResourcesPathExceptionMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Recherche une chaîne localisée semblable à The database connection has failed. Details : {0}. Stacktrace : {1}.
+        /// </summary>
+        internal static string InvalidSqliteConnectionExceptionMessage {
+            get {
+                return ResourceManager.GetString("InvalidSqliteConnectionExceptionMessage", resourceCulture);
             }
         }
         

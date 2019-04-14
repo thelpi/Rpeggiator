@@ -26,17 +26,6 @@ namespace RpeggiatorLib.Sprites
         public ItemType? ItemType { get; private set; }
 
         /// <summary>
-        /// Creates an instance from json datas.
-        /// </summary>
-        /// <param name="datas">Json datas.</param>
-        /// <returns><see cref="PickableItem"/></returns>
-        internal static PickableItem FromDynamic(dynamic datas)
-        {
-            return new PickableItem((double)datas.X, (double)datas.Y, Constants.Item.LOOT_WIDTH, Constants.Item.LOOT_HEIGHT,
-                (ItemType?)datas.ItemType, (int)datas.Quantity, null);
-        }
-
-        /// <summary>
         /// Builds an instance from enemy's loot.
         /// </summary>
         /// <param name="enemy"><see cref="Enemy"/></param>
@@ -67,7 +56,7 @@ namespace RpeggiatorLib.Sprites
         /// <param name="timeBeForeDisapear"><see cref="_timeManager"/> lifetime, in milliseconds.</param>
         protected PickableItem(double x, double y, double width, double height,
             ItemType? itemType, int quantity, double? timeBeForeDisapear)
-            : base(x, y, width, height)
+            : base(x, y, width, height, nameof(ImageRender), new[] { itemType.HasValue ? itemType.Value.ToString() : nameof(Filename.Coin) })
         {
             ItemType = itemType;
             Quantity = quantity;
@@ -75,8 +64,6 @@ namespace RpeggiatorLib.Sprites
             {
                 _timeManager = new Elapser(timeBeForeDisapear.Value);
             }
-
-            _render = new ImageRender(itemType.HasValue ? ItemType.Value.ToString() : nameof(Filename.Coin));
         }
 
         /// <summary>

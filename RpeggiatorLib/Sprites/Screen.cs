@@ -98,71 +98,6 @@ namespace RpeggiatorLib.Sprites
         }
 
         /// <summary>
-        /// Creates an instance, for the specified identifier, from json datas.
-        /// </summary>
-        /// <param name="id"><see cref="Id"/></param>
-        /// <param name="datas">Json datas.</param>
-        /// <returns><see cref="Screen"/></returns>
-        internal static Screen FromDynamic(int id, dynamic datas)
-        {
-            Screen s = new Screen(id, (double)datas.X, (double)datas.Y, (double)datas.Width, (double)datas.Height,
-                (FloorType)datas.FloorType, (double)datas.AreaDarknessOpacity);
-            s.SetRenderFromDynamic((object)datas);
-
-            // TODO : move this code in the constructor.
-            foreach (dynamic structureJson in datas.PermanentStructures)
-            {
-                s._permanentStructures.Add(PermanentStructure.FromDynamic(structureJson));
-            }
-            foreach (dynamic gateJson in datas.Gates)
-            {
-                s._gates.Add(Gate.FromDynamic(gateJson));
-            }
-            foreach (dynamic riftJson in datas.Rifts)
-            {
-                s._rifts.Add(Rift.FromDynamic(riftJson));
-            }
-            foreach (dynamic pitJson in datas.Pits)
-            {
-                s._pits.Add(Pit.FromDynamic(pitJson));
-            }
-            foreach (dynamic chestJson in datas.Chests)
-            {
-                s._chests.Add(Chest.FromDynamic(chestJson));
-            }
-            foreach (dynamic doorJson in datas.Doors)
-            {
-                s._doors.Add(Door.FromDynamic(doorJson));
-            }
-            foreach (dynamic floorJson in datas.Floors)
-            {
-                s._floors.Add(Floor.FromDynamic(floorJson));
-            }
-            foreach (dynamic enemyJson in datas.Enemies)
-            {
-                s._enemies.Add(Enemy.FromDynamic(enemyJson));
-            }
-            foreach (dynamic gatetriggerJson in datas.GateTriggers)
-            {
-                s._gateTriggers.Add(GateTrigger.FromDynamic(gatetriggerJson));
-            }
-            foreach (dynamic itemJson in datas.Items)
-            {
-                s._pickableItems.Add(PickableItem.FromDynamic(itemJson));
-            }
-            dynamic neighboringScreens = datas.NeighboringScreens;
-            s._neighboringScreens = new Dictionary<Direction, int>
-            {
-                { Direction.Bottom, (int)neighboringScreens.Bottom },
-                { Direction.Left, (int)neighboringScreens.Left },
-                { Direction.Right, (int)neighboringScreens.Right },
-                { Direction.Top, (int)neighboringScreens.Top }
-            };
-
-            return s;
-        }
-
-        /// <summary>
         /// Constructor.
         /// </summary>
         /// <param name="id"><see cref="Id"/></param>
@@ -172,22 +107,42 @@ namespace RpeggiatorLib.Sprites
         /// <param name="height"><see cref="Sprite.Height"/></param>
         /// <param name="floorType"><see cref="Floor.FloorType"/></param>
         /// <param name="darknessOpacity"><see cref="DarknessOpacity"/></param>
-        internal Screen(int id, double x, double y, double width, double height, FloorType floorType, double darknessOpacity)
-            : base(x, y, width, height, floorType)
+        /// <param name="renderType"><see cref="Render.ISpriteRender"/> subtype name.</param>
+        /// <param name="renderProperties">Datas required to initialize the <see cref="Render.ISpriteRender"/>.</param>
+        /// <param name="actionnedItems"><see cref="_actionnedItems"/></param>
+        /// <param name="chests"><see cref="_chests"/></param>
+        /// <param name="doors"><see cref="_doors"/></param>
+        /// <param name="enemies"><see cref="_enemies"/></param>
+        /// <param name="floors"><see cref="_floors"/></param>
+        /// <param name="gates"><see cref="_gates"/></param>
+        /// <param name="gateTriggers"><see cref="_gateTriggers"/></param>
+        /// <param name="permanentStructures"><see cref="_permanentStructures"/></param>
+        /// <param name="pickableItems"><see cref="_pickableItems"/></param>
+        /// <param name="pits"><see cref="_pits"/></param>
+        /// <param name="rifts"><see cref="_rifts"/></param>
+        /// <param name="neighboringScreens"><see cref="_neighboringScreens"/></param>
+        internal Screen(int id, double x, double y, double width, double height,
+            FloorType floorType, double darknessOpacity, string renderType, object[] renderProperties,
+            IEnumerable<PermanentStructure> permanentStructures, IEnumerable<Door> doors, IEnumerable<Floor> floors,
+            IEnumerable<Enemy> enemies, IEnumerable<GateTrigger> gateTriggers, IEnumerable<Gate> gates, IEnumerable<Rift> rifts,
+            IEnumerable<Pit> pits, IEnumerable<Chest> chests, IEnumerable<PickableItem> pickableItems,
+            IEnumerable<ActionnedItem> actionnedItems, IDictionary<Direction, int> neighboringScreens)
+            : base(x, y, width, height, floorType, renderType, renderProperties)
         {
             Id = id;
             DarknessOpacity = darknessOpacity;
-            _permanentStructures = new List<PermanentStructure>();
-            _doors = new List<Door>();
-            _floors = new List<Floor>();
-            _enemies = new List<Enemy>();
-            _gateTriggers = new List<GateTrigger>();
-            _gates = new List<Gate>();
-            _rifts = new List<Rift>();
-            _pits = new List<Pit>();
-            _chests = new List<Chest>();
-            _pickableItems = new List<PickableItem>();
-            _actionnedItems = new List<ActionnedItem>();
+            _permanentStructures = new List<PermanentStructure>(permanentStructures);
+            _doors = new List<Door>(doors);
+            _floors = new List<Floor>(floors);
+            _enemies = new List<Enemy>(enemies);
+            _gateTriggers = new List<GateTrigger>(gateTriggers);
+            _gates = new List<Gate>(gates);
+            _rifts = new List<Rift>(rifts);
+            _pits = new List<Pit>(pits);
+            _chests = new List<Chest>(chests);
+            _pickableItems = new List<PickableItem>(pickableItems);
+            _actionnedItems = new List<ActionnedItem>(actionnedItems);
+            _neighboringScreens = new Dictionary<Direction, int>(neighboringScreens);
         }
 
         /// <summary>

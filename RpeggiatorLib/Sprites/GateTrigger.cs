@@ -22,20 +22,6 @@ namespace RpeggiatorLib.Sprites
         public override ISpriteRender Render { get { return IsActivated ? _renderOn : _render; } }
 
         /// <summary>
-        /// Creates an instance from json datas.
-        /// </summary>
-        /// <param name="datas">Json datas.</param>
-        /// <returns><see cref="GateTrigger"/></returns>
-        public static GateTrigger FromDynamic(dynamic datas)
-        {
-            GateTrigger gt = new GateTrigger((double)datas.X, (double)datas.Y, (double)datas.Width, (double)datas.Height,
-                (double)datas.ActionDuration, (int)datas.GateIndex, (bool)datas.AppearOnActivation,
-                (string)datas.OnRenderType, (string)datas.OnRenderValue);
-            gt.SetRenderFromDynamic((object)datas);
-            return gt;
-        }
-
-        /// <summary>
         /// Constructor.
         /// </summary>
         /// <param name="x"><see cref="Sprite.X"/></param>
@@ -45,28 +31,18 @@ namespace RpeggiatorLib.Sprites
         /// <param name="actionDuration"><see cref="FloorTrigger._actionDuration"/></param>
         /// <param name="gateIndex"><see cref="GateIndex"/></param>
         /// <param name="appearOnActivation"><see cref="AppearOnActivation"/></param>
-        /// <param name="onRenderType"><see cref="_renderOn"/> render type.</param>
-        /// <param name="onRenderValue"><see cref="_renderOn"/> render value.</param>
+        /// <param name="renderType"><see cref="ISpriteRender"/> subtype name.</param>
+        /// <param name="renderProperties">Datas required to initialize the <see cref="ISpriteRender"/>.</param>
+        /// <param name="onRenderType"><see cref="_renderOn"/> subtype name.</param>
+        /// <param name="onRenderProperties">Datas required to initialize <see cref="_renderOn"/>.</param>
         internal GateTrigger(double x, double y, double width, double height,
-            double actionDuration, int gateIndex, bool appearOnActivation, string onRenderType, string onRenderValue)
-            : base(x, y, width, height, actionDuration)
+            double actionDuration, int gateIndex, bool appearOnActivation,
+            string renderType, object[] renderProperties, string onRenderType, object[] onRenderProperties)
+            : base(x, y, width, height, actionDuration, renderType, renderProperties)
         {
             GateIndex = gateIndex;
             AppearOnActivation = appearOnActivation;
-            switch (onRenderType)
-            {
-                case nameof(ImageMosaicRender):
-                    _renderOn = new ImageMosaicRender(onRenderValue, this);
-                    break;
-                case nameof(ImageRender):
-                    _renderOn = new ImageRender(onRenderValue);
-                    break;
-                case nameof(PlainRender):
-                    _renderOn = new PlainRender(onRenderValue);
-                    break;
-                default:
-                    throw new System.NotImplementedException(Messages.NotImplementedGraphicExceptionMessage);
-            }
+            _renderOn = GetRenderFromValues(onRenderType, onRenderProperties);
         }
     }
 }

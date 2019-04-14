@@ -39,20 +39,6 @@ namespace RpeggiatorLib.Sprites
         public override ISpriteRender Render { get { return Locked ? _renderLocked : _render; } }
 
         /// <summary>
-        /// Creates an instance from json datas.
-        /// </summary>
-        /// <param name="datas">Json datas.</param>
-        /// <returns><see cref="Door"/></returns>
-        internal static Door FromDynamic(dynamic datas)
-        {
-            Door d = new Door((double)datas.X, (double)datas.Y, (double)datas.Width, (double)datas.Height, (int?)datas.KeyId,
-                (int)datas.ScreenId, (int)datas.Id, (double)datas.PlayerGoThroughX, (double)datas.PlayerGoThroughY,
-                (string)datas.LockedRenderType, (string)datas.LockedRenderValue);
-            d.SetRenderFromDynamic((object)datas);
-            return d;
-        }
-
-        /// <summary>
         /// Constructor.
         /// </summary>
         /// <param name="x"><see cref="Sprite.X"/></param>
@@ -64,31 +50,21 @@ namespace RpeggiatorLib.Sprites
         /// <param name="id"><see cref="Id"/></param>
         /// <param name="playerGoThroughX"><see cref="PlayerGoThroughX"/></param>
         /// <param name="playerGoThroughY"><see cref="PlayerGoThroughY"/></param>
-        /// <param name="lockedRenderType"><see cref="_renderLocked"/> render type.</param>
-        /// <param name="lockedRenderValue"><see cref="_renderLocked"/> render value.</param>
+        /// <param name="lockedRenderType"><see cref="_renderLocked"/> subtype name.</param>
+        /// <param name="lockedRenderProperties">Datas required to initialize <see cref="_renderLocked"/>.</param>
+        /// <param name="renderType"><see cref="ISpriteRender"/> subtype name.</param>
+        /// <param name="renderProperties">Datas required to initialize the <see cref="ISpriteRender"/>.</param>
         internal Door(double x, double y, double width, double height, int? keyId, int screenId, int id,
-            double playerGoThroughX, double playerGoThroughY, string lockedRenderType, string lockedRenderValue)
-            : base(x, y, width, height)
+            double playerGoThroughX, double playerGoThroughY, string lockedRenderType, object[] lockedRenderProperties,
+            string renderType, object[] renderProperties)
+            : base(x, y, width, height, renderType, renderProperties)
         {
             _keyId = keyId;
             _screenId = screenId;
             Id = id;
             PlayerGoThroughX = playerGoThroughX;
             PlayerGoThroughY = playerGoThroughY;
-            switch (lockedRenderType)
-            {
-                case nameof(PlainRender):
-                    _renderLocked = new PlainRender(lockedRenderValue);
-                    break;
-                case nameof(ImageRender):
-                    _renderLocked = new ImageRender(lockedRenderValue);
-                    break;
-                case nameof(ImageMosaicRender):
-                    _renderLocked = new ImageMosaicRender(lockedRenderValue, this);
-                    break;
-                default:
-                    throw new System.NotImplementedException(Messages.NotImplementedGraphicExceptionMessage);
-            }
+            _renderLocked = GetRenderFromValues(lockedRenderType, lockedRenderProperties);
         }
 
         /// <summary>

@@ -117,6 +117,9 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="EngineNotInitializedExceptionMessage" xml:space="preserve">
+    <value>The engine has not been properly initialized.</value>
+  </data>
   <data name="InfiniteOverlapCheckExceptionMessage" xml:space="preserve">
     <value>The method can't find a position which avoid every structures.</value>
   </data>
@@ -125,6 +128,9 @@
   </data>
   <data name="InvalidResourcesPathExceptionMessage" xml:space="preserve">
     <value>The specified resources path is invalid.</value>
+  </data>
+  <data name="InvalidSqliteConnectionExceptionMessage" xml:space="preserve">
+    <value>The database connection has failed. Details : {0}. Stacktrace : {1}</value>
   </data>
   <data name="NoQuadraticSolutionExceptionMessage" xml:space="preserve">
     <value>Unable to resolve this quadratic equation.</value>

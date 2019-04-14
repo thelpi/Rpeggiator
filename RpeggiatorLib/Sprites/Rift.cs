@@ -9,18 +9,6 @@ namespace RpeggiatorLib.Sprites
     public class Rift : DamageableSprite
     {
         /// <summary>
-        /// Constructor from json.
-        /// </summary>
-        /// <param name="datas">Json datas.</param>
-        /// <returns><see cref="Rift"/></returns>
-        internal static Rift FromDynamic(dynamic datas)
-        {
-            Rift r = new Rift((double)datas.X, (double)datas.Y, (double)datas.Width, (double)datas.Height, (double)datas.LifePoints);
-            r.SetRenderFromDynamic((object)datas);
-            return r;
-        }
-
-        /// <summary>
         /// Constructor.
         /// </summary>
         /// <param name="x"><see cref="Sprite.X"/></param>
@@ -28,8 +16,11 @@ namespace RpeggiatorLib.Sprites
         /// <param name="width"><see cref="Sprite.Width"/></param>
         /// <param name="height"><see cref="Sprite.Height"/></param>
         /// <param name="lifepoints"><see cref="DamageableSprite.CurrentLifePoints"/></param>
-        internal Rift(double x, double y, double width, double height, double lifepoints)
-            : base(x, y, width, height, lifepoints)
+        /// <param name="renderType"><see cref="ISpriteRender"/> subtype name.</param>
+        /// <param name="renderProperties">Datas required to initialize the <see cref="ISpriteRender"/>.</param>
+        internal Rift(double x, double y, double width, double height,
+            double lifepoints, string renderType, object[] renderProperties)
+            : base(x, y, width, height, lifepoints, renderType, renderProperties)
         {
             ExplosionLifePointCost = Constants.RIFT_EXPLOSION_LIFE_POINT_COST;
             ArrowLifePointCost = 0;

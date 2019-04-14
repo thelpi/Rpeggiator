@@ -21,18 +21,6 @@ namespace RpeggiatorLib.Sprites
         public bool Activated { get; private set; }
 
         /// <summary>
-        /// Creates an instance from json datas.
-        /// </summary>
-        /// <param name="datas">Json datas.</param>
-        /// <returns><see cref="Gate"/></returns>
-        internal static Gate FromDynamic(dynamic datas)
-        {
-            Gate g = new Gate((double)datas.X, (double)datas.Y, (double)datas.Width, (double)datas.Height, (bool)datas.Activated);
-            g.SetRenderFromDynamic((object)datas);
-            return g;
-        }
-
-        /// <summary>
         /// Constructor.
         /// </summary>
         /// <param name="x"><see cref="Sprite.X"/></param>
@@ -40,8 +28,10 @@ namespace RpeggiatorLib.Sprites
         /// <param name="width"><see cref="Sprite.Width"/></param>
         /// <param name="height"><see cref="Sprite.Height"/></param>
         /// <param name="activated"><see cref="Activated"/></param>
-        internal Gate(double x, double y, double width, double height, bool activated)
-            : base(x, y, width, height)
+        /// <param name="renderType"><see cref="ISpriteRender"/> subtype name.</param>
+        /// <param name="renderProperties">Datas required to initialize the <see cref="ISpriteRender"/>.</param>
+        internal Gate(double x, double y, double width, double height, bool activated, string renderType, object[] renderProperties)
+            : base(x, y, width, height, renderType, renderProperties)
         {
             Activated = activated;
             _defaultActivated = activated;

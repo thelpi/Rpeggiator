@@ -29,20 +29,6 @@ namespace RpeggiatorLib.Sprites
         public override ISpriteRender Render { get { return IsOpen ? _renderOpen : _render; } }
 
         /// <summary>
-        /// Creates a <see cref="Chest"/> instance from json datas.
-        /// </summary>
-        /// <param name="datas">Json datas.</param>
-        /// <returns><see cref="Chest"/></returns>
-        internal static Chest FromDynamic(dynamic datas)
-        {
-            Chest c = new Chest((double)datas.X, (double)datas.Y, (double)datas.Width, (double)datas.Height,
-                (Enums.ItemType?)datas.ItemType, (int)datas.Quantity, (int?)datas.KeyId, (int?)datas.KeyIdContainer,
-                (string)datas.OpenRenderType, (string)datas.OpenRenderValue);
-            c.SetRenderFromDynamic((object)datas);
-            return c;
-        }
-
-        /// <summary>
         /// Constructor.
         /// </summary>
         /// <param name="x"><see cref="Sprite.X"/></param>
@@ -53,30 +39,20 @@ namespace RpeggiatorLib.Sprites
         /// <param name="quantity"><see cref="_quantity"/></param>
         /// <param name="keyId"><see cref="_keyId"/></param>
         /// <param name="keyIdContainer"><see cref="_keyIdContainer"/></param>
-        /// <param name="openRenderType"><see cref="_renderOpen"/> render type.</param>
-        /// <param name="openRenderValue"><see cref="_renderOpen"/> render value.</param>
-        internal Chest(double x, double y, double width, double height, Enums.ItemType? itemType, int quantity,
-            int? keyId, int? keyIdContainer, string openRenderType, string openRenderValue)
-            : base(x, y, width, height)
+        /// <param name="renderType"><see cref="ISpriteRender"/> subtype name.</param>
+        /// <param name="renderProperties">Datas required to initialize the <see cref="ISpriteRender"/>.</param>
+        /// <param name="openRenderType"><see cref="_renderOpen"/> subtype name.</param>
+        /// <param name="openRenderProperties">Datas required to initialize <see cref="_renderOpen"/>.</param>
+        internal Chest(double x, double y, double width, double height,
+            Enums.ItemType? itemType, int quantity, int? keyId, int? keyIdContainer,
+            string renderType, object[] renderProperties, string openRenderType, object[] openRenderProperties)
+            : base(x, y, width, height, renderType, renderProperties)
         {
             _itemType = itemType;
             _quantity = quantity;
             _keyId = keyId;
             _keyIdContainer = keyIdContainer;
-            switch (openRenderType)
-            {
-                case nameof(PlainRender):
-                    _renderOpen = new PlainRender(openRenderValue);
-                    break;
-                case nameof(ImageRender):
-                    _renderOpen = new ImageRender(openRenderValue);
-                    break;
-                case nameof(ImageMosaicRender):
-                    _renderOpen = new ImageMosaicRender(openRenderValue, this);
-                    break;
-                default:
-                    throw new System.NotImplementedException(Messages.NotImplementedGraphicExceptionMessage);
-            }
+            _renderOpen = GetRenderFromValues(openRenderType, openRenderProperties);
         }
 
         /// <summary>

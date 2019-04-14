@@ -68,20 +68,61 @@ namespace RpeggiatorLib.Sprites
         /// <param name="y"><see cref="Y"/></param>
         /// <param name="width"><see cref="Width"/></param>
         /// <param name="height"><see cref="Height"/></param>
-        protected Sprite(double x, double y, double width, double height)
-            : this(x, y, width, height, 0)
+        /// <param name="render"><see cref="Render"/></param>
+        protected Sprite(double x, double y, double width, double height, ISpriteRender render)
+            : this(x, y, width, height, 0, render)
         {
             Z = GetZIndexBySubType();
         }
 
+        /// <summary>
+        /// Constructor.
+        /// </summary>
+        /// <param name="x"><see cref="X"/></param>
+        /// <param name="y"><see cref="Y"/></param>
+        /// <param name="width"><see cref="Width"/></param>
+        /// <param name="height"><see cref="Height"/></param>
+        /// <param name="renderType"><see cref="ISpriteRender"/> subtype name.</param>
+        /// <param name="renderProperties">Datas required to initialize the <see cref="ISpriteRender"/>.</param>
+        protected Sprite(double x, double y, double width, double height, string renderType, object[] renderProperties)
+            : this(x, y, width, height, 0, null)
+        {
+            Z = GetZIndexBySubType();
+            _render = GetRenderFromValues(renderType, renderProperties);
+        }
+
         // Private constructor.
-        private Sprite(double x, double y, double width, double height, int zIndex)
+        private Sprite(double x, double y, double width, double height, int zIndex, ISpriteRender render)
         {
             X = x;
             Y = y;
             Width = width;
             Height = height;
             Z = zIndex;
+            _render = render;
+        }
+
+        /// <summary>
+        /// Computes and gets a <see cref="ISpriteRender"/> from given properties.
+        /// </summary>
+        /// <param name="renderType"><see cref="ISpriteRender"/> subtype name.</param>
+        /// <param name="renderProperties">Datas required to initialize the <see cref="ISpriteRender"/>.</param>
+        /// <returns><see cref="ISpriteRender"/></returns>
+        protected ISpriteRender GetRenderFromValues(string renderType, params object[] renderProperties)
+        {
+            switch (renderType)
+            {
+                case nameof(ImageDirectionRender):
+                    return new ImageDirectionRender((string)renderProperties[0], this, (string)renderProperties[1]);
+                case nameof(ImageMosaicRender):
+                    return new ImageMosaicRender((string)renderProperties[0], this);
+                case nameof(ImageRender):
+                    return new ImageRender((string)renderProperties[0]);
+                case nameof(PlainRender):
+                    return new PlainRender((string)renderProperties[0]);
+                default:
+                    throw new System.NotImplementedException(Messages.NotImplementedGraphicExceptionMessage);
+            }
         }
 
         /// <summary>
@@ -96,39 +137,13 @@ namespace RpeggiatorLib.Sprites
         }
 
         /// <summary>
-        /// Creates an instance of <see cref="ISpriteRender"/> from the json datas.
-        /// </summary>
-        /// <param name="datas">Json datas.</param>
-        /// <param name="directionPropertyName">Optionnal; for the subtype <see cref="ImageDirectionRender"/>, the property name used for <see cref="Direction"/>.</param>
-        protected void SetRenderFromDynamic(dynamic datas, string directionPropertyName = null)
-        {
-            switch ((string)datas.RenderType)
-            {
-                case nameof(ImageDirectionRender):
-                    _render = new ImageDirectionRender((string)datas.RenderValue, this, directionPropertyName);
-                    break;
-                case nameof(ImageMosaicRender):
-                    _render = new ImageMosaicRender((string)datas.RenderValue, this);
-                    break;
-                case nameof(ImageRender):
-                    _render = new ImageRender((string)datas.RenderValue);
-                    break;
-                case nameof(PlainRender):
-                    _render = new PlainRender((string)datas.RenderValue);
-                    break;
-                default:
-                    throw new System.NotImplementedException(Messages.NotImplementedGraphicExceptionMessage);
-            }
-        }
-
-        /// <summary>
         /// Makes a copy of the current instance on a new position, with the same <see cref="Width"/> and <see cref="Height"/>.
         /// </summary>
         /// <param name="newPosition">The new position.</param>
         /// <returns>The new instance.</returns>
         internal Sprite CopyToPosition(Point newPosition)
         {
-            return new Sprite(newPosition.X, newPosition.Y, Width, Height, Z);
+            return new Sprite(newPosition.X, newPosition.Y, Width, Height, Z, Render);
         }
 
         /// <summary>
@@ -242,7 +257,7 @@ namespace RpeggiatorLib.Sprites
             double a = ((1 - ratio) / 2);
             double newX = X + (a * Width);
             double newY = Y + (a * Height);
-            return new Sprite(newX, newY, Width * ratio, Height * ratio, Z);
+            return new Sprite(newX, newY, Width * ratio, Height * ratio, Z, Render);
         }
 
         /// <summary>
