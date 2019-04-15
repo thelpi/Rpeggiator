@@ -12,7 +12,7 @@ namespace RpeggiatorLib.Sprites
         // The optionnal key identifier to unlock the door.
         private int? _keyId;
         // The screen identifier this door is connected.
-        private int _screenId;
+        private int _connectedScreenId;
         // Render when locked.
         private ISpriteRender _renderLocked;
 
@@ -46,7 +46,7 @@ namespace RpeggiatorLib.Sprites
         /// <param name="width"><see cref="Sprite.Width"/></param>
         /// <param name="height"><see cref="Sprite.Height"/></param>
         /// <param name="keyId"><see cref="_keyId"/></param>
-        /// <param name="screenId"><see cref="_screenId"/></param>
+        /// <param name="connectedScreenId"><see cref="_connectedScreenId"/></param>
         /// <param name="id"><see cref="Id"/></param>
         /// <param name="playerGoThroughX"><see cref="PlayerGoThroughX"/></param>
         /// <param name="playerGoThroughY"><see cref="PlayerGoThroughY"/></param>
@@ -54,13 +54,13 @@ namespace RpeggiatorLib.Sprites
         /// <param name="lockedRenderProperties">Datas required to initialize <see cref="_renderLocked"/>.</param>
         /// <param name="renderType"><see cref="ISpriteRender"/> subtype name.</param>
         /// <param name="renderProperties">Datas required to initialize the <see cref="ISpriteRender"/>.</param>
-        internal Door(double x, double y, double width, double height, int? keyId, int screenId, int id,
+        internal Door(double x, double y, double width, double height, int? keyId, int connectedScreenId, int id,
             double playerGoThroughX, double playerGoThroughY, string lockedRenderType, object[] lockedRenderProperties,
             string renderType, object[] renderProperties)
             : base(x, y, width, height, renderType, renderProperties)
         {
             _keyId = keyId;
-            _screenId = screenId;
+            _connectedScreenId = connectedScreenId;
             Id = id;
             PlayerGoThroughX = playerGoThroughX;
             PlayerGoThroughY = playerGoThroughY;
@@ -75,7 +75,7 @@ namespace RpeggiatorLib.Sprites
         {
             if (!_keyId.HasValue || Engine.Default.Player.Inventory.Keyring.Any(k => k == _keyId))
             {
-                return _screenId;
+                return _connectedScreenId;
             }
 
             return null;

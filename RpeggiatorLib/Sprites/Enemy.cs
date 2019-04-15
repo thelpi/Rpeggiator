@@ -13,6 +13,8 @@ namespace RpeggiatorLib.Sprites
         private Elapser _movementTimeManager;
         // Movement path.
         private Path _path;
+        // Ensures non-authorized path redefinition.
+        private bool _pathInitialized = false;
 
         /// <summary>
         /// Loot <see cref="Enums.ItemType"/>; <c>Null</c> for coin.
@@ -58,19 +60,31 @@ namespace RpeggiatorLib.Sprites
         /// <param name="defaultDirection">Initial <see cref="LifeSprite.Direction"/>.</param>
         /// <param name="lootItemType"><see cref="LootItemType"/></param>
         /// <param name="lootQuantity"><see cref="LootQuantity"/></param>
-        /// <param name="pathSteps">Steps of <see cref="_path"/>; except the current position.</param>
         internal Enemy(double x, double y, double width, double height, double maximalLifePoints, double hitLifePointCost,
             double speed, double recoveryTime, string renderFilename, string renderRecoveryFilename,
-            Enums.Direction defaultDirection, Enums.ItemType? lootItemType, int lootQuantity, IEnumerable<Point> pathSteps)
+            Enums.Direction defaultDirection, Enums.ItemType? lootItemType, int lootQuantity)
             : base(x, y, width, height, maximalLifePoints, hitLifePointCost, speed, recoveryTime, renderFilename,
                   renderRecoveryFilename, defaultDirection)
         {
             _movementTimeManager = new Elapser();
-            List<Point> points = new List<Point> { TopLeftCorner };
-            points.AddRange(pathSteps);
-            _path = new Path(points.ToArray());
             LootItemType = lootItemType;
             LootQuantity = lootQuantity;
+        }
+
+        /// <summary>
+        /// Initializes <see cref="_path"/>.
+        /// </summary>
+        /// <remarks>Duplicate calls will be ignored.</remarks>
+        /// <param name="pathSteps">Steps of <see cref="_path"/>; except the current position.</param>
+        internal void SetPath(IEnumerable<Point> pathSteps)
+        {
+            if (!_pathInitialized)
+            {
+                List<Point> points = new List<Point> { TopLeftCorner };
+                points.AddRange(pathSteps);
+                _path = new Path(points.ToArray());
+                _pathInitialized = true;
+            }
         }
 
         /// <inheritdoc />

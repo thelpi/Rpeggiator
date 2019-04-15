@@ -109,7 +109,6 @@ namespace RpeggiatorLib.Sprites
         /// <param name="darknessOpacity"><see cref="DarknessOpacity"/></param>
         /// <param name="renderType"><see cref="Render.ISpriteRender"/> subtype name.</param>
         /// <param name="renderProperties">Datas required to initialize the <see cref="Render.ISpriteRender"/>.</param>
-        /// <param name="actionnedItems"><see cref="_actionnedItems"/></param>
         /// <param name="chests"><see cref="_chests"/></param>
         /// <param name="doors"><see cref="_doors"/></param>
         /// <param name="enemies"><see cref="_enemies"/></param>
@@ -121,12 +120,11 @@ namespace RpeggiatorLib.Sprites
         /// <param name="pits"><see cref="_pits"/></param>
         /// <param name="rifts"><see cref="_rifts"/></param>
         /// <param name="neighboringScreens"><see cref="_neighboringScreens"/></param>
-        internal Screen(int id, double x, double y, double width, double height,
-            FloorType floorType, double darknessOpacity, string renderType, object[] renderProperties,
-            IEnumerable<PermanentStructure> permanentStructures, IEnumerable<Door> doors, IEnumerable<Floor> floors,
-            IEnumerable<Enemy> enemies, IEnumerable<GateTrigger> gateTriggers, IEnumerable<Gate> gates, IEnumerable<Rift> rifts,
-            IEnumerable<Pit> pits, IEnumerable<Chest> chests, IEnumerable<PickableItem> pickableItems,
-            IEnumerable<ActionnedItem> actionnedItems, IDictionary<Direction, int> neighboringScreens)
+        internal Screen(int id, double x, double y, double width, double height, FloorType floorType, double darknessOpacity,
+            string renderType, object[] renderProperties, IEnumerable<PermanentStructure> permanentStructures,
+            IEnumerable<Door> doors, IEnumerable<Floor> floors, IEnumerable<Enemy> enemies, IEnumerable<GateTrigger> gateTriggers,
+            IEnumerable<Gate> gates, IEnumerable<Rift> rifts, IEnumerable<Pit> pits, IEnumerable<Chest> chests,
+            IEnumerable<PickableItem> pickableItems, IDictionary<Direction, int> neighboringScreens)
             : base(x, y, width, height, floorType, renderType, renderProperties)
         {
             Id = id;
@@ -141,7 +139,7 @@ namespace RpeggiatorLib.Sprites
             _pits = new List<Pit>(pits);
             _chests = new List<Chest>(chests);
             _pickableItems = new List<PickableItem>(pickableItems);
-            _actionnedItems = new List<ActionnedItem>(actionnedItems);
+            _actionnedItems = new List<ActionnedItem>();
             _neighboringScreens = new Dictionary<Direction, int>(neighboringScreens);
         }
 
