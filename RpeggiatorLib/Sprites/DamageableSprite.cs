@@ -4,7 +4,7 @@
     /// Represents a sprite which can be damaged.
     /// </summary>
     /// <seealso cref="Sprite"/>
-    public class DamageableSprite : Sprite
+    public abstract class DamageableSprite : Sprite
     {
         /// <summary>
         /// Current number of life points.

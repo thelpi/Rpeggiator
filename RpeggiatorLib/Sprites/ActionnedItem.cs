@@ -4,12 +4,12 @@
     /// Represents an item dropped on the floor.
     /// </summary>
     /// <seealso cref="Sprite"/>
-    public class ActionnedItem : Sprite
+    public abstract class ActionnedItem : Sprite
     {
         /// <summary>
-        /// Indicates the item use is finished.
+        /// Overriden; Indicates the item use is finished.
         /// </summary>
-        public virtual bool IsDone { get { throw new System.NotImplementedException(Messages.NotImplementedVirtualExceptionMessage); } }
+        public abstract bool IsDone { get; }
 
         /// <summary>
         /// Constructor.
@@ -31,9 +31,6 @@
         /// </summary>
         /// <param name="sprite"><see cref="DamageableSprite"/></param>
         /// <returns>Life points cost.</returns>
-        internal virtual double GetLifePointsCost(DamageableSprite sprite)
-        {
-            return 0;
-        }
+        internal abstract double GetLifePointsCost(DamageableSprite sprite);
     }
 }

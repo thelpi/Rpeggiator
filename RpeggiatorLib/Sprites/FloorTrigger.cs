@@ -5,7 +5,7 @@
     /// </summary>
     /// <remarks>This kind of trigger might be activated by <see cref="Enemy"/>.</remarks>
     /// <seealso cref="Sprite"/>
-    public class FloorTrigger : Sprite
+    public abstract class FloorTrigger : Sprite
     {
         // Action duration, in milliseconds.
         private double _actionDuration;

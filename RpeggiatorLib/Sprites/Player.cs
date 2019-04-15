@@ -307,5 +307,11 @@ namespace RpeggiatorLib.Sprites
 
             SwordHitSprite?.AdjustToPlayer();
         }
+
+        /// <inheritdoc />
+        protected override double ComputeLifePointCostFromEnemies()
+        {
+            return Engine.Default.CheckHitByEnemiesOnPlayer();
+        }
     }
 }

@@ -8,7 +8,7 @@ namespace RpeggiatorLib.Sprites
     /// Represents a living <see cref="Sprite"/> (player, enemies, pngs...).
     /// </summary>
     /// <seealso cref="DamageableSprite"/>
-    public class LifeSprite : DamageableSprite
+    public abstract class LifeSprite : DamageableSprite
     {
         // Original speed.
         private double _originalSpeed;
@@ -151,12 +151,8 @@ namespace RpeggiatorLib.Sprites
         /// <summary>
         /// Overridden; Computes the cost, in life points, inflicted by current instance antagonists.
         /// </summary>
-        /// <remarks>By default, <see cref="Enemy"/> are considered as antagonists.</remarks>
         /// <returns>Life points cost.</returns>
-        protected virtual double ComputeLifePointCostFromEnemies()
-        {
-            return Engine.Default.CheckHitByEnemiesOnPlayer();
-        }
+        protected abstract double ComputeLifePointCostFromEnemies();
 
         /// <summary>
         /// Creates an altenation between <see cref="Sprite._render"/> and <see cref="_renderRecovery"/> (or any render alternative).
