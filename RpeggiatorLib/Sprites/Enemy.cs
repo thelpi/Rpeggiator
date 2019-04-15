@@ -167,5 +167,16 @@ namespace RpeggiatorLib.Sprites
 
             Move(newPoint.X, newPoint.Y);
         }
+
+        /// <inheritdoc />
+        protected override double ComputeLifePointCostFromEnemies()
+        {
+            if (Engine.Default.Player.IsHitting && Overlap(Engine.Default.Player.SwordHitSprite))
+            {
+                return Engine.Default.Player.HitLifePointCost;
+            }
+
+            return 0;
+        }
     }
 }

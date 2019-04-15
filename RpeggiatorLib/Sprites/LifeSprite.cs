@@ -135,18 +135,7 @@ namespace RpeggiatorLib.Sprites
             {
                 double cumuledLifePoints = Engine.Default.CurrentScreen.HitByAnActionnedItem(this);
 
-                // TODO : fix this IF
-                if (GetType() == typeof(Enemy))
-                {
-                    if (Engine.Default.Player.IsHitting && Overlap(Engine.Default.Player.SwordHitSprite))
-                    {
-                        cumuledLifePoints += Engine.Default.Player.HitLifePointCost;
-                    }
-                }
-                else
-                {
-                    cumuledLifePoints += Engine.Default.CheckHitByEnemiesOnPlayer();
-                }
+                cumuledLifePoints += ComputeLifePointCostFromEnemies();
 
                 if (cumuledLifePoints.Greater(0))
                 {
@@ -157,6 +146,16 @@ namespace RpeggiatorLib.Sprites
             }
 
             return false;
+        }
+
+        /// <summary>
+        /// Overridden; Computes the cost, in life points, inflicted by current instance antagonists.
+        /// </summary>
+        /// <remarks>By default, <see cref="Enemy"/> are considered as antagonists.</remarks>
+        /// <returns>Life points cost.</returns>
+        protected virtual double ComputeLifePointCostFromEnemies()
+        {
+            return Engine.Default.CheckHitByEnemiesOnPlayer();
         }
 
         /// <summary>
