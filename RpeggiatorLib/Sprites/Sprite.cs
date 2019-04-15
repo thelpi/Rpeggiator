@@ -8,7 +8,7 @@ namespace RpeggiatorLib.Sprites
     /// <summary>
     /// Represents a two-dimensional point (i.e. a rectangle) which evolves in time.
     /// </summary>
-    public class Sprite
+    public abstract class Sprite
     {
         /// <summary>
         /// Default <see cref="ISpriteRender"/>.
@@ -68,38 +68,16 @@ namespace RpeggiatorLib.Sprites
         /// <param name="y"><see cref="Y"/></param>
         /// <param name="width"><see cref="Width"/></param>
         /// <param name="height"><see cref="Height"/></param>
-        /// <param name="render"><see cref="Render"/></param>
-        protected Sprite(double x, double y, double width, double height, ISpriteRender render)
-            : this(x, y, width, height, 0, render)
-        {
-            Z = GetZIndexBySubType();
-        }
-
-        /// <summary>
-        /// Constructor.
-        /// </summary>
-        /// <param name="x"><see cref="X"/></param>
-        /// <param name="y"><see cref="Y"/></param>
-        /// <param name="width"><see cref="Width"/></param>
-        /// <param name="height"><see cref="Height"/></param>
         /// <param name="renderType"><see cref="ISpriteRender"/> subtype name.</param>
         /// <param name="renderProperties">Datas required to initialize the <see cref="ISpriteRender"/>.</param>
         protected Sprite(double x, double y, double width, double height, string renderType, object[] renderProperties)
-            : this(x, y, width, height, 0, null)
-        {
-            Z = GetZIndexBySubType();
-            _render = GetRenderFromValues(renderType, renderProperties);
-        }
-
-        // Private constructor.
-        private Sprite(double x, double y, double width, double height, int zIndex, ISpriteRender render)
         {
             X = x;
             Y = y;
             Width = width;
             Height = height;
-            Z = zIndex;
-            _render = render;
+            Z = GetZIndexBySubType();
+            _render = GetRenderFromValues(renderType, renderProperties);
         }
 
         /// <summary>
@@ -137,13 +115,16 @@ namespace RpeggiatorLib.Sprites
         }
 
         /// <summary>
-        /// Makes a copy of the current instance on a new position, with the same <see cref="Width"/> and <see cref="Height"/>.
+        /// Makes a shallow copy of the current instance on a new position.
         /// </summary>
         /// <param name="newPosition">The new position.</param>
         /// <returns>The new instance.</returns>
         internal Sprite CopyToPosition(Point newPosition)
         {
-            return new Sprite(newPosition.X, newPosition.Y, Width, Height, Z, Render);
+            Sprite copy = (Sprite)MemberwiseClone();
+            copy.X = newPosition.X;
+            copy.Y = newPosition.Y;
+            return copy;
         }
 
         /// <summary>
@@ -248,7 +229,7 @@ namespace RpeggiatorLib.Sprites
         }
 
         /// <summary>
-        /// Creates a copy of the current sprite compared to a size ratio.
+        /// Creates a shallow copy of the current sprite compared to a size ratio.
         /// </summary>
         /// <param name="ratio">The size ratio.</param>
         /// <returns>The sprite copy.</returns>
@@ -257,7 +238,14 @@ namespace RpeggiatorLib.Sprites
             double a = ((1 - ratio) / 2);
             double newX = X + (a * Width);
             double newY = Y + (a * Height);
-            return new Sprite(newX, newY, Width * ratio, Height * ratio, Z, Render);
+
+            Sprite copy = (Sprite)MemberwiseClone();
+            copy.X = newX;
+            copy.Y = newY;
+            copy.Width = Width * ratio;
+            copy.Height = Height * ratio;
+
+            return copy;
         }
 
         /// <summary>

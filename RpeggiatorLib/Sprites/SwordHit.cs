@@ -16,7 +16,7 @@ namespace RpeggiatorLib.Sprites
         /// <param name="width"><see cref="Sprite.Width"/></param>
         /// <param name="height"><see cref="Sprite.Height"/></param>
         internal SwordHit(double x, double y, double width, double height)
-            : base(x, y, width, height, new ImageRender(nameof(Enums.Filename.Sword)))
+            : base(x, y, width, height, nameof(ImageRender), new[] { nameof(Enums.Filename.Sword) })
         {
             // Empty.
         }
