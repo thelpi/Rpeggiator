@@ -181,7 +181,7 @@ namespace RpeggiatorLib.Sprites
         /// <returns>List of <see cref="GateTrigger"/>.</returns>
         internal IReadOnlyCollection<GateTrigger> GetTriggersForSpecifiedGate(Gate gate)
         {
-            return _gateTriggers.Where(gt => gt.GateIndex == _gates.IndexOf(gate) && gt.IsActivated).ToList();
+            return _gateTriggers.Where(gt => gt.GateId == _gates.IndexOf(gate) && gt.IsActivated).ToList();
         }
 
         /// <summary>

@@ -59,5 +59,30 @@ namespace RpeggiatorLib.Properties {
                 resourceCulture = value;
             }
         }
+        
+        /// <summary>
+        ///   Recherche une chaîne localisée semblable à create table gate_trigger (
+        ///	screen_id int not null,
+        ///	x double not null,
+        ///	y double not null,
+        ///	width double not null,
+        ///	height double not null,
+        ///	render_type Varchar(50) not null,
+        ///	render_value_0 Varchar(255) not null,
+        ///	render_value_1 Varchar(255) null,
+        ///	render_value_2 Varchar(255) null,
+        ///	render_value_3 Varchar(255) null,
+        ///	render_value_4 Varchar(255) null,
+        ///	render_value_5 Varchar(255) null,
+        ///	render_value_6 Varchar(255) null,
+        ///	render_value_7 Varchar(255) null,
+        ///	render_value_8 Varchar(255) null,
+        /// [le reste de la chaîne a été tronqué]&quot;;.
+        /// </summary>
+        internal static string SpriteDb_sql {
+            get {
+                return ResourceManager.GetString("SpriteDb_sql", resourceCulture);
+            }
+        }
     }
 }

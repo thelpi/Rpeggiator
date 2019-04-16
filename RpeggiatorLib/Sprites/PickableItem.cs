@@ -53,16 +53,16 @@ namespace RpeggiatorLib.Sprites
         /// <param name="height"><see cref="Sprite.Height"/></param>
         /// <param name="itemType"><see cref="ItemType"/></param>
         /// <param name="quantity"><see cref="Quantity"/></param>
-        /// <param name="timeBeForeDisapear"><see cref="_timeManager"/> lifetime, in milliseconds.</param>
+        /// <param name="timeBeforeDisapear"><see cref="_timeManager"/> lifetime, in milliseconds.</param>
         internal PickableItem(double x, double y, double width, double height,
-            ItemType? itemType, int quantity, double? timeBeForeDisapear)
+            ItemType? itemType, int quantity, double? timeBeforeDisapear)
             : base(x, y, width, height, nameof(ImageRender), new[] { itemType.HasValue ? itemType.Value.ToString() : nameof(Filename.Coin) })
         {
             ItemType = itemType;
             Quantity = quantity;
-            if (timeBeForeDisapear.HasValue)
+            if (timeBeforeDisapear.HasValue)
             {
-                _timeManager = new Elapser(timeBeForeDisapear.Value);
+                _timeManager = new Elapser(timeBeforeDisapear.Value);
             }
         }
 

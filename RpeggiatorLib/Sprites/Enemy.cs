@@ -26,25 +26,6 @@ namespace RpeggiatorLib.Sprites
         public int LootQuantity { get; private set; }
 
         /// <summary>
-        /// Creats an instance from json datas.
-        /// </summary>
-        /// <param name="datas">Json datas.</param>
-        /// <returns><see cref="Enemy"/></returns>
-        internal static Enemy FromDynamic(dynamic datas)
-        {
-            List<Point> steps = new List<Point>();
-            foreach (dynamic jsonPath in datas.Path)
-            {
-                steps.Add(new Point((double)jsonPath.X, (double)jsonPath.Y));
-            }
-
-            return new Enemy((double)datas.X, (double)datas.Y, (double)datas.Height, (double)datas.Width,
-                (double)datas.MaximalLifePoints, (double)datas.HitLifePointCost, (double)datas.Speed, (double)datas.RecoveryTime,
-                (string)datas.RenderFilename, (string)datas.RenderRecoveryFilename, (Enums.Direction)datas.DefaultDirection,
-                (Enums.ItemType?)datas.LootItemType, (int)datas.LootQuantity, steps);
-        }
-
-        /// <summary>
         /// Constructor.
         /// </summary>
         /// <param name="x"><see cref="Sprite.X"/></param>

@@ -43,11 +43,18 @@ namespace RpeggiatorLib
                 using (SQLiteConnection connection = new SQLiteConnection(CONN_STRING))
                 {
                     connection.Open();
+                    // Keep this code if initialization required.
+                    /*using (SQLiteCommand cmd = connection.CreateCommand())
+                    {
+                        cmd.CommandText = Properties.Resources.SpriteDb_sql;
+
+                        cmd.ExecuteNonQuery();
+                    }*/
                 }
             }
-            catch (System.Exception ex)
+            catch (Exception ex)
             {
-                throw new System.InvalidOperationException(string.Format(Messages.InvalidSqliteConnectionExceptionMessage, ex.Message, ex.StackTrace));
+                throw new InvalidOperationException(string.Format(Messages.InvalidSqliteConnectionExceptionMessage, ex.Message, ex.StackTrace));
             }
         }
 
@@ -78,7 +85,7 @@ namespace RpeggiatorLib
 
                     cmd.CommandText = string.Format(
                         "select x, y, width, height, floor_type, darkness_opacity, " +
-                        "render_type" + GenerateSqlColumnsRender() + ", " +
+                        "render_type, " + string.Join(", ", GenerateSqlColumnsRender()) + ", " +
                         "neighboring_screen_top, neighboring_screen_bottom, neighboring_screen_right, neighboring_screen_left " +
                         "from screen " +
                         "where id = {0}", id
@@ -105,6 +112,8 @@ namespace RpeggiatorLib
 
             return s;
         }
+
+        #region Get screen informations by sprite type.
 
         // Gets permanent structures of a screen.
         private List<Sprites.PermanentStructure> GetPermanentStructures(int id, SQLiteCommand cmd)
@@ -185,7 +194,7 @@ namespace RpeggiatorLib
         {
             List<Sprites.Enemy> sprites = new List<Sprites.Enemy>();
 
-            cmd.CommandText = GenerateSpriteTableSql(id, "enemy", "maximal_life_points", "hit_life_point_cost",
+            cmd.CommandText = GenerateSpriteTableSqlWithoutRender(id, "enemy", "maximal_life_points", "hit_life_point_cost",
                 "speed", "recovery_time", "render_filename", "render_recovery_filename", "default_direction",
                 "loot_item_type", "loot_quantity", "id");
 
@@ -202,7 +211,25 @@ namespace RpeggiatorLib
                         (Enums.ItemType?)reader.GetNullValue<int>(11), reader.GetInt32(12)));
 
                     List<Point> pointOfSteps = new List<Point>();
-                    // TODO 
+
+                    using (SQLiteConnection connection2 = new SQLiteConnection(CONN_STRING))
+                    {
+                        connection2.Open();
+                        using (SQLiteCommand cmd2 = connection2.CreateCommand())
+                        {
+                            cmd2.CommandText = string.Format(
+                                "select x, y from enemy_step where enemy_id = {0} order by step_no asc", enemyId);
+
+                            using (SQLiteDataReader reader2 = cmd2.ExecuteReader())
+                            {
+                                while (reader2.Read())
+                                {
+                                    pointOfSteps.Add(new Point(reader2.GetDouble(0), reader.GetDouble(1)));
+                                }
+                            }
+                        }
+                    }
+
                     sprites.Last().SetPath(pointOfSteps);
                 }
             }
@@ -215,7 +242,7 @@ namespace RpeggiatorLib
         {
             List<Sprites.Pit> sprites = new List<Sprites.Pit>();
 
-            cmd.CommandText = GenerateSpriteTableSql(id, "pit", null);
+            cmd.CommandText = GenerateSpriteTableSql(id, "pit", "screen_index_entrance");
 
             using (SQLiteDataReader reader = cmd.ExecuteReader())
             {
@@ -223,7 +250,7 @@ namespace RpeggiatorLib
                 {
                     sprites.Add(new Sprites.Pit(
                         reader.GetDouble(0), reader.GetDouble(1), reader.GetDouble(2), reader.GetDouble(3),
-                        reader.GetString(4), GetRenderPropertiesForCurrentReaderRow(reader, 5)));
+                        reader.GetNullValue<int>(15), reader.GetString(4), GetRenderPropertiesForCurrentReaderRow(reader, 5)));
                 }
             }
 
@@ -235,7 +262,7 @@ namespace RpeggiatorLib
         {
             List<Sprites.Floor> sprites = new List<Sprites.Floor>();
 
-            cmd.CommandText = GenerateSpriteTableSql(id, "floor", null);
+            cmd.CommandText = GenerateSpriteTableSql(id, "floor", "floor_type");
 
             using (SQLiteDataReader reader = cmd.ExecuteReader())
             {
@@ -243,7 +270,7 @@ namespace RpeggiatorLib
                 {
                     sprites.Add(new Sprites.Floor(
                         reader.GetDouble(0), reader.GetDouble(1), reader.GetDouble(2), reader.GetDouble(3),
-                        reader.GetString(4), GetRenderPropertiesForCurrentReaderRow(reader, 5)));
+                        (Enums.FloorType)reader.GetInt32(15), reader.GetString(4), GetRenderPropertiesForCurrentReaderRow(reader, 5)));
                 }
             }
 
@@ -255,7 +282,8 @@ namespace RpeggiatorLib
         {
             List<Sprites.PickableItem> sprites = new List<Sprites.PickableItem>();
 
-            cmd.CommandText = GenerateSpriteTableSql(id, "pickable_items", null);
+            cmd.CommandText = GenerateSpriteTableSqlWithoutRender(id, "pickable_items",
+                "item_type", "quantity", "time_before_disapear");
 
             using (SQLiteDataReader reader = cmd.ExecuteReader())
             {
@@ -263,7 +291,7 @@ namespace RpeggiatorLib
                 {
                     sprites.Add(new Sprites.PickableItem(
                         reader.GetDouble(0), reader.GetDouble(1), reader.GetDouble(2), reader.GetDouble(3),
-                        reader.GetString(4), GetRenderPropertiesForCurrentReaderRow(reader, 5)));
+                        (Enums.ItemType?)reader.GetNullValue<int>(4), reader.GetInt32(5), reader.GetNullValue<double>(6)));
                 }
             }
 
@@ -275,7 +303,7 @@ namespace RpeggiatorLib
         {
             List<Sprites.Gate> sprites = new List<Sprites.Gate>();
 
-            cmd.CommandText = GenerateSpriteTableSql(id, "gate", null);
+            cmd.CommandText = GenerateSpriteTableSql(id, "gate", "activated");
 
             using (SQLiteDataReader reader = cmd.ExecuteReader())
             {
@@ -283,7 +311,7 @@ namespace RpeggiatorLib
                 {
                     sprites.Add(new Sprites.Gate(
                         reader.GetDouble(0), reader.GetDouble(1), reader.GetDouble(2), reader.GetDouble(3),
-                        reader.GetString(4), GetRenderPropertiesForCurrentReaderRow(reader, 5)));
+                        reader.GetInt32(15) > 0, reader.GetString(4), GetRenderPropertiesForCurrentReaderRow(reader, 5)));
                 }
             }
 
@@ -302,8 +330,8 @@ namespace RpeggiatorLib
                 while (reader.Read())
                 {
                     sprites.Add(new Sprites.Rift(
-                        reader.GetDouble(0), reader.GetDouble(1), reader.GetDouble(2), reader.GetDouble(3), reader.GetDouble(15),
-                        reader.GetString(4), GetRenderPropertiesForCurrentReaderRow(reader, 5)));
+                        reader.GetDouble(0), reader.GetDouble(1), reader.GetDouble(2), reader.GetDouble(3),
+                        reader.GetDouble(15), reader.GetString(4), GetRenderPropertiesForCurrentReaderRow(reader, 5)));
                 }
             }
 
@@ -317,7 +345,7 @@ namespace RpeggiatorLib
 
             List<string> otherColums = new List<string>
             {
-                "action_duration", "gate_index", "appear_on_activation", "on_render_type"
+                "action_duration", "gate_id", "appear_on_activation", "on_render_type"
             };
             otherColums.AddRange(GenerateSqlColumnsRender("on_render_value"));
             cmd.CommandText = GenerateSpriteTableSql(id, "gate_trigger", otherColums.ToArray());
@@ -328,7 +356,7 @@ namespace RpeggiatorLib
                 {
                     sprites.Add(new Sprites.GateTrigger(
                         reader.GetDouble(0), reader.GetDouble(1), reader.GetDouble(2), reader.GetDouble(3),
-                        reader.GetDouble(15), reader.GetInt32(16), reader.GetBoolean(17),
+                        reader.GetDouble(15), reader.GetInt32(16), reader.GetInt32(17) > 0,
                         reader.GetString(4), GetRenderPropertiesForCurrentReaderRow(reader, 5),
                         reader.GetString(18), GetRenderPropertiesForCurrentReaderRow(reader, 19)));
                 }
@@ -337,24 +365,38 @@ namespace RpeggiatorLib
             return sprites;
         }
 
+        #endregion
+
         // Generates SQL query to get informations about a certain type of sprite relatives to a screen.
         private string GenerateSpriteTableSql(int screenId, string table, params string[] additionalColumns)
         {
             return string.Format(
                 "select x, y, width, height, render_type {0} {1} from {2} where screen_id = {3}",
-                GenerateSqlColumnsRender(),
+                string.Concat(", ", string.Join(", ", GenerateSqlColumnsRender())),
+                (additionalColumns?.Length > 0 ? ", " + string.Join(", ", additionalColumns) : string.Empty),
+                table,
+                screenId);
+        }
+
+        // Generates SQL query to get informations about a certain type of sprite relatives to a screen; no columns relatives to render.
+        private string GenerateSpriteTableSqlWithoutRender(int screenId, string table, params string[] additionalColumns)
+        {
+            return string.Format(
+                "select x, y, width, height {0} from {1} where screen_id = {2}",
                 (additionalColumns?.Length > 0 ? ", " + string.Join(", ", additionalColumns) : string.Empty),
                 table,
                 screenId);
         }
 
         // Generates the SQL which contains every columns related to "render_value" (or similar pattern).
-        private IEnumerable<string> GenerateSqlColumnsRender(string pattern = "render_value")
+        private List<string> GenerateSqlColumnsRender(string pattern = "render_value")
         {
+            List<string> cols = new List<string>();
             for (int i = 0; i < 10; i++)
             {
-                yield return string.Format(", {1}_{0}", pattern, i);
+                cols.Add(string.Format("{0}_{1}", pattern, i));
             }
+            return cols;
         }
 
         // Builds an array of values relatives to the render

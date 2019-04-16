@@ -13,7 +13,7 @@ namespace RpeggiatorLib.Sprites
         /// <summary>
         /// Indicates the index of the gate linked to this trigger in the <see cref="Gate"/> collection of <see cref="Engine"/>.
         /// </summary>
-        public int GateIndex { get; private set; }
+        public int GateId { get; private set; }
         /// <summary>
         /// Indicates if the <see cref="Gate"/> appears when the trigger is activated; otherwise, it disappear.
         /// </summary>
@@ -29,18 +29,18 @@ namespace RpeggiatorLib.Sprites
         /// <param name="width"><see cref="Sprite.Width"/></param>
         /// <param name="height"><see cref="Sprite.Height"/></param>
         /// <param name="actionDuration"><see cref="FloorTrigger._actionDuration"/></param>
-        /// <param name="gateIndex"><see cref="GateIndex"/></param>
+        /// <param name="gateId"><see cref="GateId"/></param>
         /// <param name="appearOnActivation"><see cref="AppearOnActivation"/></param>
         /// <param name="renderType"><see cref="ISpriteRender"/> subtype name.</param>
         /// <param name="renderProperties">Datas required to initialize the <see cref="ISpriteRender"/>.</param>
         /// <param name="onRenderType"><see cref="_renderOn"/> subtype name.</param>
         /// <param name="onRenderProperties">Datas required to initialize <see cref="_renderOn"/>.</param>
         internal GateTrigger(double x, double y, double width, double height,
-            double actionDuration, int gateIndex, bool appearOnActivation,
+            double actionDuration, int gateId, bool appearOnActivation,
             string renderType, object[] renderProperties, string onRenderType, object[] onRenderProperties)
             : base(x, y, width, height, actionDuration, renderType, renderProperties)
         {
-            GateIndex = gateIndex;
+            GateId = gateId;
             AppearOnActivation = appearOnActivation;
             _renderOn = GetRenderFromValues(onRenderType, onRenderProperties);
         }
