@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Data.SQLite;
 using System.Linq;
 
@@ -84,22 +85,24 @@ namespace RpeggiatorLib
                     List<Sprites.PickableItem> pickableItems = GetPickableItems(id, cmd);
 
                     cmd.CommandText = string.Format(
-                        "select x, y, width, height, floor_type, darkness_opacity, " +
-                        "render_type, " + string.Join(", ", GenerateSqlColumnsRender()) + ", " +
+                        "select x, y, width, height, floor_type, darkness_opacity, render_type, {0}, " +
                         "neighboring_screen_top, neighboring_screen_bottom, neighboring_screen_right, neighboring_screen_left " +
-                        "from screen " +
-                        "where id = {0}", id
+                        "from screen where id = @id", string.Join(", ", GenerateSqlColumnsRender())
                     );
+                    cmd.Parameters.Add("@id", DbType.Int32);
+                    cmd.Parameters["@id"].Value = id;
 
                     using (SQLiteDataReader reader = cmd.ExecuteReader())
                     {
                         if (reader.Read())
                         {
-                            Dictionary<Enums.Direction, int> neighboringScreens = new Dictionary<Enums.Direction, int>();
-                            neighboringScreens.Add(Enums.Direction.Bottom, reader.GetInt32(18));
-                            neighboringScreens.Add(Enums.Direction.Top, reader.GetInt32(17));
-                            neighboringScreens.Add(Enums.Direction.Right, reader.GetInt32(19));
-                            neighboringScreens.Add(Enums.Direction.Left, reader.GetInt32(20));
+                            Dictionary<Enums.Direction, int> neighboringScreens = new Dictionary<Enums.Direction, int>
+                            {
+                                { Enums.Direction.Bottom, reader.GetInt32(18) },
+                                { Enums.Direction.Top, reader.GetInt32(17) },
+                                { Enums.Direction.Right, reader.GetInt32(19) },
+                                { Enums.Direction.Left, reader.GetInt32(20) }
+                            };
 
                             s = new Sprites.Screen(id, reader.GetDouble(0), reader.GetDouble(1), reader.GetDouble(2),
                                 reader.GetDouble(3), (Enums.FloorType)reader.GetInt32(4), reader.GetDouble(5), reader.GetString(6),
@@ -120,7 +123,9 @@ namespace RpeggiatorLib
         {
             List<Sprites.PermanentStructure> sprites = new List<Sprites.PermanentStructure>();
 
-            cmd.CommandText = GenerateSpriteTableSql(id, "permanent_structure", null);
+            cmd.CommandText = GenerateSpriteTableSql("permanent_structure", null);
+            cmd.Parameters.Add("@screen_id", DbType.Int32);
+            cmd.Parameters["@screen_id"].Value = id;
 
             using (SQLiteDataReader reader = cmd.ExecuteReader())
             {
@@ -145,7 +150,9 @@ namespace RpeggiatorLib
                 "key_id", "connected_screen_id", "id", "player_go_through_x", "player_go_through_y", "locked_render_type"
             };
             otherColumns.AddRange(GenerateSqlColumnsRender("locked_render_value"));
-            cmd.CommandText = GenerateSpriteTableSql(id, "door", otherColumns.ToArray());
+            cmd.CommandText = GenerateSpriteTableSql("door", otherColumns.ToArray());
+            cmd.Parameters.Add("@screen_id", DbType.Int32);
+            cmd.Parameters["@screen_id"].Value = id;
 
             using (SQLiteDataReader reader = cmd.ExecuteReader())
             {
@@ -172,7 +179,9 @@ namespace RpeggiatorLib
                 "item_type", "quantity", "key_id", "key_id_container", "open_render_type"
             };
             otherColumns.AddRange(GenerateSqlColumnsRender("open_render_value"));
-            cmd.CommandText = GenerateSpriteTableSql(id, "chest", otherColumns.ToArray());
+            cmd.CommandText = GenerateSpriteTableSql("chest", otherColumns.ToArray());
+            cmd.Parameters.Add("@screen_id", DbType.Int32);
+            cmd.Parameters["@screen_id"].Value = id;
 
             using (SQLiteDataReader reader = cmd.ExecuteReader())
             {
@@ -194,47 +203,53 @@ namespace RpeggiatorLib
         {
             List<Sprites.Enemy> sprites = new List<Sprites.Enemy>();
 
-            cmd.CommandText = GenerateSpriteTableSqlWithoutRender(id, "enemy", "maximal_life_points", "hit_life_point_cost",
+            cmd.CommandText = GenerateSpriteTableSqlWithoutRender("enemy", "maximal_life_points", "hit_life_point_cost",
                 "speed", "recovery_time", "render_filename", "render_recovery_filename", "default_direction",
                 "loot_item_type", "loot_quantity", "id");
+            cmd.Parameters.Add("@screen_id", DbType.Int32);
+            cmd.Parameters["@screen_id"].Value = id;
 
             using (SQLiteDataReader reader = cmd.ExecuteReader())
             {
                 while (reader.Read())
                 {
-                    int enemyId = reader.GetInt32(13);
-
                     sprites.Add(new Sprites.Enemy(
                         reader.GetDouble(0), reader.GetDouble(1), reader.GetDouble(2), reader.GetDouble(3),
                         reader.GetDouble(4), reader.GetDouble(5), reader.GetDouble(6), reader.GetDouble(7),
                         reader.GetString(8), reader.GetString(9), (Enums.Direction)reader.GetInt32(10),
                         (Enums.ItemType?)reader.GetNullValue<int>(11), reader.GetInt32(12)));
 
-                    List<Point> pointOfSteps = new List<Point>();
-
-                    using (SQLiteConnection connection2 = new SQLiteConnection(CONN_STRING))
-                    {
-                        connection2.Open();
-                        using (SQLiteCommand cmd2 = connection2.CreateCommand())
-                        {
-                            cmd2.CommandText = string.Format(
-                                "select x, y from enemy_step where enemy_id = {0} order by step_no asc", enemyId);
-
-                            using (SQLiteDataReader reader2 = cmd2.ExecuteReader())
-                            {
-                                while (reader2.Read())
-                                {
-                                    pointOfSteps.Add(new Point(reader2.GetDouble(0), reader.GetDouble(1)));
-                                }
-                            }
-                        }
-                    }
-
-                    sprites.Last().SetPath(pointOfSteps);
+                    sprites.Last().SetPath(GetEnemyPathSteps(reader.GetInt32(13)));
                 }
             }
 
             return sprites;
+        }
+
+        // gets path steps for an enemy.
+        private List<Point> GetEnemyPathSteps(int enemyId)
+        {
+            List<Point> pointOfSteps = new List<Point>();
+
+            using (SQLiteConnection connection2 = new SQLiteConnection(CONN_STRING))
+            {
+                connection2.Open();
+                using (SQLiteCommand cmd2 = connection2.CreateCommand())
+                {
+                    cmd2.CommandText = string.Format(
+                        "select x, y from enemy_step where enemy_id = {0} order by step_no asc", enemyId);
+
+                    using (SQLiteDataReader reader2 = cmd2.ExecuteReader())
+                    {
+                        while (reader2.Read())
+                        {
+                            pointOfSteps.Add(new Point(reader2.GetDouble(0), reader2.GetDouble(1)));
+                        }
+                    }
+                }
+            }
+
+            return pointOfSteps;
         }
 
         // Gets pits of a screen.
@@ -242,7 +257,9 @@ namespace RpeggiatorLib
         {
             List<Sprites.Pit> sprites = new List<Sprites.Pit>();
 
-            cmd.CommandText = GenerateSpriteTableSql(id, "pit", "screen_index_entrance");
+            cmd.CommandText = GenerateSpriteTableSql("pit", "screen_index_entrance");
+            cmd.Parameters.Add("@screen_id", DbType.Int32);
+            cmd.Parameters["@screen_id"].Value = id;
 
             using (SQLiteDataReader reader = cmd.ExecuteReader())
             {
@@ -262,7 +279,9 @@ namespace RpeggiatorLib
         {
             List<Sprites.Floor> sprites = new List<Sprites.Floor>();
 
-            cmd.CommandText = GenerateSpriteTableSql(id, "floor", "floor_type");
+            cmd.CommandText = GenerateSpriteTableSql("floor", "floor_type");
+            cmd.Parameters.Add("@screen_id", DbType.Int32);
+            cmd.Parameters["@screen_id"].Value = id;
 
             using (SQLiteDataReader reader = cmd.ExecuteReader())
             {
@@ -282,8 +301,10 @@ namespace RpeggiatorLib
         {
             List<Sprites.PickableItem> sprites = new List<Sprites.PickableItem>();
 
-            cmd.CommandText = GenerateSpriteTableSqlWithoutRender(id, "pickable_items",
+            cmd.CommandText = GenerateSpriteTableSqlWithoutRender("pickable_items",
                 "item_type", "quantity", "time_before_disapear");
+            cmd.Parameters.Add("@screen_id", DbType.Int32);
+            cmd.Parameters["@screen_id"].Value = id;
 
             using (SQLiteDataReader reader = cmd.ExecuteReader())
             {
@@ -303,7 +324,9 @@ namespace RpeggiatorLib
         {
             List<Sprites.Gate> sprites = new List<Sprites.Gate>();
 
-            cmd.CommandText = GenerateSpriteTableSql(id, "gate", "activated");
+            cmd.CommandText = GenerateSpriteTableSql("gate", "activated");
+            cmd.Parameters.Add("@screen_id", DbType.Int32);
+            cmd.Parameters["@screen_id"].Value = id;
 
             using (SQLiteDataReader reader = cmd.ExecuteReader())
             {
@@ -323,7 +346,9 @@ namespace RpeggiatorLib
         {
             List<Sprites.Rift> sprites = new List<Sprites.Rift>();
 
-            cmd.CommandText = GenerateSpriteTableSql(id, "rift", "lifepoints");
+            cmd.CommandText = GenerateSpriteTableSql("rift", "lifepoints");
+            cmd.Parameters.Add("@screen_id", DbType.Int32);
+            cmd.Parameters["@screen_id"].Value = id;
 
             using (SQLiteDataReader reader = cmd.ExecuteReader())
             {
@@ -348,7 +373,9 @@ namespace RpeggiatorLib
                 "action_duration", "gate_id", "appear_on_activation", "on_render_type"
             };
             otherColums.AddRange(GenerateSqlColumnsRender("on_render_value"));
-            cmd.CommandText = GenerateSpriteTableSql(id, "gate_trigger", otherColums.ToArray());
+            cmd.CommandText = GenerateSpriteTableSql("gate_trigger", otherColums.ToArray());
+            cmd.Parameters.Add("@screen_id", DbType.Int32);
+            cmd.Parameters["@screen_id"].Value = id;
 
             using (SQLiteDataReader reader = cmd.ExecuteReader())
             {
@@ -367,29 +394,29 @@ namespace RpeggiatorLib
 
         #endregion
 
+        #region Static tool methods
+
         // Generates SQL query to get informations about a certain type of sprite relatives to a screen.
-        private string GenerateSpriteTableSql(int screenId, string table, params string[] additionalColumns)
+        private static string GenerateSpriteTableSql(string table, params string[] additionalColumns)
         {
             return string.Format(
-                "select x, y, width, height, render_type {0} {1} from {2} where screen_id = {3}",
+                "select x, y, width, height, render_type {0} {1} from {2} where screen_id = @screen_id",
                 string.Concat(", ", string.Join(", ", GenerateSqlColumnsRender())),
                 (additionalColumns?.Length > 0 ? ", " + string.Join(", ", additionalColumns) : string.Empty),
-                table,
-                screenId);
+                table);
         }
 
         // Generates SQL query to get informations about a certain type of sprite relatives to a screen; no columns relatives to render.
-        private string GenerateSpriteTableSqlWithoutRender(int screenId, string table, params string[] additionalColumns)
+        private static string GenerateSpriteTableSqlWithoutRender(string table, params string[] additionalColumns)
         {
             return string.Format(
-                "select x, y, width, height {0} from {1} where screen_id = {2}",
+                "select x, y, width, height {0} from {1} where screen_id = @screen_id",
                 (additionalColumns?.Length > 0 ? ", " + string.Join(", ", additionalColumns) : string.Empty),
-                table,
-                screenId);
+                table);
         }
 
         // Generates the SQL which contains every columns related to "render_value" (or similar pattern).
-        private List<string> GenerateSqlColumnsRender(string pattern = "render_value")
+        private static List<string> GenerateSqlColumnsRender(string pattern = "render_value")
         {
             List<string> cols = new List<string>();
             for (int i = 0; i < 10; i++)
@@ -400,7 +427,7 @@ namespace RpeggiatorLib
         }
 
         // Builds an array of values relatives to the render
-        private object[] GetRenderPropertiesForCurrentReaderRow(SQLiteDataReader reader, int startAt)
+        private static object[] GetRenderPropertiesForCurrentReaderRow(SQLiteDataReader reader, int startAt)
         {
             object[] renderProperties = new object[10];
             for (int i = 0; i < 10; i++)
@@ -409,12 +436,92 @@ namespace RpeggiatorLib
             }
             return renderProperties;
         }
+
+        // Generates SQL query to insert datas in a table. Parameters have the same name as columns with "@" prefix.
+        private static string GenerateSqlInsert(string tableName, params string[] columns)
+        {
+            return string.Format("insert into {0} ({1}) values ({2})",
+                tableName,
+                string.Join(", ", columns),
+                string.Join(", ", columns.Select(c => string.Concat("@", c))));
+        }
+
+        // Creates, prepares and executes a insert SQL statement for multiple insertions.
+        private static void ExecutePreparedInsert(string tableName, string[] columns, DbType[] types, IEnumerable<object[]> rowsValues)
+        {
+            using (SQLiteConnection connection = new SQLiteConnection(CONN_STRING))
+            {
+                connection.Open();
+                using (SQLiteCommand cmd = connection.CreateCommand())
+                {
+                    cmd.CommandText = GenerateSqlInsert(tableName, columns);
+                    for (int i = 0; i < columns.Length; i++)
+                    {
+                        cmd.Parameters.Add(columns[i].ToParam(), types[i]);
+                    }
+                    cmd.Prepare();
+
+                    foreach (object[] rowValue in rowsValues)
+                    {
+                        for (int i = 0; i < columns.Length; i++)
+                        {
+                            cmd.Parameters[columns[i].ToParam()].Value = rowValue[i];
+                        }
+                        cmd.ExecuteNonQuery();
+                    }
+                }
+            }
+        }
+
+        #endregion
+
+        #region Insert methods
+
+        /// <summary>
+        /// Creates or recreates every steps on an <see cref="Sprites.Enemy"/> path.
+        /// </summary>
+        /// <param name="enemyId"><see cref="Sprites.Enemy"/> identifier.</param>
+        /// <param name="points">List of coordinates; the key indicates the order.</param>
+        /// <exception cref="ArgumentException"><paramref name="enemyId"/> is lower or equals to zero.</exception>
+        public void GetEnemyPathSteps(int enemyId, Dictionary<int, System.Windows.Point> points)
+        {
+            if (enemyId <= 0)
+            {
+                throw new ArgumentException(nameof(enemyId));
+            }
+
+            using (SQLiteConnection connection = new SQLiteConnection(CONN_STRING))
+            {
+                connection.Open();
+                using (SQLiteCommand cmd = connection.CreateCommand())
+                {
+                    // Removes previous steps
+                    cmd.CommandText = "delete from enemy_step where enemy_id = @enemy_id";
+                    cmd.Parameters.Add("@enemy_id", DbType.Int32);
+                    cmd.Parameters["@enemy_id"].Value = enemyId;
+                    cmd.ExecuteNonQuery();
+                }
+
+                if (points != null)
+                {
+                    points = points.OrderBy(kvp => kvp.Key).ToDictionary(kvp => kvp.Key, kvp => kvp.Value);
+
+                    ExecutePreparedInsert("enemy_step",
+                        new[] { "enemy_id", "step_no", "x", "y" },
+                        new[] { DbType.Int32, DbType.Int32, DbType.Double, DbType.Double },
+                        points.Select(kvp => new object[] { enemyId, kvp.Key, kvp.Value.X, kvp.Value.Y })
+                    );
+                }
+            }
+        }
+
+        #endregion
     }
 
     /// <summary>
-    /// Extension methods for <see cref="SQLiteDataReader"/>.
+    /// Extension methods for <see cref="SqliteMapper"/>.
     /// </summary>
-    internal static class SQLiteDataReaderExtensions
+    internal static class SqliteMapperExtensions
     {
         /// <summary>
         /// Extracts a nullable value from a <see cref="SQLiteDataReader"/> at a specified column.
@@ -426,6 +533,14 @@ namespace RpeggiatorLib
         internal static T? GetNullValue<T>(this SQLiteDataReader reader, int index) where T : struct
         {
             return reader.IsDBNull(index) ? (T?)null : (T)Convert.ChangeType(reader[index], typeof(T));
+        }
+
+        /// <summary>
+        /// Transforms a <see cref="string"/> which represents a SQL column, to its associated parameter name.
+        /// </summary>
+        internal static string ToParam(this string column)
+        {
+            return string.Concat("@", column);
         }
     }
 }
