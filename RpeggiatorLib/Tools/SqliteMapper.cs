@@ -140,8 +140,8 @@ namespace RpeggiatorLib
                 CreateDoor(screenId, 400, 0, 80, 20, "ImageRender", new object[] { "Door" }, 1, 3, 400, 540, "ImageRender", new object[] { "DoorLocked" });
                 CreatePit(screenId, 700, 100, 50, 50, "ImageRender", new object[] { "Pit" }, null);
                 CreateRift(screenId, 700, 400, 20, 100, "PlainRender", new object[] { "#DEB887" }, 8);
-                CreateEnemy(screenId, 50, 50, 40, 40, 4, 5, 150, 0, "Enemy", "Enemy", Enums.Direction.Right, null, 10);
-                int enemyId = CreateEnemy(screenId, 600, 50, 40, 40, 4, 5, 150, 0, "Enemy", "Enemy", Enums.Direction.Bottom, Enums.ItemType.Arrow, 1);
+                int enemyId = CreateEnemy(screenId, 50, 50, 40, 40, 4, 5, 150, 0, "Enemy", "Enemy", Enums.Direction.Right, null, 10);
+                CreateEnemy(screenId, 600, 50, 40, 40, 4, 5, 150, 0, "Enemy", "Enemy", Enums.Direction.Bottom, Enums.ItemType.Arrow, 1);
                 CreateEnemyPathSteps(enemyId, new Dictionary<int, System.Windows.Point>
                 {
                     { 1, new System.Windows.Point(730, 350) },
@@ -438,7 +438,7 @@ namespace RpeggiatorLib
                         (Enums.Direction)reader.GetInt32("default_direction"),
                         (Enums.ItemType?)reader.GetNullValue<int>("loot_item_type"), reader.GetInt32("loot_quantity")));
 
-                    sprites.Last().SetPath(GetEnemyPathSteps(reader.GetInt32(13)));
+                    sprites.Last().SetPath(GetEnemyPathSteps(reader.GetInt32("id")));
                 }
             }
 
