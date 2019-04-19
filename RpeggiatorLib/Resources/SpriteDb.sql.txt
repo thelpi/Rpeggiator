@@ -258,7 +258,6 @@ create table gate (
 
 create table screen (
 	id int not null,
-	screen_id int not null,
 	x double not null,
 	y double not null,
 	width double not null,

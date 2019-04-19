@@ -48,13 +48,6 @@ namespace RpeggiatorLib
                 using (SQLiteConnection connection = new SQLiteConnection(CONN_STRING))
                 {
                     connection.Open();
-                    // Keep this code if initialization required.
-                    using (SQLiteCommand cmd = connection.CreateCommand())
-                    {
-                        cmd.CommandText = Properties.Resources.SpriteDb_sql;
-
-                        cmd.ExecuteNonQuery();
-                    }
                 }
             }
             catch (Exception ex)
@@ -119,6 +112,44 @@ namespace RpeggiatorLib
             }
 
             return s;
+        }
+
+        /// <summary>
+        /// Clears the database and creates a new one.
+        /// </summary>
+        /// <param name="createDefaultDatas">Creates some default screens.</param>
+        public void ResetDatabase(bool createDefaultDatas)
+        {
+            using (SQLiteConnection connection = new SQLiteConnection(CONN_STRING))
+            {
+                connection.Open();
+                using (SQLiteCommand cmd = connection.CreateCommand())
+                {
+                    cmd.CommandText = Properties.Resources.SpriteDb_sql;
+
+                    cmd.ExecuteNonQuery();
+                }
+            }
+
+            if (createDefaultDatas)
+            {
+                int screenId = CreateScreen(0, 0, 800, 600, "PlainRender", new object[] { "#FFFFEFD5" }, Enums.FloorType.Ground, 0, 2, 2, 4, 2);
+                CreatePermanentStructure(screenId, 0, 300, 300, 50, "ImageMosaicRender", new object[] { "Tree" });
+                CreatePermanentStructure(screenId, 100, 260, 50, 140, "ImageMosaicRender", new object[] { "Tree" });
+                CreateChest(screenId, 400, 380, 40, 40, "ImageRender", new object[] { "Chest" }, null, 10, null, 1, "ImageRender", new object[] { "OpenChest" });
+                CreateDoor(screenId, 400, 0, 80, 20, "ImageRender", new object[] { "Door" }, 1, 3, 400, 540, "ImageRender", new object[] { "DoorLocked" });
+                CreatePit(screenId, 700, 100, 50, 50, "ImageRender", new object[] { "Pit" }, null);
+                CreateRift(screenId, 700, 400, 20, 100, "PlainRender", new object[] { "#DEB887" }, 8);
+                CreateEnemy(screenId, 50, 50, 40, 40, 4, 5, 150, 0, "Enemy", "Enemy", Enums.Direction.Right, null, 10);
+                int enemyId = CreateEnemy(screenId, 600, 50, 40, 40, 4, 5, 150, 0, "Enemy", "Enemy", Enums.Direction.Bottom, Enums.ItemType.Arrow, 1);
+                CreateEnemyPathSteps(enemyId, new Dictionary<int, System.Windows.Point>
+                {
+                    { 1, new System.Windows.Point(730, 350) },
+                    { 2, new System.Windows.Point(730, 400) },
+                    { 3, new System.Windows.Point(750, 550) },
+                    { 4, new System.Windows.Point(30, 520) },
+                });
+            }
         }
 
         #region Static tool methods
@@ -203,7 +234,7 @@ namespace RpeggiatorLib
                 columns.Add("render_type");
                 for (int i = 0; i < RENDER_COLUMNS_COUNT; i++)
                 {
-                    columns.Add(string.Join("render_value_{0}", i));
+                    columns.Add($"render_value_{i}");
                 }
             }
             if (additionalColumns?.Length > 0)
@@ -247,7 +278,7 @@ namespace RpeggiatorLib
             {
                 for (int i = 0; i < RENDER_COLUMNS_COUNT; i++)
                 {
-                    if (renderValues.Length <= i)
+                    if (renderValues.Length > i)
                     {
                         values.Add(renderValues[i] ?? DBNull.Value);
                     }
@@ -259,12 +290,12 @@ namespace RpeggiatorLib
             }
             foreach (object o in additionalValues)
             {
-                if (o.GetType() == typeof(object[]))
+                if (o != null && o.GetType() == typeof(object[]))
                 {
                     object[] oArray = o as object[];
                     for (int i = 0; i < RENDER_COLUMNS_COUNT; i++)
                     {
-                        if (oArray.Length <= i)
+                        if (oArray.Length > i)
                         {
                             values.Add(oArray[i] ?? DBNull.Value);
                         }
@@ -292,7 +323,8 @@ namespace RpeggiatorLib
                 using (SQLiteCommand cmd = connection.CreateCommand())
                 {
                     cmd.CommandText = $"select max(id) from {tableName}";
-                    id += Convert.ToInt32(cmd.ExecuteScalar() ?? 0);
+                    object baseScalarValue = cmd.ExecuteScalar();
+                    id += Convert.ToInt32(baseScalarValue == null || baseScalarValue == DBNull.Value ? 0 : baseScalarValue);
                 }
             }
 
@@ -344,7 +376,7 @@ namespace RpeggiatorLib
                 while (reader.Read())
                 {
                     sprites.Add(new Sprites.Door(
-                        reader.GetInt32("id"), reader.GetDouble('x'), reader.GetDouble("y"), reader.GetDouble("width"),
+                        reader.GetInt32("id"), reader.GetDouble("x"), reader.GetDouble("y"), reader.GetDouble("width"),
                         reader.GetDouble("height"), reader.GetNullValue<int>("key_id"), reader.GetInt32("connected_screen_id"),
                         reader.GetDouble("player_go_through_x"), reader.GetDouble("player_go_through_y"),
                         reader.GetString("locked_render_type"), GetRenderPropertiesForCurrentReaderRow(reader, "locked_render_value"),
@@ -423,7 +455,7 @@ namespace RpeggiatorLib
                 connection.Open();
                 using (SQLiteCommand cmd = connection.CreateCommand())
                 {
-                    cmd.CommandText = "select x, y from enemy_step where enemy_id = @enemyId order by step_no asc";
+                    cmd.CommandText = "select x, y from enemy_step where enemy_id = @enemy_id order by step_no asc";
                     cmd.Parameters.Add("@enemy_id", DbType.Int32);
                     cmd.Parameters["@enemy_id"].Value = enemyId;
 
@@ -688,7 +720,7 @@ namespace RpeggiatorLib
                 otherColumns.Add($"on_render_value_{i}");
                 otherTypes.Add(DbType.String);
             }
-            otherValues.Add(onRenderValues);
+            otherValues.Add(onRenderValues.FillToLimit(RENDER_COLUMNS_COUNT));
 
             ExecutePreparedInsert("gate_trigger",
                 ToColumnsArray(true, otherColumns.ToArray()),
@@ -814,12 +846,12 @@ namespace RpeggiatorLib
                 otherColumns.Add($"locked_render_value_{i}");
                 otherTypes.Add(DbType.String);
             }
-            otherValues.Add(lockedRenderValues);
+            otherValues.Add(lockedRenderValues.FillToLimit(RENDER_COLUMNS_COUNT));
 
             ExecutePreparedInsert("door",
                 ToColumnsArray(true, otherColumns.ToArray()),
                 ToTypesArray(true, otherTypes.ToArray()),
-                ToValuesArray(id, screenId, x, y, width, height, renderType, renderValues, otherValues));
+                ToValuesArray(id, screenId, x, y, width, height, renderType, renderValues, otherValues.ToArray()));
 
             return id;
         }
@@ -914,7 +946,7 @@ namespace RpeggiatorLib
                 otherColumns.Add($"open_render_value_{i}");
                 otherTypes.Add(DbType.String);
             }
-            otherValues.Add(openRenderValues);
+            otherValues.Add(openRenderValues.FillToLimit(RENDER_COLUMNS_COUNT));
 
             ExecutePreparedInsert("chest",
                 ToColumnsArray(true, otherColumns.ToArray()),
@@ -967,7 +999,7 @@ namespace RpeggiatorLib
             ExecutePreparedInsert("enemy",
                 ToColumnsArray(false, otherColumns.ToArray()),
                 ToTypesArray(false, otherTypes.ToArray()),
-                ToValuesArray(id, screenId, x, y, width, height, null, null, otherValues));
+                ToValuesArray(id, screenId, x, y, width, height, null, null, otherValues.ToArray()));
 
             return id;
         }
@@ -1020,6 +1052,22 @@ namespace RpeggiatorLib
     /// </summary>
     internal static class SqliteMapperExtensions
     {
+        /// <summary>
+        /// Creates an array of fixed size from <paramref name="values"/>, fills with <c>Null</c>.
+        /// </summary>
+        /// <param name="values">The original array of values.</param>
+        /// <param name="limit">The fixed size.</param>
+        /// <returns>The fixed array of values.</returns>
+        internal static object[] FillToLimit(this object[] values, int limit)
+        {
+            object[] newValues = new object[limit];
+            for (int i = 0; i < limit; i++)
+            {
+                newValues[i] = values.Length > i ? values[i] : null;
+            }
+            return newValues;
+        }
+
         /// <summary>
         /// Extracts a nullable value from a <see cref="SQLiteDataReader"/> at a specified column.
         /// </summary>
