@@ -35,6 +35,7 @@ namespace RpeggiatorLib.Sprites
         internal static PickableItem Loot(Enemy enemy, ItemType? itemType, int quantity)
         {
             return new PickableItem(
+                0,
                 enemy.X + (enemy.Width / 2) - (Constants.Item.LOOT_WIDTH / 2),
                 enemy.Y + (enemy.Height / 2) - (Constants.Item.LOOT_HEIGHT / 2),
                 Constants.Item.LOOT_WIDTH,
@@ -47,6 +48,7 @@ namespace RpeggiatorLib.Sprites
         /// <summary>
         /// Constructor.
         /// </summary>
+        /// <param name="id"><see cref="Sprite.Id"/></param>
         /// <param name="x"><see cref="Sprite.X"/></param>
         /// <param name="y"><see cref="Sprite.Y"/></param>
         /// <param name="width"><see cref="Sprite.Width"/></param>
@@ -54,9 +56,9 @@ namespace RpeggiatorLib.Sprites
         /// <param name="itemType"><see cref="ItemType"/></param>
         /// <param name="quantity"><see cref="Quantity"/></param>
         /// <param name="timeBeforeDisapear"><see cref="_timeManager"/> lifetime, in milliseconds.</param>
-        internal PickableItem(double x, double y, double width, double height,
+        internal PickableItem(int id, double x, double y, double width, double height,
             ItemType? itemType, int quantity, double? timeBeforeDisapear)
-            : base(x, y, width, height, nameof(ImageRender), new[] { itemType.HasValue ? itemType.Value.ToString() : nameof(Filename.Coin) })
+            : base(id, x, y, width, height, nameof(ImageRender), new[] { itemType.HasValue ? itemType.Value.ToString() : nameof(Filename.Coin) })
         {
             ItemType = itemType;
             Quantity = quantity;

@@ -28,6 +28,7 @@ namespace RpeggiatorLib.Sprites
         /// <summary>
         /// Constructor.
         /// </summary>
+        /// <param name="id"><see cref="Sprite.Id"/></param>
         /// <param name="x"><see cref="Sprite.X"/></param>
         /// <param name="y"><see cref="Sprite.Y"/></param>
         /// <param name="width"><see cref="Sprite.Width"/></param>
@@ -41,10 +42,10 @@ namespace RpeggiatorLib.Sprites
         /// <param name="defaultDirection">Initial <see cref="LifeSprite.Direction"/>.</param>
         /// <param name="lootItemType"><see cref="LootItemType"/></param>
         /// <param name="lootQuantity"><see cref="LootQuantity"/></param>
-        internal Enemy(double x, double y, double width, double height, double maximalLifePoints, double hitLifePointCost,
+        internal Enemy(int id, double x, double y, double width, double height, double maximalLifePoints, double hitLifePointCost,
             double speed, double recoveryTime, string renderFilename, string renderRecoveryFilename,
             Enums.Direction defaultDirection, Enums.ItemType? lootItemType, int lootQuantity)
-            : base(x, y, width, height, maximalLifePoints, hitLifePointCost, speed, recoveryTime, renderFilename,
+            : base(id, x, y, width, height, maximalLifePoints, hitLifePointCost, speed, recoveryTime, renderFilename,
                   renderRecoveryFilename, defaultDirection)
         {
             _movementTimeManager = new Elapser();

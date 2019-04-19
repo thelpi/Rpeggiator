@@ -39,6 +39,10 @@ namespace RpeggiatorLib.Sprites
         /// Overridden; <see cref="_render"/>
         /// </summary>
         public virtual ISpriteRender Render { get { return _render; } }
+        /// <summary>
+        /// Unique identifier.
+        /// </summary>
+        public int Id { get; private set; }
 
         /// <summary>
         /// Inferred; top left corner coordinates.
@@ -64,13 +68,14 @@ namespace RpeggiatorLib.Sprites
         /// <summary>
         /// Constructor.
         /// </summary>
+        /// <param name="id"><see cref="Id"/></param>
         /// <param name="x"><see cref="X"/></param>
         /// <param name="y"><see cref="Y"/></param>
         /// <param name="width"><see cref="Width"/></param>
         /// <param name="height"><see cref="Height"/></param>
         /// <param name="renderType"><see cref="ISpriteRender"/> subtype name.</param>
         /// <param name="renderProperties">Datas required to initialize the <see cref="ISpriteRender"/>.</param>
-        protected Sprite(double x, double y, double width, double height, string renderType, object[] renderProperties)
+        protected Sprite(int id, double x, double y, double width, double height, string renderType, object[] renderProperties)
         {
             X = x;
             Y = y;
@@ -78,6 +83,7 @@ namespace RpeggiatorLib.Sprites
             Height = height;
             Z = GetZIndexBySubType();
             _render = GetRenderFromValues(renderType, renderProperties);
+            Id = id;
         }
 
         /// <summary>

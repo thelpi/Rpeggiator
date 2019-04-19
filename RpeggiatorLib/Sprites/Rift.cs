@@ -11,6 +11,7 @@ namespace RpeggiatorLib.Sprites
         /// <summary>
         /// Constructor.
         /// </summary>
+        /// <param name="id"><see cref="Sprite.Id"/></param>
         /// <param name="x"><see cref="Sprite.X"/></param>
         /// <param name="y"><see cref="Sprite.Y"/></param>
         /// <param name="width"><see cref="Sprite.Width"/></param>
@@ -18,9 +19,9 @@ namespace RpeggiatorLib.Sprites
         /// <param name="lifepoints"><see cref="DamageableSprite.CurrentLifePoints"/></param>
         /// <param name="renderType"><see cref="ISpriteRender"/> subtype name.</param>
         /// <param name="renderProperties">Datas required to initialize the <see cref="ISpriteRender"/>.</param>
-        internal Rift(double x, double y, double width, double height,
+        internal Rift(int id, double x, double y, double width, double height,
             double lifepoints, string renderType, object[] renderProperties)
-            : base(x, y, width, height, lifepoints, renderType, renderProperties)
+            : base(id, x, y, width, height, lifepoints, renderType, renderProperties)
         {
             ExplosionLifePointCost = Constants.RIFT_EXPLOSION_LIFE_POINT_COST;
             ArrowLifePointCost = 0;

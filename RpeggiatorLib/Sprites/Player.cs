@@ -60,6 +60,7 @@ namespace RpeggiatorLib.Sprites
         /// </summary>
         /// <remarks>Every initial values come from <see cref="Constants.Player"/>.</remarks>
         internal Player() : base(
+            0,
             Constants.Player.INITIAL_PLAYER_X,
             Constants.Player.INITIAL_PLAYER_Y,
             Constants.Player.SPRITE_SIZE_X,
@@ -294,7 +295,7 @@ namespace RpeggiatorLib.Sprites
                         hitY -= Height;
                         break;
                 }
-                SwordHitSprite = new SwordHit(hitX, hitY, Width, Height);
+                SwordHitSprite = new SwordHit(Id, hitX, hitY, Width, Height);
             }
             else if (_hitElapser?.Elapsed == true)
             {

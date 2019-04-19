@@ -19,6 +19,7 @@ namespace RpeggiatorLib.Sprites
         /// <summary>
         /// Constructor.
         /// </summary>
+        /// <param name="id"><see cref="Sprite.Id"/></param>
         /// <param name="x"><see cref="Sprite.X"/></param>
         /// <param name="y"><see cref="Sprite.Y"/></param>
         /// <param name="width"><see cref="Sprite.Width"/></param>
@@ -26,9 +27,9 @@ namespace RpeggiatorLib.Sprites
         /// <param name="floorType"><see cref="FloorType"/></param>
         /// <param name="renderType"><see cref="Render.ISpriteRender"/> subtype name.</param>
         /// <param name="renderProperties">Datas required to initialize the <see cref="Render.ISpriteRender"/>.</param>
-        internal Floor(double x, double y, double width, double height,
+        internal Floor(int id, double x, double y, double width, double height,
             FloorType floorType, string renderType, object[] renderProperties)
-            : base(x, y, width, height, renderType, renderProperties)
+            : base(id, x, y, width, height, renderType, renderProperties)
         {
             FloorType = floorType;
             SpeedRatio = Constants.FLOOR_SPEED_RATIO[FloorType];

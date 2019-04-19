@@ -33,7 +33,7 @@ namespace RpeggiatorLib
             }
 
             ResourcesPath = string.Concat(resourcesPath, resourcesPath.Last() == '\\' ? string.Empty : "\\");
-            Default = new Engine(Constants.FIRST_SCREEN_INDEX);
+            Default = new Engine(Constants.FIRST_SCREEN_ID);
             return Default;
         }
 
@@ -150,10 +150,10 @@ namespace RpeggiatorLib
                 }
                 else
                 {
-                    Pit pit = CurrentScreen.Pits.FirstOrDefault(p => p.ScreenIndexEntrance.HasValue && p.CanFallIn(Player));
+                    Pit pit = CurrentScreen.Pits.FirstOrDefault(p => p.ScreenIdEntrance.HasValue && p.CanFallIn(Player));
                     if (pit != null)
                     {
-                        CurrentScreen = GetOrCreateScreen(pit.ScreenIndexEntrance.Value);
+                        CurrentScreen = GetOrCreateScreen(pit.ScreenIdEntrance.Value);
                     }
                 }
             }

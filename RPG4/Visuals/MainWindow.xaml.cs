@@ -34,7 +34,7 @@ namespace RPG4.Visuals
         private bool _actionKeyPressed;
         private int? _inventoryKeyPressed;
         
-        private int _currentScreenIndex;
+        private int _currentScreenId;
         private Engine _engine;
 
         /// <summary>
@@ -106,9 +106,9 @@ namespace RPG4.Visuals
             };
             worker.ProgressChanged += delegate (object sender, ProgressChangedEventArgs e)
             {
-                if (_engine.CurrentScreenId != _currentScreenIndex)
+                if (_engine.CurrentScreenId != _currentScreenId)
                 {
-                    _currentScreenIndex = _engine.CurrentScreenId;
+                    _currentScreenId = _engine.CurrentScreenId;
 
                     rctCoin.Fill = _engine.CoinMenuRender.GetRenderBrush();
                     rctKeyring.Fill = _engine.KeyringMenuRender.GetRenderBrush();

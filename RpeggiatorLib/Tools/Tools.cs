@@ -23,15 +23,15 @@ namespace RpeggiatorLib
         }
 
         /// <summary>
-        /// Gets the screen datas by its index.
+        /// Gets the screen datas by its identifier.
         /// </summary>
-        /// <param name="screenIndex">Screen index.</param>
+        /// <param name="screenId">Screen identifier.</param>
         /// <returns>Dynamic screen datas.</returns>
-        internal static dynamic GetScreenDatasFromIndex(int screenIndex)
+        internal static dynamic GetScreenDatasFromId(int screenId)
         {
             string jsonRawContent;
             
-            string resourcePath = string.Format("{0}Screen{1}.json", Engine.ResourcesPath, screenIndex);
+            string resourcePath = string.Format("{0}Screen{1}.json", Engine.ResourcesPath, screenId);
 
             using (FileStream stream = new FileStream(resourcePath, FileMode.Open, FileAccess.Read))
             {

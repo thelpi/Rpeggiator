@@ -63,6 +63,7 @@ namespace RpeggiatorLib.Sprites
         /// <summary>
         /// Constructor.
         /// </summary>
+        /// <param name="id"><see cref="Sprite.Id"/></param>
         /// <param name="x"><see cref="Sprite.X"/></param>
         /// <param name="y"><see cref="Sprite.Y"/></param>
         /// <param name="width"><see cref="Sprite.Width"/></param>
@@ -74,9 +75,9 @@ namespace RpeggiatorLib.Sprites
         /// <param name="renderFilename">File name for <see cref="Sprite._render"/>.</param>
         /// <param name="renderRecoveryFilename">File name for <see cref="_renderRecovery"/>.</param>
         /// <param name="defaultDirection">Default <see cref="Direction"/>.</param>
-        protected LifeSprite(double x, double y, double width, double height, double maximalLifePoints, double hitLifePointCost,
+        protected LifeSprite(int id, double x, double y, double width, double height, double maximalLifePoints, double hitLifePointCost,
             double speed, double recoveryTime, string renderFilename, string renderRecoveryFilename, Direction defaultDirection)
-            : base(x, y, width, height, maximalLifePoints, nameof(ImageDirectionRender), new[] { renderFilename, nameof(Direction) })
+            : base(id, x, y, width, height, maximalLifePoints, nameof(ImageDirectionRender), new[] { renderFilename, nameof(Direction) })
         {
             Direction = defaultDirection;
             MaximalLifePoints = maximalLifePoints;

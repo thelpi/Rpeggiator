@@ -24,10 +24,6 @@ namespace RpeggiatorLib.Sprites
         private List<Floor> _floors;
 
         /// <summary>
-        /// Current screen identifier..
-        /// </summary>
-        public int Id { get; private set; }
-        /// <summary>
         /// Current screen darkness; opacity ratio between 0 (no) and 1 (full).
         /// </summary>
         public double DarknessOpacity { get; private set; }
@@ -100,7 +96,7 @@ namespace RpeggiatorLib.Sprites
         /// <summary>
         /// Constructor.
         /// </summary>
-        /// <param name="id"><see cref="Id"/></param>
+        /// <param name="id"><see cref="Sprite.Id"/></param>
         /// <param name="x"><see cref="Sprite.X"/></param>
         /// <param name="y"><see cref="Sprite.Y"/></param>
         /// <param name="width"><see cref="Sprite.Width"/></param>
@@ -125,9 +121,8 @@ namespace RpeggiatorLib.Sprites
             IEnumerable<Door> doors, IEnumerable<Floor> floors, IEnumerable<Enemy> enemies, IEnumerable<GateTrigger> gateTriggers,
             IEnumerable<Gate> gates, IEnumerable<Rift> rifts, IEnumerable<Pit> pits, IEnumerable<Chest> chests,
             IEnumerable<PickableItem> pickableItems, IDictionary<Direction, int> neighboringScreens)
-            : base(x, y, width, height, floorType, renderType, renderProperties)
+            : base(id, x, y, width, height, floorType, renderType, renderProperties)
         {
-            Id = id;
             DarknessOpacity = darknessOpacity;
             _permanentStructures = new List<PermanentStructure>(permanentStructures);
             _doors = new List<Door>(doors);

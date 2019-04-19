@@ -17,11 +17,6 @@ namespace RpeggiatorLib.Sprites
         private ISpriteRender _renderLocked;
 
         /// <summary>
-        /// Identifier.
-        /// </summary>
-        /// <remarks>A door has the same identifier in both screens.</remarks>
-        public int Id { get; private set; }
-        /// <summary>
         /// The <see cref="Player"/> X-axis position when he goes through the door and changes screen.
         /// </summary>
         public double PlayerGoThroughX { get; private set; }
@@ -41,27 +36,26 @@ namespace RpeggiatorLib.Sprites
         /// <summary>
         /// Constructor.
         /// </summary>
+        /// <param name="id"><see cref="Sprite.Id"/></param>
         /// <param name="x"><see cref="Sprite.X"/></param>
         /// <param name="y"><see cref="Sprite.Y"/></param>
         /// <param name="width"><see cref="Sprite.Width"/></param>
         /// <param name="height"><see cref="Sprite.Height"/></param>
         /// <param name="keyId"><see cref="_keyId"/></param>
         /// <param name="connectedScreenId"><see cref="_connectedScreenId"/></param>
-        /// <param name="id"><see cref="Id"/></param>
         /// <param name="playerGoThroughX"><see cref="PlayerGoThroughX"/></param>
         /// <param name="playerGoThroughY"><see cref="PlayerGoThroughY"/></param>
         /// <param name="lockedRenderType"><see cref="_renderLocked"/> subtype name.</param>
         /// <param name="lockedRenderProperties">Datas required to initialize <see cref="_renderLocked"/>.</param>
         /// <param name="renderType"><see cref="ISpriteRender"/> subtype name.</param>
         /// <param name="renderProperties">Datas required to initialize the <see cref="ISpriteRender"/>.</param>
-        internal Door(double x, double y, double width, double height, int? keyId, int connectedScreenId, int id,
+        internal Door(int id, double x, double y, double width, double height, int? keyId, int connectedScreenId,
             double playerGoThroughX, double playerGoThroughY, string lockedRenderType, object[] lockedRenderProperties,
             string renderType, object[] renderProperties)
-            : base(x, y, width, height, renderType, renderProperties)
+            : base(id, x, y, width, height, renderType, renderProperties)
         {
             _keyId = keyId;
             _connectedScreenId = connectedScreenId;
-            Id = id;
             PlayerGoThroughX = playerGoThroughX;
             PlayerGoThroughY = playerGoThroughY;
             _renderLocked = GetRenderFromValues(lockedRenderType, lockedRenderProperties);

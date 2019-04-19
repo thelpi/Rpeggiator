@@ -21,6 +21,7 @@
         /// <summary>
         /// Constructor.
         /// </summary>
+        /// <param name="id"><see cref="Sprite.Id"/></param>
         /// <param name="x"><see cref="Sprite.X"/></param>
         /// <param name="y"><see cref="Sprite.Y"/></param>
         /// <param name="width"><see cref="Sprite.Width"/></param>
@@ -28,9 +29,9 @@
         /// <param name="lifepoints"><see cref="CurrentLifePoints"/></param>
         /// <param name="renderType"><see cref="Render.ISpriteRender"/> subtype name.</param>
         /// <param name="renderProperties">Datas required to initialize the <see cref="Render.ISpriteRender"/>.</param>
-        protected DamageableSprite(double x, double y, double width, double height,
+        protected DamageableSprite(int id, double x, double y, double width, double height,
             double lifepoints, string renderType, object[] renderProperties) 
-            : base(x, y, width, height, renderType, renderProperties)
+            : base(id, x, y, width, height, renderType, renderProperties)
         {
             CurrentLifePoints = lifepoints;
         }

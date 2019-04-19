@@ -13,9 +13,9 @@ namespace RpeggiatorLib
         /// </summary>
         internal const int MOVE_HISTORY_COUNT = 50;
         /// <summary>
-        /// First screen index.
+        /// First screen identifier.
         /// </summary>
-        internal const int FIRST_SCREEN_INDEX = 1;
+        internal const int FIRST_SCREEN_ID = 1;
         /// <summary>
         /// Ratio of time acceleration betwean real world and game.
         /// </summary>

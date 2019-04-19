@@ -28,7 +28,7 @@ namespace RpeggiatorLib.Sprites
         /// <param name="direction"><see cref="Direction"/></param>
         /// <param name="thrownBy"><see cref="LifeSprite"/> who throws the arrow.</param>
         internal ActionnedArrow(Point point, Direction direction, LifeSprite thrownBy)
-            : base(point.X, point.Y, Constants.Arrow.WIDTH, Constants.Arrow.HEIGHT,
+            : base(0, point.X, point.Y, Constants.Arrow.WIDTH, Constants.Arrow.HEIGHT,
                   nameof(ImageDirectionRender), nameof(Filename.Arrow), nameof(Direction))
         {
             Direction = direction;
