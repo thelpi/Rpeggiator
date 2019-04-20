@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Data;
 using System.Data.SQLite;
 using System.Linq;
+using SysColor = System.Windows.Media.Colors;
 
 namespace RpeggiatorLib
 {
@@ -134,15 +135,15 @@ namespace RpeggiatorLib
             if (createDefaultDatas)
             {
                 #region First screen
-                int screenId = CreateScreen(0, 0, 800, 600, "PlainRender", new object[] { "#FFFFEFD5" }, Enums.FloorType.Ground, 0, 2, 2, 4, 2);
-                CreatePermanentStructure(screenId, 0, 300, 300, 50, "ImageMosaicRender", new object[] { "Tree" });
-                CreatePermanentStructure(screenId, 100, 260, 50, 140, "ImageMosaicRender", new object[] { "Tree" });
-                CreateChest(screenId, 400, 380, 40, 40, "ImageRender", new object[] { "Chest" }, null, 10, null, 1, "ImageRender", new object[] { "OpenChest" });
-                CreateDoor(screenId, 400, 0, 80, 20, "ImageRender", new object[] { "Door" }, 1, 3, 400, 540, "ImageRender", new object[] { "DoorLocked" });
-                CreatePit(screenId, 700, 100, 50, 50, "ImageRender", new object[] { "Pit" }, null);
-                CreateRift(screenId, 700, 400, 20, 100, "PlainRender", new object[] { "#DEB887" }, 8);
-                int enemyId = CreateEnemy(screenId, 50, 50, 40, 40, 4, 5, 150, 0, "Enemy", "Enemy", Enums.Direction.Right, null, 10);
-                CreateEnemy(screenId, 600, 50, 40, 40, 4, 5, 150, 0, "Enemy", "Enemy", Enums.Direction.Bottom, Enums.ItemType.Arrow, 1);
+
+                int screenId1 = CreateScreen(0, 0, 800, 600, nameof(Render.PlainRender), new object[] { Tools.HexFromColor(SysColor.PapayaWhip) }, Enums.FloorType.Ground, 0);
+                CreatePermanentStructure(screenId1, 0, 300, 300, 50, nameof(Render.ImageMosaicRender), new object[] { "Tree" });
+                CreatePermanentStructure(screenId1, 100, 260, 50, 140, nameof(Render.ImageMosaicRender), new object[] { "Tree" });
+                CreateChest(screenId1, 400, 380, 40, 40, nameof(Render.ImageRender), new object[] { "Chest" }, null, 10, null, 1, nameof(Render.ImageRender), new object[] { "OpenChest" });
+                CreatePit(screenId1, 700, 100, 50, 50, nameof(Render.ImageRender), new object[] { "Pit" }, null);
+                CreateRift(screenId1, 700, 400, 20, 100, nameof(Render.PlainRender), new object[] { Tools.HexFromColor(SysColor.BurlyWood) }, 8);
+                int enemyId = CreateEnemy(screenId1, 50, 50, 40, 40, 4, 5, 150, 0, "Enemy", "Enemy", Enums.Direction.Right, null, 10);
+                CreateEnemy(screenId1, 600, 50, 40, 40, 4, 5, 150, 0, "Enemy", "Enemy", Enums.Direction.Bottom, Enums.ItemType.Arrow, 1);
                 CreateEnemyPathSteps(enemyId, new Dictionary<int, System.Windows.Point>
                 {
                     { 1, new System.Windows.Point(730, 350) },
@@ -150,42 +151,59 @@ namespace RpeggiatorLib
                     { 3, new System.Windows.Point(750, 550) },
                     { 4, new System.Windows.Point(30, 520) },
                 });
+
                 #endregion
+
                 #region Left screen
-                screenId = CreateScreen(0, 0, 800, 600, "PlainRender", new object[] { "#FFFFEFD5" }, Enums.FloorType.Ground, 0.8, 1, 1, 1, 1);
-                CreatePermanentStructure(screenId, 80, 80, 480, 40, "ImageMosaicRender", new object[] { "Tree" });
-                CreatePermanentStructure(screenId, 80, 80, 40, 320, "ImageMosaicRender", new object[] { "Tree" });
-                CreatePermanentStructure(screenId, 520, 80, 40, 320, "ImageMosaicRender", new object[] { "Tree" });
-                CreatePermanentStructure(screenId, 80, 360, 300, 40, "ImageMosaicRender", new object[] { "Tree" });
-                CreatePermanentStructure(screenId, 480, 360, 80, 40, "ImageMosaicRender", new object[] { "Tree" });
-                CreatePermanentStructure(screenId, 400, 590, 80, 10, "ImageMosaicRender", new object[] { "Tree" });
-                int gateId = CreateGate(screenId, 380, 360, 100, 40, "PlainRender", new object[] { "#FFDCDCDC" }, true);
-                CreateGateTrigger(screenId, 570, 20, 20, 20, "ImageRender", new object[] { "TriggerOff" }, 5000, gateId, false, "ImageRender", new object[] { "TriggerOn" });
-                CreateGateTrigger(screenId, 160, 220, 20, 20, "ImageRender", new object[] { "TriggerOff" }, 5000, gateId, false, "ImageRender", new object[] { "TriggerOn" });
-                CreatePickableItem(screenId, 310, 230, Constants.Bomb.WIDTH, Constants.Bomb.HEIGHT, Enums.ItemType.Bomb, 10, null);
-                CreatePit(screenId, 600, 400, 50, 50, "ImageRender", new object[] { "Pit" }, 1);
+
+                int screenId2 = CreateScreen(0, 0, 800, 600, nameof(Render.PlainRender), new object[] { Tools.HexFromColor(SysColor.PapayaWhip) }, Enums.FloorType.Ground, 0.8);
+                CreatePermanentStructure(screenId2, 80, 80, 480, 40, nameof(Render.ImageMosaicRender), new object[] { "Tree" });
+                CreatePermanentStructure(screenId2, 80, 80, 40, 320, nameof(Render.ImageMosaicRender), new object[] { "Tree" });
+                CreatePermanentStructure(screenId2, 520, 80, 40, 320, nameof(Render.ImageMosaicRender), new object[] { "Tree" });
+                CreatePermanentStructure(screenId2, 80, 360, 300, 40, nameof(Render.ImageMosaicRender), new object[] { "Tree" });
+                CreatePermanentStructure(screenId2, 480, 360, 80, 40, nameof(Render.ImageMosaicRender), new object[] { "Tree" });
+                CreatePermanentStructure(screenId2, 400, 590, 80, 10, nameof(Render.ImageMosaicRender), new object[] { "Tree" });
+                int gateId = CreateGate(screenId2, 380, 360, 100, 40, nameof(Render.PlainRender), new object[] { Tools.HexFromColor(SysColor.Gainsboro) }, true);
+                CreateGateTrigger(screenId2, 570, 20, 20, 20, nameof(Render.ImageRender), new object[] { "TriggerOff" }, 5000, gateId, false, nameof(Render.ImageRender), new object[] { "TriggerOn" });
+                CreateGateTrigger(screenId2, 160, 220, 20, 20, nameof(Render.ImageRender), new object[] { "TriggerOff" }, 5000, gateId, false, nameof(Render.ImageRender), new object[] { "TriggerOn" });
+                CreatePickableItem(screenId2, 310, 230, Constants.Bomb.WIDTH, Constants.Bomb.HEIGHT, Enums.ItemType.Bomb, 10, null);
+                CreatePit(screenId2, 600, 400, 50, 50, nameof(Render.ImageRender), new object[] { "Pit" }, screenId1);
+                
                 #endregion
+
                 #region Top screen
-                screenId = CreateScreen(0, 0, 800, 600, "PlainRender", new object[] { "#FFFFEFD5" }, Enums.FloorType.Ground, 0, 3, 3, 3, 3);
-                CreateFloor(screenId, 150, 150, 300, 200, "PlainRender", new object[] { "#0000FF" }, Enums.FloorType.Water);
-                CreateFloor(screenId, 150, 150, 300, 200, "PlainRender", new object[] { "#0000FF" }, Enums.FloorType.Water);
-                CreateFloor(screenId, 460, 150, 150, 200, "PlainRender", new object[] { "#DC143C" }, Enums.FloorType.Lava);
-                CreateFloor(screenId, 200, 360, 400, 100, "PlainRender", new object[] { "#F0FFFF" }, Enums.FloorType.Ice);
-                CreatePermanentStructure(screenId, 0, 0, 800, 20, "ImageMosaicRender", new object[] { "Tree" });
-                CreatePermanentStructure(screenId, 0, 20, 20, 560, "ImageMosaicRender", new object[] { "Tree" });
-                CreatePermanentStructure(screenId, 780, 20, 20, 560, "ImageMosaicRender", new object[] { "Tree" });
-                CreatePermanentStructure(screenId, 0, 580, 400, 20, "ImageMosaicRender", new object[] { "Tree" });
-                CreatePermanentStructure(screenId, 480, 580, 320, 20, "ImageMosaicRender", new object[] { "Tree" });
-                CreateDoor(screenId, 400, 580, 80, 20, "ImageRender", new object[] { "Door" }, 1, 1, 400, 20, "ImageRender", new object[] { "DoorLocked" });
+
+                int screenId3 = CreateScreen(0, 0, 800, 600, nameof(Render.PlainRender), new object[] { Tools.HexFromColor(SysColor.PapayaWhip) }, Enums.FloorType.Ground, 0);
+                CreateFloor(screenId3, 150, 150, 300, 200, nameof(Render.PlainRender), new object[] { Tools.HexFromColor(SysColor.Blue) }, Enums.FloorType.Water);
+                CreateFloor(screenId3, 460, 150, 150, 200, nameof(Render.PlainRender), new object[] { Tools.HexFromColor(SysColor.Crimson) }, Enums.FloorType.Lava);
+                CreateFloor(screenId3, 200, 360, 400, 100, nameof(Render.PlainRender), new object[] { Tools.HexFromColor(SysColor.Azure) }, Enums.FloorType.Ice);
+                CreatePermanentStructure(screenId3, 0, 0, 800, 20, nameof(Render.ImageMosaicRender), new object[] { "Tree" });
+                CreatePermanentStructure(screenId3, 0, 20, 20, 560, nameof(Render.ImageMosaicRender), new object[] { "Tree" });
+                CreatePermanentStructure(screenId3, 780, 20, 20, 560, nameof(Render.ImageMosaicRender), new object[] { "Tree" });
+                CreatePermanentStructure(screenId3, 0, 580, 400, 20, nameof(Render.ImageMosaicRender), new object[] { "Tree" });
+                CreatePermanentStructure(screenId3, 480, 580, 320, 20, nameof(Render.ImageMosaicRender), new object[] { "Tree" });
+                CreateDoor(screenId3, 400, 580, 80, 20, nameof(Render.ImageRender), new object[] { "Door" }, 1, screenId1, 400, 20, nameof(Render.ImageRender), new object[] { "DoorLocked" });
+                
                 #endregion
+
                 #region Right screen
-                screenId = CreateScreen(0, 0, 800, 600, "PlainRender", new object[] { "#FFFFEFD5" }, Enums.FloorType.Ground, 0, 1, 1, 1, 1);
-                CreatePermanentStructure(screenId, 166, 49, 495, 50, "ImageMosaicRender", new object[] { "Tree" });
-                CreatePermanentStructure(screenId, 63, 50, 49, 194, "ImageMosaicRender", new object[] { "Tree" });
-                CreatePermanentStructure(screenId, 629, 236, 42, 284, "ImageMosaicRender", new object[] { "Tree" });
-                CreatePermanentStructure(screenId, 63, 327, 434, 61, "ImageMosaicRender", new object[] { "Tree" });
-                CreatePermanentStructure(screenId, 69, 469, 407, 56, "ImageMosaicRender", new object[] { "Tree" });
+
+                int screenId4 = CreateScreen(0, 0, 800, 600, nameof(Render.PlainRender), new object[] { Tools.HexFromColor(SysColor.PapayaWhip) }, Enums.FloorType.Ground, 0);
+                CreatePermanentStructure(screenId4, 166, 49, 495, 50, nameof(Render.ImageMosaicRender), new object[] { "Tree" });
+                CreatePermanentStructure(screenId4, 63, 50, 49, 194, nameof(Render.ImageMosaicRender), new object[] { "Tree" });
+                CreatePermanentStructure(screenId4, 629, 236, 42, 284, nameof(Render.ImageMosaicRender), new object[] { "Tree" });
+                CreatePermanentStructure(screenId4, 63, 327, 434, 61, nameof(Render.ImageMosaicRender), new object[] { "Tree" });
+                CreatePermanentStructure(screenId4, 69, 469, 407, 56, nameof(Render.ImageMosaicRender), new object[] { "Tree" });
+
                 #endregion
+
+                SetNeighboringScreens(screenId1, screenId2, screenId2, screenId4, screenId2);
+                SetNeighboringScreens(screenId2, screenId1, screenId1, screenId1, screenId1);
+                SetNeighboringScreens(screenId3, screenId1, screenId1, screenId1, screenId1);
+                SetNeighboringScreens(screenId4, screenId1, screenId1, screenId1, screenId1);
+
+                // Screen ID 3 is required to create this door.
+                CreateDoor(screenId1, 400, 0, 80, 20, nameof(Render.ImageRender), new object[] { "Door" }, 1, screenId3, 400, 540, nameof(Render.ImageRender), new object[] { "DoorLocked" });
             }
         }
 
@@ -1044,6 +1062,7 @@ namespace RpeggiatorLib
         /// <summary>
         /// Creates a <see cref="Sprites.Screen"/> in the database.
         /// </summary>
+        /// <remarks><see cref="Sprites.Screen._neighboringScreens"/> must be set with <see cref="SetNeighboringScreens(int, int, int, int, int)"/>.</remarks>
         /// <param name="x"><see cref="Sprites.Sprite.X"/></param>
         /// <param name="y"><see cref="Sprites.Sprite.Y"/></param>
         /// <param name="width"><see cref="Sprites.Sprite.Width"/></param>
@@ -1052,14 +1071,9 @@ namespace RpeggiatorLib
         /// <param name="renderValues">Values required to instanciate a <see cref="Sprites.Sprite.Render"/> (filename, color, and so forth).</param>
         /// <param name="darknessOpacity"><see cref="Sprites.Screen.DarknessOpacity"/></param>
         /// <param name="floorType"><see cref="Sprites.Floor.FloorType"/></param>
-        /// <param name="neighboringScreenLeft"><see cref="Sprites.Screen._neighboringScreens"/></param>
-        /// <param name="neighboringScreenBottom"><see cref="Sprites.Screen._neighboringScreens"/></param>
-        /// <param name="neighboringScreenRight"><see cref="Sprites.Screen._neighboringScreens"/></param>
-        /// <param name="neighboringScreenTop"><see cref="Sprites.Screen._neighboringScreens"/></param>
         /// <returns><see cref="Sprites.Sprite.Id"/></returns>
         public int CreateScreen(double x, double y, double width, double height, string renderType, object[] renderValues,
-            Enums.FloorType floorType, double darknessOpacity, int neighboringScreenTop, int neighboringScreenBottom,
-            int neighboringScreenRight, int neighboringScreenLeft)
+            Enums.FloorType floorType, double darknessOpacity)
         {
             int id = GetNextId("screen");
 
@@ -1070,7 +1084,7 @@ namespace RpeggiatorLib
                 DbType.Int32, DbType.Int32, DbType.Int32).ToList();
             typesList.RemoveAt(1);
             List<Object> valuesList = ToValuesArray(id, 0, x, y, width, height, renderType, renderValues, floorType,
-                darknessOpacity, neighboringScreenTop, neighboringScreenBottom, neighboringScreenRight, neighboringScreenLeft).ToList();
+                darknessOpacity, 0, 0, 0, 0).ToList();
             valuesList.RemoveAt(1);
 
             ExecutePreparedInsert("screen",
@@ -1079,6 +1093,44 @@ namespace RpeggiatorLib
                 valuesList.ToArray());
 
             return id;
+        }
+
+        /// <summary>
+        /// Sets <see cref="Sprites.Screen._neighboringScreens"/> for a specified screen.
+        /// </summary>
+        /// <param name="screenId"><see cref="Sprites.Sprite.Id"/></param>
+        /// <param name="screenIdTop"><see cref="Sprites.Screen._neighboringScreens"/> top identifier.</param>
+        /// <param name="screenIdLeft"><see cref="Sprites.Screen._neighboringScreens"/> left identifier.</param>
+        /// <param name="screenIdRight"><see cref="Sprites.Screen._neighboringScreens"/> right identifier.</param>
+        /// <param name="screenIdBottom"><see cref="Sprites.Screen._neighboringScreens"/> bottom identifier.</param>
+        public void SetNeighboringScreens(int screenId, int screenIdTop, int screenIdLeft, int screenIdRight, int screenIdBottom)
+        {
+            using (SQLiteConnection connection = new SQLiteConnection(CONN_STRING))
+            {
+                connection.Open();
+                using (SQLiteCommand cmd = connection.CreateCommand())
+                {
+                    cmd.CommandText = "update screen set neighboring_screen_top = @neighboring_screen_top, " +
+                        "neighboring_screen_bottom = @neighboring_screen_bottom, " +
+                        "neighboring_screen_right = @neighboring_screen_right, " +
+                        "neighboring_screen_left = @neighboring_screen_left " +
+                        "where id = @id";
+
+                    cmd.Parameters.Add("@neighboring_screen_top", DbType.Int32);
+                    cmd.Parameters.Add("@neighboring_screen_bottom", DbType.Int32);
+                    cmd.Parameters.Add("@neighboring_screen_right", DbType.Int32);
+                    cmd.Parameters.Add("@neighboring_screen_left", DbType.Int32);
+                    cmd.Parameters.Add("@id", DbType.Int32);
+
+                    cmd.Parameters["@neighboring_screen_top"].Value = screenIdTop;
+                    cmd.Parameters["@neighboring_screen_bottom"].Value = screenIdBottom;
+                    cmd.Parameters["@neighboring_screen_right"].Value =screenIdRight ;
+                    cmd.Parameters["@neighboring_screen_left"].Value = screenIdLeft;
+                    cmd.Parameters["@id"].Value = screenId;
+
+                    cmd.ExecuteNonQuery();
+                }
+            }
         }
 
         #endregion
