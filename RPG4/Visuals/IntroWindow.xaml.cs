@@ -29,7 +29,7 @@ namespace RPG4.Visuals
         private void btnNewGame_Click(object sender, RoutedEventArgs e)
         {
             Hide();
-            //RpeggiatorLib.SqliteMapper.Defaut.ResetDatabase(true);
+            RpeggiatorLib.SqliteMapper.Defaut.ResetDatabase(true);
             new MainWindow().ShowDialog();
             ShowDialog();
         }

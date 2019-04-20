@@ -133,6 +133,7 @@ namespace RpeggiatorLib
 
             if (createDefaultDatas)
             {
+                #region First screen
                 int screenId = CreateScreen(0, 0, 800, 600, "PlainRender", new object[] { "#FFFFEFD5" }, Enums.FloorType.Ground, 0, 2, 2, 4, 2);
                 CreatePermanentStructure(screenId, 0, 300, 300, 50, "ImageMosaicRender", new object[] { "Tree" });
                 CreatePermanentStructure(screenId, 100, 260, 50, 140, "ImageMosaicRender", new object[] { "Tree" });
@@ -149,6 +150,42 @@ namespace RpeggiatorLib
                     { 3, new System.Windows.Point(750, 550) },
                     { 4, new System.Windows.Point(30, 520) },
                 });
+                #endregion
+                #region Left screen
+                screenId = CreateScreen(0, 0, 800, 600, "PlainRender", new object[] { "#FFFFEFD5" }, Enums.FloorType.Ground, 0.8, 1, 1, 1, 1);
+                CreatePermanentStructure(screenId, 80, 80, 480, 40, "ImageMosaicRender", new object[] { "Tree" });
+                CreatePermanentStructure(screenId, 80, 80, 40, 320, "ImageMosaicRender", new object[] { "Tree" });
+                CreatePermanentStructure(screenId, 520, 80, 40, 320, "ImageMosaicRender", new object[] { "Tree" });
+                CreatePermanentStructure(screenId, 80, 360, 300, 40, "ImageMosaicRender", new object[] { "Tree" });
+                CreatePermanentStructure(screenId, 480, 360, 80, 40, "ImageMosaicRender", new object[] { "Tree" });
+                CreatePermanentStructure(screenId, 400, 590, 80, 10, "ImageMosaicRender", new object[] { "Tree" });
+                int gateId = CreateGate(screenId, 380, 360, 100, 40, "PlainRender", new object[] { "#FFDCDCDC" }, true);
+                CreateGateTrigger(screenId, 570, 20, 20, 20, "ImageRender", new object[] { "TriggerOff" }, 5000, gateId, false, "ImageRender", new object[] { "TriggerOn" });
+                CreateGateTrigger(screenId, 160, 220, 20, 20, "ImageRender", new object[] { "TriggerOff" }, 5000, gateId, false, "ImageRender", new object[] { "TriggerOn" });
+                CreatePickableItem(screenId, 310, 230, Constants.Bomb.WIDTH, Constants.Bomb.HEIGHT, Enums.ItemType.Bomb, 10, null);
+                CreatePit(screenId, 600, 400, 50, 50, "ImageRender", new object[] { "Pit" }, 1);
+                #endregion
+                #region Top screen
+                screenId = CreateScreen(0, 0, 800, 600, "PlainRender", new object[] { "#FFFFEFD5" }, Enums.FloorType.Ground, 0, 3, 3, 3, 3);
+                CreateFloor(screenId, 150, 150, 300, 200, "PlainRender", new object[] { "#0000FF" }, Enums.FloorType.Water);
+                CreateFloor(screenId, 150, 150, 300, 200, "PlainRender", new object[] { "#0000FF" }, Enums.FloorType.Water);
+                CreateFloor(screenId, 460, 150, 150, 200, "PlainRender", new object[] { "#DC143C" }, Enums.FloorType.Lava);
+                CreateFloor(screenId, 200, 360, 400, 100, "PlainRender", new object[] { "#F0FFFF" }, Enums.FloorType.Ice);
+                CreatePermanentStructure(screenId, 0, 0, 800, 20, "ImageMosaicRender", new object[] { "Tree" });
+                CreatePermanentStructure(screenId, 0, 20, 20, 560, "ImageMosaicRender", new object[] { "Tree" });
+                CreatePermanentStructure(screenId, 780, 20, 20, 560, "ImageMosaicRender", new object[] { "Tree" });
+                CreatePermanentStructure(screenId, 0, 580, 400, 20, "ImageMosaicRender", new object[] { "Tree" });
+                CreatePermanentStructure(screenId, 480, 580, 320, 20, "ImageMosaicRender", new object[] { "Tree" });
+                CreateDoor(screenId, 400, 580, 80, 20, "ImageRender", new object[] { "Door" }, 1, 1, 400, 20, "ImageRender", new object[] { "DoorLocked" });
+                #endregion
+                #region Right screen
+                screenId = CreateScreen(0, 0, 800, 600, "PlainRender", new object[] { "#FFFFEFD5" }, Enums.FloorType.Ground, 0, 1, 1, 1, 1);
+                CreatePermanentStructure(screenId, 166, 49, 495, 50, "ImageMosaicRender", new object[] { "Tree" });
+                CreatePermanentStructure(screenId, 63, 50, 49, 194, "ImageMosaicRender", new object[] { "Tree" });
+                CreatePermanentStructure(screenId, 629, 236, 42, 284, "ImageMosaicRender", new object[] { "Tree" });
+                CreatePermanentStructure(screenId, 63, 327, 434, 61, "ImageMosaicRender", new object[] { "Tree" });
+                CreatePermanentStructure(screenId, 69, 469, 407, 56, "ImageMosaicRender", new object[] { "Tree" });
+                #endregion
             }
         }
 
@@ -206,7 +243,7 @@ namespace RpeggiatorLib
                     cmd.CommandText = GenerateSqlInsert(tableName, columns);
                     for (int i = 0; i < columns.Length; i++)
                     {
-                        cmd.Parameters.Add(columns[i].ToParam(), types[i]);
+                        cmd.Parameters.Add(string.Concat("@", columns[i]), types[i]);
                     }
                     cmd.Prepare();
 
@@ -214,7 +251,7 @@ namespace RpeggiatorLib
                     {
                         for (int i = 0; i < columns.Length; i++)
                         {
-                            cmd.Parameters[columns[i].ToParam()].Value = rowValue[i];
+                            cmd.Parameters[string.Concat("@", columns[i])].Value = rowValue[i];
                         }
                         cmd.ExecuteNonQuery();
                     }
@@ -521,7 +558,7 @@ namespace RpeggiatorLib
         {
             List<Sprites.PickableItem> sprites = new List<Sprites.PickableItem>();
 
-            cmd.CommandText = GenerateSpriteTableSql("pickable_items", false,
+            cmd.CommandText = GenerateSpriteTableSql("pickable_item", false,
                 "item_type", "quantity", "time_before_disapear");
             cmd.Parameters.Add("@screen_id", DbType.Int32);
             cmd.Parameters["@screen_id"].Value = id;
@@ -725,7 +762,7 @@ namespace RpeggiatorLib
             ExecutePreparedInsert("gate_trigger",
                 ToColumnsArray(true, otherColumns.ToArray()),
                 ToTypesArray(true, otherTypes.ToArray()),
-                ToValuesArray(id, screenId, x, y, width, height, renderType, renderValues, otherValues));
+                ToValuesArray(id, screenId, x, y, width, height, renderType, renderValues, otherValues.ToArray()));
 
             return id;
         }
@@ -798,8 +835,8 @@ namespace RpeggiatorLib
             int id = GetNextId("pickable_item");
 
             ExecutePreparedInsert("pickable_item",
-                   ToColumnsArray(true, "item_type", "quantity", "time_before_disapear"),
-                   ToTypesArray(true, DbType.Int32, DbType.Int32, DbType.Double),
+                   ToColumnsArray(false, "item_type", "quantity", "time_before_disapear"),
+                   ToTypesArray(false, DbType.Int32, DbType.Int32, DbType.Double),
                    ToValuesArray(id, screenId, x, y, width, height, null, null, (int?)itemType, quantity, timeBeforeDisapear));
 
             return id;
@@ -1082,55 +1119,20 @@ namespace RpeggiatorLib
         }
 
         /// <summary>
-        /// Transforms a <see cref="string"/> which represents a SQL column, to its associated parameter name.
+        /// Extracts a non-nullable value from a <see cref="SQLiteDataReader"/> at a specified column.
         /// </summary>
-        internal static string ToParam(this string column)
-        {
-            return string.Concat("@", column);
-        }
-
-        /// <summary>
-        /// Gets a value of type <see cref="bool"/> from <paramref name="reader"/> at the specified <paramref name="columnName"/>.
-        /// </summary>
+        /// <typeparam name="T">The output type.</typeparam>
         /// <param name="reader"><see cref="SQLiteDataReader"/></param>
         /// <param name="columnName">Column name.</param>
-        /// <returns>Value of type <see cref="bool"/>.</returns>
-        internal static bool GetBoolean(this SQLiteDataReader reader, string columnName)
+        /// <returns>Value.</returns>
+        internal static T GetValue<T>(this SQLiteDataReader reader, string columnName) where T : struct
         {
-            return reader.GetBoolean(reader.GetOrdinal(columnName));
-        }
-
-        /// <summary>
-        /// Gets a value of type <see cref="byte"/> from <paramref name="reader"/> at the specified <paramref name="columnName"/>.
-        /// </summary>
-        /// <param name="reader"><see cref="SQLiteDataReader"/></param>
-        /// <param name="columnName">Column name.</param>
-        /// <returns>Value of type <see cref="byte"/>.</returns>
-        internal static byte GetByte(this SQLiteDataReader reader, string columnName)
-        {
-            return reader.GetByte(reader.GetOrdinal(columnName));
-        }
-
-        /// <summary>
-        /// Gets a value of type <see cref="DateTime"/> from <paramref name="reader"/> at the specified <paramref name="columnName"/>.
-        /// </summary>
-        /// <param name="reader"><see cref="SQLiteDataReader"/></param>
-        /// <param name="columnName">Column name.</param>
-        /// <returns>Value of type <see cref="DateTime"/>.</returns>
-        internal static DateTime GetDateTime(this SQLiteDataReader reader, string columnName)
-        {
-            return reader.GetDateTime(reader.GetOrdinal(columnName));
-        }
-
-        /// <summary>
-        /// Gets a value of type <see cref="decimal"/> from <paramref name="reader"/> at the specified <paramref name="columnName"/>.
-        /// </summary>
-        /// <param name="reader"><see cref="SQLiteDataReader"/></param>
-        /// <param name="columnName">Column name.</param>
-        /// <returns>Value of type <see cref="decimal"/>.</returns>
-        internal static decimal GetDecimal(this SQLiteDataReader reader, string columnName)
-        {
-            return reader.GetDecimal(reader.GetOrdinal(columnName));
+            object nonTypedValue = reader[columnName];
+            if (nonTypedValue == null || nonTypedValue == DBNull.Value)
+            {
+                return default(T);
+            }
+            return (T)Convert.ChangeType(nonTypedValue, typeof(T));
         }
 
         /// <summary>
@@ -1141,29 +1143,7 @@ namespace RpeggiatorLib
         /// <returns>Value of type <see cref="double"/>.</returns>
         internal static double GetDouble(this SQLiteDataReader reader, string columnName)
         {
-            return reader.GetDouble(reader.GetOrdinal(columnName));
-        }
-
-        /// <summary>
-        /// Gets a value of type <see cref="float"/> from <paramref name="reader"/> at the specified <paramref name="columnName"/>.
-        /// </summary>
-        /// <param name="reader"><see cref="SQLiteDataReader"/></param>
-        /// <param name="columnName">Column name.</param>
-        /// <returns>Value of type <see cref="float"/>.</returns>
-        internal static float GetFloat(this SQLiteDataReader reader, string columnName)
-        {
-            return reader.GetFloat(reader.GetOrdinal(columnName));
-        }
-
-        /// <summary>
-        /// Gets a value of type <see cref="short"/> from <paramref name="reader"/> at the specified <paramref name="columnName"/>.
-        /// </summary>
-        /// <param name="reader"><see cref="SQLiteDataReader"/></param>
-        /// <param name="columnName">Column name.</param>
-        /// <returns>Value of type <see cref="short"/>.</returns>
-        internal static short GetInt16(this SQLiteDataReader reader, string columnName)
-        {
-            return reader.GetInt16(reader.GetOrdinal(columnName));
+            return reader.GetValue<double>(columnName);
         }
 
         /// <summary>
@@ -1174,18 +1154,7 @@ namespace RpeggiatorLib
         /// <returns>Value of type <see cref="int"/>.</returns>
         internal static int GetInt32(this SQLiteDataReader reader, string columnName)
         {
-            return reader.GetInt32(reader.GetOrdinal(columnName));
-        }
-
-        /// <summary>
-        /// Gets a value of type <see cref="long"/> from <paramref name="reader"/> at the specified <paramref name="columnName"/>.
-        /// </summary>
-        /// <param name="reader"><see cref="SQLiteDataReader"/></param>
-        /// <param name="columnName">Column name.</param>
-        /// <returns>Value of type <see cref="long"/>.</returns>
-        internal static long GetInt64(this SQLiteDataReader reader, string columnName)
-        {
-            return reader.GetInt64(reader.GetOrdinal(columnName));
+            return reader.GetValue<int>(columnName);
         }
 
         /// <summary>
