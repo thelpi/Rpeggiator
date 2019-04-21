@@ -61,27 +61,29 @@ namespace RpeggiatorLib.Properties {
         }
         
         /// <summary>
-        ///   Recherche une chaîne localisée semblable à create table gate_trigger (
+        ///   Recherche une chaîne localisée semblable à drop table if exists gate_trigger;
+        ///drop table if exists rift;
+        ///drop table if exists permanent_structure;
+        ///drop table if exists door;
+        ///drop table if exists chest;
+        ///drop table if exists enemy;
+        ///drop table if exists enemy_step;
+        ///drop table if exists pit;
+        ///drop table if exists floor;
+        ///drop table if exists pickable_item;
+        ///drop table if exists gate;
+        ///drop table if exists screen;
+        ///
+        ///create table gate_trigger (
+        ///	id int not null,
         ///	screen_id int not null,
         ///	x double not null,
         ///	y double not null,
-        ///	width double not null,
-        ///	height double not null,
-        ///	render_type Varchar(50) not null,
-        ///	render_value_0 Varchar(255) not null,
-        ///	render_value_1 Varchar(255) null,
-        ///	render_value_2 Varchar(255) null,
-        ///	render_value_3 Varchar(255) null,
-        ///	render_value_4 Varchar(255) null,
-        ///	render_value_5 Varchar(255) null,
-        ///	render_value_6 Varchar(255) null,
-        ///	render_value_7 Varchar(255) null,
-        ///	render_value_8 Varchar(255) null,
-        /// [le reste de la chaîne a été tronqué]&quot;;.
+        ///	width double no [le reste de la chaîne a été tronqué]&quot;;.
         /// </summary>
-        internal static string SpriteDb_sql {
+        internal static string SpriteDb {
             get {
-                return ResourceManager.GetString("SpriteDb_sql", resourceCulture);
+                return ResourceManager.GetString("SpriteDb", resourceCulture);
             }
         }
     }

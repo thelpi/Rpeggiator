@@ -7,8 +7,8 @@ namespace RpeggiatorLib
     /// </summary>
     internal class Elapser
     {
-        private DateTime _timestamp;
-        private double _lifetime;
+        private readonly DateTime _timestamp;
+        private readonly double _lifetime;
         private DateTime? _latestTimestamp;
 
         /// <summary>

@@ -122,7 +122,7 @@ namespace RpeggiatorLib
                 connection.Open();
                 using (SQLiteCommand cmd = connection.CreateCommand())
                 {
-                    cmd.CommandText = Properties.Resources.SpriteDb_sql;
+                    cmd.CommandText = Properties.Resources.SpriteDb;
 
                     cmd.ExecuteNonQuery();
                 }

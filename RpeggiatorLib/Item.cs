@@ -74,55 +74,57 @@ namespace RpeggiatorLib
         // Creates an instance of every items.
         private static void BuildItemList()
         {
-            _items = new List<Item>();
-            _items.Add(new Item
+            _items = new List<Item>
             {
-                Type = ItemType.Bomb,
-                Name = Names.ItemBomb,
-                Unique = false,
-                InitialMaximalQuantity = 20
-            });
-            _items.Add(new Item
-            {
-                Type = ItemType.LifePotionSmall,
-                Name = Names.ItemLifePotionSmall,
-                Unique = false,
-                InitialMaximalQuantity = 12
-            });
-            _items.Add(new Item
-            {
-                Type = ItemType.LifePotionMedium,
-                Name = Names.ItemLifePotionMedium,
-                Unique = false,
-                InitialMaximalQuantity = 6
-            });
-            _items.Add(new Item
-            {
-                Type = ItemType.LifePotionLarge,
-                Name = Names.ItemLifePotionLarge,
-                Unique = false,
-                InitialMaximalQuantity = 3
-            });
-            _items.Add(new Item
-            {
-                Type = ItemType.Lamp,
-                Name = Names.ItemLamp,
-                Unique = true
-            });
-            _items.Add(new Item
-            {
-                Type = ItemType.Bow,
-                Name = Names.ItemBow,
-                Unique = true
-            });
-            _items.Add(new Item
-            {
-                Type = ItemType.Arrow,
-                Name = Names.ItemArrow,
-                Unique = false,
-                InitialMaximalQuantity = 20,
-                AmmoFor = ItemType.Bow
-            });
+                new Item
+                {
+                    Type = ItemType.Bomb,
+                    Name = Names.ItemBomb,
+                    Unique = false,
+                    InitialMaximalQuantity = 20
+                },
+                new Item
+                {
+                    Type = ItemType.LifePotionSmall,
+                    Name = Names.ItemLifePotionSmall,
+                    Unique = false,
+                    InitialMaximalQuantity = 12
+                },
+                new Item
+                {
+                    Type = ItemType.LifePotionMedium,
+                    Name = Names.ItemLifePotionMedium,
+                    Unique = false,
+                    InitialMaximalQuantity = 6
+                },
+                new Item
+                {
+                    Type = ItemType.LifePotionLarge,
+                    Name = Names.ItemLifePotionLarge,
+                    Unique = false,
+                    InitialMaximalQuantity = 3
+                },
+                new Item
+                {
+                    Type = ItemType.Lamp,
+                    Name = Names.ItemLamp,
+                    Unique = true
+                },
+                new Item
+                {
+                    Type = ItemType.Bow,
+                    Name = Names.ItemBow,
+                    Unique = true
+                },
+                new Item
+                {
+                    Type = ItemType.Arrow,
+                    Name = Names.ItemArrow,
+                    Unique = false,
+                    InitialMaximalQuantity = 20,
+                    AmmoFor = ItemType.Bow
+                }
+            };
             // Sets the use delay for every items of the list.
             _items.ForEach(item => item.UseDelay = Constants.Item.DELAY_BETWEEN_USE[item.Type]);
         }

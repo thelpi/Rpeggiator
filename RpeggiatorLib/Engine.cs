@@ -39,7 +39,7 @@ namespace RpeggiatorLib
         }
 
         private Screen _currentScreen;
-        private DateTime _beginTimestamp;
+        private readonly DateTime _beginTimestamp;
         private List<Screen> _screens = new List<Screen>();
 
         /// <summary>
@@ -140,8 +140,7 @@ namespace RpeggiatorLib
             }
             else
             {
-                int? doorId;
-                int? newScreenByDoor = CheckForDoorOpened(out doorId);
+                int? newScreenByDoor = CheckForDoorOpened(out int? doorId);
                 if (newScreenByDoor.HasValue)
                 {
                     // The position must be set before to get to the screen.
