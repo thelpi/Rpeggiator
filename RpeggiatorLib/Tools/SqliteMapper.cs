@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Data;
 using System.Data.SQLite;
 using System.Linq;
+using RpeggiatorLib.Enums;
 using SysColor = System.Windows.Media.Colors;
 
 namespace RpeggiatorLib
@@ -76,14 +77,14 @@ namespace RpeggiatorLib
             {
                 #region First screen
 
-                int screenId1 = CreateScreen(Enums.RenderType.Plain, new[] { Tools.HexFromColor(SysColor.PapayaWhip) }, Enums.FloorType.Ground, 0);
-                CreatePermanentStructure(screenId1, 0, 300, 300, 50, Enums.RenderType.ImageMosaic, new[] { "Tree" });
-                CreatePermanentStructure(screenId1, 100, 260, 50, 140, Enums.RenderType.ImageMosaic, new[] { "Tree" });
-                CreateChest(screenId1, 400, 380, 40, 40, Enums.RenderType.Image, new[] { "Chest" }, null, 10, null, 1, Enums.RenderType.Image, new[] { "OpenChest" });
-                CreatePit(screenId1, 700, 100, 50, 50, Enums.RenderType.Image, new[] { "Pit" }, null);
-                CreateRift(screenId1, 700, 400, 20, 100, Enums.RenderType.Plain, new[] { Tools.HexFromColor(SysColor.BurlyWood) }, 8);
-                int enemyId = CreateEnemy(screenId1, 50, 50, 40, 40, 4, 5, 150, 0, "Enemy", "Enemy", Enums.Direction.Right, null, 10);
-                CreateEnemy(screenId1, 600, 50, 40, 40, 4, 5, 150, 0, "Enemy", "Enemy", Enums.Direction.Bottom, Enums.ItemType.Arrow, 1);
+                int screenId1 = CreateScreen(RenderType.Plain, new[] { Tools.HexFromColor(SysColor.PapayaWhip) }, FloorType.Ground, 0);
+                CreatePermanentStructure(screenId1, 0, 300, 300, 50, RenderType.ImageMosaic, new[] { "Tree" });
+                CreatePermanentStructure(screenId1, 100, 260, 50, 140, RenderType.ImageMosaic, new[] { "Tree" });
+                CreateChest(screenId1, 400, 380, 40, 40, RenderType.Image, new[] { "Chest" }, null, 10, null, 1, RenderType.Image, new[] { "OpenChest" });
+                CreatePit(screenId1, 700, 100, 50, 50, RenderType.Image, new[] { "Pit" }, null);
+                CreateRift(screenId1, 700, 400, 20, 100, RenderType.Plain, new[] { Tools.HexFromColor(SysColor.BurlyWood) }, 8);
+                int enemyId = CreateEnemy(screenId1, 50, 50, 40, 40, 4, 5, 150, 0, "Enemy", "Enemy", Direction.Right, null, 10);
+                CreateEnemy(screenId1, 600, 50, 40, 40, 4, 5, 150, 0, "Enemy", "Enemy", Direction.Bottom, ItemType.Arrow, 1);
                 CreateEnemyPathSteps(enemyId, new Dictionary<int, System.Windows.Point>
                 {
                     { 1, new System.Windows.Point(730, 350) },
@@ -96,44 +97,44 @@ namespace RpeggiatorLib
 
                 #region Left screen
 
-                int screenId2 = CreateScreen(Enums.RenderType.Plain, new[] { Tools.HexFromColor(SysColor.PapayaWhip) }, Enums.FloorType.Ground, 0.8);
-                CreatePermanentStructure(screenId2, 80, 80, 480, 40, Enums.RenderType.ImageMosaic, new[] { "Tree" });
-                CreatePermanentStructure(screenId2, 80, 80, 40, 320, Enums.RenderType.ImageMosaic, new[] { "Tree" });
-                CreatePermanentStructure(screenId2, 520, 80, 40, 320, Enums.RenderType.ImageMosaic, new[] { "Tree" });
-                CreatePermanentStructure(screenId2, 80, 360, 300, 40, Enums.RenderType.ImageMosaic, new[] { "Tree" });
-                CreatePermanentStructure(screenId2, 480, 360, 80, 40, Enums.RenderType.ImageMosaic, new[] { "Tree" });
-                CreatePermanentStructure(screenId2, 400, 590, 80, 10, Enums.RenderType.ImageMosaic, new[] { "Tree" });
-                int gateId = CreateGate(screenId2, 380, 360, 100, 40, Enums.RenderType.Plain, new[] { Tools.HexFromColor(SysColor.Gainsboro) }, true);
-                CreateGateTrigger(screenId2, 570, 20, 20, 20, Enums.RenderType.Image, new[] { "TriggerOff" }, 5000, gateId, false, Enums.RenderType.Image, new[] { "TriggerOn" });
-                CreateGateTrigger(screenId2, 160, 220, 20, 20, Enums.RenderType.Image, new[] { "TriggerOff" }, 5000, gateId, false, Enums.RenderType.Image, new[] { "TriggerOn" });
-                CreatePickableItem(screenId2, 310, 230, Constants.Bomb.WIDTH, Constants.Bomb.HEIGHT, Enums.ItemType.Bomb, 10, null);
-                CreatePit(screenId2, 600, 400, 50, 50, Enums.RenderType.Image, new[] { "Pit" }, screenId1);
+                int screenId2 = CreateScreen(RenderType.Plain, new[] { Tools.HexFromColor(SysColor.PapayaWhip) }, FloorType.Ground, 0.8);
+                CreatePermanentStructure(screenId2, 80, 80, 480, 40, RenderType.ImageMosaic, new[] { "Tree" });
+                CreatePermanentStructure(screenId2, 80, 80, 40, 320, RenderType.ImageMosaic, new[] { "Tree" });
+                CreatePermanentStructure(screenId2, 520, 80, 40, 320, RenderType.ImageMosaic, new[] { "Tree" });
+                CreatePermanentStructure(screenId2, 80, 360, 300, 40, RenderType.ImageMosaic, new[] { "Tree" });
+                CreatePermanentStructure(screenId2, 480, 360, 80, 40, RenderType.ImageMosaic, new[] { "Tree" });
+                CreatePermanentStructure(screenId2, 400, 590, 80, 10, RenderType.ImageMosaic, new[] { "Tree" });
+                int gateId = CreateGate(screenId2, 380, 360, 100, 40, RenderType.Plain, new[] { Tools.HexFromColor(SysColor.Gainsboro) }, true);
+                CreateGateTrigger(screenId2, 570, 20, 20, 20, RenderType.Image, new[] { "TriggerOff" }, 5000, gateId, false, RenderType.Image, new[] { "TriggerOn" });
+                CreateGateTrigger(screenId2, 160, 220, 20, 20, RenderType.Image, new[] { "TriggerOff" }, 5000, gateId, false, RenderType.Image, new[] { "TriggerOn" });
+                CreatePickableItem(screenId2, 310, 230, Constants.Bomb.WIDTH, Constants.Bomb.HEIGHT, ItemType.Bomb, 10, null);
+                CreatePit(screenId2, 600, 400, 50, 50, RenderType.Image, new[] { "Pit" }, screenId1);
 
                 #endregion
 
                 #region Top screen
 
-                int screenId3 = CreateScreen(Enums.RenderType.Plain, new[] { Tools.HexFromColor(SysColor.PapayaWhip) }, Enums.FloorType.Ground, 0);
-                CreateFloor(screenId3, 150, 150, 300, 200, Enums.RenderType.Plain, new[] { Tools.HexFromColor(SysColor.Blue) }, Enums.FloorType.Water);
-                CreateFloor(screenId3, 460, 150, 150, 200, Enums.RenderType.Plain, new[] { Tools.HexFromColor(SysColor.Crimson) }, Enums.FloorType.Lava);
-                CreateFloor(screenId3, 200, 360, 400, 100, Enums.RenderType.Plain, new[] { Tools.HexFromColor(SysColor.Azure) }, Enums.FloorType.Ice);
-                CreatePermanentStructure(screenId3, 0, 0, 800, 20, Enums.RenderType.ImageMosaic, new[] { "Tree" });
-                CreatePermanentStructure(screenId3, 0, 20, 20, 560, Enums.RenderType.ImageMosaic, new[] { "Tree" });
-                CreatePermanentStructure(screenId3, 780, 20, 20, 560, Enums.RenderType.ImageMosaic, new[] { "Tree" });
-                CreatePermanentStructure(screenId3, 0, 580, 400, 20, Enums.RenderType.ImageMosaic, new[] { "Tree" });
-                CreatePermanentStructure(screenId3, 480, 580, 320, 20, Enums.RenderType.ImageMosaic, new[] { "Tree" });
-                CreateDoor(screenId3, 400, 580, 80, 20, Enums.RenderType.Image, new[] { "Door" }, 1, screenId1, 400, 20, Enums.RenderType.Image, new[] { "DoorLocked" });
+                int screenId3 = CreateScreen(RenderType.Plain, new[] { Tools.HexFromColor(SysColor.PapayaWhip) }, FloorType.Ground, 0);
+                CreateFloor(screenId3, 150, 150, 300, 200, RenderType.Plain, new[] { Tools.HexFromColor(SysColor.Blue) }, FloorType.Water);
+                CreateFloor(screenId3, 460, 150, 150, 200, RenderType.Plain, new[] { Tools.HexFromColor(SysColor.Crimson) }, FloorType.Lava);
+                CreateFloor(screenId3, 200, 360, 400, 100, RenderType.Plain, new[] { Tools.HexFromColor(SysColor.Azure) }, FloorType.Ice);
+                CreatePermanentStructure(screenId3, 0, 0, 800, 20, RenderType.ImageMosaic, new[] { "Tree" });
+                CreatePermanentStructure(screenId3, 0, 20, 20, 560, RenderType.ImageMosaic, new[] { "Tree" });
+                CreatePermanentStructure(screenId3, 780, 20, 20, 560, RenderType.ImageMosaic, new[] { "Tree" });
+                CreatePermanentStructure(screenId3, 0, 580, 400, 20, RenderType.ImageMosaic, new[] { "Tree" });
+                CreatePermanentStructure(screenId3, 480, 580, 320, 20, RenderType.ImageMosaic, new[] { "Tree" });
+                CreateDoor(screenId3, 400, 580, 80, 20, RenderType.Image, new[] { "Door" }, 1, screenId1, 400, 20, RenderType.Image, new[] { "DoorLocked" });
 
                 #endregion
 
                 #region Right screen
 
-                int screenId4 = CreateScreen(Enums.RenderType.Plain, new[] { Tools.HexFromColor(SysColor.PapayaWhip) }, Enums.FloorType.Ground, 0);
-                CreatePermanentStructure(screenId4, 166, 49, 495, 50, Enums.RenderType.ImageMosaic, new[] { "Tree" });
-                CreatePermanentStructure(screenId4, 63, 50, 49, 194, Enums.RenderType.ImageMosaic, new[] { "Tree" });
-                CreatePermanentStructure(screenId4, 629, 236, 42, 284, Enums.RenderType.ImageMosaic, new[] { "Tree" });
-                CreatePermanentStructure(screenId4, 63, 327, 434, 61, Enums.RenderType.ImageMosaic, new[] { "Tree" });
-                CreatePermanentStructure(screenId4, 69, 469, 407, 56, Enums.RenderType.ImageMosaic, new[] { "Tree" });
+                int screenId4 = CreateScreen(RenderType.Plain, new[] { Tools.HexFromColor(SysColor.PapayaWhip) }, FloorType.Ground, 0);
+                CreatePermanentStructure(screenId4, 166, 49, 495, 50, RenderType.ImageMosaic, new[] { "Tree" });
+                CreatePermanentStructure(screenId4, 63, 50, 49, 194, RenderType.ImageMosaic, new[] { "Tree" });
+                CreatePermanentStructure(screenId4, 629, 236, 42, 284, RenderType.ImageMosaic, new[] { "Tree" });
+                CreatePermanentStructure(screenId4, 63, 327, 434, 61, RenderType.ImageMosaic, new[] { "Tree" });
+                CreatePermanentStructure(screenId4, 69, 469, 407, 56, RenderType.ImageMosaic, new[] { "Tree" });
 
                 #endregion
 
@@ -143,7 +144,7 @@ namespace RpeggiatorLib
                 SetNeighboringScreens(screenId4, screenId1, screenId1, screenId1, screenId1);
 
                 // Screen ID 3 is required to create this door.
-                CreateDoor(screenId1, 400, 0, 80, 20, Enums.RenderType.Image, new[] { "Door" }, 1, screenId3, 400, 540, Enums.RenderType.Image, new[] { "DoorLocked" });
+                CreateDoor(screenId1, 400, 0, 80, 20, RenderType.Image, new[] { "Door" }, 1, screenId3, 400, 540, RenderType.Image, new[] { "DoorLocked" });
             }
         }
 
@@ -185,17 +186,17 @@ namespace RpeggiatorLib
                     {
                         if (reader.Read())
                         {
-                            Dictionary<Enums.Direction, int> neighboringScreens = new Dictionary<Enums.Direction, int>
+                            Dictionary<Direction, int> neighboringScreens = new Dictionary<Direction, int>
                             {
-                                { Enums.Direction.Bottom, reader.GetInt32("neighboring_screen_bottom") },
-                                { Enums.Direction.Top, reader.GetInt32("neighboring_screen_top") },
-                                { Enums.Direction.Right, reader.GetInt32("neighboring_screen_right") },
-                                { Enums.Direction.Left, reader.GetInt32("neighboring_screen_left") }
+                                { Direction.Bottom, reader.GetInt32("neighboring_screen_bottom") },
+                                { Direction.Top, reader.GetInt32("neighboring_screen_top") },
+                                { Direction.Right, reader.GetInt32("neighboring_screen_right") },
+                                { Direction.Left, reader.GetInt32("neighboring_screen_left") }
                             };
 
                             s = new Sprites.Screen(reader.GetInt32("id"), reader.GetDouble("x"), reader.GetDouble("y"),
-                                reader.GetDouble("width"), reader.GetDouble("height"), (Enums.FloorType)reader.GetInt32("floor_type"),
-                                reader.GetDouble("darkness_opacity"), (Enums.RenderType)reader.GetInt32("render_type"),
+                                reader.GetDouble("width"), reader.GetDouble("height"), (FloorType)reader.GetInt32("floor_type"),
+                                reader.GetDouble("darkness_opacity"), (RenderType)reader.GetInt32("render_type"),
                                 GetRenderPropertiesForCurrentReaderRow(reader), permanentStructures, doors, floors, enemies,
                                 gateTriggers, gates, rifts, pits, chests, pickableItems, neighboringScreens);
                         }
@@ -276,63 +277,63 @@ namespace RpeggiatorLib
                     {
                         case nameof(Sprites.Chest):
                             sp = new Sprites.Chest(reader.GetInt32("id"), reader.GetDouble("x"), reader.GetDouble("y"), reader.GetDouble("width"),
-                                reader.GetDouble("height"), (Enums.ItemType?)reader.GetNullValue<int>("item_type"), reader.GetInt32("quantity"),
+                                reader.GetDouble("height"), (ItemType?)reader.GetNullValue<int>("item_type"), reader.GetInt32("quantity"),
                                 reader.GetNullValue<int>("key_id"), reader.GetNullValue<int>("key_id_container"),
-                                (Enums.RenderType)reader.GetInt32("render_type"), GetRenderPropertiesForCurrentReaderRow(reader),
-                                (Enums.RenderType)reader.GetInt32("open_render_type"),
+                                (RenderType)reader.GetInt32("render_type"), GetRenderPropertiesForCurrentReaderRow(reader),
+                                (RenderType)reader.GetInt32("open_render_type"),
                                 GetRenderPropertiesForCurrentReaderRow(reader, "open_render_value"));
                             break;
                         case nameof(Sprites.Door):
                             sp = new Sprites.Door(reader.GetInt32("id"), reader.GetDouble("x"), reader.GetDouble("y"), reader.GetDouble("width"),
                                 reader.GetDouble("height"), reader.GetNullValue<int>("key_id"), reader.GetInt32("connected_screen_id"),
                                 reader.GetDouble("player_go_through_x"), reader.GetDouble("player_go_through_y"),
-                                (Enums.RenderType)reader.GetInt32("locked_render_type"),
+                                (RenderType)reader.GetInt32("locked_render_type"),
                                 GetRenderPropertiesForCurrentReaderRow(reader, "locked_render_value"),
-                                (Enums.RenderType)reader.GetInt32("render_type"), GetRenderPropertiesForCurrentReaderRow(reader));
+                                (RenderType)reader.GetInt32("render_type"), GetRenderPropertiesForCurrentReaderRow(reader));
                             break;
                         case nameof(Sprites.Enemy):
                             sp = new Sprites.Enemy(reader.GetInt32("id"), reader.GetDouble("x"), reader.GetDouble("y"), reader.GetDouble("width"),
                                 reader.GetDouble("height"), reader.GetDouble("maximal_life_points"), reader.GetDouble("hit_life_point_cost"),
                                 reader.GetDouble("speed"), reader.GetDouble("recovery_time"), reader.GetString("render_filename"),
-                                reader.GetString("render_recovery_filename"), (Enums.Direction)reader.GetInt32("default_direction"),
-                                (Enums.ItemType?)reader.GetNullValue<int>("loot_item_type"), reader.GetInt32("loot_quantity"));
+                                reader.GetString("render_recovery_filename"), (Direction)reader.GetInt32("default_direction"),
+                                (ItemType?)reader.GetNullValue<int>("loot_item_type"), reader.GetInt32("loot_quantity"));
                             break;
                         case nameof(Sprites.Floor):
                             sp = new Sprites.Floor(reader.GetInt32("id"), reader.GetDouble("x"), reader.GetDouble("y"), reader.GetDouble("width"),
-                                reader.GetDouble("height"), (Enums.FloorType)reader.GetInt32("floor_type"),
-                                (Enums.RenderType)reader.GetInt32("render_type"), GetRenderPropertiesForCurrentReaderRow(reader));
+                                reader.GetDouble("height"), (FloorType)reader.GetInt32("floor_type"),
+                                (RenderType)reader.GetInt32("render_type"), GetRenderPropertiesForCurrentReaderRow(reader));
                             break;
                         case nameof(Sprites.Gate):
                             sp = new Sprites.Gate(reader.GetInt32("id"), reader.GetDouble("x"), reader.GetDouble("y"), reader.GetDouble("width"),
-                                reader.GetDouble("height"), reader.GetInt32("activated") > 0, (Enums.RenderType)reader.GetInt32("render_type"),
+                                reader.GetDouble("height"), reader.GetInt32("activated") > 0, (RenderType)reader.GetInt32("render_type"),
                                 GetRenderPropertiesForCurrentReaderRow(reader));
                             break;
                         case nameof(Sprites.GateTrigger):
                             sp = new Sprites.GateTrigger(reader.GetInt32("id"), reader.GetDouble("x"), reader.GetDouble("y"),
                                 reader.GetDouble("width"), reader.GetDouble("height"), reader.GetDouble("action_duration"),
                                 reader.GetInt32("gate_id"), reader.GetInt32("appear_on_activation") > 0,
-                                (Enums.RenderType)reader.GetInt32("render_type"), GetRenderPropertiesForCurrentReaderRow(reader),
-                                (Enums.RenderType)reader.GetInt32("on_render_type"),
+                                (RenderType)reader.GetInt32("render_type"), GetRenderPropertiesForCurrentReaderRow(reader),
+                                (RenderType)reader.GetInt32("on_render_type"),
                                 GetRenderPropertiesForCurrentReaderRow(reader, "on_render_value"));
                             break;
                         case nameof(Sprites.PermanentStructure):
                             sp = new Sprites.PermanentStructure(reader.GetInt32("id"), reader.GetDouble("x"), reader.GetDouble("y"),
-                                reader.GetDouble("width"), reader.GetDouble("height"), (Enums.RenderType)reader.GetInt32("render_type"),
+                                reader.GetDouble("width"), reader.GetDouble("height"), (RenderType)reader.GetInt32("render_type"),
                                 GetRenderPropertiesForCurrentReaderRow(reader));
                             break;
                         case nameof(Sprites.PickableItem):
                             sp = new Sprites.PickableItem(reader.GetInt32("id"), reader.GetDouble("x"), reader.GetDouble("y"),
-                                reader.GetDouble("width"), reader.GetDouble("height"), (Enums.ItemType?)reader.GetNullValue<int>("item_type"),
+                                reader.GetDouble("width"), reader.GetDouble("height"), (ItemType?)reader.GetNullValue<int>("item_type"),
                                 reader.GetInt32("quantity"), reader.GetNullValue<double>("time_before_disapear"));
                             break;
                         case nameof(Sprites.Pit):
                             sp = new Sprites.Pit(reader.GetInt32("id"), reader.GetDouble("x"), reader.GetDouble("y"), reader.GetDouble("width"),
                                 reader.GetDouble("height"), reader.GetNullValue<int>("screen_id_entrance"),
-                                (Enums.RenderType)reader.GetInt32("render_type"), GetRenderPropertiesForCurrentReaderRow(reader));
+                                (RenderType)reader.GetInt32("render_type"), GetRenderPropertiesForCurrentReaderRow(reader));
                             break;
                         case nameof(Sprites.Rift):
                             sp = new Sprites.Rift(reader.GetInt32("id"), reader.GetDouble("x"), reader.GetDouble("y"), reader.GetDouble("width"),
-                                reader.GetDouble("height"), reader.GetDouble("lifepoints"), (Enums.RenderType)reader.GetInt32("render_type"),
+                                reader.GetDouble("height"), reader.GetDouble("lifepoints"), (RenderType)reader.GetInt32("render_type"),
                                 GetRenderPropertiesForCurrentReaderRow(reader));
                             break;
                         default:
@@ -407,6 +408,26 @@ namespace RpeggiatorLib
                     }
                 }
             }
+        }
+
+        // Creats a sprite of the specified type inside the specified screen.
+        private int CreateSpriteInScreen<T>(string tableName, int screenId, double x, double y, double width, double height,
+            RenderType? renderType, string[] renderValues, params Tuple<string, DbType, object>[] otherValues) where T : Sprites.Sprite
+        {
+            if (!ExistsId("screen", screenId))
+            {
+                throw new ArgumentException(Messages.InvalidIdForInsertionExceptionMessage, nameof(screenId));
+            }
+            CheckInputDimensions(x, y, width, height);
+
+            int id = GetNextId(tableName);
+
+            ExecutePreparedInsert(tableName,
+                ToColumnsArray(renderType.HasValue, otherValues.Select(t => t.Item1).ToArray()),
+                ToTypesArray(renderType.HasValue, otherValues.Select(t => t.Item2).ToArray()),
+                ToValuesArray(id, screenId, x, y, width, height, renderType, renderValues, otherValues.Select(t => t.Item3).ToArray()));
+
+            return id;
         }
 
         #region Static tool methods
@@ -506,7 +527,7 @@ namespace RpeggiatorLib
         }
 
         // Creates an array with every values to insert for a sprite.
-        private static object[] ToValuesArray(int id, int screenId, double x, double y, double width, double height, Enums.RenderType? renderType, string[] renderValues, params object[] additionalValues)
+        private static object[] ToValuesArray(int id, int screenId, double x, double y, double width, double height, RenderType? renderType, string[] renderValues, params object[] additionalValues)
         {
             List<object> values = new List<object> { id, screenId, x, y, width, height };
             if (renderType.HasValue)
@@ -571,7 +592,7 @@ namespace RpeggiatorLib
 
         #endregion
 
-        #region Insert methods
+        #region Public insertion methods
 
         /// <summary>
         /// Creates or recreates every steps on an <see cref="Sprites.Enemy"/> path.
@@ -585,6 +606,7 @@ namespace RpeggiatorLib
             {
                 throw new ArgumentException(Messages.InvalidIdForInsertionExceptionMessage, nameof(enemyId));
             }
+            // TODO : checks "points" argument.
 
             using (SQLiteConnection connection = new SQLiteConnection(CONN_STRING))
             {
@@ -619,26 +641,13 @@ namespace RpeggiatorLib
         /// <param name="y"><see cref="Sprites.Sprite.Y"/></param>
         /// <param name="width"><see cref="Sprites.Sprite.Width"/></param>
         /// <param name="height"><see cref="Sprites.Sprite.Height"/></param>
-        /// <param name="renderType"><see cref="Enums.RenderType"/></param>
+        /// <param name="renderType"><see cref="RenderType"/></param>
         /// <param name="renderValues">Values required to instanciate a <see cref="Sprites.Sprite.Render"/> (filename, color, and so forth).</param>
         /// <returns><see cref="Sprites.Sprite.Id"/></returns>
-        public int CreatePermanentStructure(int screenId, double x, double y, double width, double height,
-            Enums.RenderType renderType, string[] renderValues)
+        private int CreatePermanentStructure(int screenId, double x, double y, double width, double height,
+            RenderType renderType, string[] renderValues)
         {
-            if (!ExistsId("screen", screenId))
-            {
-                throw new ArgumentException(Messages.InvalidIdForInsertionExceptionMessage, nameof(screenId));
-            }
-            CheckInputDimensions(x, y, width, height);
-
-            int id = GetNextId("permanent_structure");
-
-            ExecutePreparedInsert("permanent_structure",
-                ToColumnsArray(true),
-                ToTypesArray(true),
-                ToValuesArray(id, screenId, x, y, width, height, renderType, renderValues));
-
-            return id;
+            return CreateSpriteInScreen<Sprites.PermanentStructure>("permanent_structure", screenId, x, y, width, height, renderType, renderValues);
         }
 
         /// <summary>
@@ -649,46 +658,27 @@ namespace RpeggiatorLib
         /// <param name="y"><see cref="Sprites.Sprite.Y"/></param>
         /// <param name="width"><see cref="Sprites.Sprite.Width"/></param>
         /// <param name="height"><see cref="Sprites.Sprite.Height"/></param>
-        /// <param name="renderType"><see cref="Enums.RenderType"/></param>
+        /// <param name="renderType"><see cref="RenderType"/></param>
         /// <param name="renderValues">Values required to instanciate a <see cref="Sprites.Sprite.Render"/> (filename, color, and so forth).</param>
         /// <param name="actionDuration"><see cref="Sprites.FloorTrigger._actionDuration"/></param>
         /// <param name="appearOnActivation"><see cref="Sprites.GateTrigger.AppearOnActivation"/></param>
         /// <param name="gateId"><see cref="Sprites.GateTrigger.GateId"/></param>
-        /// <param name="onRenderType"><see cref="Enums.RenderType"/></param>
+        /// <param name="onRenderType"><see cref="RenderType"/></param>
         /// <param name="onRenderValues">Values required to instanciate a <see cref="Sprites.GateTrigger._renderOn"/> (filename, color, and so forth).</param>
         /// <returns><see cref="Sprites.Sprite.Id"/></returns>
         public int CreateGateTrigger(int screenId, double x, double y, double width, double height,
-            Enums.RenderType renderType, string[] renderValues,
+            RenderType renderType, string[] renderValues,
             double actionDuration, int gateId, bool appearOnActivation,
-            Enums.RenderType onRenderType, string[] onRenderValues)
+            RenderType onRenderType, string[] onRenderValues)
         {
-            if (!ExistsId("screen", screenId))
-            {
-                throw new ArgumentException(Messages.InvalidIdForInsertionExceptionMessage, nameof(screenId));
-            }
-            CheckInputDimensions(x, y, width, height);
+            // TODO : check arguments.
 
-            int id = GetNextId("gate_trigger");
-
-            List<string> otherColumns = new List<string>
-            {
-                "action_duration", "gate_id", "appear_on_activation", "on_render_type", "on_render_value"
-            };
-            List<DbType> otherTypes = new List<DbType>
-            {
-                DbType.Double, DbType.Int32, DbType.Boolean, DbType.Int32, DbType.String
-            };
-            List<object> otherValues = new List<object>
-            {
-                actionDuration, gateId, appearOnActivation, (int)onRenderType, onRenderValues
-            };
-
-            ExecutePreparedInsert("gate_trigger",
-                ToColumnsArray(true, otherColumns.ToArray()),
-                ToTypesArray(true, otherTypes.ToArray()),
-                ToValuesArray(id, screenId, x, y, width, height, renderType, renderValues, otherValues.ToArray()));
-
-            return id;
+            return CreateSpriteInScreen<Sprites.GateTrigger>("gate_trigger", screenId, x, y, width, height, renderType, renderValues,
+                new Tuple<string, DbType, object>("action_duration", DbType.Double, actionDuration),
+                new Tuple<string, DbType, object>("gate_id", DbType.Int32, gateId),
+                new Tuple<string, DbType, object>("appear_on_activation", DbType.Int32, appearOnActivation ? 1 : 0),
+                new Tuple<string, DbType, object>("on_render_type", DbType.Int32, (int)onRenderType),
+                new Tuple<string, DbType, object>("on_render_value", DbType.String, onRenderValues));
         }
 
         /// <summary>
@@ -699,27 +689,17 @@ namespace RpeggiatorLib
         /// <param name="y"><see cref="Sprites.Sprite.Y"/></param>
         /// <param name="width"><see cref="Sprites.Sprite.Width"/></param>
         /// <param name="height"><see cref="Sprites.Sprite.Height"/></param>
-        /// <param name="renderType"><see cref="Enums.RenderType"/></param>
+        /// <param name="renderType"><see cref="RenderType"/></param>
         /// <param name="renderValues">Values required to instanciate a <see cref="Sprites.Sprite.Render"/> (filename, color, and so forth).</param>
         /// <param name="lifepoints"><see cref="Sprites.DamageableSprite.CurrentLifePoints"/></param>
         /// <returns><see cref="Sprites.Sprite.Id"/></returns>
         public int CreateRift(int screenId, double x, double y, double width, double height,
-            Enums.RenderType renderType, string[] renderValues, double lifepoints)
+            RenderType renderType, string[] renderValues, double lifepoints)
         {
-            if (!ExistsId("screen", screenId))
-            {
-                throw new ArgumentException(Messages.InvalidIdForInsertionExceptionMessage, nameof(screenId));
-            }
-            CheckInputDimensions(x, y, width, height);
+            // TODO : checks "lifepoints" argument.
 
-            int id = GetNextId("rift");
-
-            ExecutePreparedInsert("rift",
-                ToColumnsArray(true, "lifepoints"),
-                ToTypesArray(true, DbType.Double),
-                ToValuesArray(id, screenId, x, y, width, height, renderType, renderValues, lifepoints));
-
-            return id;
+            return CreateSpriteInScreen<Sprites.Rift>("rift", screenId, x, y, width, height, renderType, renderValues,
+                new Tuple<string, DbType, object>("lifepoints", DbType.Double, lifepoints));
         }
 
         /// <summary>
@@ -730,27 +710,15 @@ namespace RpeggiatorLib
         /// <param name="y"><see cref="Sprites.Sprite.Y"/></param>
         /// <param name="width"><see cref="Sprites.Sprite.Width"/></param>
         /// <param name="height"><see cref="Sprites.Sprite.Height"/></param>
-        /// <param name="renderType"><see cref="Enums.RenderType"/></param>
+        /// <param name="renderType"><see cref="RenderType"/></param>
         /// <param name="renderValues">Values required to instanciate a <see cref="Sprites.Sprite.Render"/> (filename, color, and so forth).</param>
         /// <param name="activated"><see cref="Sprites.Gate._defaultActivated"/></param>
         /// <returns><see cref="Sprites.Sprite.Id"/></returns>
         public int CreateGate(int screenId, double x, double y, double width, double height,
-            Enums.RenderType renderType, string[] renderValues, bool activated)
+            RenderType renderType, string[] renderValues, bool activated)
         {
-            if (!ExistsId("screen", screenId))
-            {
-                throw new ArgumentException(Messages.InvalidIdForInsertionExceptionMessage, nameof(screenId));
-            }
-            CheckInputDimensions(x, y, width, height);
-
-            int id = GetNextId("gate");
-
-            ExecutePreparedInsert("gate",
-                ToColumnsArray(true, "activated"),
-                ToTypesArray(true, DbType.Boolean),
-                ToValuesArray(id, screenId, x, y, width, height, renderType, renderValues, activated));
-
-            return id;
+            return CreateSpriteInScreen<Sprites.Gate>("gate", screenId, x, y, width, height, renderType, renderValues,
+                new Tuple<string, DbType, object>("activated", DbType.Int32, activated ? 1 : 0));
         }
 
         /// <summary>
@@ -766,22 +734,14 @@ namespace RpeggiatorLib
         /// <param name="timeBeforeDisapear">Duration, in milliseconds, before <see cref="Sprites.PickableItem.Disapear"/>.</param>
         /// <returns><see cref="Sprites.Sprite.Id"/></returns>
         public int CreatePickableItem(int screenId, double x, double y, double width, double height,
-            Enums.ItemType? itemType, int quantity, double? timeBeforeDisapear)
+            ItemType? itemType, int quantity, double? timeBeforeDisapear)
         {
-            if (!ExistsId("screen", screenId))
-            {
-                throw new ArgumentException(Messages.InvalidIdForInsertionExceptionMessage, nameof(screenId));
-            }
-            CheckInputDimensions(x, y, width, height);
+            // TODO : checks arguments.
 
-            int id = GetNextId("pickable_item");
-
-            ExecutePreparedInsert("pickable_item",
-                   ToColumnsArray(false, "item_type", "quantity", "time_before_disapear"),
-                   ToTypesArray(false, DbType.Int32, DbType.Int32, DbType.Double),
-                   ToValuesArray(id, screenId, x, y, width, height, null, null, (int?)itemType, quantity, timeBeforeDisapear));
-
-            return id;
+            return CreateSpriteInScreen<Sprites.PickableItem>("pickable_item", screenId, x, y, width, height, null, null,
+                new Tuple<string, DbType, object>("item_type", DbType.Int32, (int?)itemType),
+                new Tuple<string, DbType, object>("quantity", DbType.Int32, quantity),
+                new Tuple<string, DbType, object>("time_before_disapear", DbType.Double, timeBeforeDisapear));
         }
 
         /// <summary>
@@ -792,47 +752,29 @@ namespace RpeggiatorLib
         /// <param name="y"><see cref="Sprites.Sprite.Y"/></param>
         /// <param name="width"><see cref="Sprites.Sprite.Width"/></param>
         /// <param name="height"><see cref="Sprites.Sprite.Height"/></param>
-        /// <param name="renderType"><see cref="Enums.RenderType"/></param>
+        /// <param name="renderType"><see cref="RenderType"/></param>
         /// <param name="renderValues">Values required to instanciate a <see cref="Sprites.Sprite.Render"/> (filename, color, and so forth).</param>
         /// <param name="connectedScreenId"><see cref="Sprites.Door._connectedScreenId"/></param>
         /// <param name="keyId"><see cref="Sprites.Door._keyId"/></param>
-        /// <param name="lockedRenderType"><see cref="Enums.RenderType"/></param>
+        /// <param name="lockedRenderType"><see cref="RenderType"/></param>
         /// <param name="lockedRenderValues">Values required to instanciate a <see cref="Sprites.Door._renderLocked"/> (filename, color, and so forth).</param>
         /// <param name="playerGoThroughX"><see cref="Sprites.Door.PlayerGoThroughX"/></param>
         /// <param name="playerGoThroughY"><see cref="Sprites.Door.PlayerGoThroughY"/></param>
         /// <returns><see cref="Sprites.Sprite.Id"/></returns>
         public int CreateDoor(int screenId, double x, double y, double width, double height,
-            Enums.RenderType renderType, string[] renderValues,
+            RenderType renderType, string[] renderValues,
             int keyId, int connectedScreenId, double playerGoThroughX, double playerGoThroughY,
-            Enums.RenderType lockedRenderType, string[] lockedRenderValues)
+            RenderType lockedRenderType, string[] lockedRenderValues)
         {
-            if (!ExistsId("screen", screenId))
-            {
-                throw new ArgumentException(Messages.InvalidIdForInsertionExceptionMessage, nameof(screenId));
-            }
-            CheckInputDimensions(x, y, width, height);
+            // TODO : checks arguments.
 
-            int id = GetNextId("door");
-
-            List<string> otherColumns = new List<string>
-            {
-                "key_id", "connected_screen_id", "player_go_through_x", "player_go_through_y", "locked_render_type", "locked_render_value"
-            };
-            List<DbType> otherTypes = new List<DbType>
-            {
-                DbType.Int32, DbType.Int32, DbType.Double, DbType.Double, DbType.Int32, DbType.String
-            };
-            List<object> otherValues = new List<object>
-            {
-                keyId, connectedScreenId, playerGoThroughX, playerGoThroughY, (int)lockedRenderType, lockedRenderValues
-            };
-
-            ExecutePreparedInsert("door",
-                ToColumnsArray(true, otherColumns.ToArray()),
-                ToTypesArray(true, otherTypes.ToArray()),
-                ToValuesArray(id, screenId, x, y, width, height, renderType, renderValues, otherValues.ToArray()));
-
-            return id;
+            return CreateSpriteInScreen<Sprites.Door>("door", screenId, x, y, width, height, renderType, renderValues,
+                new Tuple<string, DbType, object>("key_id", DbType.Int32, (int?)keyId),
+                new Tuple<string, DbType, object>("connected_screen_id", DbType.Int32, connectedScreenId),
+                new Tuple<string, DbType, object>("player_go_through_x", DbType.Double, playerGoThroughX),
+                new Tuple<string, DbType, object>("player_go_through_y", DbType.Double, playerGoThroughY),
+                new Tuple<string, DbType, object>("locked_render_type", DbType.Int32, (int)lockedRenderType),
+                new Tuple<string, DbType, object>("locked_render_value", DbType.String, lockedRenderValues));
         }
 
         /// <summary>
@@ -843,27 +785,17 @@ namespace RpeggiatorLib
         /// <param name="y"><see cref="Sprites.Sprite.Y"/></param>
         /// <param name="width"><see cref="Sprites.Sprite.Width"/></param>
         /// <param name="height"><see cref="Sprites.Sprite.Height"/></param>
-        /// <param name="renderType"><see cref="Enums.RenderType"/></param>
+        /// <param name="renderType"><see cref="RenderType"/></param>
         /// <param name="renderValues">Values required to instanciate a <see cref="Sprites.Sprite.Render"/> (filename, color, and so forth).</param>
         /// <param name="floorType"><see cref="Sprites.Floor.FloorType"/></param>
         /// <returns><see cref="Sprites.Sprite.Id"/></returns>
         public int CreateFloor(int screenId, double x, double y, double width, double height,
-            Enums.RenderType renderType, string[] renderValues, Enums.FloorType floorType)
+            RenderType renderType, string[] renderValues, FloorType floorType)
         {
-            if (!ExistsId("screen", screenId))
-            {
-                throw new ArgumentException(Messages.InvalidIdForInsertionExceptionMessage, nameof(screenId));
-            }
-            CheckInputDimensions(x, y, width, height);
+            // TODO : checks "floorType" argument.
 
-            int id = GetNextId("floor");
-
-            ExecutePreparedInsert("floor",
-                ToColumnsArray(true, "floor_type"),
-                ToTypesArray(true, DbType.Int32),
-                ToValuesArray(id, screenId, x, y, width, height, renderType, renderValues, (int)floorType));
-
-            return id;
+            return CreateSpriteInScreen<Sprites.Floor>("floor", screenId, x, y, width, height, renderType, renderValues,
+                new Tuple<string, DbType, object>("floor_type", DbType.Int32, (int)floorType));
         }
 
         /// <summary>
@@ -874,27 +806,17 @@ namespace RpeggiatorLib
         /// <param name="y"><see cref="Sprites.Sprite.Y"/></param>
         /// <param name="width"><see cref="Sprites.Sprite.Width"/></param>
         /// <param name="height"><see cref="Sprites.Sprite.Height"/></param>
-        /// <param name="renderType"><see cref="Enums.RenderType"/></param>
+        /// <param name="renderType"><see cref="RenderType"/></param>
         /// <param name="renderValues">Values required to instanciate a <see cref="Sprites.Sprite.Render"/> (filename, color, and so forth).</param>
         /// <param name="screenIdEntrance"><see cref="Sprites.Pit.ScreenIdEntrance"/></param>
         /// <returns><see cref="Sprites.Sprite.Id"/></returns>
         public int CreatePit(int screenId, double x, double y, double width, double height,
-            Enums.RenderType renderType, string[] renderValues, int? screenIdEntrance)
+            RenderType renderType, string[] renderValues, int? screenIdEntrance)
         {
-            if (!ExistsId("screen", screenId))
-            {
-                throw new ArgumentException(Messages.InvalidIdForInsertionExceptionMessage, nameof(screenId));
-            }
-            CheckInputDimensions(x, y, width, height);
+            // TODO : checks "screenIdEntrance" argument.
 
-            int id = GetNextId("pit");
-
-            ExecutePreparedInsert("pit",
-                ToColumnsArray(true, "screen_id_entrance"),
-                ToTypesArray(true, DbType.Int32),
-                ToValuesArray(id, screenId, x, y, width, height, renderType, renderValues, screenIdEntrance));
-
-            return id;
+            return CreateSpriteInScreen<Sprites.Pit>("pit", screenId, x, y, width, height, renderType, renderValues,
+                new Tuple<string, DbType, object>("screen_id_entrance", DbType.Int32, screenIdEntrance));
         }
 
         /// <summary>
@@ -905,46 +827,28 @@ namespace RpeggiatorLib
         /// <param name="y"><see cref="Sprites.Sprite.Y"/></param>
         /// <param name="width"><see cref="Sprites.Sprite.Width"/></param>
         /// <param name="height"><see cref="Sprites.Sprite.Height"/></param>
-        /// <param name="renderType"><see cref="Enums.RenderType"/></param>
+        /// <param name="renderType"><see cref="RenderType"/></param>
         /// <param name="renderValues">Values required to instanciate a <see cref="Sprites.Sprite.Render"/> (filename, color, and so forth).</param>
         /// <param name="itemType"><see cref="Sprites.Chest._itemType"/></param>
         /// <param name="keyId"><see cref="Sprites.Chest._keyId"/></param>
-        /// <param name="openRenderType"><see cref="Enums.RenderType"/></param>
+        /// <param name="openRenderType"><see cref="RenderType"/></param>
         /// <param name="keyIdContainer"><see cref="Sprites.Chest._keyIdContainer"/></param>
         /// <param name="openRenderValues">Values required to instanciate a <see cref="Sprites.Chest._renderOpen"/> (filename, color, and so forth).</param>
         /// <param name="quantity"><see cref="Sprites.Chest._quantity"/></param>
         /// <returns><see cref="Sprites.Sprite.Id"/></returns>
         public int CreateChest(int screenId, double x, double y, double width, double height,
-            Enums.RenderType renderType, string[] renderValues,
-            Enums.ItemType? itemType, int quantity, int? keyId, int? keyIdContainer, Enums.RenderType openRenderType, string[] openRenderValues)
+            RenderType renderType, string[] renderValues, ItemType? itemType, int quantity, int? keyId, int? keyIdContainer,
+            RenderType openRenderType, string[] openRenderValues)
         {
-            if (!ExistsId("screen", screenId))
-            {
-                throw new ArgumentException(Messages.InvalidIdForInsertionExceptionMessage, nameof(screenId));
-            }
-            CheckInputDimensions(x, y, width, height);
+            // TODO : checks arguments.
 
-            int id = GetNextId("chest");
-
-            List<string> otherColumns = new List<string>
-            {
-                "item_type", "quantity", "key_id", "key_id_container", "open_render_type", "open_render_value"
-            };
-            List<DbType> otherTypes = new List<DbType>
-            {
-                DbType.Int32, DbType.Int32, DbType.Int32, DbType.Int32, DbType.Int32, DbType.String
-            };
-            List<object> otherValues = new List<object>
-            {
-                itemType.HasValue ? (int?)itemType.Value : null, quantity, keyId, keyIdContainer, (int)openRenderType, openRenderValues
-            };
-
-            ExecutePreparedInsert("chest",
-                ToColumnsArray(true, otherColumns.ToArray()),
-                ToTypesArray(true, otherTypes.ToArray()),
-                ToValuesArray(id, screenId, x, y, width, height, renderType, renderValues, otherValues.ToArray()));
-
-            return id;
+            return CreateSpriteInScreen<Sprites.Chest>("chest", screenId, x, y, width, height, renderType, renderValues,
+                new Tuple<string, DbType, object>("item_type", DbType.Int32, (int?)itemType),
+                new Tuple<string, DbType, object>("quantity", DbType.Int32, quantity),
+                new Tuple<string, DbType, object>("key_id", DbType.Int32, keyId),
+                new Tuple<string, DbType, object>("key_id_container", DbType.Int32, keyIdContainer),
+                new Tuple<string, DbType, object>("open_render_type", DbType.Int32, (int)openRenderType),
+                new Tuple<string, DbType, object>("open_render_value", DbType.String, openRenderValues));
         }
 
         /// <summary>
@@ -967,50 +871,32 @@ namespace RpeggiatorLib
         /// <remarks><see cref="Sprites.Sprite.Id"/></remarks>
         public int CreateEnemy(int screenId, double x, double y, double width, double height, double maximalLifePoints,
             double hitLifePointCost, double speed, double recoveryTime, string renderFilename, string renderRecoveryFilename,
-            Enums.Direction defaultDirection, Enums.ItemType? lootItemType, int lootQuantity)
+            Direction defaultDirection, ItemType? lootItemType, int lootQuantity)
         {
-            if (!ExistsId("screen", screenId))
-            {
-                throw new ArgumentException(Messages.InvalidIdForInsertionExceptionMessage, nameof(screenId));
-            }
-            CheckInputDimensions(x, y, width, height);
+            // TODO : checks arguments.
 
-            int id = GetNextId("enemy");
-
-            List<string> otherColumns = new List<string>
-            {
-                "maximal_life_points", "hit_life_point_cost", "speed", "recovery_time", "render_filename",
-                "render_recovery_filename", "default_direction", "loot_item_type", "loot_quantity"
-            };
-            List<DbType> otherTypes = new List<DbType>
-            {
-                DbType.Double, DbType.Double, DbType.Double, DbType.Double, DbType.String,
-                DbType.String, DbType.Int32, DbType.Int32, DbType.Int32
-            };
-            List<object> otherValues = new List<object>
-            {
-                maximalLifePoints, hitLifePointCost, speed, recoveryTime, renderFilename,
-                renderRecoveryFilename, (int)defaultDirection, (int?)lootItemType, lootQuantity, id
-            };
-
-            ExecutePreparedInsert("enemy",
-                ToColumnsArray(false, otherColumns.ToArray()),
-                ToTypesArray(false, otherTypes.ToArray()),
-                ToValuesArray(id, screenId, x, y, width, height, null, null, otherValues.ToArray()));
-
-            return id;
+            return CreateSpriteInScreen<Sprites.Enemy>("enemy", screenId, x, y, width, height, null, null,
+                new Tuple<string, DbType, object>("maximal_life_points", DbType.Double, maximalLifePoints),
+                new Tuple<string, DbType, object>("hit_life_point_cost", DbType.Double, hitLifePointCost),
+                new Tuple<string, DbType, object>("speed", DbType.Double, speed),
+                new Tuple<string, DbType, object>("recovery_time", DbType.Double, recoveryTime),
+                new Tuple<string, DbType, object>("render_filename", DbType.String, renderFilename),
+                new Tuple<string, DbType, object>("render_recovery_filename", DbType.String, renderRecoveryFilename),
+                new Tuple<string, DbType, object>("default_direction", DbType.Int32, (int)defaultDirection),
+                new Tuple<string, DbType, object>("loot_item_type", DbType.Int32, (int?)lootItemType),
+                new Tuple<string, DbType, object>("loot_quantity", DbType.Int32, lootQuantity));
         }
 
         /// <summary>
         /// Creates a <see cref="Sprites.Screen"/> in the database.
         /// </summary>
         /// <remarks><see cref="Sprites.Screen._neighboringScreens"/> must be set with <see cref="SetNeighboringScreens(int, int, int, int, int)"/>.</remarks>
-        /// <param name="renderType"><see cref="Enums.RenderType"/></param>
+        /// <param name="renderType"><see cref="RenderType"/></param>
         /// <param name="renderValues">Values required to instanciate a <see cref="Sprites.Sprite.Render"/> (filename, color, and so forth).</param>
         /// <param name="darknessOpacity"><see cref="Sprites.Screen.DarknessOpacity"/></param>
         /// <param name="floorType"><see cref="Sprites.Floor.FloorType"/></param>
         /// <returns><see cref="Sprites.Sprite.Id"/></returns>
-        public int CreateScreen(Enums.RenderType renderType, string[] renderValues, Enums.FloorType floorType, double darknessOpacity)
+        public int CreateScreen(RenderType renderType, string[] renderValues, FloorType floorType, double darknessOpacity)
         {
             int id = GetNextId("screen");
 
@@ -1020,8 +906,8 @@ namespace RpeggiatorLib
             List<DbType> typesList = ToTypesArray(true, DbType.Int32, DbType.Double, DbType.Int32,
                 DbType.Int32, DbType.Int32, DbType.Int32).ToList();
             typesList.RemoveAt(1);
-            List<Object> valuesList = ToValuesArray(id, 0, 0, 0, Constants.SCREEN_WIDTH, Constants.SCREEN_HEIGHT, renderType, renderValues, floorType,
-                darknessOpacity, 0, 0, 0, 0).ToList();
+            List<Object> valuesList = ToValuesArray(id, 0, 0, 0, Constants.SCREEN_WIDTH, Constants.SCREEN_HEIGHT, renderType, renderValues,
+                floorType, darknessOpacity, 0, 0, 0, 0).ToList();
             valuesList.RemoveAt(1);
 
             ExecutePreparedInsert("screen",
