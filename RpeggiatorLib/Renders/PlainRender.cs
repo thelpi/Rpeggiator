@@ -1,12 +1,12 @@
 ﻿using System.Windows.Media;
 
-namespace RpeggiatorLib.Render
+namespace RpeggiatorLib.Renders
 {
     /// <summary>
     /// Represents a <see cref="Sprites.Sprite"/> render by plain color.
     /// </summary>
-    /// <seealso cref="ISpriteRender"/>
-    public class PlainRender : ISpriteRender
+    /// <seealso cref="Render"/>
+    public class PlainRender : Render
     {
         // Color hexadecimal value.
         private string _hexColor;
@@ -23,7 +23,7 @@ namespace RpeggiatorLib.Render
         }
 
         /// <inheritdoc />
-        public Brush GetRenderBrush()
+        public override Brush GetRenderBrush()
         {
             if (_brush == null)
             {

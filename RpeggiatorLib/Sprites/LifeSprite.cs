@@ -1,6 +1,6 @@
 ﻿using System.Linq;
 using RpeggiatorLib.Enums;
-using RpeggiatorLib.Render;
+using RpeggiatorLib.Renders;
 
 namespace RpeggiatorLib.Sprites
 {
@@ -17,7 +17,7 @@ namespace RpeggiatorLib.Sprites
         // Recovery time, in milliseconds.
         private double _recoveryTime;
         // Render while recovering.
-        private ISpriteRender _renderRecovery;
+        private Render _renderRecovery;
 
         /// <summary>
         /// Maximal number of life points.
@@ -58,7 +58,7 @@ namespace RpeggiatorLib.Sprites
         /// </summary>
         public Direction Direction { get; protected set; }
         /// <inheritdoc />
-        public override ISpriteRender Render { get { return RecoveryRenderSwitch(); } }
+        public override Render Render { get { return RecoveryRenderSwitch(); } }
 
         /// <summary>
         /// Constructor.
@@ -158,10 +158,10 @@ namespace RpeggiatorLib.Sprites
         /// <summary>
         /// Creates an altenation between <see cref="Sprite._render"/> and <see cref="_renderRecovery"/> (or any render alternative).
         /// </summary>
-        /// <param name="alternativeRender">Optionnal; alternative <see cref="ISpriteRender"/> for <see cref="Sprite._render"/>.</param>
-        /// <param name="alternativeRecoveryRender">Optionnal; alternative <see cref="ISpriteRender"/> for <see cref="_renderRecovery"/>.</param>
-        /// <returns>Current <see cref="ISpriteRender"/>.</returns>
-        protected ISpriteRender RecoveryRenderSwitch(ISpriteRender alternativeRender = null, ISpriteRender alternativeRecoveryRender = null)
+        /// <param name="alternativeRender">Optionnal; alternative <see cref="Renders.Render"/> for <see cref="Sprite._render"/>.</param>
+        /// <param name="alternativeRecoveryRender">Optionnal; alternative <see cref="Renders.Render"/> for <see cref="_renderRecovery"/>.</param>
+        /// <returns>Current <see cref="Renders.Render"/>.</returns>
+        protected Render RecoveryRenderSwitch(Render alternativeRender = null, Render alternativeRecoveryRender = null)
         {
             alternativeRender = alternativeRender ?? _render;
             alternativeRecoveryRender = alternativeRecoveryRender ?? _renderRecovery;

@@ -136,12 +136,12 @@ namespace RpeggiatorLib
             {
                 #region First screen
 
-                int screenId1 = CreateScreen(0, 0, 800, 600, nameof(Render.PlainRender), new object[] { Tools.HexFromColor(SysColor.PapayaWhip) }, Enums.FloorType.Ground, 0);
-                CreatePermanentStructure(screenId1, 0, 300, 300, 50, nameof(Render.ImageMosaicRender), new object[] { "Tree" });
-                CreatePermanentStructure(screenId1, 100, 260, 50, 140, nameof(Render.ImageMosaicRender), new object[] { "Tree" });
-                CreateChest(screenId1, 400, 380, 40, 40, nameof(Render.ImageRender), new object[] { "Chest" }, null, 10, null, 1, nameof(Render.ImageRender), new object[] { "OpenChest" });
-                CreatePit(screenId1, 700, 100, 50, 50, nameof(Render.ImageRender), new object[] { "Pit" }, null);
-                CreateRift(screenId1, 700, 400, 20, 100, nameof(Render.PlainRender), new object[] { Tools.HexFromColor(SysColor.BurlyWood) }, 8);
+                int screenId1 = CreateScreen(0, 0, 800, 600, nameof(Renders.PlainRender), new object[] { Tools.HexFromColor(SysColor.PapayaWhip) }, Enums.FloorType.Ground, 0);
+                CreatePermanentStructure(screenId1, 0, 300, 300, 50, nameof(Renders.ImageMosaicRender), new object[] { "Tree" });
+                CreatePermanentStructure(screenId1, 100, 260, 50, 140, nameof(Renders.ImageMosaicRender), new object[] { "Tree" });
+                CreateChest(screenId1, 400, 380, 40, 40, nameof(Renders.ImageRender), new object[] { "Chest" }, null, 10, null, 1, nameof(Renders.ImageRender), new object[] { "OpenChest" });
+                CreatePit(screenId1, 700, 100, 50, 50, nameof(Renders.ImageRender), new object[] { "Pit" }, null);
+                CreateRift(screenId1, 700, 400, 20, 100, nameof(Renders.PlainRender), new object[] { Tools.HexFromColor(SysColor.BurlyWood) }, 8);
                 int enemyId = CreateEnemy(screenId1, 50, 50, 40, 40, 4, 5, 150, 0, "Enemy", "Enemy", Enums.Direction.Right, null, 10);
                 CreateEnemy(screenId1, 600, 50, 40, 40, 4, 5, 150, 0, "Enemy", "Enemy", Enums.Direction.Bottom, Enums.ItemType.Arrow, 1);
                 CreateEnemyPathSteps(enemyId, new Dictionary<int, System.Windows.Point>
@@ -156,44 +156,44 @@ namespace RpeggiatorLib
 
                 #region Left screen
 
-                int screenId2 = CreateScreen(0, 0, 800, 600, nameof(Render.PlainRender), new object[] { Tools.HexFromColor(SysColor.PapayaWhip) }, Enums.FloorType.Ground, 0.8);
-                CreatePermanentStructure(screenId2, 80, 80, 480, 40, nameof(Render.ImageMosaicRender), new object[] { "Tree" });
-                CreatePermanentStructure(screenId2, 80, 80, 40, 320, nameof(Render.ImageMosaicRender), new object[] { "Tree" });
-                CreatePermanentStructure(screenId2, 520, 80, 40, 320, nameof(Render.ImageMosaicRender), new object[] { "Tree" });
-                CreatePermanentStructure(screenId2, 80, 360, 300, 40, nameof(Render.ImageMosaicRender), new object[] { "Tree" });
-                CreatePermanentStructure(screenId2, 480, 360, 80, 40, nameof(Render.ImageMosaicRender), new object[] { "Tree" });
-                CreatePermanentStructure(screenId2, 400, 590, 80, 10, nameof(Render.ImageMosaicRender), new object[] { "Tree" });
-                int gateId = CreateGate(screenId2, 380, 360, 100, 40, nameof(Render.PlainRender), new object[] { Tools.HexFromColor(SysColor.Gainsboro) }, true);
-                CreateGateTrigger(screenId2, 570, 20, 20, 20, nameof(Render.ImageRender), new object[] { "TriggerOff" }, 5000, gateId, false, nameof(Render.ImageRender), new object[] { "TriggerOn" });
-                CreateGateTrigger(screenId2, 160, 220, 20, 20, nameof(Render.ImageRender), new object[] { "TriggerOff" }, 5000, gateId, false, nameof(Render.ImageRender), new object[] { "TriggerOn" });
+                int screenId2 = CreateScreen(0, 0, 800, 600, nameof(Renders.PlainRender), new object[] { Tools.HexFromColor(SysColor.PapayaWhip) }, Enums.FloorType.Ground, 0.8);
+                CreatePermanentStructure(screenId2, 80, 80, 480, 40, nameof(Renders.ImageMosaicRender), new object[] { "Tree" });
+                CreatePermanentStructure(screenId2, 80, 80, 40, 320, nameof(Renders.ImageMosaicRender), new object[] { "Tree" });
+                CreatePermanentStructure(screenId2, 520, 80, 40, 320, nameof(Renders.ImageMosaicRender), new object[] { "Tree" });
+                CreatePermanentStructure(screenId2, 80, 360, 300, 40, nameof(Renders.ImageMosaicRender), new object[] { "Tree" });
+                CreatePermanentStructure(screenId2, 480, 360, 80, 40, nameof(Renders.ImageMosaicRender), new object[] { "Tree" });
+                CreatePermanentStructure(screenId2, 400, 590, 80, 10, nameof(Renders.ImageMosaicRender), new object[] { "Tree" });
+                int gateId = CreateGate(screenId2, 380, 360, 100, 40, nameof(Renders.PlainRender), new object[] { Tools.HexFromColor(SysColor.Gainsboro) }, true);
+                CreateGateTrigger(screenId2, 570, 20, 20, 20, nameof(Renders.ImageRender), new object[] { "TriggerOff" }, 5000, gateId, false, nameof(Renders.ImageRender), new object[] { "TriggerOn" });
+                CreateGateTrigger(screenId2, 160, 220, 20, 20, nameof(Renders.ImageRender), new object[] { "TriggerOff" }, 5000, gateId, false, nameof(Renders.ImageRender), new object[] { "TriggerOn" });
                 CreatePickableItem(screenId2, 310, 230, Constants.Bomb.WIDTH, Constants.Bomb.HEIGHT, Enums.ItemType.Bomb, 10, null);
-                CreatePit(screenId2, 600, 400, 50, 50, nameof(Render.ImageRender), new object[] { "Pit" }, screenId1);
+                CreatePit(screenId2, 600, 400, 50, 50, nameof(Renders.ImageRender), new object[] { "Pit" }, screenId1);
                 
                 #endregion
 
                 #region Top screen
 
-                int screenId3 = CreateScreen(0, 0, 800, 600, nameof(Render.PlainRender), new object[] { Tools.HexFromColor(SysColor.PapayaWhip) }, Enums.FloorType.Ground, 0);
-                CreateFloor(screenId3, 150, 150, 300, 200, nameof(Render.PlainRender), new object[] { Tools.HexFromColor(SysColor.Blue) }, Enums.FloorType.Water);
-                CreateFloor(screenId3, 460, 150, 150, 200, nameof(Render.PlainRender), new object[] { Tools.HexFromColor(SysColor.Crimson) }, Enums.FloorType.Lava);
-                CreateFloor(screenId3, 200, 360, 400, 100, nameof(Render.PlainRender), new object[] { Tools.HexFromColor(SysColor.Azure) }, Enums.FloorType.Ice);
-                CreatePermanentStructure(screenId3, 0, 0, 800, 20, nameof(Render.ImageMosaicRender), new object[] { "Tree" });
-                CreatePermanentStructure(screenId3, 0, 20, 20, 560, nameof(Render.ImageMosaicRender), new object[] { "Tree" });
-                CreatePermanentStructure(screenId3, 780, 20, 20, 560, nameof(Render.ImageMosaicRender), new object[] { "Tree" });
-                CreatePermanentStructure(screenId3, 0, 580, 400, 20, nameof(Render.ImageMosaicRender), new object[] { "Tree" });
-                CreatePermanentStructure(screenId3, 480, 580, 320, 20, nameof(Render.ImageMosaicRender), new object[] { "Tree" });
-                CreateDoor(screenId3, 400, 580, 80, 20, nameof(Render.ImageRender), new object[] { "Door" }, 1, screenId1, 400, 20, nameof(Render.ImageRender), new object[] { "DoorLocked" });
+                int screenId3 = CreateScreen(0, 0, 800, 600, nameof(Renders.PlainRender), new object[] { Tools.HexFromColor(SysColor.PapayaWhip) }, Enums.FloorType.Ground, 0);
+                CreateFloor(screenId3, 150, 150, 300, 200, nameof(Renders.PlainRender), new object[] { Tools.HexFromColor(SysColor.Blue) }, Enums.FloorType.Water);
+                CreateFloor(screenId3, 460, 150, 150, 200, nameof(Renders.PlainRender), new object[] { Tools.HexFromColor(SysColor.Crimson) }, Enums.FloorType.Lava);
+                CreateFloor(screenId3, 200, 360, 400, 100, nameof(Renders.PlainRender), new object[] { Tools.HexFromColor(SysColor.Azure) }, Enums.FloorType.Ice);
+                CreatePermanentStructure(screenId3, 0, 0, 800, 20, nameof(Renders.ImageMosaicRender), new object[] { "Tree" });
+                CreatePermanentStructure(screenId3, 0, 20, 20, 560, nameof(Renders.ImageMosaicRender), new object[] { "Tree" });
+                CreatePermanentStructure(screenId3, 780, 20, 20, 560, nameof(Renders.ImageMosaicRender), new object[] { "Tree" });
+                CreatePermanentStructure(screenId3, 0, 580, 400, 20, nameof(Renders.ImageMosaicRender), new object[] { "Tree" });
+                CreatePermanentStructure(screenId3, 480, 580, 320, 20, nameof(Renders.ImageMosaicRender), new object[] { "Tree" });
+                CreateDoor(screenId3, 400, 580, 80, 20, nameof(Renders.ImageRender), new object[] { "Door" }, 1, screenId1, 400, 20, nameof(Renders.ImageRender), new object[] { "DoorLocked" });
                 
                 #endregion
 
                 #region Right screen
 
-                int screenId4 = CreateScreen(0, 0, 800, 600, nameof(Render.PlainRender), new object[] { Tools.HexFromColor(SysColor.PapayaWhip) }, Enums.FloorType.Ground, 0);
-                CreatePermanentStructure(screenId4, 166, 49, 495, 50, nameof(Render.ImageMosaicRender), new object[] { "Tree" });
-                CreatePermanentStructure(screenId4, 63, 50, 49, 194, nameof(Render.ImageMosaicRender), new object[] { "Tree" });
-                CreatePermanentStructure(screenId4, 629, 236, 42, 284, nameof(Render.ImageMosaicRender), new object[] { "Tree" });
-                CreatePermanentStructure(screenId4, 63, 327, 434, 61, nameof(Render.ImageMosaicRender), new object[] { "Tree" });
-                CreatePermanentStructure(screenId4, 69, 469, 407, 56, nameof(Render.ImageMosaicRender), new object[] { "Tree" });
+                int screenId4 = CreateScreen(0, 0, 800, 600, nameof(Renders.PlainRender), new object[] { Tools.HexFromColor(SysColor.PapayaWhip) }, Enums.FloorType.Ground, 0);
+                CreatePermanentStructure(screenId4, 166, 49, 495, 50, nameof(Renders.ImageMosaicRender), new object[] { "Tree" });
+                CreatePermanentStructure(screenId4, 63, 50, 49, 194, nameof(Renders.ImageMosaicRender), new object[] { "Tree" });
+                CreatePermanentStructure(screenId4, 629, 236, 42, 284, nameof(Renders.ImageMosaicRender), new object[] { "Tree" });
+                CreatePermanentStructure(screenId4, 63, 327, 434, 61, nameof(Renders.ImageMosaicRender), new object[] { "Tree" });
+                CreatePermanentStructure(screenId4, 69, 469, 407, 56, nameof(Renders.ImageMosaicRender), new object[] { "Tree" });
 
                 #endregion
 
@@ -203,7 +203,7 @@ namespace RpeggiatorLib
                 SetNeighboringScreens(screenId4, screenId1, screenId1, screenId1, screenId1);
 
                 // Screen ID 3 is required to create this door.
-                CreateDoor(screenId1, 400, 0, 80, 20, nameof(Render.ImageRender), new object[] { "Door" }, 1, screenId3, 400, 540, nameof(Render.ImageRender), new object[] { "DoorLocked" });
+                CreateDoor(screenId1, 400, 0, 80, 20, nameof(Renders.ImageRender), new object[] { "Door" }, 1, screenId3, 400, 540, nameof(Renders.ImageRender), new object[] { "DoorLocked" });
             }
         }
 

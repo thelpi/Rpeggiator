@@ -19,8 +19,8 @@
         /// <param name="y"><see cref="Sprite.Y"/></param>
         /// <param name="height"><see cref="Sprite.Height"/></param>
         /// <param name="width"><see cref="Sprite.Width"/></param>
-        /// <param name="renderType"><see cref="Render.ISpriteRender"/> subtype name.</param>
-        /// <param name="renderProperties">Datas required to initialize the <see cref="Render.ISpriteRender"/>.</param>
+        /// <param name="renderType"><see cref="Renders.Render"/> subtype name.</param>
+        /// <param name="renderProperties">Datas required to initialize the <see cref="Renders.Render"/>.</param>
         protected ActionnedItem(int id, double x, double y, double width, double height, string renderType, params object[] renderProperties)
             : base(id, x, y, width, height, renderType, renderProperties)
         {

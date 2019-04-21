@@ -1,5 +1,5 @@
 ﻿using RpeggiatorLib.Enums;
-using RpeggiatorLib.Render;
+using RpeggiatorLib.Renders;
 
 namespace RpeggiatorLib.Sprites
 {

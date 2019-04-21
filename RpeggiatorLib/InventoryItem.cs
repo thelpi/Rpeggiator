@@ -1,5 +1,5 @@
 ﻿using RpeggiatorLib.Enums;
-using RpeggiatorLib.Render;
+using RpeggiatorLib.Renders;
 
 namespace RpeggiatorLib
 {
@@ -30,9 +30,9 @@ namespace RpeggiatorLib
             }
         }
         /// <summary>
-        /// <see cref="ISpriteRender"/>
+        /// <see cref="Renders.Render"/>
         /// </summary>
-        public ISpriteRender Render { get; private set; }
+        public Render Render { get; private set; }
 
         /// <summary>
         /// Constructor.

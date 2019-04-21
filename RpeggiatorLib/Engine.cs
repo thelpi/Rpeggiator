@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using RpeggiatorLib.Sprites;
+using RpeggiatorLib.Renders;
 
 namespace RpeggiatorLib
 {
@@ -85,13 +86,13 @@ namespace RpeggiatorLib
             }
         }
         /// <summary>
-        /// Gets the <see cref="Render.ISpriteRender"/> for inventory coins.
+        /// Gets the <see cref="Render.Render"/> for inventory coins.
         /// </summary>
-        public Render.ISpriteRender CoinMenuRender { get { return Render.ImageRender.CoinMenuRender(); } }
+        public Render CoinMenuRender { get { return ImageRender.CoinMenuRender(); } }
         /// <summary>
-        /// Gets the <see cref="Render.ISpriteRender"/> for inventory keyring.
+        /// Gets the <see cref="Render.Render"/> for inventory keyring.
         /// </summary>
-        public Render.ISpriteRender KeyringMenuRender { get { return Render.ImageRender.KeyringMenuRender(); } }
+        public Render KeyringMenuRender { get { return ImageRender.KeyringMenuRender(); } }
 
         // Private constructor.
         private Engine(int screenId)

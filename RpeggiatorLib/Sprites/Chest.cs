@@ -1,5 +1,5 @@
 ﻿using System.Linq;
-using RpeggiatorLib.Render;
+using RpeggiatorLib.Renders;
 
 namespace RpeggiatorLib.Sprites
 {
@@ -17,7 +17,7 @@ namespace RpeggiatorLib.Sprites
         // Optionnal key identifier inside the chest; in that case, replace any value of "_itemType".
         private int? _keyIdContainer;
         // Render after opening the chest.
-        private ISpriteRender _renderOpen;
+        private Render _renderOpen;
 
         /// <summary>
         /// Indicates if the chest has been open.
@@ -26,7 +26,7 @@ namespace RpeggiatorLib.Sprites
         /// <summary>
         /// The render, which changes regarding if the chest has been opened or not.
         /// </summary>
-        public override ISpriteRender Render { get { return IsOpen ? _renderOpen : _render; } }
+        public override Render Render { get { return IsOpen ? _renderOpen : _render; } }
 
         /// <summary>
         /// Constructor.
@@ -40,8 +40,8 @@ namespace RpeggiatorLib.Sprites
         /// <param name="quantity"><see cref="_quantity"/></param>
         /// <param name="keyId"><see cref="_keyId"/></param>
         /// <param name="keyIdContainer"><see cref="_keyIdContainer"/></param>
-        /// <param name="renderType"><see cref="ISpriteRender"/> subtype name.</param>
-        /// <param name="renderProperties">Datas required to initialize the <see cref="ISpriteRender"/>.</param>
+        /// <param name="renderType"><see cref="Renders.Render"/> subtype name.</param>
+        /// <param name="renderProperties">Datas required to initialize the <see cref="Renders.Render"/>.</param>
         /// <param name="openRenderType"><see cref="_renderOpen"/> subtype name.</param>
         /// <param name="openRenderProperties">Datas required to initialize <see cref="_renderOpen"/>.</param>
         internal Chest(int id, double x, double y, double width, double height,

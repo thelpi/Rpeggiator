@@ -1,4 +1,4 @@
-﻿using RpeggiatorLib.Render;
+﻿using RpeggiatorLib.Renders;
 
 namespace RpeggiatorLib.Sprites
 {
@@ -8,7 +8,7 @@ namespace RpeggiatorLib.Sprites
     public class GateTrigger : FloorTrigger
     {
         // Render when the ttrigger is ON.
-        private ISpriteRender _renderOn;
+        private Render _renderOn;
 
         /// <summary>
         /// Indicates the gate's identifier linked to this trigger in the <see cref="Gate"/> collection of <see cref="Engine"/>.
@@ -19,7 +19,7 @@ namespace RpeggiatorLib.Sprites
         /// </summary>
         public bool AppearOnActivation { get; private set; }
         /// <inheritdoc />
-        public override ISpriteRender Render { get { return IsActivated ? _renderOn : _render; } }
+        public override Render Render { get { return IsActivated ? _renderOn : _render; } }
 
         /// <summary>
         /// Constructor.
@@ -32,8 +32,8 @@ namespace RpeggiatorLib.Sprites
         /// <param name="actionDuration"><see cref="FloorTrigger._actionDuration"/></param>
         /// <param name="gateId"><see cref="GateId"/></param>
         /// <param name="appearOnActivation"><see cref="AppearOnActivation"/></param>
-        /// <param name="renderType"><see cref="ISpriteRender"/> subtype name.</param>
-        /// <param name="renderProperties">Datas required to initialize the <see cref="ISpriteRender"/>.</param>
+        /// <param name="renderType"><see cref="Renders.Render"/> subtype name.</param>
+        /// <param name="renderProperties">Datas required to initialize the <see cref="Renders.Render"/>.</param>
         /// <param name="onRenderType"><see cref="_renderOn"/> subtype name.</param>
         /// <param name="onRenderProperties">Datas required to initialize <see cref="_renderOn"/>.</param>
         internal GateTrigger(int id, double x, double y, double width, double height,

@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using RpeggiatorLib.Enums;
-using RpeggiatorLib.Render;
+using RpeggiatorLib.Renders;
 
 namespace RpeggiatorLib.Sprites
 {
@@ -11,9 +11,9 @@ namespace RpeggiatorLib.Sprites
     public abstract class Sprite
     {
         /// <summary>
-        /// Default <see cref="ISpriteRender"/>.
+        /// Default <see cref="Renders.Render"/>.
         /// </summary>
-        protected ISpriteRender _render;
+        protected Render _render;
 
         /// <summary>
         /// X
@@ -38,7 +38,7 @@ namespace RpeggiatorLib.Sprites
         /// <summary>
         /// Overridden; <see cref="_render"/>
         /// </summary>
-        public virtual ISpriteRender Render { get { return _render; } }
+        public virtual Render Render { get { return _render; } }
         /// <summary>
         /// Unique identifier.
         /// </summary>
@@ -73,8 +73,8 @@ namespace RpeggiatorLib.Sprites
         /// <param name="y"><see cref="Y"/></param>
         /// <param name="width"><see cref="Width"/></param>
         /// <param name="height"><see cref="Height"/></param>
-        /// <param name="renderType"><see cref="ISpriteRender"/> subtype name.</param>
-        /// <param name="renderProperties">Datas required to initialize the <see cref="ISpriteRender"/>.</param>
+        /// <param name="renderType"><see cref="Renders.Render"/> subtype name.</param>
+        /// <param name="renderProperties">Datas required to initialize the <see cref="Renders.Render"/>.</param>
         protected Sprite(int id, double x, double y, double width, double height, string renderType, object[] renderProperties)
         {
             X = x;
@@ -87,12 +87,12 @@ namespace RpeggiatorLib.Sprites
         }
 
         /// <summary>
-        /// Computes and gets a <see cref="ISpriteRender"/> from given properties.
+        /// Computes and gets a <see cref="Renders.Render"/> from given properties.
         /// </summary>
-        /// <param name="renderType"><see cref="ISpriteRender"/> subtype name.</param>
-        /// <param name="renderProperties">Datas required to initialize the <see cref="ISpriteRender"/>.</param>
-        /// <returns><see cref="ISpriteRender"/></returns>
-        protected ISpriteRender GetRenderFromValues(string renderType, params object[] renderProperties)
+        /// <param name="renderType"><see cref="Renders.Render"/> subtype name.</param>
+        /// <param name="renderProperties">Datas required to initialize the <see cref="Renders.Render"/>.</param>
+        /// <returns><see cref="Renders.Render"/></returns>
+        protected Render GetRenderFromValues(string renderType, params object[] renderProperties)
         {
             switch (renderType)
             {

@@ -1,5 +1,5 @@
 ﻿using System.Linq;
-using RpeggiatorLib.Render;
+using RpeggiatorLib.Renders;
 
 namespace RpeggiatorLib.Sprites
 {
@@ -14,7 +14,7 @@ namespace RpeggiatorLib.Sprites
         // The screen identifier this door is connected.
         private int _connectedScreenId;
         // Render when locked.
-        private ISpriteRender _renderLocked;
+        private Render _renderLocked;
 
         /// <summary>
         /// The <see cref="Player"/> X-axis position when he goes through the door and changes screen.
@@ -31,7 +31,7 @@ namespace RpeggiatorLib.Sprites
         /// <summary>
         /// The render, which changes regarding if the door is locked or not.
         /// </summary>
-        public override ISpriteRender Render { get { return Locked ? _renderLocked : _render; } }
+        public override Render Render { get { return Locked ? _renderLocked : _render; } }
 
         /// <summary>
         /// Constructor.
@@ -47,8 +47,8 @@ namespace RpeggiatorLib.Sprites
         /// <param name="playerGoThroughY"><see cref="PlayerGoThroughY"/></param>
         /// <param name="lockedRenderType"><see cref="_renderLocked"/> subtype name.</param>
         /// <param name="lockedRenderProperties">Datas required to initialize <see cref="_renderLocked"/>.</param>
-        /// <param name="renderType"><see cref="ISpriteRender"/> subtype name.</param>
-        /// <param name="renderProperties">Datas required to initialize the <see cref="ISpriteRender"/>.</param>
+        /// <param name="renderType"><see cref="Renders.Render"/> subtype name.</param>
+        /// <param name="renderProperties">Datas required to initialize the <see cref="Renders.Render"/>.</param>
         internal Door(int id, double x, double y, double width, double height, int? keyId, int connectedScreenId,
             double playerGoThroughX, double playerGoThroughY, string lockedRenderType, object[] lockedRenderProperties,
             string renderType, object[] renderProperties)

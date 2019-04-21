@@ -2,7 +2,7 @@
 using System.Linq;
 using RpeggiatorLib.Enums;
 using RpeggiatorLib.Exceptions;
-using RpeggiatorLib.Render;
+using RpeggiatorLib.Renders;
 
 namespace RpeggiatorLib.Sprites
 {
@@ -21,9 +21,9 @@ namespace RpeggiatorLib.Sprites
         // Lifetime manager for the current hit with the current weapon.
         private Elapser _hitElapser;
         // Render while holding a shield.
-        private ISpriteRender _renderShield;
+        private Render _renderShield;
         // Render while recovering and holding a shield.
-        private ISpriteRender _renderRecoveryShield;
+        private Render _renderRecoveryShield;
 
         /// <summary>
         /// When coming into a new screen, indicates the direction relative to the former screen.
@@ -42,7 +42,7 @@ namespace RpeggiatorLib.Sprites
         /// </summary>
         public SwordHit SwordHitSprite { get; private set; }
         /// <inheritdoc />
-        public override ISpriteRender Render
+        public override Render Render
         {
             get
             {

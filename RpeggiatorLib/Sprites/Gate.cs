@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using RpeggiatorLib.Render;
+using RpeggiatorLib.Renders;
 
 namespace RpeggiatorLib.Sprites
 {
@@ -29,8 +29,8 @@ namespace RpeggiatorLib.Sprites
         /// <param name="width"><see cref="Sprite.Width"/></param>
         /// <param name="height"><see cref="Sprite.Height"/></param>
         /// <param name="activated"><see cref="Activated"/></param>
-        /// <param name="renderType"><see cref="ISpriteRender"/> subtype name.</param>
-        /// <param name="renderProperties">Datas required to initialize the <see cref="ISpriteRender"/>.</param>
+        /// <param name="renderType"><see cref="Render.Render"/> subtype name.</param>
+        /// <param name="renderProperties">Datas required to initialize the <see cref="Render.Render"/>.</param>
         internal Gate(int id, double x, double y, double width, double height, bool activated, string renderType, object[] renderProperties)
             : base(id, x, y, width, height, renderType, renderProperties)
         {

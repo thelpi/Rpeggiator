@@ -103,8 +103,8 @@ namespace RpeggiatorLib.Sprites
         /// <param name="height"><see cref="Sprite.Height"/></param>
         /// <param name="floorType"><see cref="Floor.FloorType"/></param>
         /// <param name="darknessOpacity"><see cref="DarknessOpacity"/></param>
-        /// <param name="renderType"><see cref="Render.ISpriteRender"/> subtype name.</param>
-        /// <param name="renderProperties">Datas required to initialize the <see cref="Render.ISpriteRender"/>.</param>
+        /// <param name="renderType"><see cref="Renders.Render"/> subtype name.</param>
+        /// <param name="renderProperties">Datas required to initialize the <see cref="Renders.Render"/>.</param>
         /// <param name="chests"><see cref="_chests"/></param>
         /// <param name="doors"><see cref="_doors"/></param>
         /// <param name="enemies"><see cref="_enemies"/></param>

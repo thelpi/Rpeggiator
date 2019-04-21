@@ -1,15 +1,14 @@
 ﻿using System.IO;
-using System.Reflection;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 
-namespace RpeggiatorLib.Render
+namespace RpeggiatorLib.Renders
 {
     /// <summary>
     /// Represents a <see cref="Sprites.Sprite"/> render using a bitmap image.
     /// </summary>
-    /// <seealso cref="ISpriteRender"/>
-    public class ImageRender : ISpriteRender
+    /// <seealso cref="Render"/>
+    public class ImageRender : Render
     {
         // Instance specific to coins in the menu.
         private static ImageRender _coinMenuRender = null;
@@ -31,7 +30,7 @@ namespace RpeggiatorLib.Render
         }
 
         /// <inheritdoc />
-        public virtual Brush GetRenderBrush()
+        public override Brush GetRenderBrush()
         {
             if (_brush == null)
             {

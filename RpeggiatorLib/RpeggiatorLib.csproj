@@ -105,11 +105,12 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
-    <Compile Include="Render\ImageDirectionRender.cs" />
-    <Compile Include="Render\ImageMosaicRender.cs" />
-    <Compile Include="Render\ImageRender.cs" />
-    <Compile Include="Render\ISpriteRender.cs" />
-    <Compile Include="Render\PlainRender.cs" />
+    <Compile Include="Renders\ImageAnimatedRender.cs" />
+    <Compile Include="Renders\ImageDirectionRender.cs" />
+    <Compile Include="Renders\ImageMosaicRender.cs" />
+    <Compile Include="Renders\ImageRender.cs" />
+    <Compile Include="Renders\Render.cs" />
+    <Compile Include="Renders\PlainRender.cs" />
     <Compile Include="Sprites\ActionnedArrow.cs" />
     <Compile Include="Sprites\ActionnedBomb.cs" />
     <Compile Include="Sprites\ActionnedItem.cs" />

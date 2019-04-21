@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Windows.Media;
 
-namespace RpeggiatorLib.Render
+namespace RpeggiatorLib.Renders
 {
     /// <summary>
     /// Represents a <see cref="Sprites.Sprite"/> render using a bitmap image for each direction.

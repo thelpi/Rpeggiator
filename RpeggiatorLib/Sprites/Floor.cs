@@ -25,8 +25,8 @@ namespace RpeggiatorLib.Sprites
         /// <param name="width"><see cref="Sprite.Width"/></param>
         /// <param name="height"><see cref="Sprite.Height"/></param>
         /// <param name="floorType"><see cref="FloorType"/></param>
-        /// <param name="renderType"><see cref="Render.ISpriteRender"/> subtype name.</param>
-        /// <param name="renderProperties">Datas required to initialize the <see cref="Render.ISpriteRender"/>.</param>
+        /// <param name="renderType"><see cref="Renders.Render"/> subtype name.</param>
+        /// <param name="renderProperties">Datas required to initialize the <see cref="Renders.Render"/>.</param>
         internal Floor(int id, double x, double y, double width, double height,
             FloorType floorType, string renderType, object[] renderProperties)
             : base(id, x, y, width, height, renderType, renderProperties)
