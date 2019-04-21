@@ -12,9 +12,9 @@ namespace RpeggiatorLib.Sprites
         // The optionnal key identifier to unlock the door.
         private int? _keyId;
         // The screen identifier this door is connected.
-        private int _connectedScreenId;
+        private readonly int _connectedScreenId;
         // Render when locked.
-        private Render _renderLocked;
+        private readonly Render _renderLocked;
 
         /// <summary>
         /// The <see cref="Player"/> X-axis position when he goes through the door and changes screen.
@@ -45,13 +45,13 @@ namespace RpeggiatorLib.Sprites
         /// <param name="connectedScreenId"><see cref="_connectedScreenId"/></param>
         /// <param name="playerGoThroughX"><see cref="PlayerGoThroughX"/></param>
         /// <param name="playerGoThroughY"><see cref="PlayerGoThroughY"/></param>
-        /// <param name="lockedRenderType"><see cref="_renderLocked"/> subtype name.</param>
+        /// <param name="lockedRenderType"><see cref="Enums.RenderType"/></param>
         /// <param name="lockedRenderProperties">Datas required to initialize <see cref="_renderLocked"/>.</param>
-        /// <param name="renderType"><see cref="Renders.Render"/> subtype name.</param>
+        /// <param name="renderType"><see cref="Enums.RenderType"/></param>
         /// <param name="renderProperties">Datas required to initialize the <see cref="Renders.Render"/>.</param>
         internal Door(int id, double x, double y, double width, double height, int? keyId, int connectedScreenId,
-            double playerGoThroughX, double playerGoThroughY, string lockedRenderType, object[] lockedRenderProperties,
-            string renderType, object[] renderProperties)
+            double playerGoThroughX, double playerGoThroughY, Enums.RenderType lockedRenderType, object[] lockedRenderProperties,
+            Enums.RenderType renderType, object[] renderProperties)
             : base(id, x, y, width, height, renderType, renderProperties)
         {
             _keyId = keyId;

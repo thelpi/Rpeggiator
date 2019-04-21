@@ -100,7 +100,7 @@ namespace RpeggiatorLib
 
                             s = new Sprites.Screen(reader.GetInt32("id"), reader.GetDouble("x"), reader.GetDouble("y"),
                                 reader.GetDouble("width"), reader.GetDouble("height"), (Enums.FloorType)reader.GetInt32("floor_type"),
-                                reader.GetDouble("darkness_opacity"), reader.GetString("render_type"),
+                                reader.GetDouble("darkness_opacity"), (Enums.RenderType)reader.GetInt32("render_type"),
                                 GetRenderPropertiesForCurrentReaderRow(reader), permanentStructures, doors, floors, enemies,
                                 gateTriggers, gates, rifts, pits, chests, pickableItems, neighboringScreens);
                         }
@@ -448,8 +448,8 @@ namespace RpeggiatorLib
                 while (reader.Read())
                 {
                     sprites.Add(new Sprites.PermanentStructure(
-                        reader.GetInt32("id"), reader.GetDouble("x"), reader.GetDouble("y"), reader.GetDouble("width"),
-                        reader.GetDouble("height"), reader.GetString("render_type"), GetRenderPropertiesForCurrentReaderRow(reader)));
+                        reader.GetInt32("id"), reader.GetDouble("x"), reader.GetDouble("y"), reader.GetDouble("width"), reader.GetDouble("height"),
+                        (Enums.RenderType)reader.GetInt32("render_type"), GetRenderPropertiesForCurrentReaderRow(reader)));
                 }
             }
 
@@ -478,8 +478,8 @@ namespace RpeggiatorLib
                         reader.GetInt32("id"), reader.GetDouble("x"), reader.GetDouble("y"), reader.GetDouble("width"),
                         reader.GetDouble("height"), reader.GetNullValue<int>("key_id"), reader.GetInt32("connected_screen_id"),
                         reader.GetDouble("player_go_through_x"), reader.GetDouble("player_go_through_y"),
-                        reader.GetString("locked_render_type"), GetRenderPropertiesForCurrentReaderRow(reader, "locked_render_value"),
-                        reader.GetString("render_type"), GetRenderPropertiesForCurrentReaderRow(reader)));
+                        (Enums.RenderType)reader.GetInt32("locked_render_type"), GetRenderPropertiesForCurrentReaderRow(reader, "locked_render_value"),
+                        (Enums.RenderType)reader.GetInt32("render_type"), GetRenderPropertiesForCurrentReaderRow(reader)));
                 }
             }
 
@@ -508,8 +508,8 @@ namespace RpeggiatorLib
                     sprites.Add(new Sprites.Chest(reader.GetInt32("id"), reader.GetDouble("x"), reader.GetDouble("y"),
                         reader.GetDouble("width"), reader.GetDouble("height"), (Enums.ItemType?)reader.GetNullValue<int>("item_type"),
                         reader.GetInt32("quantity"), reader.GetNullValue<int>("key_id"), reader.GetNullValue<int>("key_id_container"),
-                        reader.GetString("render_type"), GetRenderPropertiesForCurrentReaderRow(reader),
-                        reader.GetString("open_render_type"), GetRenderPropertiesForCurrentReaderRow(reader, "open_render_value")));
+                        (Enums.RenderType)reader.GetInt32("render_type"), GetRenderPropertiesForCurrentReaderRow(reader),
+                        (Enums.RenderType)reader.GetInt32("open_render_type"), GetRenderPropertiesForCurrentReaderRow(reader, "open_render_value")));
                 }
             }
 
@@ -586,7 +586,7 @@ namespace RpeggiatorLib
                 {
                     sprites.Add(new Sprites.Pit(reader.GetInt32("id"), reader.GetDouble("x"), reader.GetDouble("y"),
                         reader.GetDouble("width"), reader.GetDouble("height"), reader.GetNullValue<int>("screen_id_entrance"),
-                        reader.GetString("render_type"), GetRenderPropertiesForCurrentReaderRow(reader)));
+                        (Enums.RenderType)reader.GetInt32("render_type"), GetRenderPropertiesForCurrentReaderRow(reader)));
                 }
             }
 
@@ -608,7 +608,7 @@ namespace RpeggiatorLib
                 {
                     sprites.Add(new Sprites.Floor(reader.GetInt32("id"), reader.GetDouble("x"), reader.GetDouble("y"),
                         reader.GetDouble("width"), reader.GetDouble("height"), (Enums.FloorType)reader.GetInt32("floor_type"),
-                        reader.GetString("render_type"), GetRenderPropertiesForCurrentReaderRow(reader)));
+                        (Enums.RenderType)reader.GetInt32("render_type"), GetRenderPropertiesForCurrentReaderRow(reader)));
                 }
             }
 
@@ -653,7 +653,7 @@ namespace RpeggiatorLib
                 {
                     sprites.Add(new Sprites.Gate(reader.GetInt32("id"), reader.GetDouble("x"), reader.GetDouble("y"), +
                         reader.GetDouble("width"), reader.GetDouble("height"), reader.GetInt32("activated") > 0,
-                        reader.GetString("render_type"), GetRenderPropertiesForCurrentReaderRow(reader)));
+                        (Enums.RenderType)reader.GetInt32("render_type"), GetRenderPropertiesForCurrentReaderRow(reader)));
                 }
             }
 
@@ -675,7 +675,7 @@ namespace RpeggiatorLib
                 {
                     sprites.Add(new Sprites.Rift(reader.GetInt32("id"), reader.GetDouble("x"), reader.GetDouble("y"),
                         reader.GetDouble("width"), reader.GetDouble("height"), reader.GetDouble("lifepoints"),
-                        reader.GetString("render_type"), GetRenderPropertiesForCurrentReaderRow(reader)));
+                        (Enums.RenderType)reader.GetInt32("render_type"), GetRenderPropertiesForCurrentReaderRow(reader)));
                 }
             }
 
@@ -704,8 +704,8 @@ namespace RpeggiatorLib
                     sprites.Add(new Sprites.GateTrigger(
                         reader.GetInt32("id"), reader.GetDouble("x"), reader.GetDouble("y"), reader.GetDouble("width"),
                         reader.GetDouble("height"), reader.GetDouble("action_duration"), reader.GetInt32("gate_id"),
-                        reader.GetInt32("appear_on_activation") > 0, reader.GetString("render_type"),
-                        GetRenderPropertiesForCurrentReaderRow(reader), reader.GetString("on_render_type"),
+                        reader.GetInt32("appear_on_activation") > 0, (Enums.RenderType)reader.GetInt32("render_type"),
+                        GetRenderPropertiesForCurrentReaderRow(reader), (Enums.RenderType)reader.GetInt32("on_render_type"),
                         GetRenderPropertiesForCurrentReaderRow(reader, "on_render_value")));
                 }
             }

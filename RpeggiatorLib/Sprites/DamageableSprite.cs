@@ -27,10 +27,10 @@
         /// <param name="width"><see cref="Sprite.Width"/></param>
         /// <param name="height"><see cref="Sprite.Height"/></param>
         /// <param name="lifepoints"><see cref="CurrentLifePoints"/></param>
-        /// <param name="renderType"><see cref="Renders.Render"/> subtype name.</param>
+        /// <param name="renderType"><see cref="Enums.RenderType"/></param>
         /// <param name="renderProperties">Datas required to initialize the <see cref="Renders.Render"/>.</param>
         protected DamageableSprite(int id, double x, double y, double width, double height,
-            double lifepoints, string renderType, object[] renderProperties) 
+            double lifepoints, Enums.RenderType renderType, object[] renderProperties) 
             : base(id, x, y, width, height, renderType, renderProperties)
         {
             CurrentLifePoints = lifepoints;

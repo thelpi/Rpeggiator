@@ -11,13 +11,13 @@ namespace RpeggiatorLib.Sprites
     public abstract class LifeSprite : DamageableSprite
     {
         // Original speed.
-        private double _originalSpeed;
+        private readonly double _originalSpeed;
         // Recovery time manager.
         private Elapser _recoveryManager;
         // Recovery time, in milliseconds.
-        private double _recoveryTime;
+        private readonly double _recoveryTime;
         // Render while recovering.
-        private Render _renderRecovery;
+        private readonly Render _renderRecovery;
 
         /// <summary>
         /// Maximal number of life points.
@@ -77,7 +77,7 @@ namespace RpeggiatorLib.Sprites
         /// <param name="defaultDirection">Default <see cref="Direction"/>.</param>
         protected LifeSprite(int id, double x, double y, double width, double height, double maximalLifePoints, double hitLifePointCost,
             double speed, double recoveryTime, string renderFilename, string renderRecoveryFilename, Direction defaultDirection)
-            : base(id, x, y, width, height, maximalLifePoints, nameof(ImageDirectionRender), new[] { renderFilename, nameof(Direction) })
+            : base(id, x, y, width, height, maximalLifePoints, Enums.RenderType.ImageDirectionRender, new[] { renderFilename, nameof(Direction) })
         {
             Direction = defaultDirection;
             MaximalLifePoints = maximalLifePoints;

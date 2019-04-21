@@ -13,7 +13,7 @@ namespace RpeggiatorLib.Sprites
         /// <summary>
         /// Indicates the value of <see cref="Activated"/> when no active trigger.
         /// </summary>
-        private bool _defaultActivated;
+        private readonly bool _defaultActivated;
 
         /// <summary>
         /// Indicates if the gate is currently activated.
@@ -29,9 +29,10 @@ namespace RpeggiatorLib.Sprites
         /// <param name="width"><see cref="Sprite.Width"/></param>
         /// <param name="height"><see cref="Sprite.Height"/></param>
         /// <param name="activated"><see cref="Activated"/></param>
-        /// <param name="renderType"><see cref="Render.Render"/> subtype name.</param>
+        /// <param name="renderType"><see cref="Enums.RenderType"/></param>
         /// <param name="renderProperties">Datas required to initialize the <see cref="Render.Render"/>.</param>
-        internal Gate(int id, double x, double y, double width, double height, bool activated, string renderType, object[] renderProperties)
+        internal Gate(int id, double x, double y, double width, double height,
+            bool activated, Enums.RenderType renderType, object[] renderProperties)
             : base(id, x, y, width, height, renderType, renderProperties)
         {
             Activated = activated;

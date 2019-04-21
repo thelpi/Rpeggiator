@@ -12,7 +12,7 @@ namespace RpeggiatorLib.Sprites
     {
         private Elapser _elapser;
         private bool _hitOrAway;
-        private LifeSprite _thrownBy;
+        private readonly LifeSprite _thrownBy;
 
         /// <inheritdoc />
         public override bool IsDone { get { return _hitOrAway; } }
@@ -29,7 +29,7 @@ namespace RpeggiatorLib.Sprites
         /// <param name="thrownBy"><see cref="LifeSprite"/> who throws the arrow.</param>
         internal ActionnedArrow(Point point, Direction direction, LifeSprite thrownBy)
             : base(0, point.X, point.Y, Constants.Arrow.WIDTH, Constants.Arrow.HEIGHT,
-                  nameof(ImageDirectionRender), nameof(Filename.Arrow), nameof(Direction))
+                  RenderType.ImageDirectionRender, nameof(Filename.Arrow), nameof(Direction))
         {
             Direction = direction;
             _elapser = new Elapser();

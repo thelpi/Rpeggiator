@@ -10,18 +10,18 @@ namespace RpeggiatorLib.Sprites
     /// <seealso cref="Floor"/>
     public class Screen : Floor
     {
-        private Dictionary<Direction, int> _neighboringScreens;
-        private List<PermanentStructure> _permanentStructures;
+        private readonly Dictionary<Direction, int> _neighboringScreens;
+        private readonly List<PermanentStructure> _permanentStructures;
         private List<Gate> _gates;
         private List<Rift> _rifts;
         private List<Enemy> _enemies;
         private List<GateTrigger> _gateTriggers;
         private List<PickableItem> _pickableItems;
         private List<ActionnedItem> _actionnedItems;
-        private List<Pit> _pits;
+        private readonly List<Pit> _pits;
         private List<Chest> _chests;
-        private List<Door> _doors;
-        private List<Floor> _floors;
+        private readonly List<Door> _doors;
+        private readonly List<Floor> _floors;
 
         /// <summary>
         /// Current screen darkness; opacity ratio between 0 (no) and 1 (full).
@@ -103,7 +103,7 @@ namespace RpeggiatorLib.Sprites
         /// <param name="height"><see cref="Sprite.Height"/></param>
         /// <param name="floorType"><see cref="Floor.FloorType"/></param>
         /// <param name="darknessOpacity"><see cref="DarknessOpacity"/></param>
-        /// <param name="renderType"><see cref="Renders.Render"/> subtype name.</param>
+        /// <param name="renderType"><see cref="RenderType"/></param>
         /// <param name="renderProperties">Datas required to initialize the <see cref="Renders.Render"/>.</param>
         /// <param name="chests"><see cref="_chests"/></param>
         /// <param name="doors"><see cref="_doors"/></param>
@@ -117,7 +117,7 @@ namespace RpeggiatorLib.Sprites
         /// <param name="rifts"><see cref="_rifts"/></param>
         /// <param name="neighboringScreens"><see cref="_neighboringScreens"/></param>
         internal Screen(int id, double x, double y, double width, double height, FloorType floorType, double darknessOpacity,
-            string renderType, object[] renderProperties, IEnumerable<PermanentStructure> permanentStructures,
+            RenderType renderType, object[] renderProperties, IEnumerable<PermanentStructure> permanentStructures,
             IEnumerable<Door> doors, IEnumerable<Floor> floors, IEnumerable<Enemy> enemies, IEnumerable<GateTrigger> gateTriggers,
             IEnumerable<Gate> gates, IEnumerable<Rift> rifts, IEnumerable<Pit> pits, IEnumerable<Chest> chests,
             IEnumerable<PickableItem> pickableItems, IDictionary<Direction, int> neighboringScreens)

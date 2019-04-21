@@ -31,7 +31,7 @@ namespace RpeggiatorLib.Sprites
         /// </summary>
         /// <param name="point">Drop coordinates.</param>
         internal ActionnedBomb(Point point)
-            : base(0, point.X, point.Y, Constants.Bomb.WIDTH, Constants.Bomb.HEIGHT, nameof(ImageRender), nameof(Enums.Filename.Bomb))
+            : base(0, point.X, point.Y, Constants.Bomb.WIDTH, Constants.Bomb.HEIGHT, Enums.RenderType.ImageRender, nameof(Enums.Filename.Bomb))
         {
             _pendingTimeManager = new Elapser(Constants.Bomb.TIME_WHILE_PENDING);
             ExplosionSprite = null;

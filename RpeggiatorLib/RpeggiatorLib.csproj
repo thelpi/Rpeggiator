@@ -80,6 +80,7 @@
     <Compile Include="Enums\Filename.cs" />
     <Compile Include="Enums\FloorType.cs" />
     <Compile Include="Enums\ItemType.cs" />
+    <Compile Include="Enums\RenderType.cs" />
     <Compile Include="Exceptions\InfiniteOverlapCheckException.cs" />
     <Compile Include="Exceptions\NoQuadraticSolutionException.cs" />
     <Compile Include="Inventory.cs" />

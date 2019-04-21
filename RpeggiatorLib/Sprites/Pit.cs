@@ -27,10 +27,10 @@ namespace RpeggiatorLib.Sprites
         /// <param name="width"><see cref="Sprite.Width"/></param>
         /// <param name="height"><see cref="Sprite.Height"/></param>
         /// <param name="screenIdEntrance"><see cref="ScreenIdEntrance"/></param>
-        /// <param name="renderType"><see cref="Render.Render"/> subtype name.</param>
+        /// <param name="renderType"><see cref="Enums.RenderType"/></param>
         /// <param name="renderProperties">Datas required to initialize the <see cref="Render.Render"/>.</param>
         internal Pit(int id, double x, double y, double width, double height,
-            int? screenIdEntrance, string renderType, object[] renderProperties)
+            int? screenIdEntrance, Enums.RenderType renderType, object[] renderProperties)
             : base(id, x, y, width, height, renderType, renderProperties)
         {
             ScreenIdEntrance = screenIdEntrance;

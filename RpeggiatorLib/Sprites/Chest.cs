@@ -13,11 +13,11 @@ namespace RpeggiatorLib.Sprites
         // Item contained in the chest; Null for coins or if "_keyIdContainer" is specified.
         private Enums.ItemType? _itemType;
         // Quantity of what's inside the chest; ignored if "_keyIdContainer" is specified.
-        private int _quantity;
+        private readonly int _quantity;
         // Optionnal key identifier inside the chest; in that case, replace any value of "_itemType".
         private int? _keyIdContainer;
         // Render after opening the chest.
-        private Render _renderOpen;
+        private readonly Render _renderOpen;
 
         /// <summary>
         /// Indicates if the chest has been open.
@@ -40,13 +40,13 @@ namespace RpeggiatorLib.Sprites
         /// <param name="quantity"><see cref="_quantity"/></param>
         /// <param name="keyId"><see cref="_keyId"/></param>
         /// <param name="keyIdContainer"><see cref="_keyIdContainer"/></param>
-        /// <param name="renderType"><see cref="Renders.Render"/> subtype name.</param>
+        /// <param name="renderType"><see cref="Enums.RenderType"/></param>
         /// <param name="renderProperties">Datas required to initialize the <see cref="Renders.Render"/>.</param>
-        /// <param name="openRenderType"><see cref="_renderOpen"/> subtype name.</param>
+        /// <param name="openRenderType"><see cref="Enums.RenderType"/></param>
         /// <param name="openRenderProperties">Datas required to initialize <see cref="_renderOpen"/>.</param>
         internal Chest(int id, double x, double y, double width, double height,
             Enums.ItemType? itemType, int quantity, int? keyId, int? keyIdContainer,
-            string renderType, object[] renderProperties, string openRenderType, object[] openRenderProperties)
+            Enums.RenderType renderType, object[] renderProperties, Enums.RenderType openRenderType, object[] openRenderProperties)
             : base(id, x, y, width, height, renderType, renderProperties)
         {
             _itemType = itemType;

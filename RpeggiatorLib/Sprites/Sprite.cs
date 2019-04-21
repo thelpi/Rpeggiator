@@ -73,9 +73,9 @@ namespace RpeggiatorLib.Sprites
         /// <param name="y"><see cref="Y"/></param>
         /// <param name="width"><see cref="Width"/></param>
         /// <param name="height"><see cref="Height"/></param>
-        /// <param name="renderType"><see cref="Renders.Render"/> subtype name.</param>
+        /// <param name="renderType"><see cref="Enums.RenderType"/></param>
         /// <param name="renderProperties">Datas required to initialize the <see cref="Renders.Render"/>.</param>
-        protected Sprite(int id, double x, double y, double width, double height, string renderType, object[] renderProperties)
+        protected Sprite(int id, double x, double y, double width, double height, RenderType renderType, object[] renderProperties)
         {
             X = x;
             Y = y;
@@ -89,20 +89,20 @@ namespace RpeggiatorLib.Sprites
         /// <summary>
         /// Computes and gets a <see cref="Renders.Render"/> from given properties.
         /// </summary>
-        /// <param name="renderType"><see cref="Renders.Render"/> subtype name.</param>
+        /// <param name="renderType"><see cref="Enums.RenderType"/></param>
         /// <param name="renderProperties">Datas required to initialize the <see cref="Renders.Render"/>.</param>
         /// <returns><see cref="Renders.Render"/></returns>
-        protected Render GetRenderFromValues(string renderType, params object[] renderProperties)
+        protected Render GetRenderFromValues(RenderType renderType, params object[] renderProperties)
         {
             switch (renderType)
             {
-                case nameof(ImageDirectionRender):
+                case RenderType.ImageDirectionRender:
                     return new ImageDirectionRender((string)renderProperties[0], this, (string)renderProperties[1]);
-                case nameof(ImageMosaicRender):
+                case RenderType.ImageMosaicRender:
                     return new ImageMosaicRender((string)renderProperties[0], this);
-                case nameof(ImageRender):
+                case RenderType.ImageRender:
                     return new ImageRender((string)renderProperties[0]);
-                case nameof(PlainRender):
+                case RenderType.PlainRender:
                     return new PlainRender((string)renderProperties[0]);
                 default:
                     throw new System.NotImplementedException(Messages.NotImplementedGraphicExceptionMessage);

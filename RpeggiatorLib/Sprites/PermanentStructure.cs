@@ -14,9 +14,10 @@
         /// <param name="y"><see cref="Sprite.Y"/></param>
         /// <param name="width"><see cref="Sprite.Width"/></param>
         /// <param name="height"><see cref="Sprite.Height"/></param>
-        /// <param name="renderType"><see cref="Renders.Render"/> subtype name.</param>
+        /// <param name="renderType"><see cref="Enums.RenderType"/></param>
         /// <param name="renderProperties">Datas required to initialize the <see cref="Renders.Render"/>.</param>
-        internal PermanentStructure(int id, double x, double y, double width, double height, string renderType, object[] renderProperties)
+        internal PermanentStructure(int id, double x, double y, double width, double height,
+            Enums.RenderType renderType, object[] renderProperties)
             : base(id, x, y, width, height, renderType, renderProperties)
         {
             // Empty.
