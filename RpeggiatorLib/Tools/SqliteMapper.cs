@@ -56,6 +56,98 @@ namespace RpeggiatorLib
         }
 
         /// <summary>
+        /// Clears the database and creates a new one.
+        /// </summary>
+        /// <param name="createDefaultDatas">Creates some default screens.</param>
+        public void ResetDatabase(bool createDefaultDatas)
+        {
+            using (SQLiteConnection connection = new SQLiteConnection(CONN_STRING))
+            {
+                connection.Open();
+                using (SQLiteCommand cmd = connection.CreateCommand())
+                {
+                    cmd.CommandText = Properties.Resources.SpriteDb;
+
+                    cmd.ExecuteNonQuery();
+                }
+            }
+
+            if (createDefaultDatas)
+            {
+                #region First screen
+
+                int screenId1 = CreateScreen(Enums.RenderType.Plain, new[] { Tools.HexFromColor(SysColor.PapayaWhip) }, Enums.FloorType.Ground, 0);
+                CreatePermanentStructure(screenId1, 0, 300, 300, 50, Enums.RenderType.ImageMosaic, new[] { "Tree" });
+                CreatePermanentStructure(screenId1, 100, 260, 50, 140, Enums.RenderType.ImageMosaic, new[] { "Tree" });
+                CreateChest(screenId1, 400, 380, 40, 40, Enums.RenderType.Image, new[] { "Chest" }, null, 10, null, 1, Enums.RenderType.Image, new[] { "OpenChest" });
+                CreatePit(screenId1, 700, 100, 50, 50, Enums.RenderType.Image, new[] { "Pit" }, null);
+                CreateRift(screenId1, 700, 400, 20, 100, Enums.RenderType.Plain, new[] { Tools.HexFromColor(SysColor.BurlyWood) }, 8);
+                int enemyId = CreateEnemy(screenId1, 50, 50, 40, 40, 4, 5, 150, 0, "Enemy", "Enemy", Enums.Direction.Right, null, 10);
+                CreateEnemy(screenId1, 600, 50, 40, 40, 4, 5, 150, 0, "Enemy", "Enemy", Enums.Direction.Bottom, Enums.ItemType.Arrow, 1);
+                CreateEnemyPathSteps(enemyId, new Dictionary<int, System.Windows.Point>
+                {
+                    { 1, new System.Windows.Point(730, 350) },
+                    { 2, new System.Windows.Point(730, 400) },
+                    { 3, new System.Windows.Point(750, 550) },
+                    { 4, new System.Windows.Point(30, 520) },
+                });
+
+                #endregion
+
+                #region Left screen
+
+                int screenId2 = CreateScreen(Enums.RenderType.Plain, new[] { Tools.HexFromColor(SysColor.PapayaWhip) }, Enums.FloorType.Ground, 0.8);
+                CreatePermanentStructure(screenId2, 80, 80, 480, 40, Enums.RenderType.ImageMosaic, new[] { "Tree" });
+                CreatePermanentStructure(screenId2, 80, 80, 40, 320, Enums.RenderType.ImageMosaic, new[] { "Tree" });
+                CreatePermanentStructure(screenId2, 520, 80, 40, 320, Enums.RenderType.ImageMosaic, new[] { "Tree" });
+                CreatePermanentStructure(screenId2, 80, 360, 300, 40, Enums.RenderType.ImageMosaic, new[] { "Tree" });
+                CreatePermanentStructure(screenId2, 480, 360, 80, 40, Enums.RenderType.ImageMosaic, new[] { "Tree" });
+                CreatePermanentStructure(screenId2, 400, 590, 80, 10, Enums.RenderType.ImageMosaic, new[] { "Tree" });
+                int gateId = CreateGate(screenId2, 380, 360, 100, 40, Enums.RenderType.Plain, new[] { Tools.HexFromColor(SysColor.Gainsboro) }, true);
+                CreateGateTrigger(screenId2, 570, 20, 20, 20, Enums.RenderType.Image, new[] { "TriggerOff" }, 5000, gateId, false, Enums.RenderType.Image, new[] { "TriggerOn" });
+                CreateGateTrigger(screenId2, 160, 220, 20, 20, Enums.RenderType.Image, new[] { "TriggerOff" }, 5000, gateId, false, Enums.RenderType.Image, new[] { "TriggerOn" });
+                CreatePickableItem(screenId2, 310, 230, Constants.Bomb.WIDTH, Constants.Bomb.HEIGHT, Enums.ItemType.Bomb, 10, null);
+                CreatePit(screenId2, 600, 400, 50, 50, Enums.RenderType.Image, new[] { "Pit" }, screenId1);
+
+                #endregion
+
+                #region Top screen
+
+                int screenId3 = CreateScreen(Enums.RenderType.Plain, new[] { Tools.HexFromColor(SysColor.PapayaWhip) }, Enums.FloorType.Ground, 0);
+                CreateFloor(screenId3, 150, 150, 300, 200, Enums.RenderType.Plain, new[] { Tools.HexFromColor(SysColor.Blue) }, Enums.FloorType.Water);
+                CreateFloor(screenId3, 460, 150, 150, 200, Enums.RenderType.Plain, new[] { Tools.HexFromColor(SysColor.Crimson) }, Enums.FloorType.Lava);
+                CreateFloor(screenId3, 200, 360, 400, 100, Enums.RenderType.Plain, new[] { Tools.HexFromColor(SysColor.Azure) }, Enums.FloorType.Ice);
+                CreatePermanentStructure(screenId3, 0, 0, 800, 20, Enums.RenderType.ImageMosaic, new[] { "Tree" });
+                CreatePermanentStructure(screenId3, 0, 20, 20, 560, Enums.RenderType.ImageMosaic, new[] { "Tree" });
+                CreatePermanentStructure(screenId3, 780, 20, 20, 560, Enums.RenderType.ImageMosaic, new[] { "Tree" });
+                CreatePermanentStructure(screenId3, 0, 580, 400, 20, Enums.RenderType.ImageMosaic, new[] { "Tree" });
+                CreatePermanentStructure(screenId3, 480, 580, 320, 20, Enums.RenderType.ImageMosaic, new[] { "Tree" });
+                CreateDoor(screenId3, 400, 580, 80, 20, Enums.RenderType.Image, new[] { "Door" }, 1, screenId1, 400, 20, Enums.RenderType.Image, new[] { "DoorLocked" });
+
+                #endregion
+
+                #region Right screen
+
+                int screenId4 = CreateScreen(Enums.RenderType.Plain, new[] { Tools.HexFromColor(SysColor.PapayaWhip) }, Enums.FloorType.Ground, 0);
+                CreatePermanentStructure(screenId4, 166, 49, 495, 50, Enums.RenderType.ImageMosaic, new[] { "Tree" });
+                CreatePermanentStructure(screenId4, 63, 50, 49, 194, Enums.RenderType.ImageMosaic, new[] { "Tree" });
+                CreatePermanentStructure(screenId4, 629, 236, 42, 284, Enums.RenderType.ImageMosaic, new[] { "Tree" });
+                CreatePermanentStructure(screenId4, 63, 327, 434, 61, Enums.RenderType.ImageMosaic, new[] { "Tree" });
+                CreatePermanentStructure(screenId4, 69, 469, 407, 56, Enums.RenderType.ImageMosaic, new[] { "Tree" });
+
+                #endregion
+
+                SetNeighboringScreens(screenId1, screenId2, screenId2, screenId4, screenId2);
+                SetNeighboringScreens(screenId2, screenId1, screenId1, screenId1, screenId1);
+                SetNeighboringScreens(screenId3, screenId1, screenId1, screenId1, screenId1);
+                SetNeighboringScreens(screenId4, screenId1, screenId1, screenId1, screenId1);
+
+                // Screen ID 3 is required to create this door.
+                CreateDoor(screenId1, 400, 0, 80, 20, Enums.RenderType.Image, new[] { "Door" }, 1, screenId3, 400, 540, Enums.RenderType.Image, new[] { "DoorLocked" });
+            }
+        }
+
+        /// <summary>
         /// Gets a <see cref="Sprites.Screen"/> by its identifier.
         /// </summary>
         /// <param name="id"><see cref="Sprites.Screen"/> identifier.</param>
@@ -73,6 +165,7 @@ namespace RpeggiatorLib
                     List<Sprites.Door> doors = GetTypedSpritesForAScreen<Sprites.Door>(id, cmd);
                     List<Sprites.Floor> floors = GetTypedSpritesForAScreen<Sprites.Floor>(id, cmd);
                     List<Sprites.Enemy> enemies = GetTypedSpritesForAScreen<Sprites.Enemy>(id, cmd);
+                    enemies.ForEach(e => e.SetPath(GetEnemyPathSteps(e.Id)));
                     List<Sprites.GateTrigger> gateTriggers = GetTypedSpritesForAScreen<Sprites.GateTrigger>(id, cmd);
                     List<Sprites.Gate> gates = GetTypedSpritesForAScreen<Sprites.Gate>(id, cmd);
                     List<Sprites.Rift> rifts = GetTypedSpritesForAScreen<Sprites.Rift>(id, cmd);
@@ -113,95 +206,206 @@ namespace RpeggiatorLib
             return s;
         }
 
-        /// <summary>
-        /// Clears the database and creates a new one.
-        /// </summary>
-        /// <param name="createDefaultDatas">Creates some default screens.</param>
-        public void ResetDatabase(bool createDefaultDatas)
+        // Gets, for a specified screen, every sprites of a specified type.
+        private List<T> GetTypedSpritesForAScreen<T>(int screenId, SQLiteCommand cmd) where T : Sprites.Sprite
+        {
+            string tableName = "";
+            bool withRender = true;
+            string[] additionalColumns = null;
+            switch (typeof(T).Name)
+            {
+                case nameof(Sprites.Chest):
+                    tableName = "chest";
+                    additionalColumns = new[] { "item_type", "quantity", "key_id", "key_id_container", "open_render_type", "open_render_value" };
+                    break;
+                case nameof(Sprites.Door):
+                    tableName = "door";
+                    additionalColumns = new[] { "key_id", "connected_screen_id", "player_go_through_x", "player_go_through_y",
+                        "locked_render_type", "locked_render_value" };
+                    break;
+                case nameof(Sprites.Enemy):
+                    tableName = "enemy";
+                    withRender = false;
+                    additionalColumns = new[] { "maximal_life_points", "hit_life_point_cost", "speed", "recovery_time", "render_filename",
+                        "render_recovery_filename", "default_direction", "loot_item_type", "loot_quantity" };
+                    break;
+                case nameof(Sprites.Floor):
+                    tableName = "floor";
+                    additionalColumns = new[] { "floor_type" };
+                    break;
+                case nameof(Sprites.Gate):
+                    tableName = "gate";
+                    additionalColumns = new[] { "activated" };
+                    break;
+                case nameof(Sprites.GateTrigger):
+                    tableName = "gate_trigger";
+                    additionalColumns = new[] { "action_duration", "gate_id", "appear_on_activation", "on_render_type", "on_render_value" };
+                    break;
+                case nameof(Sprites.PermanentStructure):
+                    tableName = "permanent_structure";
+                    break;
+                case nameof(Sprites.PickableItem):
+                    tableName = "pickable_item";
+                    withRender = false;
+                    additionalColumns = new[] { "item_type", "quantity", "time_before_disapear" };
+                    break;
+                case nameof(Sprites.Pit):
+                    tableName = "pit";
+                    additionalColumns = new[] { "screen_id_entrance" };
+                    break;
+                case nameof(Sprites.Rift):
+                    tableName = "rift";
+                    additionalColumns = new[] { "lifepoints" };
+                    break;
+                default:
+                    throw new NotImplementedException();
+            }
+
+            List<T> sprites = new List<T>();
+
+            cmd.CommandText = GenerateSpriteTableSql(tableName, withRender, additionalColumns);
+            cmd.Parameters.Add("@screen_id", DbType.Int32);
+            cmd.Parameters["@screen_id"].Value = screenId;
+
+            using (SQLiteDataReader reader = cmd.ExecuteReader())
+            {
+                while (reader.Read())
+                {
+                    Sprites.Sprite sp;
+                    switch (typeof(T).Name)
+                    {
+                        case nameof(Sprites.Chest):
+                            sp = new Sprites.Chest(reader.GetInt32("id"), reader.GetDouble("x"), reader.GetDouble("y"), reader.GetDouble("width"),
+                                reader.GetDouble("height"), (Enums.ItemType?)reader.GetNullValue<int>("item_type"), reader.GetInt32("quantity"),
+                                reader.GetNullValue<int>("key_id"), reader.GetNullValue<int>("key_id_container"),
+                                (Enums.RenderType)reader.GetInt32("render_type"), GetRenderPropertiesForCurrentReaderRow(reader),
+                                (Enums.RenderType)reader.GetInt32("open_render_type"),
+                                GetRenderPropertiesForCurrentReaderRow(reader, "open_render_value"));
+                            break;
+                        case nameof(Sprites.Door):
+                            sp = new Sprites.Door(reader.GetInt32("id"), reader.GetDouble("x"), reader.GetDouble("y"), reader.GetDouble("width"),
+                                reader.GetDouble("height"), reader.GetNullValue<int>("key_id"), reader.GetInt32("connected_screen_id"),
+                                reader.GetDouble("player_go_through_x"), reader.GetDouble("player_go_through_y"),
+                                (Enums.RenderType)reader.GetInt32("locked_render_type"),
+                                GetRenderPropertiesForCurrentReaderRow(reader, "locked_render_value"),
+                                (Enums.RenderType)reader.GetInt32("render_type"), GetRenderPropertiesForCurrentReaderRow(reader));
+                            break;
+                        case nameof(Sprites.Enemy):
+                            sp = new Sprites.Enemy(reader.GetInt32("id"), reader.GetDouble("x"), reader.GetDouble("y"), reader.GetDouble("width"),
+                                reader.GetDouble("height"), reader.GetDouble("maximal_life_points"), reader.GetDouble("hit_life_point_cost"),
+                                reader.GetDouble("speed"), reader.GetDouble("recovery_time"), reader.GetString("render_filename"),
+                                reader.GetString("render_recovery_filename"), (Enums.Direction)reader.GetInt32("default_direction"),
+                                (Enums.ItemType?)reader.GetNullValue<int>("loot_item_type"), reader.GetInt32("loot_quantity"));
+                            break;
+                        case nameof(Sprites.Floor):
+                            sp = new Sprites.Floor(reader.GetInt32("id"), reader.GetDouble("x"), reader.GetDouble("y"), reader.GetDouble("width"),
+                                reader.GetDouble("height"), (Enums.FloorType)reader.GetInt32("floor_type"),
+                                (Enums.RenderType)reader.GetInt32("render_type"), GetRenderPropertiesForCurrentReaderRow(reader));
+                            break;
+                        case nameof(Sprites.Gate):
+                            sp = new Sprites.Gate(reader.GetInt32("id"), reader.GetDouble("x"), reader.GetDouble("y"), reader.GetDouble("width"),
+                                reader.GetDouble("height"), reader.GetInt32("activated") > 0, (Enums.RenderType)reader.GetInt32("render_type"),
+                                GetRenderPropertiesForCurrentReaderRow(reader));
+                            break;
+                        case nameof(Sprites.GateTrigger):
+                            sp = new Sprites.GateTrigger(reader.GetInt32("id"), reader.GetDouble("x"), reader.GetDouble("y"),
+                                reader.GetDouble("width"), reader.GetDouble("height"), reader.GetDouble("action_duration"),
+                                reader.GetInt32("gate_id"), reader.GetInt32("appear_on_activation") > 0,
+                                (Enums.RenderType)reader.GetInt32("render_type"), GetRenderPropertiesForCurrentReaderRow(reader),
+                                (Enums.RenderType)reader.GetInt32("on_render_type"),
+                                GetRenderPropertiesForCurrentReaderRow(reader, "on_render_value"));
+                            break;
+                        case nameof(Sprites.PermanentStructure):
+                            sp = new Sprites.PermanentStructure(reader.GetInt32("id"), reader.GetDouble("x"), reader.GetDouble("y"),
+                                reader.GetDouble("width"), reader.GetDouble("height"), (Enums.RenderType)reader.GetInt32("render_type"),
+                                GetRenderPropertiesForCurrentReaderRow(reader));
+                            break;
+                        case nameof(Sprites.PickableItem):
+                            sp = new Sprites.PickableItem(reader.GetInt32("id"), reader.GetDouble("x"), reader.GetDouble("y"),
+                                reader.GetDouble("width"), reader.GetDouble("height"), (Enums.ItemType?)reader.GetNullValue<int>("item_type"),
+                                reader.GetInt32("quantity"), reader.GetNullValue<double>("time_before_disapear"));
+                            break;
+                        case nameof(Sprites.Pit):
+                            sp = new Sprites.Pit(reader.GetInt32("id"), reader.GetDouble("x"), reader.GetDouble("y"), reader.GetDouble("width"),
+                                reader.GetDouble("height"), reader.GetNullValue<int>("screen_id_entrance"),
+                                (Enums.RenderType)reader.GetInt32("render_type"), GetRenderPropertiesForCurrentReaderRow(reader));
+                            break;
+                        case nameof(Sprites.Rift):
+                            sp = new Sprites.Rift(reader.GetInt32("id"), reader.GetDouble("x"), reader.GetDouble("y"), reader.GetDouble("width"),
+                                reader.GetDouble("height"), reader.GetDouble("lifepoints"), (Enums.RenderType)reader.GetInt32("render_type"),
+                                GetRenderPropertiesForCurrentReaderRow(reader));
+                            break;
+                        default:
+                            throw new NotImplementedException();
+                    }
+                    sprites.Add(sp as T);
+                }
+            }
+
+            return sprites;
+        }
+
+        // gets path steps for an enemy.
+        private List<Point> GetEnemyPathSteps(int enemyId)
+        {
+            List<Point> pointOfSteps = new List<Point>();
+
+            using (SQLiteConnection connection = new SQLiteConnection(CONN_STRING))
+            {
+                connection.Open();
+                using (SQLiteCommand cmd = connection.CreateCommand())
+                {
+                    cmd.CommandText = "select x, y from enemy_step where enemy_id = @enemy_id order by step_no asc";
+                    cmd.Parameters.Add("@enemy_id", DbType.Int32);
+                    cmd.Parameters["@enemy_id"].Value = enemyId;
+
+                    using (SQLiteDataReader reader = cmd.ExecuteReader())
+                    {
+                        while (reader.Read())
+                        {
+                            pointOfSteps.Add(new Point(reader.GetDouble(0), reader.GetDouble(1)));
+                        }
+                    }
+                }
+            }
+
+            return pointOfSteps;
+        }
+
+        // Gets the next identifier for the specified table.
+        private int GetNextId(string tableName)
+        {
+            int id = 1;
+            using (SQLiteConnection connection = new SQLiteConnection(CONN_STRING))
+            {
+                connection.Open();
+                using (SQLiteCommand cmd = connection.CreateCommand())
+                {
+                    cmd.CommandText = $"select max(id) from {tableName}";
+                    object baseScalarValue = cmd.ExecuteScalar();
+                    id += Convert.ToInt32(baseScalarValue == null || baseScalarValue == DBNull.Value ? 0 : baseScalarValue);
+                }
+            }
+
+            return id;
+        }
+
+        // Checks if the specified identifier exists for the specified table.
+        private bool ExistsId(string tableName, int id)
         {
             using (SQLiteConnection connection = new SQLiteConnection(CONN_STRING))
             {
                 connection.Open();
                 using (SQLiteCommand cmd = connection.CreateCommand())
                 {
-                    cmd.CommandText = Properties.Resources.SpriteDb;
-
-                    cmd.ExecuteNonQuery();
+                    cmd.CommandText = string.Format($"select id from {tableName} where id = @id");
+                    cmd.Parameters.Add("@id", DbType.Int32);
+                    cmd.Parameters["@id"].Value = id;
+                    using (SQLiteDataReader reader = cmd.ExecuteReader())
+                    {
+                        return reader.Read();
+                    }
                 }
-            }
-
-            if (createDefaultDatas)
-            {
-                #region First screen
-
-                int screenId1 = CreateScreen(Enums.RenderType.Plain, new [] { Tools.HexFromColor(SysColor.PapayaWhip) }, Enums.FloorType.Ground, 0);
-                CreatePermanentStructure(screenId1, 0, 300, 300, 50, Enums.RenderType.ImageMosaic, new [] { "Tree" });
-                CreatePermanentStructure(screenId1, 100, 260, 50, 140, Enums.RenderType.ImageMosaic, new [] { "Tree" });
-                CreateChest(screenId1, 400, 380, 40, 40, Enums.RenderType.Image, new [] { "Chest" }, null, 10, null, 1, Enums.RenderType.Image, new [] { "OpenChest" });
-                CreatePit(screenId1, 700, 100, 50, 50, Enums.RenderType.Image, new [] { "Pit" }, null);
-                CreateRift(screenId1, 700, 400, 20, 100, Enums.RenderType.Plain, new [] { Tools.HexFromColor(SysColor.BurlyWood) }, 8);
-                int enemyId = CreateEnemy(screenId1, 50, 50, 40, 40, 4, 5, 150, 0, "Enemy", "Enemy", Enums.Direction.Right, null, 10);
-                CreateEnemy(screenId1, 600, 50, 40, 40, 4, 5, 150, 0, "Enemy", "Enemy", Enums.Direction.Bottom, Enums.ItemType.Arrow, 1);
-                CreateEnemyPathSteps(enemyId, new Dictionary<int, System.Windows.Point>
-                {
-                    { 1, new System.Windows.Point(730, 350) },
-                    { 2, new System.Windows.Point(730, 400) },
-                    { 3, new System.Windows.Point(750, 550) },
-                    { 4, new System.Windows.Point(30, 520) },
-                });
-
-                #endregion
-
-                #region Left screen
-
-                int screenId2 = CreateScreen(Enums.RenderType.Plain, new [] { Tools.HexFromColor(SysColor.PapayaWhip) }, Enums.FloorType.Ground, 0.8);
-                CreatePermanentStructure(screenId2, 80, 80, 480, 40, Enums.RenderType.ImageMosaic, new [] { "Tree" });
-                CreatePermanentStructure(screenId2, 80, 80, 40, 320, Enums.RenderType.ImageMosaic, new [] { "Tree" });
-                CreatePermanentStructure(screenId2, 520, 80, 40, 320, Enums.RenderType.ImageMosaic, new [] { "Tree" });
-                CreatePermanentStructure(screenId2, 80, 360, 300, 40, Enums.RenderType.ImageMosaic, new [] { "Tree" });
-                CreatePermanentStructure(screenId2, 480, 360, 80, 40, Enums.RenderType.ImageMosaic, new [] { "Tree" });
-                CreatePermanentStructure(screenId2, 400, 590, 80, 10, Enums.RenderType.ImageMosaic, new [] { "Tree" });
-                int gateId = CreateGate(screenId2, 380, 360, 100, 40, Enums.RenderType.Plain, new [] { Tools.HexFromColor(SysColor.Gainsboro) }, true);
-                CreateGateTrigger(screenId2, 570, 20, 20, 20, Enums.RenderType.Image, new [] { "TriggerOff" }, 5000, gateId, false, Enums.RenderType.Image, new [] { "TriggerOn" });
-                CreateGateTrigger(screenId2, 160, 220, 20, 20, Enums.RenderType.Image, new [] { "TriggerOff" }, 5000, gateId, false, Enums.RenderType.Image, new [] { "TriggerOn" });
-                CreatePickableItem(screenId2, 310, 230, Constants.Bomb.WIDTH, Constants.Bomb.HEIGHT, Enums.ItemType.Bomb, 10, null);
-                CreatePit(screenId2, 600, 400, 50, 50, Enums.RenderType.Image, new [] { "Pit" }, screenId1);
-                
-                #endregion
-
-                #region Top screen
-
-                int screenId3 = CreateScreen(Enums.RenderType.Plain, new [] { Tools.HexFromColor(SysColor.PapayaWhip) }, Enums.FloorType.Ground, 0);
-                CreateFloor(screenId3, 150, 150, 300, 200, Enums.RenderType.Plain, new [] { Tools.HexFromColor(SysColor.Blue) }, Enums.FloorType.Water);
-                CreateFloor(screenId3, 460, 150, 150, 200, Enums.RenderType.Plain, new [] { Tools.HexFromColor(SysColor.Crimson) }, Enums.FloorType.Lava);
-                CreateFloor(screenId3, 200, 360, 400, 100, Enums.RenderType.Plain, new [] { Tools.HexFromColor(SysColor.Azure) }, Enums.FloorType.Ice);
-                CreatePermanentStructure(screenId3, 0, 0, 800, 20, Enums.RenderType.ImageMosaic, new [] { "Tree" });
-                CreatePermanentStructure(screenId3, 0, 20, 20, 560, Enums.RenderType.ImageMosaic, new [] { "Tree" });
-                CreatePermanentStructure(screenId3, 780, 20, 20, 560, Enums.RenderType.ImageMosaic, new [] { "Tree" });
-                CreatePermanentStructure(screenId3, 0, 580, 400, 20, Enums.RenderType.ImageMosaic, new [] { "Tree" });
-                CreatePermanentStructure(screenId3, 480, 580, 320, 20, Enums.RenderType.ImageMosaic, new [] { "Tree" });
-                CreateDoor(screenId3, 400, 580, 80, 20, Enums.RenderType.Image, new [] { "Door" }, 1, screenId1, 400, 20, Enums.RenderType.Image, new [] { "DoorLocked" });
-                
-                #endregion
-
-                #region Right screen
-
-                int screenId4 = CreateScreen(Enums.RenderType.Plain, new [] { Tools.HexFromColor(SysColor.PapayaWhip) }, Enums.FloorType.Ground, 0);
-                CreatePermanentStructure(screenId4, 166, 49, 495, 50, Enums.RenderType.ImageMosaic, new [] { "Tree" });
-                CreatePermanentStructure(screenId4, 63, 50, 49, 194, Enums.RenderType.ImageMosaic, new [] { "Tree" });
-                CreatePermanentStructure(screenId4, 629, 236, 42, 284, Enums.RenderType.ImageMosaic, new [] { "Tree" });
-                CreatePermanentStructure(screenId4, 63, 327, 434, 61, Enums.RenderType.ImageMosaic, new [] { "Tree" });
-                CreatePermanentStructure(screenId4, 69, 469, 407, 56, Enums.RenderType.ImageMosaic, new [] { "Tree" });
-
-                #endregion
-
-                SetNeighboringScreens(screenId1, screenId2, screenId2, screenId4, screenId2);
-                SetNeighboringScreens(screenId2, screenId1, screenId1, screenId1, screenId1);
-                SetNeighboringScreens(screenId3, screenId1, screenId1, screenId1, screenId1);
-                SetNeighboringScreens(screenId4, screenId1, screenId1, screenId1, screenId1);
-
-                // Screen ID 3 is required to create this door.
-                CreateDoor(screenId1, 400, 0, 80, 20, Enums.RenderType.Image, new [] { "Door" }, 1, screenId3, 400, 540, Enums.RenderType.Image, new [] { "DoorLocked" });
             }
         }
 
@@ -324,43 +528,6 @@ namespace RpeggiatorLib
             return values.ToArray();
         }
 
-        // Gets the next identifier for the specified table.
-        private static int GetNextId(string tableName)
-        {
-            int id = 1;
-            using (SQLiteConnection connection = new SQLiteConnection(CONN_STRING))
-            {
-                connection.Open();
-                using (SQLiteCommand cmd = connection.CreateCommand())
-                {
-                    cmd.CommandText = $"select max(id) from {tableName}";
-                    object baseScalarValue = cmd.ExecuteScalar();
-                    id += Convert.ToInt32(baseScalarValue == null || baseScalarValue == DBNull.Value ? 0 : baseScalarValue);
-                }
-            }
-
-            return id;
-        }
-
-        // Checks if the specified identifier exists for the specified table.
-        private static bool ExistsId(string tableName, int id)
-        {
-            using (SQLiteConnection connection = new SQLiteConnection(CONN_STRING))
-            {
-                connection.Open();
-                using (SQLiteCommand cmd = connection.CreateCommand())
-                {
-                    cmd.CommandText = string.Format($"select id from {tableName} where id = @id");
-                    cmd.Parameters.Add("@id", DbType.Int32);
-                    cmd.Parameters["@id"].Value = id;
-                    using (SQLiteDataReader reader = cmd.ExecuteReader())
-                    {
-                        return reader.Read();
-                    }
-                }
-            }
-        }
-
         // Checks input dimensions and throws an exception if invalid.
         private static void CheckInputDimensions(double x, double y, double width, double height)
         {
@@ -403,173 +570,6 @@ namespace RpeggiatorLib
         }
 
         #endregion
-
-        // Gets, for a specified screen, every sprites of a specified type.
-        private List<T> GetTypedSpritesForAScreen<T>(int screenId, SQLiteCommand cmd) where T : Sprites.Sprite
-        {
-            string tableName = "";
-            bool withRender = true;
-            string[] additionalColumns = null;
-            switch (typeof(T).Name)
-            {
-                case nameof(Sprites.Chest):
-                    tableName = "chest";
-                    additionalColumns = new[] { "item_type", "quantity", "key_id", "key_id_container", "open_render_type", "open_render_value" };
-                    break;
-                case nameof(Sprites.Door):
-                    tableName = "door";
-                    additionalColumns = new[] { "key_id", "connected_screen_id", "player_go_through_x", "player_go_through_y",
-                        "locked_render_type", "locked_render_value" };
-                    break;
-                case nameof(Sprites.Enemy):
-                    tableName = "enemy";
-                    withRender = false;
-                    additionalColumns = new[] { "maximal_life_points", "hit_life_point_cost", "speed", "recovery_time", "render_filename",
-                        "render_recovery_filename", "default_direction", "loot_item_type", "loot_quantity" };
-                    break;
-                case nameof(Sprites.Floor):
-                    tableName = "floor";
-                    additionalColumns = new[] { "floor_type" };
-                    break;
-                case nameof(Sprites.Gate):
-                    tableName = "gate";
-                    additionalColumns = new[] { "activated" };
-                    break;
-                case nameof(Sprites.GateTrigger):
-                    tableName = "gate_trigger";
-                    additionalColumns = new[] { "action_duration", "gate_id", "appear_on_activation", "on_render_type", "on_render_value" };
-                    break;
-                case nameof(Sprites.PermanentStructure):
-                    tableName = "permanent_structure";
-                    break;
-                case nameof(Sprites.PickableItem):
-                    tableName = "pickable_item";
-                    withRender = false;
-                    additionalColumns = new[] { "item_type", "quantity", "time_before_disapear" };
-                    break;
-                case nameof(Sprites.Pit):
-                    tableName = "pit";
-                    additionalColumns = new[] { "screen_id_entrance" };
-                    break;
-                case nameof(Sprites.Rift):
-                    tableName = "rift";
-                    additionalColumns = new[] { "lifepoints" };
-                    break;
-                default:
-                    throw new NotImplementedException();
-            }
-
-            List<T> sprites = new List<T>();
-
-            cmd.CommandText = GenerateSpriteTableSql(tableName, withRender, additionalColumns);
-            cmd.Parameters.Add("@screen_id", DbType.Int32);
-            cmd.Parameters["@screen_id"].Value = screenId;
-
-            using (SQLiteDataReader reader = cmd.ExecuteReader())
-            {
-                while (reader.Read())
-                {
-                    Sprites.Sprite sp;
-                    switch (typeof(T).Name)
-                    {
-                        case nameof(Sprites.Chest):
-                            sp = new Sprites.Chest(reader.GetInt32("id"), reader.GetDouble("x"), reader.GetDouble("y"), reader.GetDouble("width"),
-                                reader.GetDouble("height"), (Enums.ItemType?)reader.GetNullValue<int>("item_type"), reader.GetInt32("quantity"),
-                                reader.GetNullValue<int>("key_id"), reader.GetNullValue<int>("key_id_container"),
-                                (Enums.RenderType)reader.GetInt32("render_type"), GetRenderPropertiesForCurrentReaderRow(reader),
-                                (Enums.RenderType)reader.GetInt32("open_render_type"),
-                                GetRenderPropertiesForCurrentReaderRow(reader, "open_render_value"));
-                            break;
-                        case nameof(Sprites.Door):
-                            sp = new Sprites.Door(reader.GetInt32("id"), reader.GetDouble("x"), reader.GetDouble("y"), reader.GetDouble("width"),
-                                reader.GetDouble("height"), reader.GetNullValue<int>("key_id"), reader.GetInt32("connected_screen_id"),
-                                reader.GetDouble("player_go_through_x"), reader.GetDouble("player_go_through_y"),
-                                (Enums.RenderType)reader.GetInt32("locked_render_type"),
-                                GetRenderPropertiesForCurrentReaderRow(reader, "locked_render_value"),
-                                (Enums.RenderType)reader.GetInt32("render_type"), GetRenderPropertiesForCurrentReaderRow(reader));
-                            break;
-                        case nameof(Sprites.Enemy):
-                            sp = new Sprites.Enemy(reader.GetInt32("id"), reader.GetDouble("x"), reader.GetDouble("y"), reader.GetDouble("width"),
-                                reader.GetDouble("height"), reader.GetDouble("maximal_life_points"), reader.GetDouble("hit_life_point_cost"),
-                                reader.GetDouble("speed"), reader.GetDouble("recovery_time"), reader.GetString("render_filename"),
-                                reader.GetString("render_recovery_filename"), (Enums.Direction)reader.GetInt32("default_direction"),
-                                (Enums.ItemType?)reader.GetNullValue<int>("loot_item_type"), reader.GetInt32("loot_quantity"));
-                            (sp as Sprites.Enemy).SetPath(GetEnemyPathSteps(reader.GetInt32("id")));
-                            break;
-                        case nameof(Sprites.Floor):
-                            sp = new Sprites.Floor(reader.GetInt32("id"), reader.GetDouble("x"), reader.GetDouble("y"), reader.GetDouble("width"),
-                                reader.GetDouble("height"), (Enums.FloorType)reader.GetInt32("floor_type"),
-                                (Enums.RenderType)reader.GetInt32("render_type"), GetRenderPropertiesForCurrentReaderRow(reader));
-                            break;
-                        case nameof(Sprites.Gate):
-                            sp = new Sprites.Gate(reader.GetInt32("id"), reader.GetDouble("x"), reader.GetDouble("y"), reader.GetDouble("width"),
-                                reader.GetDouble("height"), reader.GetInt32("activated") > 0, (Enums.RenderType)reader.GetInt32("render_type"),
-                                GetRenderPropertiesForCurrentReaderRow(reader));
-                            break;
-                        case nameof(Sprites.GateTrigger):
-                            sp = new Sprites.GateTrigger(reader.GetInt32("id"), reader.GetDouble("x"), reader.GetDouble("y"),
-                                reader.GetDouble("width"), reader.GetDouble("height"), reader.GetDouble("action_duration"),
-                                reader.GetInt32("gate_id"), reader.GetInt32("appear_on_activation") > 0,
-                                (Enums.RenderType)reader.GetInt32("render_type"), GetRenderPropertiesForCurrentReaderRow(reader),
-                                (Enums.RenderType)reader.GetInt32("on_render_type"),
-                                GetRenderPropertiesForCurrentReaderRow(reader, "on_render_value"));
-                            break;
-                        case nameof(Sprites.PermanentStructure):
-                            sp = new Sprites.PermanentStructure(reader.GetInt32("id"), reader.GetDouble("x"), reader.GetDouble("y"),
-                                reader.GetDouble("width"), reader.GetDouble("height"), (Enums.RenderType)reader.GetInt32("render_type"),
-                                GetRenderPropertiesForCurrentReaderRow(reader));
-                            break;
-                        case nameof(Sprites.PickableItem):
-                            sp = new Sprites.PickableItem(reader.GetInt32("id"), reader.GetDouble("x"), reader.GetDouble("y"),
-                                reader.GetDouble("width"), reader.GetDouble("height"), (Enums.ItemType?)reader.GetNullValue<int>("item_type"),
-                                reader.GetInt32("quantity"), reader.GetNullValue<double>("time_before_disapear"));
-                            break;
-                        case nameof(Sprites.Pit):
-                            sp = new Sprites.Pit(reader.GetInt32("id"), reader.GetDouble("x"), reader.GetDouble("y"), reader.GetDouble("width"),
-                                reader.GetDouble("height"), reader.GetNullValue<int>("screen_id_entrance"),
-                                (Enums.RenderType)reader.GetInt32("render_type"), GetRenderPropertiesForCurrentReaderRow(reader));
-                            break;
-                        case nameof(Sprites.Rift):
-                            sp = new Sprites.Rift(reader.GetInt32("id"), reader.GetDouble("x"), reader.GetDouble("y"), reader.GetDouble("width"),
-                                reader.GetDouble("height"), reader.GetDouble("lifepoints"), (Enums.RenderType)reader.GetInt32("render_type"),
-                                GetRenderPropertiesForCurrentReaderRow(reader));
-                            break;
-                        default:
-                            throw new NotImplementedException();
-                    }
-                    sprites.Add(sp as T);
-                }
-            }
-
-            return sprites;
-        }
-
-        // gets path steps for an enemy.
-        private List<Point> GetEnemyPathSteps(int enemyId)
-        {
-            List<Point> pointOfSteps = new List<Point>();
-
-            using (SQLiteConnection connection = new SQLiteConnection(CONN_STRING))
-            {
-                connection.Open();
-                using (SQLiteCommand cmd = connection.CreateCommand())
-                {
-                    cmd.CommandText = "select x, y from enemy_step where enemy_id = @enemy_id order by step_no asc";
-                    cmd.Parameters.Add("@enemy_id", DbType.Int32);
-                    cmd.Parameters["@enemy_id"].Value = enemyId;
-
-                    using (SQLiteDataReader reader = cmd.ExecuteReader())
-                    {
-                        while (reader.Read())
-                        {
-                            pointOfSteps.Add(new Point(reader.GetDouble(0), reader.GetDouble(1)));
-                        }
-                    }
-                }
-            }
-
-            return pointOfSteps;
-        }
 
         #region Insert methods
 
