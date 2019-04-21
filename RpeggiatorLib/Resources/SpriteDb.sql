@@ -19,30 +19,12 @@ create table gate_trigger (
 	width float not null,
 	height float not null,
 	render_type int not null,
-	render_value_0 Varchar(255) not null,
-	render_value_1 Varchar(255) null,
-	render_value_2 Varchar(255) null,
-	render_value_3 Varchar(255) null,
-	render_value_4 Varchar(255) null,
-	render_value_5 Varchar(255) null,
-	render_value_6 Varchar(255) null,
-	render_value_7 Varchar(255) null,
-	render_value_8 Varchar(255) null,
-	render_value_9 Varchar(255) null,
+	render_value Varchar(4095) not null,
 	action_duration float not null,
 	gate_id int not null,
 	appear_on_activation int not null,
 	on_render_type int not null,
-	on_render_value_0 Varchar(255) not null,
-	on_render_value_1 Varchar(255) null,
-	on_render_value_2 Varchar(255) null,
-	on_render_value_3 Varchar(255) null,
-	on_render_value_4 Varchar(255) null,
-	on_render_value_5 Varchar(255) null,
-	on_render_value_6 Varchar(255) null,
-	on_render_value_7 Varchar(255) null,
-	on_render_value_8 Varchar(255) null,
-	on_render_value_9 Varchar(255) null
+	on_render_value Varchar(4095) not null
 );
 
 create table rift (
@@ -53,16 +35,7 @@ create table rift (
 	width float not null,
 	height float not null,
 	render_type int not null,
-	render_value_0 Varchar(255) not null,
-	render_value_1 Varchar(255) null,
-	render_value_2 Varchar(255) null,
-	render_value_3 Varchar(255) null,
-	render_value_4 Varchar(255) null,
-	render_value_5 Varchar(255) null,
-	render_value_6 Varchar(255) null,
-	render_value_7 Varchar(255) null,
-	render_value_8 Varchar(255) null,
-	render_value_9 Varchar(255) null,
+	render_value Varchar(4095) not null,
 	lifepoints float not null
 );
 
@@ -74,16 +47,7 @@ create table permanent_structure (
 	width float not null,
 	height float not null,
 	render_type int not null,
-	render_value_0 Varchar(255) not null,
-	render_value_1 Varchar(255) null,
-	render_value_2 Varchar(255) null,
-	render_value_3 Varchar(255) null,
-	render_value_4 Varchar(255) null,
-	render_value_5 Varchar(255) null,
-	render_value_6 Varchar(255) null,
-	render_value_7 Varchar(255) null,
-	render_value_8 Varchar(255) null,
-	render_value_9 Varchar(255) null
+	render_value Varchar(4095) not null
 );
 
 create table door (
@@ -94,31 +58,13 @@ create table door (
 	width float not null,
 	height float not null,
 	render_type int not null,
-	render_value_0 Varchar(255) not null,
-	render_value_1 Varchar(255) null,
-	render_value_2 Varchar(255) null,
-	render_value_3 Varchar(255) null,
-	render_value_4 Varchar(255) null,
-	render_value_5 Varchar(255) null,
-	render_value_6 Varchar(255) null,
-	render_value_7 Varchar(255) null,
-	render_value_8 Varchar(255) null,
-	render_value_9 Varchar(255) null,
+	render_value Varchar(4095) not null,
 	key_id int null,
 	connected_screen_id int not null,
 	player_go_through_x float not null,
 	player_go_through_y float not null,
 	locked_render_type int not null,
-	locked_render_value_0 Varchar(255) not null,
-	locked_render_value_1 Varchar(255) null,
-	locked_render_value_2 Varchar(255) null,
-	locked_render_value_3 Varchar(255) null,
-	locked_render_value_4 Varchar(255) null,
-	locked_render_value_5 Varchar(255) null,
-	locked_render_value_6 Varchar(255) null,
-	locked_render_value_7 Varchar(255) null,
-	locked_render_value_8 Varchar(255) null,
-	locked_render_value_9 Varchar(255) null
+	locked_render_value Varchar(4095) not null
 );
 
 create table chest (
@@ -129,31 +75,13 @@ create table chest (
 	width float not null,
 	height float not null,
 	render_type int not null,
-	render_value_0 Varchar(255) not null,
-	render_value_1 Varchar(255) null,
-	render_value_2 Varchar(255) null,
-	render_value_3 Varchar(255) null,
-	render_value_4 Varchar(255) null,
-	render_value_5 Varchar(255) null,
-	render_value_6 Varchar(255) null,
-	render_value_7 Varchar(255) null,
-	render_value_8 Varchar(255) null,
-	render_value_9 Varchar(255) null,
+	render_value Varchar(4095) not null,
 	item_type int null,
 	quantity int not null,
 	key_id int null,
 	key_id_container int null,
 	open_render_type int not null,
-	open_render_value_0 Varchar(255) not null,
-	open_render_value_1 Varchar(255) null,
-	open_render_value_2 Varchar(255) null,
-	open_render_value_3 Varchar(255) null,
-	open_render_value_4 Varchar(255) null,
-	open_render_value_5 Varchar(255) null,
-	open_render_value_6 Varchar(255) null,
-	open_render_value_7 Varchar(255) null,
-	open_render_value_8 Varchar(255) null,
-	open_render_value_9 Varchar(255) null
+	open_render_value Varchar(4095) not null
 );
 
 create table enemy (
@@ -189,16 +117,7 @@ create table pit (
 	width float not null,
 	height float not null,
 	render_type int not null,
-	render_value_0 Varchar(255) not null,
-	render_value_1 Varchar(255) null,
-	render_value_2 Varchar(255) null,
-	render_value_3 Varchar(255) null,
-	render_value_4 Varchar(255) null,
-	render_value_5 Varchar(255) null,
-	render_value_6 Varchar(255) null,
-	render_value_7 Varchar(255) null,
-	render_value_8 Varchar(255) null,
-	render_value_9 Varchar(255) null,
+	render_value Varchar(4095) not null,
 	screen_id_entrance int null
 );
 
@@ -210,16 +129,7 @@ create table floor (
 	width float not null,
 	height float not null,
 	render_type int not null,
-	render_value_0 Varchar(255) not null,
-	render_value_1 Varchar(255) null,
-	render_value_2 Varchar(255) null,
-	render_value_3 Varchar(255) null,
-	render_value_4 Varchar(255) null,
-	render_value_5 Varchar(255) null,
-	render_value_6 Varchar(255) null,
-	render_value_7 Varchar(255) null,
-	render_value_8 Varchar(255) null,
-	render_value_9 Varchar(255) null,
+	render_value Varchar(4095) not null,
 	floor_type int not null
 );
 
@@ -243,16 +153,7 @@ create table gate (
 	width float not null,
 	height float not null,
 	render_type int not null,
-	render_value_0 Varchar(255) not null,
-	render_value_1 Varchar(255) null,
-	render_value_2 Varchar(255) null,
-	render_value_3 Varchar(255) null,
-	render_value_4 Varchar(255) null,
-	render_value_5 Varchar(255) null,
-	render_value_6 Varchar(255) null,
-	render_value_7 Varchar(255) null,
-	render_value_8 Varchar(255) null,
-	render_value_9 Varchar(255) null,
+	render_value Varchar(4095) not null,
 	activated int not null
 );
 
@@ -263,16 +164,7 @@ create table screen (
 	width float not null,
 	height float not null,
 	render_type int not null,
-	render_value_0 Varchar(255) not null,
-	render_value_1 Varchar(255) null,
-	render_value_2 Varchar(255) null,
-	render_value_3 Varchar(255) null,
-	render_value_4 Varchar(255) null,
-	render_value_5 Varchar(255) null,
-	render_value_6 Varchar(255) null,
-	render_value_7 Varchar(255) null,
-	render_value_8 Varchar(255) null,
-	render_value_9 Varchar(255) null,
+	render_value Varchar(4095) not null,
 	floor_type int not null,
 	darkness_opacity float not null,
 	neighboring_screen_top int not null,

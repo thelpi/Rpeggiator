@@ -50,8 +50,8 @@ namespace RpeggiatorLib.Sprites
         /// <param name="renderType"><see cref="Enums.RenderType"/></param>
         /// <param name="renderProperties">Datas required to initialize the <see cref="Renders.Render"/>.</param>
         internal Door(int id, double x, double y, double width, double height, int? keyId, int connectedScreenId,
-            double playerGoThroughX, double playerGoThroughY, Enums.RenderType lockedRenderType, object[] lockedRenderProperties,
-            Enums.RenderType renderType, object[] renderProperties)
+            double playerGoThroughX, double playerGoThroughY, Enums.RenderType lockedRenderType, string[] lockedRenderProperties,
+            Enums.RenderType renderType, string[] renderProperties)
             : base(id, x, y, width, height, renderType, renderProperties)
         {
             _keyId = keyId;

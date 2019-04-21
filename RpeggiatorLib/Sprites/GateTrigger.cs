@@ -38,7 +38,7 @@ namespace RpeggiatorLib.Sprites
         /// <param name="onRenderProperties">Datas required to initialize <see cref="_renderOn"/>.</param>
         internal GateTrigger(int id, double x, double y, double width, double height,
             double actionDuration, int gateId, bool appearOnActivation,
-            Enums.RenderType renderType, object[] renderProperties, Enums.RenderType onRenderType, object[] onRenderProperties)
+            Enums.RenderType renderType, string[] renderProperties, Enums.RenderType onRenderType, string[] onRenderProperties)
             : base(id, x, y, width, height, actionDuration, renderType, renderProperties)
         {
             GateId = gateId;

@@ -12,6 +12,10 @@ namespace RpeggiatorLib
     /// </summary>
     public class SqliteMapper
     {
+        // Caracter used as separator in "render_velue" SQL column.
+        private const char RENDER_VALUES_SEPARATOR = '|';
+        // Escape string to substitute the caracter used as separator in "render_velue" SQL column.
+        private const string RENDER_VALUES_ESCAPE_SEPARATOR = "ù!*^¨§µ^*!";
         // Number of columns used to store properties relatives to a render.
         private const int RENDER_COLUMNS_COUNT = 10;
         // Database name.
@@ -226,15 +230,14 @@ namespace RpeggiatorLib
             return cols;
         }
 
-        // Builds an array of values relatives to the render
-        private static object[] GetRenderPropertiesForCurrentReaderRow(SQLiteDataReader reader, string baseColumnName = "render_value")
+        // Builds an array of values relatives to the default render or a specified one.
+        private static string[] GetRenderPropertiesForCurrentReaderRow(SQLiteDataReader reader, string columnName = "render_value")
         {
-            object[] renderProperties = new object[RENDER_COLUMNS_COUNT];
-            for (int i = 0; i < RENDER_COLUMNS_COUNT; i++)
-            {
-                renderProperties[i] = reader[$"{baseColumnName}_{i}"];
-            }
-            return renderProperties;
+            return reader.GetString(columnName)
+                    .Split(RENDER_VALUES_SEPARATOR)
+                    .Select(v =>
+                        v.Replace(RENDER_VALUES_ESCAPE_SEPARATOR, RENDER_VALUES_SEPARATOR.ToString()))
+                    .ToArray();
         }
 
         // Generates SQL query to insert datas in a table. Parameters have the same name as columns with "@" prefix.

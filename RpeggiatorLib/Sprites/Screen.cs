@@ -117,7 +117,7 @@ namespace RpeggiatorLib.Sprites
         /// <param name="rifts"><see cref="_rifts"/></param>
         /// <param name="neighboringScreens"><see cref="_neighboringScreens"/></param>
         internal Screen(int id, double x, double y, double width, double height, FloorType floorType, double darknessOpacity,
-            RenderType renderType, object[] renderProperties, IEnumerable<PermanentStructure> permanentStructures,
+            RenderType renderType, string[] renderProperties, IEnumerable<PermanentStructure> permanentStructures,
             IEnumerable<Door> doors, IEnumerable<Floor> floors, IEnumerable<Enemy> enemies, IEnumerable<GateTrigger> gateTriggers,
             IEnumerable<Gate> gates, IEnumerable<Rift> rifts, IEnumerable<Pit> pits, IEnumerable<Chest> chests,
             IEnumerable<PickableItem> pickableItems, IDictionary<Direction, int> neighboringScreens)

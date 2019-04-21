@@ -17,7 +17,7 @@
         /// <param name="renderType"><see cref="Enums.RenderType"/></param>
         /// <param name="renderProperties">Datas required to initialize the <see cref="Renders.Render"/>.</param>
         internal PermanentStructure(int id, double x, double y, double width, double height,
-            Enums.RenderType renderType, object[] renderProperties)
+            Enums.RenderType renderType, string[] renderProperties)
             : base(id, x, y, width, height, renderType, renderProperties)
         {
             // Empty.

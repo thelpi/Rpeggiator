@@ -75,7 +75,7 @@ namespace RpeggiatorLib.Sprites
         /// <param name="height"><see cref="Height"/></param>
         /// <param name="renderType"><see cref="Enums.RenderType"/></param>
         /// <param name="renderProperties">Datas required to initialize the <see cref="Renders.Render"/>.</param>
-        protected Sprite(int id, double x, double y, double width, double height, RenderType renderType, object[] renderProperties)
+        protected Sprite(int id, double x, double y, double width, double height, RenderType renderType, string[] renderProperties)
         {
             X = x;
             Y = y;
@@ -92,18 +92,18 @@ namespace RpeggiatorLib.Sprites
         /// <param name="renderType"><see cref="Enums.RenderType"/></param>
         /// <param name="renderProperties">Datas required to initialize the <see cref="Renders.Render"/>.</param>
         /// <returns><see cref="Renders.Render"/></returns>
-        protected Render GetRenderFromValues(RenderType renderType, params object[] renderProperties)
+        protected Render GetRenderFromValues(RenderType renderType, params string[] renderProperties)
         {
             switch (renderType)
             {
                 case RenderType.ImageDirection:
-                    return new ImageDirectionRender((string)renderProperties[0], this, (string)renderProperties[1]);
+                    return new ImageDirectionRender(renderProperties[0], this, renderProperties[1]);
                 case RenderType.ImageMosaic:
-                    return new ImageMosaicRender((string)renderProperties[0], this);
+                    return new ImageMosaicRender(renderProperties[0], this);
                 case RenderType.Image:
-                    return new ImageRender((string)renderProperties[0]);
+                    return new ImageRender(renderProperties[0]);
                 case RenderType.Plain:
-                    return new PlainRender((string)renderProperties[0]);
+                    return new PlainRender(renderProperties[0]);
                 default:
                     throw new System.NotImplementedException(Messages.NotImplementedGraphicExceptionMessage);
             }

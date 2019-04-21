@@ -46,7 +46,7 @@ namespace RpeggiatorLib.Sprites
         /// <param name="openRenderProperties">Datas required to initialize <see cref="_renderOpen"/>.</param>
         internal Chest(int id, double x, double y, double width, double height,
             Enums.ItemType? itemType, int quantity, int? keyId, int? keyIdContainer,
-            Enums.RenderType renderType, object[] renderProperties, Enums.RenderType openRenderType, object[] openRenderProperties)
+            Enums.RenderType renderType, string[] renderProperties, Enums.RenderType openRenderType, string[] openRenderProperties)
             : base(id, x, y, width, height, renderType, renderProperties)
         {
             _itemType = itemType;
