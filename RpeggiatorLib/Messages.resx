@@ -135,7 +135,7 @@
   <data name="InvalidPlayerThroughDoorCoordinatesExceptionMessage" xml:space="preserve">
     <value>The coordinates of the player relative to the door are invalid.</value>
   </data>
-  <data name="InvalidRenderFilenameExceptionMessage" xml:space="preserve">
+  <data name="InvalidRenderExceptionMessage" xml:space="preserve">
     <value>The specified render image file is invalid.</value>
   </data>
   <data name="InvalidResourcesPathExceptionMessage" xml:space="preserve">
@@ -153,8 +153,8 @@
   <data name="NoQuadraticSolutionExceptionMessage" xml:space="preserve">
     <value>Unable to resolve this quadratic equation.</value>
   </data>
-  <data name="NotImplementedGraphicExceptionMessage" xml:space="preserve">
-    <value>This sub-type of graphic should be implemented.</value>
+  <data name="NotImplementedRenderExceptionMessage" xml:space="preserve">
+    <value>This sub-type of render has not been implemented.</value>
   </data>
   <data name="NotImplementedVirtualExceptionMessage" xml:space="preserve">
     <value>This virtual method ou property has not been implemented.</value>

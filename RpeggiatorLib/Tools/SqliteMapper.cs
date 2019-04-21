@@ -13,6 +13,9 @@ namespace RpeggiatorLib
     /// </summary>
     public class SqliteMapper
     {
+        // Path to resources.
+        private readonly string _resourcePath = null;
+
         // Caracter used as separator in "render_velue" SQL column.
         private const char RENDER_VALUES_SEPARATOR = '|';
         // Escape string to substitute the caracter used as separator in "render_velue" SQL column.
@@ -23,26 +26,25 @@ namespace RpeggiatorLib
         private static readonly string CONN_STRING = string.Format("Data Source={0};Version=3;", DB_NAME);
 
         private static SqliteMapper _default = null;
-
+        
         /// <summary>
         /// Default instance (singleton).
         /// </summary>
-        public static SqliteMapper Defaut
+        /// <param name="resourcesPath">Path to resources.</param>
+        public static SqliteMapper Defaut(string resourcesPath)
         {
-            get
+            if (_default == null)
             {
-                if (_default == null)
-                {
-                    _default = new SqliteMapper();
-                }
-
-                return _default;
+                _default = new SqliteMapper(resourcesPath);
             }
+
+            return _default;
         }
 
         // Private constructor.
-        private SqliteMapper()
+        private SqliteMapper(string resourcesPath)
         {
+            _resourcePath = resourcesPath;
             try
             {
                 using (SQLiteConnection connection = new SQLiteConnection(CONN_STRING))
@@ -75,17 +77,24 @@ namespace RpeggiatorLib
 
             if (createDefaultDatas)
             {
-                #region First screen
+                GenerateDefaultDatas();
+            }
+        }
 
-                int screenId1 = CreateScreen(RenderType.Plain, new[] { Tools.HexFromColor(SysColor.PapayaWhip) }, FloorType.Ground, 0);
-                CreatePermanentStructure(screenId1, 0, 300, 300, 50, RenderType.ImageMosaic, new[] { "Tree" });
-                CreatePermanentStructure(screenId1, 100, 260, 50, 140, RenderType.ImageMosaic, new[] { "Tree" });
-                CreateChest(screenId1, 400, 380, 40, 40, RenderType.Image, new[] { "Chest" }, null, 10, null, 1, RenderType.Image, new[] { "OpenChest" });
-                CreatePit(screenId1, 700, 100, 50, 50, RenderType.Image, new[] { "Pit" }, null);
-                CreateRift(screenId1, 700, 400, 20, 100, RenderType.Plain, new[] { Tools.HexFromColor(SysColor.BurlyWood) }, 8);
-                int enemyId = CreateEnemy(screenId1, 50, 50, 40, 40, 4, 5, 150, 0, "Enemy", "Enemy", Direction.Right, null, 10);
-                CreateEnemy(screenId1, 600, 50, 40, 40, 4, 5, 150, 0, "Enemy", "Enemy", Direction.Bottom, ItemType.Arrow, 1);
-                CreateEnemyPathSteps(enemyId, new Dictionary<int, System.Windows.Point>
+        // Generates default datas.
+        private void GenerateDefaultDatas()
+        {
+            #region First screen
+
+            int screenId1 = CreateScreen(RenderType.Plain, new object[] { SysColor.PapayaWhip }, FloorType.Ground, 0);
+            CreatePermanentStructure(screenId1, 0, 300, 300, 50, RenderType.ImageMosaic, new object[] { "Tree" });
+            CreatePermanentStructure(screenId1, 100, 260, 50, 140, RenderType.ImageMosaic, new object[] { "Tree" });
+            CreateChest(screenId1, 400, 380, 40, 40, RenderType.Image, new object[] { "Chest" }, null, 10, null, 1, RenderType.Image, new object[] { "OpenChest" });
+            CreatePit(screenId1, 700, 100, 50, 50, RenderType.Image, new object[] { "Pit" }, null);
+            CreateRift(screenId1, 700, 400, 20, 100, RenderType.Plain, new object[] { SysColor.BurlyWood }, 8);
+            int enemyId = CreateEnemy(screenId1, 50, 50, 40, 40, 4, 5, 150, 0, "Enemy", "Enemy", Direction.Right, null, 10);
+            CreateEnemy(screenId1, 600, 50, 40, 40, 4, 5, 150, 0, "Enemy", "Enemy", Direction.Bottom, ItemType.Arrow, 1);
+            CreateEnemyPathSteps(enemyId, new Dictionary<int, System.Windows.Point>
                 {
                     { 1, new System.Windows.Point(730, 350) },
                     { 2, new System.Windows.Point(730, 400) },
@@ -93,59 +102,58 @@ namespace RpeggiatorLib
                     { 4, new System.Windows.Point(30, 520) },
                 });
 
-                #endregion
+            #endregion
 
-                #region Left screen
+            #region Left screen
 
-                int screenId2 = CreateScreen(RenderType.Plain, new[] { Tools.HexFromColor(SysColor.PapayaWhip) }, FloorType.Ground, 0.8);
-                CreatePermanentStructure(screenId2, 80, 80, 480, 40, RenderType.ImageMosaic, new[] { "Tree" });
-                CreatePermanentStructure(screenId2, 80, 80, 40, 320, RenderType.ImageMosaic, new[] { "Tree" });
-                CreatePermanentStructure(screenId2, 520, 80, 40, 320, RenderType.ImageMosaic, new[] { "Tree" });
-                CreatePermanentStructure(screenId2, 80, 360, 300, 40, RenderType.ImageMosaic, new[] { "Tree" });
-                CreatePermanentStructure(screenId2, 480, 360, 80, 40, RenderType.ImageMosaic, new[] { "Tree" });
-                CreatePermanentStructure(screenId2, 400, 590, 80, 10, RenderType.ImageMosaic, new[] { "Tree" });
-                int gateId = CreateGate(screenId2, 380, 360, 100, 40, RenderType.Plain, new[] { Tools.HexFromColor(SysColor.Gainsboro) }, true);
-                CreateGateTrigger(screenId2, 570, 20, 20, 20, RenderType.Image, new[] { "TriggerOff" }, 5000, gateId, false, RenderType.Image, new[] { "TriggerOn" });
-                CreateGateTrigger(screenId2, 160, 220, 20, 20, RenderType.Image, new[] { "TriggerOff" }, 5000, gateId, false, RenderType.Image, new[] { "TriggerOn" });
-                CreatePickableItem(screenId2, 310, 230, Constants.Bomb.WIDTH, Constants.Bomb.HEIGHT, ItemType.Bomb, 10, null);
-                CreatePit(screenId2, 600, 400, 50, 50, RenderType.Image, new[] { "Pit" }, screenId1);
+            int screenId2 = CreateScreen(RenderType.Plain, new object[] { SysColor.PapayaWhip }, FloorType.Ground, 0.8);
+            CreatePermanentStructure(screenId2, 80, 80, 480, 40, RenderType.ImageMosaic, new object[] { "Tree" });
+            CreatePermanentStructure(screenId2, 80, 80, 40, 320, RenderType.ImageMosaic, new object[] { "Tree" });
+            CreatePermanentStructure(screenId2, 520, 80, 40, 320, RenderType.ImageMosaic, new object[] { "Tree" });
+            CreatePermanentStructure(screenId2, 80, 360, 300, 40, RenderType.ImageMosaic, new object[] { "Tree" });
+            CreatePermanentStructure(screenId2, 480, 360, 80, 40, RenderType.ImageMosaic, new object[] { "Tree" });
+            CreatePermanentStructure(screenId2, 400, 590, 80, 10, RenderType.ImageMosaic, new object[] { "Tree" });
+            int gateId = CreateGate(screenId2, 380, 360, 100, 40, RenderType.Plain, new object[] { SysColor.Gainsboro }, true);
+            CreateGateTrigger(screenId2, 570, 20, 20, 20, RenderType.Image, new object[] { "TriggerOff" }, 5000, gateId, false, RenderType.Image, new object[] { "TriggerOn" });
+            CreateGateTrigger(screenId2, 160, 220, 20, 20, RenderType.Image, new object[] { "TriggerOff" }, 5000, gateId, false, RenderType.Image, new object[] { "TriggerOn" });
+            CreatePickableItem(screenId2, 310, 230, Constants.Bomb.WIDTH, Constants.Bomb.HEIGHT, ItemType.Bomb, 10, null);
+            CreatePit(screenId2, 600, 400, 50, 50, RenderType.Image, new object[] { "Pit" }, screenId1);
 
-                #endregion
+            #endregion
 
-                #region Top screen
+            #region Top screen
 
-                int screenId3 = CreateScreen(RenderType.Plain, new[] { Tools.HexFromColor(SysColor.PapayaWhip) }, FloorType.Ground, 0);
-                CreateFloor(screenId3, 150, 150, 300, 200, RenderType.Plain, new[] { Tools.HexFromColor(SysColor.Blue) }, FloorType.Water);
-                CreateFloor(screenId3, 460, 150, 150, 200, RenderType.Plain, new[] { Tools.HexFromColor(SysColor.Crimson) }, FloorType.Lava);
-                CreateFloor(screenId3, 200, 360, 400, 100, RenderType.Plain, new[] { Tools.HexFromColor(SysColor.Azure) }, FloorType.Ice);
-                CreatePermanentStructure(screenId3, 0, 0, 800, 20, RenderType.ImageMosaic, new[] { "Tree" });
-                CreatePermanentStructure(screenId3, 0, 20, 20, 560, RenderType.ImageMosaic, new[] { "Tree" });
-                CreatePermanentStructure(screenId3, 780, 20, 20, 560, RenderType.ImageMosaic, new[] { "Tree" });
-                CreatePermanentStructure(screenId3, 0, 580, 400, 20, RenderType.ImageMosaic, new[] { "Tree" });
-                CreatePermanentStructure(screenId3, 480, 580, 320, 20, RenderType.ImageMosaic, new[] { "Tree" });
-                CreateDoor(screenId3, 400, 580, 80, 20, RenderType.Image, new[] { "Door" }, 1, screenId1, 400, 20, RenderType.Image, new[] { "DoorLocked" });
+            int screenId3 = CreateScreen(RenderType.Plain, new object[] { SysColor.PapayaWhip }, FloorType.Ground, 0);
+            CreateFloor(screenId3, 150, 150, 300, 200, RenderType.Plain, new object[] { SysColor.Blue }, FloorType.Water);
+            CreateFloor(screenId3, 460, 150, 150, 200, RenderType.Plain, new object[] { SysColor.Crimson }, FloorType.Lava);
+            CreateFloor(screenId3, 200, 360, 400, 100, RenderType.Plain, new object[] { SysColor.Azure }, FloorType.Ice);
+            CreatePermanentStructure(screenId3, 0, 0, 800, 20, RenderType.ImageMosaic, new object[] { "Tree" });
+            CreatePermanentStructure(screenId3, 0, 20, 20, 560, RenderType.ImageMosaic, new object[] { "Tree" });
+            CreatePermanentStructure(screenId3, 780, 20, 20, 560, RenderType.ImageMosaic, new object[] { "Tree" });
+            CreatePermanentStructure(screenId3, 0, 580, 400, 20, RenderType.ImageMosaic, new object[] { "Tree" });
+            CreatePermanentStructure(screenId3, 480, 580, 320, 20, RenderType.ImageMosaic, new object[] { "Tree" });
+            CreateDoor(screenId3, 400, 580, 80, 20, RenderType.Image, new object[] { "Door" }, 1, screenId1, 400, 20, RenderType.Image, new object[] { "DoorLocked" });
 
-                #endregion
+            #endregion
 
-                #region Right screen
+            #region Right screen
 
-                int screenId4 = CreateScreen(RenderType.Plain, new[] { Tools.HexFromColor(SysColor.PapayaWhip) }, FloorType.Ground, 0);
-                CreatePermanentStructure(screenId4, 166, 49, 495, 50, RenderType.ImageMosaic, new[] { "Tree" });
-                CreatePermanentStructure(screenId4, 63, 50, 49, 194, RenderType.ImageMosaic, new[] { "Tree" });
-                CreatePermanentStructure(screenId4, 629, 236, 42, 284, RenderType.ImageMosaic, new[] { "Tree" });
-                CreatePermanentStructure(screenId4, 63, 327, 434, 61, RenderType.ImageMosaic, new[] { "Tree" });
-                CreatePermanentStructure(screenId4, 69, 469, 407, 56, RenderType.ImageMosaic, new[] { "Tree" });
+            int screenId4 = CreateScreen(RenderType.Plain, new object[] { SysColor.PapayaWhip }, FloorType.Ground, 0);
+            CreatePermanentStructure(screenId4, 166, 49, 495, 50, RenderType.ImageMosaic, new object[] { "Tree" });
+            CreatePermanentStructure(screenId4, 63, 50, 49, 194, RenderType.ImageMosaic, new object[] { "Tree" });
+            CreatePermanentStructure(screenId4, 629, 236, 42, 284, RenderType.ImageMosaic, new object[] { "Tree" });
+            CreatePermanentStructure(screenId4, 63, 327, 434, 61, RenderType.ImageMosaic, new object[] { "Tree" });
+            CreatePermanentStructure(screenId4, 69, 469, 407, 56, RenderType.ImageMosaic, new object[] { "Tree" });
 
-                #endregion
+            #endregion
 
-                SetNeighboringScreens(screenId1, screenId2, screenId2, screenId4, screenId2);
-                SetNeighboringScreens(screenId2, screenId1, screenId1, screenId1, screenId1);
-                SetNeighboringScreens(screenId3, screenId1, screenId1, screenId1, screenId1);
-                SetNeighboringScreens(screenId4, screenId1, screenId1, screenId1, screenId1);
+            SetNeighboringScreens(screenId1, screenId2, screenId2, screenId4, screenId2);
+            SetNeighboringScreens(screenId2, screenId1, screenId1, screenId1, screenId1);
+            SetNeighboringScreens(screenId3, screenId1, screenId1, screenId1, screenId1);
+            SetNeighboringScreens(screenId4, screenId1, screenId1, screenId1, screenId1);
 
-                // Screen ID 3 is required to create this door.
-                CreateDoor(screenId1, 400, 0, 80, 20, RenderType.Image, new[] { "Door" }, 1, screenId3, 400, 540, RenderType.Image, new[] { "DoorLocked" });
-            }
+            // Screen ID 3 is required to create this door.
+            CreateDoor(screenId1, 400, 0, 80, 20, RenderType.Image, new[] { "Door" }, 1, screenId3, 400, 540, RenderType.Image, new[] { "DoorLocked" });
         }
 
         /// <summary>
@@ -412,20 +420,25 @@ namespace RpeggiatorLib
 
         // Creats a sprite of the specified type inside the specified screen.
         private int CreateSpriteInScreen<T>(string tableName, int screenId, double x, double y, double width, double height,
-            RenderType? renderType, string[] renderValues, params Tuple<string, DbType, object>[] otherValues) where T : Sprites.Sprite
+            RenderType? renderType, object[] renderValues, params Tuple<string, DbType, object>[] otherValues) where T : Sprites.Sprite
         {
             if (!ExistsId("screen", screenId))
             {
                 throw new ArgumentException(Messages.InvalidSpriteIdExceptionMessage, nameof(screenId));
             }
             CheckInputDimensions(x, y, width, height);
+            string[] renderValueString = null;
+            if (renderType.HasValue)
+            {
+                renderValueString = CheckRenderValues(renderType.Value, renderValues);
+            }
 
             int id = GetNextId(tableName);
 
             ExecutePreparedInsert(tableName,
                 ToColumnsArray(renderType.HasValue, otherValues.Select(t => t.Item1).ToArray()),
                 ToTypesArray(renderType.HasValue, otherValues.Select(t => t.Item2).ToArray()),
-                ToValuesArray(id, screenId, x, y, width, height, renderType, renderValues, otherValues.Select(t => t.Item3).ToArray()));
+                ToValuesArray(id, screenId, x, y, width, height, renderType, renderValueString, otherValues.Select(t => t.Item3).ToArray()));
 
             return id;
         }
@@ -570,6 +583,42 @@ namespace RpeggiatorLib
             }
         }
 
+        // Checks render properties and throws an exception if invalid.
+        private string[] CheckRenderValues(RenderType renderType, object[] renderValues)
+        {
+            if (renderValues == null || renderValues.Length == 0 || renderValues[0] == null)
+            {
+                throw new ArgumentException(Messages.InvalidRenderExceptionMessage, nameof(renderValues));
+            }
+
+            switch (renderType)
+            {
+                case RenderType.Image:
+                case RenderType.ImageMosaic:
+                    if (!System.IO.File.Exists(Tools.GetImagePath(_resourcePath, renderValues[0].ToString())))
+                    {
+                        throw new ArgumentException(Messages.InvalidRenderExceptionMessage, nameof(renderValues));
+                    }
+                    return new string[] { renderValues[0].ToString() };
+                case RenderType.ImageDirection:
+                    if (!System.IO.File.Exists(Tools.GetImagePath(_resourcePath, renderValues[0].ToString()))
+                        // TODO : check the "Direction" property on the target.
+                        || renderValues[1] == null || string.IsNullOrWhiteSpace(renderValues[1].ToString()))
+                    {
+                        throw new ArgumentException(Messages.InvalidRenderExceptionMessage, nameof(renderValues));
+                    }
+                    return new string[] { renderValues[0].ToString(), renderValues[1].ToString() };
+                case RenderType.Plain:
+                    if (renderValues[0].GetType() != typeof(System.Windows.Media.Color))
+                    {
+                        throw new ArgumentException(Messages.InvalidRenderExceptionMessage, nameof(renderValues));
+                    }
+                    return new string[] { Tools.HexFromColor((System.Windows.Media.Color)renderValues[0]) };
+                default:
+                    throw new NotImplementedException(Messages.NotImplementedRenderExceptionMessage);
+            }
+        }
+
         // Transforms an array of render properties to a string for SQL insertion.
         private static string RenderPropertiesToSqlValue(string[] renderValues)
         {
@@ -650,8 +699,10 @@ namespace RpeggiatorLib
         /// <returns><see cref="Sprites.Sprite.Id"/></returns>
         /// <exception cref="ArgumentException"><see cref="Messages.InvalidSpriteIdExceptionMessage"/></exception>
         /// <exception cref="ArgumentException"><see cref="Messages.InvalidDimensionForInsertionExceptionMessage"/></exception>
+        /// <exception cref="ArgumentException"><see cref="Messages.InvalidRenderExceptionMessage"/></exception>
+        /// <exception cref="NotImplementedException"><see cref="Messages.NotImplementedRenderExceptionMessage"/></exception>
         public int CreatePermanentStructure(int screenId, double x, double y, double width, double height,
-            RenderType renderType, string[] renderValues)
+            RenderType renderType, object[] renderValues)
         {
             return CreateSpriteInScreen<Sprites.PermanentStructure>("permanent_structure", screenId, x, y, width, height, renderType, renderValues);
         }
@@ -675,10 +726,12 @@ namespace RpeggiatorLib
         /// <exception cref="ArgumentException"><see cref="Messages.InvalidSpriteIdExceptionMessage"/></exception>
         /// <exception cref="ArgumentException"><see cref="Messages.InvalidDimensionForInsertionExceptionMessage"/></exception>
         /// <exception cref="ArgumentException"><see cref="Messages.LowerOrEqualZeroExceptionMessage"/></exception>
+        /// <exception cref="ArgumentException"><see cref="Messages.InvalidRenderExceptionMessage"/></exception>
+        /// <exception cref="NotImplementedException"><see cref="Messages.NotImplementedRenderExceptionMessage"/></exception>
         public int CreateGateTrigger(int screenId, double x, double y, double width, double height,
-            RenderType renderType, string[] renderValues,
+            RenderType renderType, object[] renderValues,
             double actionDuration, int gateId, bool appearOnActivation,
-            RenderType onRenderType, string[] onRenderValues)
+            RenderType onRenderType, object[] onRenderValues)
         {
             if (actionDuration.LowerEqual(0))
             {
@@ -688,13 +741,14 @@ namespace RpeggiatorLib
             {
                 throw new ArgumentException(Messages.InvalidSpriteIdExceptionMessage, nameof(gateId));
             }
+            string[] onRenderValuesString = CheckRenderValues(onRenderType, onRenderValues);
 
             return CreateSpriteInScreen<Sprites.GateTrigger>("gate_trigger", screenId, x, y, width, height, renderType, renderValues,
                 new Tuple<string, DbType, object>("action_duration", DbType.Double, actionDuration),
                 new Tuple<string, DbType, object>("gate_id", DbType.Int32, gateId),
                 new Tuple<string, DbType, object>("appear_on_activation", DbType.Int32, appearOnActivation ? 1 : 0),
                 new Tuple<string, DbType, object>("on_render_type", DbType.Int32, (int)onRenderType),
-                new Tuple<string, DbType, object>("on_render_value", DbType.String, onRenderValues));
+                new Tuple<string, DbType, object>("on_render_value", DbType.String, onRenderValuesString));
         }
 
         /// <summary>
@@ -712,8 +766,10 @@ namespace RpeggiatorLib
         /// <exception cref="ArgumentException"><see cref="Messages.InvalidSpriteIdExceptionMessage"/></exception>
         /// <exception cref="ArgumentException"><see cref="Messages.InvalidDimensionForInsertionExceptionMessage"/></exception>
         /// <exception cref="ArgumentException"><see cref="Messages.LowerOrEqualZeroExceptionMessage"/></exception>
+        /// <exception cref="ArgumentException"><see cref="Messages.InvalidRenderExceptionMessage"/></exception>
+        /// <exception cref="NotImplementedException"><see cref="Messages.NotImplementedRenderExceptionMessage"/></exception>
         public int CreateRift(int screenId, double x, double y, double width, double height,
-            RenderType renderType, string[] renderValues, double lifepoints)
+            RenderType renderType, object[] renderValues, double lifepoints)
         {
             if (lifepoints.LowerEqual(0))
             {
@@ -738,8 +794,10 @@ namespace RpeggiatorLib
         /// <returns><see cref="Sprites.Sprite.Id"/></returns>
         /// <exception cref="ArgumentException"><see cref="Messages.InvalidSpriteIdExceptionMessage"/></exception>
         /// <exception cref="ArgumentException"><see cref="Messages.InvalidDimensionForInsertionExceptionMessage"/></exception>
+        /// <exception cref="ArgumentException"><see cref="Messages.InvalidRenderExceptionMessage"/></exception>
+        /// <exception cref="NotImplementedException"><see cref="Messages.NotImplementedRenderExceptionMessage"/></exception>
         public int CreateGate(int screenId, double x, double y, double width, double height,
-            RenderType renderType, string[] renderValues, bool activated)
+            RenderType renderType, object[] renderValues, bool activated)
         {
             return CreateSpriteInScreen<Sprites.Gate>("gate", screenId, x, y, width, height, renderType, renderValues,
                 new Tuple<string, DbType, object>("activated", DbType.Int32, activated ? 1 : 0));
@@ -799,10 +857,12 @@ namespace RpeggiatorLib
         /// <exception cref="ArgumentException"><see cref="Messages.InvalidDimensionForInsertionExceptionMessage"/></exception>
         /// <exception cref="ArgumentException"><see cref="Messages.LowerOrEqualZeroExceptionMessage"/></exception>
         /// <exception cref="ArgumentException"><see cref="Messages.InvalidPlayerThroughDoorCoordinatesExceptionMessage"/></exception>
+        /// <exception cref="ArgumentException"><see cref="Messages.InvalidRenderExceptionMessage"/></exception>
+        /// <exception cref="NotImplementedException"><see cref="Messages.NotImplementedRenderExceptionMessage"/></exception>
         public int CreateDoor(int screenId, double x, double y, double width, double height,
-            RenderType renderType, string[] renderValues,
+            RenderType renderType, object[] renderValues,
             int? keyId, int connectedScreenId, double playerGoThroughX, double playerGoThroughY,
-            RenderType lockedRenderType, string[] lockedRenderValues)
+            RenderType lockedRenderType, object[] lockedRenderValues)
         {
             if (keyId.HasValue && keyId <= 0)
             {
@@ -820,6 +880,7 @@ namespace RpeggiatorLib
             {
                 throw new ArgumentException(Messages.InvalidPlayerThroughDoorCoordinatesExceptionMessage, nameof(playerGoThroughY));
             }
+            string[] lockedRenderValuesString = CheckRenderValues(lockedRenderType, lockedRenderValues);
 
             return CreateSpriteInScreen<Sprites.Door>("door", screenId, x, y, width, height, renderType, renderValues,
                 new Tuple<string, DbType, object>("key_id", DbType.Int32, keyId),
@@ -827,7 +888,7 @@ namespace RpeggiatorLib
                 new Tuple<string, DbType, object>("player_go_through_x", DbType.Double, playerGoThroughX),
                 new Tuple<string, DbType, object>("player_go_through_y", DbType.Double, playerGoThroughY),
                 new Tuple<string, DbType, object>("locked_render_type", DbType.Int32, (int)lockedRenderType),
-                new Tuple<string, DbType, object>("locked_render_value", DbType.String, lockedRenderValues));
+                new Tuple<string, DbType, object>("locked_render_value", DbType.String, lockedRenderValuesString));
         }
 
         /// <summary>
@@ -844,8 +905,10 @@ namespace RpeggiatorLib
         /// <returns><see cref="Sprites.Sprite.Id"/></returns>
         /// <exception cref="ArgumentException"><see cref="Messages.InvalidSpriteIdExceptionMessage"/></exception>
         /// <exception cref="ArgumentException"><see cref="Messages.InvalidDimensionForInsertionExceptionMessage"/></exception>
+        /// <exception cref="ArgumentException"><see cref="Messages.InvalidRenderExceptionMessage"/></exception>
+        /// <exception cref="NotImplementedException"><see cref="Messages.NotImplementedRenderExceptionMessage"/></exception>
         public int CreateFloor(int screenId, double x, double y, double width, double height,
-            RenderType renderType, string[] renderValues, FloorType floorType)
+            RenderType renderType, object[] renderValues, FloorType floorType)
         {
             return CreateSpriteInScreen<Sprites.Floor>("floor", screenId, x, y, width, height, renderType, renderValues,
                 new Tuple<string, DbType, object>("floor_type", DbType.Int32, (int)floorType));
@@ -865,8 +928,10 @@ namespace RpeggiatorLib
         /// <returns><see cref="Sprites.Sprite.Id"/></returns>
         /// <exception cref="ArgumentException"><see cref="Messages.InvalidSpriteIdExceptionMessage"/></exception>
         /// <exception cref="ArgumentException"><see cref="Messages.InvalidDimensionForInsertionExceptionMessage"/></exception>
+        /// <exception cref="ArgumentException"><see cref="Messages.InvalidRenderExceptionMessage"/></exception>
+        /// <exception cref="NotImplementedException"><see cref="Messages.NotImplementedRenderExceptionMessage"/></exception>
         public int CreatePit(int screenId, double x, double y, double width, double height,
-            RenderType renderType, string[] renderValues, int? screenIdEntrance)
+            RenderType renderType, object[] renderValues, int? screenIdEntrance)
         {
             if (screenIdEntrance.HasValue && !ExistsId("screen", screenIdEntrance.Value))
             {
@@ -897,9 +962,11 @@ namespace RpeggiatorLib
         /// <exception cref="ArgumentException"><see cref="Messages.InvalidSpriteIdExceptionMessage"/></exception>
         /// <exception cref="ArgumentException"><see cref="Messages.InvalidDimensionForInsertionExceptionMessage"/></exception>
         /// <exception cref="ArgumentException"><see cref="Messages.LowerOrEqualZeroExceptionMessage"/></exception>
+        /// <exception cref="ArgumentException"><see cref="Messages.InvalidRenderExceptionMessage"/></exception>
+        /// <exception cref="NotImplementedException"><see cref="Messages.NotImplementedRenderExceptionMessage"/></exception>
         public int CreateChest(int screenId, double x, double y, double width, double height,
-            RenderType renderType, string[] renderValues, ItemType? itemType, int quantity, int? keyId, int? keyIdContainer,
-            RenderType openRenderType, string[] openRenderValues)
+            RenderType renderType, object[] renderValues, ItemType? itemType, int quantity, int? keyId, int? keyIdContainer,
+            RenderType openRenderType, object[] openRenderValues)
         {
             if (quantity <= 0)
             {
@@ -913,6 +980,7 @@ namespace RpeggiatorLib
             {
                 throw new ArgumentException(Messages.LowerOrEqualZeroExceptionMessage, nameof(keyId));
             }
+            string[] openRenderValuesString = CheckRenderValues(openRenderType, openRenderValues);
 
             // The chest can't contain both item and key.
             if (keyIdContainer.HasValue)
@@ -926,7 +994,7 @@ namespace RpeggiatorLib
                 new Tuple<string, DbType, object>("key_id", DbType.Int32, keyId),
                 new Tuple<string, DbType, object>("key_id_container", DbType.Int32, keyIdContainer),
                 new Tuple<string, DbType, object>("open_render_type", DbType.Int32, (int)openRenderType),
-                new Tuple<string, DbType, object>("open_render_value", DbType.String, openRenderValues));
+                new Tuple<string, DbType, object>("open_render_value", DbType.String, openRenderValuesString));
         }
 
         /// <summary>
@@ -950,7 +1018,7 @@ namespace RpeggiatorLib
         /// <exception cref="ArgumentException"><see cref="Messages.InvalidSpriteIdExceptionMessage"/></exception>
         /// <exception cref="ArgumentException"><see cref="Messages.InvalidDimensionForInsertionExceptionMessage"/></exception>
         /// <exception cref="ArgumentException"><see cref="Messages.LowerOrEqualZeroExceptionMessage"/></exception>
-        /// <exception cref="ArgumentException"><see cref="Messages.InvalidRenderFilenameExceptionMessage"/></exception>
+        /// <exception cref="ArgumentException"><see cref="Messages.InvalidRenderExceptionMessage"/></exception>
         public int CreateEnemy(int screenId, double x, double y, double width, double height, double maximalLifePoints,
             double hitLifePointCost, double speed, double recoveryTime, string renderFilename, string renderRecoveryFilename,
             Direction defaultDirection, ItemType? lootItemType, int lootQuantity)
@@ -967,13 +1035,13 @@ namespace RpeggiatorLib
             {
                 throw new ArgumentException(Messages.LowerOrEqualZeroExceptionMessage, nameof(hitLifePointCost));
             }
-            if (string.IsNullOrWhiteSpace(renderFilename))
+            if (string.IsNullOrWhiteSpace(renderFilename) || !System.IO.File.Exists(Tools.GetImagePath(_resourcePath, renderFilename)))
             {
-                throw new ArgumentException(Messages.InvalidRenderFilenameExceptionMessage, nameof(renderFilename));
+                throw new ArgumentException(Messages.InvalidRenderExceptionMessage, nameof(renderFilename));
             }
-            if (string.IsNullOrWhiteSpace(renderRecoveryFilename))
+            if (string.IsNullOrWhiteSpace(renderRecoveryFilename) || !System.IO.File.Exists(Tools.GetImagePath(_resourcePath, renderFilename)))
             {
-                throw new ArgumentException(Messages.InvalidRenderFilenameExceptionMessage, nameof(renderRecoveryFilename));
+                throw new ArgumentException(Messages.InvalidRenderExceptionMessage, nameof(renderRecoveryFilename));
             }
             recoveryTime = recoveryTime < 0 ? 0 : recoveryTime;
             lootQuantity = lootQuantity < 0 ? 0 : lootQuantity;
@@ -999,8 +1067,12 @@ namespace RpeggiatorLib
         /// <param name="darknessOpacity"><see cref="Sprites.Screen.DarknessOpacity"/></param>
         /// <param name="floorType"><see cref="Sprites.Floor.FloorType"/></param>
         /// <returns><see cref="Sprites.Sprite.Id"/></returns>
-        public int CreateScreen(RenderType renderType, string[] renderValues, FloorType floorType, double darknessOpacity)
+        /// <exception cref="ArgumentException"><see cref="Messages.InvalidRenderExceptionMessage"/></exception>
+        /// <exception cref="NotImplementedException"><see cref="Messages.NotImplementedRenderExceptionMessage"/></exception>
+        public int CreateScreen(RenderType renderType, object[] renderValues, FloorType floorType, double darknessOpacity)
         {
+            string[] renderValuesString = CheckRenderValues(renderType, renderValues);
+
             darknessOpacity = darknessOpacity.Lower(0) ? 0 : (darknessOpacity.Greater(1) ? 1 : darknessOpacity);
 
             int id = GetNextId("screen");
@@ -1009,7 +1081,7 @@ namespace RpeggiatorLib
                 "neighboring_screen_bottom", "neighboring_screen_right", "neighboring_screen_left").ToList();
             List<DbType> typesList = ToTypesArray(true, DbType.Int32, DbType.Double, DbType.Int32,
                 DbType.Int32, DbType.Int32, DbType.Int32).ToList();
-            List<Object> valuesList = ToValuesArray(id, 0, 0, 0, Constants.SCREEN_WIDTH, Constants.SCREEN_HEIGHT, renderType, renderValues,
+            List<Object> valuesList = ToValuesArray(id, 0, 0, 0, Constants.SCREEN_WIDTH, Constants.SCREEN_HEIGHT, renderType, renderValuesString,
                 floorType, darknessOpacity, 0, 0, 0, 0).ToList();
 
             // Removes the "screenId" value in each list.
@@ -1086,74 +1158,5 @@ namespace RpeggiatorLib
         }
 
         #endregion
-    }
-
-    /// <summary>
-    /// Extension methods for <see cref="SqliteMapper"/>.
-    /// </summary>
-    internal static class SqliteMapperExtensions
-    {
-        /// <summary>
-        /// Extracts a nullable value from a <see cref="SQLiteDataReader"/> at a specified column.
-        /// </summary>
-        /// <typeparam name="T">The nullable output type.</typeparam>
-        /// <param name="reader"><see cref="SQLiteDataReader"/></param>
-        /// <param name="columnName">Column name.</param>
-        /// <returns>Value.</returns>
-        internal static T? GetNullValue<T>(this SQLiteDataReader reader, string columnName) where T : struct
-        {
-            return reader.IsDBNull(reader.GetOrdinal(columnName)) ? (T?)null
-                : (T)Convert.ChangeType(reader[columnName], typeof(T));
-        }
-
-        /// <summary>
-        /// Extracts a non-nullable value from a <see cref="SQLiteDataReader"/> at a specified column.
-        /// </summary>
-        /// <typeparam name="T">The output type.</typeparam>
-        /// <param name="reader"><see cref="SQLiteDataReader"/></param>
-        /// <param name="columnName">Column name.</param>
-        /// <returns>Value.</returns>
-        internal static T GetValue<T>(this SQLiteDataReader reader, string columnName) where T : struct
-        {
-            object nonTypedValue = reader[columnName];
-            if (nonTypedValue == null || nonTypedValue == DBNull.Value)
-            {
-                return default(T);
-            }
-            return (T)Convert.ChangeType(nonTypedValue, typeof(T));
-        }
-
-        /// <summary>
-        /// Gets a value of type <see cref="double"/> from <paramref name="reader"/> at the specified <paramref name="columnName"/>.
-        /// </summary>
-        /// <param name="reader"><see cref="SQLiteDataReader"/></param>
-        /// <param name="columnName">Column name.</param>
-        /// <returns>Value of type <see cref="double"/>.</returns>
-        internal static double GetDouble(this SQLiteDataReader reader, string columnName)
-        {
-            return reader.GetValue<double>(columnName);
-        }
-
-        /// <summary>
-        /// Gets a value of type <see cref="int"/> from <paramref name="reader"/> at the specified <paramref name="columnName"/>.
-        /// </summary>
-        /// <param name="reader"><see cref="SQLiteDataReader"/></param>
-        /// <param name="columnName">Column name.</param>
-        /// <returns>Value of type <see cref="int"/>.</returns>
-        internal static int GetInt32(this SQLiteDataReader reader, string columnName)
-        {
-            return reader.GetValue<int>(columnName);
-        }
-
-        /// <summary>
-        /// Gets a value of type <see cref="string"/> from <paramref name="reader"/> at the specified <paramref name="columnName"/>.
-        /// </summary>
-        /// <param name="reader"><see cref="SQLiteDataReader"/></param>
-        /// <param name="columnName">Column name.</param>
-        /// <returns>Value of type <see cref="string"/>.</returns>
-        internal static string GetString(this SQLiteDataReader reader, string columnName)
-        {
-            return reader.GetString(reader.GetOrdinal(columnName));
-        }
     }
 }

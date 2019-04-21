@@ -117,9 +117,9 @@ namespace RpeggiatorLib {
         /// <summary>
         ///   Recherche une chaîne localisée semblable à The specified render image file is invalid..
         /// </summary>
-        internal static string InvalidRenderFilenameExceptionMessage {
+        internal static string InvalidRenderExceptionMessage {
             get {
-                return ResourceManager.GetString("InvalidRenderFilenameExceptionMessage", resourceCulture);
+                return ResourceManager.GetString("InvalidRenderExceptionMessage", resourceCulture);
             }
         }
         
@@ -169,11 +169,11 @@ namespace RpeggiatorLib {
         }
         
         /// <summary>
-        ///   Recherche une chaîne localisée semblable à This sub-type of graphic should be implemented..
+        ///   Recherche une chaîne localisée semblable à This sub-type of render has not been implemented..
         /// </summary>
-        internal static string NotImplementedGraphicExceptionMessage {
+        internal static string NotImplementedRenderExceptionMessage {
             get {
-                return ResourceManager.GetString("NotImplementedGraphicExceptionMessage", resourceCulture);
+                return ResourceManager.GetString("NotImplementedRenderExceptionMessage", resourceCulture);
             }
         }
         

@@ -135,6 +135,7 @@
     <Compile Include="Sprites\SwordHit.cs" />
     <Compile Include="Tools\Constants.cs" />
     <Compile Include="Tools\SqliteMapper.cs" />
+    <Compile Include="Tools\SqliteMapperExtensions.cs" />
     <Compile Include="Tools\Tools.cs" />
   </ItemGroup>
   <ItemGroup>

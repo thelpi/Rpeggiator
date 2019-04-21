@@ -105,7 +105,7 @@ namespace RpeggiatorLib.Sprites
                 case RenderType.Plain:
                     return new PlainRender(renderProperties[0]);
                 default:
-                    throw new System.NotImplementedException(Messages.NotImplementedGraphicExceptionMessage);
+                    throw new System.NotImplementedException(Messages.NotImplementedRenderExceptionMessage);
             }
         }
 

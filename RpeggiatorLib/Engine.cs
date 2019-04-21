@@ -110,7 +110,7 @@ namespace RpeggiatorLib
                 return _screens.First(s => s.Id == id);
             }
 
-            Screen screen = SqliteMapper.Defaut.GetScreenById(id);
+            Screen screen = SqliteMapper.Defaut(ResourcesPath).GetScreenById(id);
 
             _screens.Add(screen);
 

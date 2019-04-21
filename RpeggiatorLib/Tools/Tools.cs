@@ -13,6 +13,17 @@ namespace RpeggiatorLib
         private static Random _random = new Random(DateTime.Now.Millisecond);
 
         /// <summary>
+        /// Gets the full path of an image from its name without extension and the specified resource directory.
+        /// </summary>
+        /// <param name="resourcesDirectory">Resources directory.</param>
+        /// <param name="imageNameWithoutExtension">Image name without extension.</param>
+        /// <returns>Image full path.</returns>
+        internal static string GetImagePath(string resourcesDirectory, string imageNameWithoutExtension)
+        {
+            return string.Format("{0}Images\\{1}.png", resourcesDirectory, imageNameWithoutExtension);
+        }
+
+        /// <summary>
         /// Transforms a <see cref="Color"/> to its hexadecimal representation.
         /// </summary>
         /// <param name="color"><see cref="Color"/></param>
@@ -20,28 +31,6 @@ namespace RpeggiatorLib
         internal static string HexFromColor(Color color)
         {
             return string.Format("#{0:X2}{1:X2}{2:X2}{3:X2}", color.A, color.R, color.G, color.B);
-        }
-
-        /// <summary>
-        /// Gets the screen datas by its identifier.
-        /// </summary>
-        /// <param name="screenId">Screen identifier.</param>
-        /// <returns>Dynamic screen datas.</returns>
-        internal static dynamic GetScreenDatasFromId(int screenId)
-        {
-            string jsonRawContent;
-            
-            string resourcePath = string.Format("{0}Screen{1}.json", Engine.ResourcesPath, screenId);
-
-            using (FileStream stream = new FileStream(resourcePath, FileMode.Open, FileAccess.Read))
-            {
-                using (StreamReader reader = new StreamReader(stream))
-                {
-                    jsonRawContent = reader.ReadToEnd();
-                }
-            }
-            
-            return JsonConvert.DeserializeObject(jsonRawContent);
         }
 
         /// <summary>

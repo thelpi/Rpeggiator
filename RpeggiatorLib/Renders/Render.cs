@@ -25,7 +25,7 @@ namespace RpeggiatorLib.Renders
         {
             BitmapImage bitmapImage = new BitmapImage();
 
-            string resourcePath = string.Format("{0}Images\\{1}.png", Engine.ResourcesPath, imageName);
+            string resourcePath = Tools.GetImagePath(Engine.ResourcesPath, imageName);
 
             using (FileStream stream = new FileStream(resourcePath, FileMode.Open, FileAccess.Read))
             {
