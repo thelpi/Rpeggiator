@@ -9,6 +9,14 @@ namespace RpeggiatorLib
     internal static class Constants
     {
         /// <summary>
+        /// <see cref="Sprites.Screen"/> width.
+        /// </summary>
+        internal const double SCREEN_WIDTH = 800;
+        /// <summary>
+        /// <see cref="Sprites.Screen"/> height.
+        /// </summary>
+        internal const double SCREEN_HEIGHT = 600;
+        /// <summary>
         /// Player's moves history max count.
         /// </summary>
         internal const int MOVE_HISTORY_COUNT = 50;

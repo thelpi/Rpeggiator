@@ -12,14 +12,10 @@ namespace RpeggiatorLib
     /// </summary>
     public class SqliteMapper
     {
-        /// <summary>
-        /// Number of columns used to store properties relatives to a render.
-        /// </summary>
-        public const int RENDER_COLUMNS_COUNT = 10;
-        /// <summary>
-        /// Database name.
-        /// </summary>
-        public const string DB_NAME = "SpriteDb.sqlite";
+        // Number of columns used to store properties relatives to a render.
+        private const int RENDER_COLUMNS_COUNT = 10;
+        // Database name.
+        private const string DB_NAME = "SpriteDb.sqlite";
         // Connection string.
         private static readonly string CONN_STRING = string.Format("Data Source={0};Version=3;", DB_NAME);
 
@@ -136,7 +132,7 @@ namespace RpeggiatorLib
             {
                 #region First screen
 
-                int screenId1 = CreateScreen(0, 0, 800, 600, nameof(Renders.PlainRender), new object[] { Tools.HexFromColor(SysColor.PapayaWhip) }, Enums.FloorType.Ground, 0);
+                int screenId1 = CreateScreen(nameof(Renders.PlainRender), new object[] { Tools.HexFromColor(SysColor.PapayaWhip) }, Enums.FloorType.Ground, 0);
                 CreatePermanentStructure(screenId1, 0, 300, 300, 50, nameof(Renders.ImageMosaicRender), new object[] { "Tree" });
                 CreatePermanentStructure(screenId1, 100, 260, 50, 140, nameof(Renders.ImageMosaicRender), new object[] { "Tree" });
                 CreateChest(screenId1, 400, 380, 40, 40, nameof(Renders.ImageRender), new object[] { "Chest" }, null, 10, null, 1, nameof(Renders.ImageRender), new object[] { "OpenChest" });
@@ -156,7 +152,7 @@ namespace RpeggiatorLib
 
                 #region Left screen
 
-                int screenId2 = CreateScreen(0, 0, 800, 600, nameof(Renders.PlainRender), new object[] { Tools.HexFromColor(SysColor.PapayaWhip) }, Enums.FloorType.Ground, 0.8);
+                int screenId2 = CreateScreen(nameof(Renders.PlainRender), new object[] { Tools.HexFromColor(SysColor.PapayaWhip) }, Enums.FloorType.Ground, 0.8);
                 CreatePermanentStructure(screenId2, 80, 80, 480, 40, nameof(Renders.ImageMosaicRender), new object[] { "Tree" });
                 CreatePermanentStructure(screenId2, 80, 80, 40, 320, nameof(Renders.ImageMosaicRender), new object[] { "Tree" });
                 CreatePermanentStructure(screenId2, 520, 80, 40, 320, nameof(Renders.ImageMosaicRender), new object[] { "Tree" });
@@ -173,7 +169,7 @@ namespace RpeggiatorLib
 
                 #region Top screen
 
-                int screenId3 = CreateScreen(0, 0, 800, 600, nameof(Renders.PlainRender), new object[] { Tools.HexFromColor(SysColor.PapayaWhip) }, Enums.FloorType.Ground, 0);
+                int screenId3 = CreateScreen(nameof(Renders.PlainRender), new object[] { Tools.HexFromColor(SysColor.PapayaWhip) }, Enums.FloorType.Ground, 0);
                 CreateFloor(screenId3, 150, 150, 300, 200, nameof(Renders.PlainRender), new object[] { Tools.HexFromColor(SysColor.Blue) }, Enums.FloorType.Water);
                 CreateFloor(screenId3, 460, 150, 150, 200, nameof(Renders.PlainRender), new object[] { Tools.HexFromColor(SysColor.Crimson) }, Enums.FloorType.Lava);
                 CreateFloor(screenId3, 200, 360, 400, 100, nameof(Renders.PlainRender), new object[] { Tools.HexFromColor(SysColor.Azure) }, Enums.FloorType.Ice);
@@ -188,7 +184,7 @@ namespace RpeggiatorLib
 
                 #region Right screen
 
-                int screenId4 = CreateScreen(0, 0, 800, 600, nameof(Renders.PlainRender), new object[] { Tools.HexFromColor(SysColor.PapayaWhip) }, Enums.FloorType.Ground, 0);
+                int screenId4 = CreateScreen(nameof(Renders.PlainRender), new object[] { Tools.HexFromColor(SysColor.PapayaWhip) }, Enums.FloorType.Ground, 0);
                 CreatePermanentStructure(screenId4, 166, 49, 495, 50, nameof(Renders.ImageMosaicRender), new object[] { "Tree" });
                 CreatePermanentStructure(screenId4, 63, 50, 49, 194, nameof(Renders.ImageMosaicRender), new object[] { "Tree" });
                 CreatePermanentStructure(screenId4, 629, 236, 42, 284, nameof(Renders.ImageMosaicRender), new object[] { "Tree" });
@@ -384,6 +380,54 @@ namespace RpeggiatorLib
             }
 
             return id;
+        }
+
+        // Checks if the specified identifier exists for the specified table.
+        private static bool ExistsId(string tableName, int id)
+        {
+            using (SQLiteConnection connection = new SQLiteConnection(CONN_STRING))
+            {
+                connection.Open();
+                using (SQLiteCommand cmd = connection.CreateCommand())
+                {
+                    cmd.CommandText = string.Format($"select id from {tableName} where id = @id");
+                    cmd.Parameters.Add("@id", DbType.Int32);
+                    cmd.Parameters["@id"].Value = id;
+                    using (SQLiteDataReader reader = cmd.ExecuteReader())
+                    {
+                        return reader.Read();
+                    }
+                }
+            }
+        }
+
+        // Checks input dimensions and throws an exception if invalid.
+        private static void CheckInputDimensions(double x, double y, double width, double height)
+        {
+            if (x < 0)
+            {
+                throw new ArgumentException(Messages.InvalidDimensionForInsertionExceptionMessage, nameof(x));
+            }
+            if (y < 0)
+            {
+                throw new ArgumentException(Messages.InvalidDimensionForInsertionExceptionMessage, nameof(y));
+            }
+            if (width < 0)
+            {
+                throw new ArgumentException(Messages.InvalidDimensionForInsertionExceptionMessage, nameof(width));
+            }
+            if (height < 0)
+            {
+                throw new ArgumentException(Messages.InvalidDimensionForInsertionExceptionMessage, nameof(height));
+            }
+            if ((x + width).Greater(Constants.SCREEN_WIDTH))
+            {
+                throw new ArgumentException(Messages.InvalidDimensionForInsertionExceptionMessage, string.Concat(nameof(x), ", ", nameof(width)));
+            }
+            if ((y + height).Greater(Constants.SCREEN_HEIGHT))
+            {
+                throw new ArgumentException(Messages.InvalidDimensionForInsertionExceptionMessage, string.Concat(nameof(y), ", ", nameof(height)));
+            }
         }
 
         #endregion
@@ -681,9 +725,9 @@ namespace RpeggiatorLib
         /// <exception cref="ArgumentException"><paramref name="enemyId"/> is lower or equals to zero.</exception>
         public void CreateEnemyPathSteps(int enemyId, Dictionary<int, System.Windows.Point> points)
         {
-            if (enemyId <= 0)
+            if (!ExistsId("enemy", enemyId))
             {
-                throw new ArgumentException(nameof(enemyId));
+                throw new ArgumentException(Messages.InvalidIdForInsertionExceptionMessage, nameof(enemyId));
             }
 
             using (SQLiteConnection connection = new SQLiteConnection(CONN_STRING))
@@ -725,6 +769,12 @@ namespace RpeggiatorLib
         public int CreatePermanentStructure(int screenId, double x, double y, double width, double height,
             string renderType, object[] renderValues)
         {
+            if (!ExistsId("screen", screenId))
+            {
+                throw new ArgumentException(Messages.InvalidIdForInsertionExceptionMessage, nameof(screenId));
+            }
+            CheckInputDimensions(x, y, width, height);
+
             int id = GetNextId("permanent_structure");
 
             ExecutePreparedInsert("permanent_structure",
@@ -756,6 +806,12 @@ namespace RpeggiatorLib
             double actionDuration, int gateId, bool appearOnActivation,
             string onRenderType, object[] onRenderValues)
         {
+            if (!ExistsId("screen", screenId))
+            {
+                throw new ArgumentException(Messages.InvalidIdForInsertionExceptionMessage, nameof(screenId));
+            }
+            CheckInputDimensions(x, y, width, height);
+
             int id = GetNextId("gate_trigger");
 
             List<string> otherColumns = new List<string>
@@ -800,6 +856,12 @@ namespace RpeggiatorLib
         public int CreateRift(int screenId, double x, double y, double width, double height,
             string renderType, object[] renderValues, double lifepoints)
         {
+            if (!ExistsId("screen", screenId))
+            {
+                throw new ArgumentException(Messages.InvalidIdForInsertionExceptionMessage, nameof(screenId));
+            }
+            CheckInputDimensions(x, y, width, height);
+
             int id = GetNextId("rift");
 
             ExecutePreparedInsert("rift",
@@ -825,6 +887,12 @@ namespace RpeggiatorLib
         public int CreateGate(int screenId, double x, double y, double width, double height,
             string renderType, object[] renderValues, bool activated)
         {
+            if (!ExistsId("screen", screenId))
+            {
+                throw new ArgumentException(Messages.InvalidIdForInsertionExceptionMessage, nameof(screenId));
+            }
+            CheckInputDimensions(x, y, width, height);
+
             int id = GetNextId("gate");
 
             ExecutePreparedInsert("gate",
@@ -850,6 +918,12 @@ namespace RpeggiatorLib
         public int CreatePickableItem(int screenId, double x, double y, double width, double height,
             Enums.ItemType? itemType, int quantity, double? timeBeforeDisapear)
         {
+            if (!ExistsId("screen", screenId))
+            {
+                throw new ArgumentException(Messages.InvalidIdForInsertionExceptionMessage, nameof(screenId));
+            }
+            CheckInputDimensions(x, y, width, height);
+
             int id = GetNextId("pickable_item");
 
             ExecutePreparedInsert("pickable_item",
@@ -882,6 +956,12 @@ namespace RpeggiatorLib
             int keyId, int connectedScreenId, double playerGoThroughX, double playerGoThroughY,
             string lockedRenderType, object[] lockedRenderValues)
         {
+            if (!ExistsId("screen", screenId))
+            {
+                throw new ArgumentException(Messages.InvalidIdForInsertionExceptionMessage, nameof(screenId));
+            }
+            CheckInputDimensions(x, y, width, height);
+
             int id = GetNextId("door");
 
             List<string> otherColumns = new List<string>
@@ -926,6 +1006,12 @@ namespace RpeggiatorLib
         public int CreateFloor(int screenId, double x, double y, double width, double height,
             string renderType, object[] renderValues, Enums.FloorType floorType)
         {
+            if (!ExistsId("screen", screenId))
+            {
+                throw new ArgumentException(Messages.InvalidIdForInsertionExceptionMessage, nameof(screenId));
+            }
+            CheckInputDimensions(x, y, width, height);
+
             int id = GetNextId("floor");
 
             ExecutePreparedInsert("floor",
@@ -951,6 +1037,12 @@ namespace RpeggiatorLib
         public int CreatePit(int screenId, double x, double y, double width, double height,
             string renderType, object[] renderValues, int? screenIdEntrance)
         {
+            if (!ExistsId("screen", screenId))
+            {
+                throw new ArgumentException(Messages.InvalidIdForInsertionExceptionMessage, nameof(screenId));
+            }
+            CheckInputDimensions(x, y, width, height);
+
             int id = GetNextId("pit");
 
             ExecutePreparedInsert("pit",
@@ -982,6 +1074,12 @@ namespace RpeggiatorLib
             string renderType, object[] renderValues,
             Enums.ItemType? itemType, int quantity, int? keyId, int? keyIdContainer, string openRenderType, object[] openRenderValues)
         {
+            if (!ExistsId("screen", screenId))
+            {
+                throw new ArgumentException(Messages.InvalidIdForInsertionExceptionMessage, nameof(screenId));
+            }
+            CheckInputDimensions(x, y, width, height);
+
             int id = GetNextId("chest");
 
             List<string> otherColumns = new List<string>
@@ -1033,6 +1131,12 @@ namespace RpeggiatorLib
             double hitLifePointCost, double speed, double recoveryTime, string renderFilename, string renderRecoveryFilename,
             Enums.Direction defaultDirection, Enums.ItemType? lootItemType, int lootQuantity)
         {
+            if (!ExistsId("screen", screenId))
+            {
+                throw new ArgumentException(Messages.InvalidIdForInsertionExceptionMessage, nameof(screenId));
+            }
+            CheckInputDimensions(x, y, width, height);
+
             int id = GetNextId("enemy");
 
             List<string> otherColumns = new List<string>
@@ -1063,17 +1167,12 @@ namespace RpeggiatorLib
         /// Creates a <see cref="Sprites.Screen"/> in the database.
         /// </summary>
         /// <remarks><see cref="Sprites.Screen._neighboringScreens"/> must be set with <see cref="SetNeighboringScreens(int, int, int, int, int)"/>.</remarks>
-        /// <param name="x"><see cref="Sprites.Sprite.X"/></param>
-        /// <param name="y"><see cref="Sprites.Sprite.Y"/></param>
-        /// <param name="width"><see cref="Sprites.Sprite.Width"/></param>
-        /// <param name="height"><see cref="Sprites.Sprite.Height"/></param>
         /// <param name="renderType"><see cref="Sprites.Sprite.Render"/> render type name.</param>
         /// <param name="renderValues">Values required to instanciate a <see cref="Sprites.Sprite.Render"/> (filename, color, and so forth).</param>
         /// <param name="darknessOpacity"><see cref="Sprites.Screen.DarknessOpacity"/></param>
         /// <param name="floorType"><see cref="Sprites.Floor.FloorType"/></param>
         /// <returns><see cref="Sprites.Sprite.Id"/></returns>
-        public int CreateScreen(double x, double y, double width, double height, string renderType, object[] renderValues,
-            Enums.FloorType floorType, double darknessOpacity)
+        public int CreateScreen(string renderType, object[] renderValues, Enums.FloorType floorType, double darknessOpacity)
         {
             int id = GetNextId("screen");
 
@@ -1083,7 +1182,7 @@ namespace RpeggiatorLib
             List<DbType> typesList = ToTypesArray(true, DbType.Int32, DbType.Double, DbType.Int32,
                 DbType.Int32, DbType.Int32, DbType.Int32).ToList();
             typesList.RemoveAt(1);
-            List<Object> valuesList = ToValuesArray(id, 0, x, y, width, height, renderType, renderValues, floorType,
+            List<Object> valuesList = ToValuesArray(id, 0, 0, 0, Constants.SCREEN_WIDTH, Constants.SCREEN_HEIGHT, renderType, renderValues, floorType,
                 darknessOpacity, 0, 0, 0, 0).ToList();
             valuesList.RemoveAt(1);
 
@@ -1105,6 +1204,27 @@ namespace RpeggiatorLib
         /// <param name="screenIdBottom"><see cref="Sprites.Screen._neighboringScreens"/> bottom identifier.</param>
         public void SetNeighboringScreens(int screenId, int screenIdTop, int screenIdLeft, int screenIdRight, int screenIdBottom)
         {
+            if (!ExistsId("screen", screenId))
+            {
+                throw new ArgumentException(Messages.InvalidIdForInsertionExceptionMessage, nameof(screenId));
+            }
+            if (!ExistsId("screen", screenIdTop))
+            {
+                throw new ArgumentException(Messages.InvalidIdForInsertionExceptionMessage, nameof(screenIdTop));
+            }
+            if (!ExistsId("screen", screenIdLeft))
+            {
+                throw new ArgumentException(Messages.InvalidIdForInsertionExceptionMessage, nameof(screenIdLeft));
+            }
+            if (!ExistsId("screen", screenIdRight))
+            {
+                throw new ArgumentException(Messages.InvalidIdForInsertionExceptionMessage, nameof(screenIdRight));
+            }
+            if (!ExistsId("screen", screenIdBottom))
+            {
+                throw new ArgumentException(Messages.InvalidIdForInsertionExceptionMessage, nameof(screenIdBottom));
+            }
+
             using (SQLiteConnection connection = new SQLiteConnection(CONN_STRING))
             {
                 connection.Open();

@@ -79,6 +79,24 @@ namespace RpeggiatorLib {
         }
         
         /// <summary>
+        ///   Recherche une chaîne localisée semblable à The specified dimension is invalid..
+        /// </summary>
+        internal static string InvalidDimensionForInsertionExceptionMessage {
+            get {
+                return ResourceManager.GetString("InvalidDimensionForInsertionExceptionMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Recherche une chaîne localisée semblable à The specified identifier does not exist in the database..
+        /// </summary>
+        internal static string InvalidIdForInsertionExceptionMessage {
+            get {
+                return ResourceManager.GetString("InvalidIdForInsertionExceptionMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Recherche une chaîne localisée semblable à The inventory slot id is invalid..
         /// </summary>
         internal static string InvalidInventorySlotIdExceptionMessage {
