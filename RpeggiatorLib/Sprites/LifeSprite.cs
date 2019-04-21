@@ -77,7 +77,7 @@ namespace RpeggiatorLib.Sprites
         /// <param name="defaultDirection">Default <see cref="Direction"/>.</param>
         protected LifeSprite(int id, double x, double y, double width, double height, double maximalLifePoints, double hitLifePointCost,
             double speed, double recoveryTime, string renderFilename, string renderRecoveryFilename, Direction defaultDirection)
-            : base(id, x, y, width, height, maximalLifePoints, Enums.RenderType.ImageDirectionRender, new[] { renderFilename, nameof(Direction) })
+            : base(id, x, y, width, height, maximalLifePoints, Enums.RenderType.ImageDirection, new[] { renderFilename, nameof(Direction) })
         {
             Direction = defaultDirection;
             MaximalLifePoints = maximalLifePoints;

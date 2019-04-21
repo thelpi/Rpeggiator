@@ -96,13 +96,13 @@ namespace RpeggiatorLib.Sprites
         {
             switch (renderType)
             {
-                case RenderType.ImageDirectionRender:
+                case RenderType.ImageDirection:
                     return new ImageDirectionRender((string)renderProperties[0], this, (string)renderProperties[1]);
-                case RenderType.ImageMosaicRender:
+                case RenderType.ImageMosaic:
                     return new ImageMosaicRender((string)renderProperties[0], this);
-                case RenderType.ImageRender:
+                case RenderType.Image:
                     return new ImageRender((string)renderProperties[0]);
-                case RenderType.PlainRender:
+                case RenderType.Plain:
                     return new PlainRender((string)renderProperties[0]);
                 default:
                     throw new System.NotImplementedException(Messages.NotImplementedGraphicExceptionMessage);

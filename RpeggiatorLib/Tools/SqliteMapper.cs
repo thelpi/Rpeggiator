@@ -132,12 +132,12 @@ namespace RpeggiatorLib
             {
                 #region First screen
 
-                int screenId1 = CreateScreen(nameof(Renders.PlainRender), new object[] { Tools.HexFromColor(SysColor.PapayaWhip) }, Enums.FloorType.Ground, 0);
-                CreatePermanentStructure(screenId1, 0, 300, 300, 50, nameof(Renders.ImageMosaicRender), new object[] { "Tree" });
-                CreatePermanentStructure(screenId1, 100, 260, 50, 140, nameof(Renders.ImageMosaicRender), new object[] { "Tree" });
-                CreateChest(screenId1, 400, 380, 40, 40, nameof(Renders.ImageRender), new object[] { "Chest" }, null, 10, null, 1, nameof(Renders.ImageRender), new object[] { "OpenChest" });
-                CreatePit(screenId1, 700, 100, 50, 50, nameof(Renders.ImageRender), new object[] { "Pit" }, null);
-                CreateRift(screenId1, 700, 400, 20, 100, nameof(Renders.PlainRender), new object[] { Tools.HexFromColor(SysColor.BurlyWood) }, 8);
+                int screenId1 = CreateScreen(Enums.RenderType.Plain, new object[] { Tools.HexFromColor(SysColor.PapayaWhip) }, Enums.FloorType.Ground, 0);
+                CreatePermanentStructure(screenId1, 0, 300, 300, 50, Enums.RenderType.ImageMosaic, new object[] { "Tree" });
+                CreatePermanentStructure(screenId1, 100, 260, 50, 140, Enums.RenderType.ImageMosaic, new object[] { "Tree" });
+                CreateChest(screenId1, 400, 380, 40, 40, Enums.RenderType.Image, new object[] { "Chest" }, null, 10, null, 1, Enums.RenderType.Image, new object[] { "OpenChest" });
+                CreatePit(screenId1, 700, 100, 50, 50, Enums.RenderType.Image, new object[] { "Pit" }, null);
+                CreateRift(screenId1, 700, 400, 20, 100, Enums.RenderType.Plain, new object[] { Tools.HexFromColor(SysColor.BurlyWood) }, 8);
                 int enemyId = CreateEnemy(screenId1, 50, 50, 40, 40, 4, 5, 150, 0, "Enemy", "Enemy", Enums.Direction.Right, null, 10);
                 CreateEnemy(screenId1, 600, 50, 40, 40, 4, 5, 150, 0, "Enemy", "Enemy", Enums.Direction.Bottom, Enums.ItemType.Arrow, 1);
                 CreateEnemyPathSteps(enemyId, new Dictionary<int, System.Windows.Point>
@@ -152,44 +152,44 @@ namespace RpeggiatorLib
 
                 #region Left screen
 
-                int screenId2 = CreateScreen(nameof(Renders.PlainRender), new object[] { Tools.HexFromColor(SysColor.PapayaWhip) }, Enums.FloorType.Ground, 0.8);
-                CreatePermanentStructure(screenId2, 80, 80, 480, 40, nameof(Renders.ImageMosaicRender), new object[] { "Tree" });
-                CreatePermanentStructure(screenId2, 80, 80, 40, 320, nameof(Renders.ImageMosaicRender), new object[] { "Tree" });
-                CreatePermanentStructure(screenId2, 520, 80, 40, 320, nameof(Renders.ImageMosaicRender), new object[] { "Tree" });
-                CreatePermanentStructure(screenId2, 80, 360, 300, 40, nameof(Renders.ImageMosaicRender), new object[] { "Tree" });
-                CreatePermanentStructure(screenId2, 480, 360, 80, 40, nameof(Renders.ImageMosaicRender), new object[] { "Tree" });
-                CreatePermanentStructure(screenId2, 400, 590, 80, 10, nameof(Renders.ImageMosaicRender), new object[] { "Tree" });
-                int gateId = CreateGate(screenId2, 380, 360, 100, 40, nameof(Renders.PlainRender), new object[] { Tools.HexFromColor(SysColor.Gainsboro) }, true);
-                CreateGateTrigger(screenId2, 570, 20, 20, 20, nameof(Renders.ImageRender), new object[] { "TriggerOff" }, 5000, gateId, false, nameof(Renders.ImageRender), new object[] { "TriggerOn" });
-                CreateGateTrigger(screenId2, 160, 220, 20, 20, nameof(Renders.ImageRender), new object[] { "TriggerOff" }, 5000, gateId, false, nameof(Renders.ImageRender), new object[] { "TriggerOn" });
+                int screenId2 = CreateScreen(Enums.RenderType.Plain, new object[] { Tools.HexFromColor(SysColor.PapayaWhip) }, Enums.FloorType.Ground, 0.8);
+                CreatePermanentStructure(screenId2, 80, 80, 480, 40, Enums.RenderType.ImageMosaic, new object[] { "Tree" });
+                CreatePermanentStructure(screenId2, 80, 80, 40, 320, Enums.RenderType.ImageMosaic, new object[] { "Tree" });
+                CreatePermanentStructure(screenId2, 520, 80, 40, 320, Enums.RenderType.ImageMosaic, new object[] { "Tree" });
+                CreatePermanentStructure(screenId2, 80, 360, 300, 40, Enums.RenderType.ImageMosaic, new object[] { "Tree" });
+                CreatePermanentStructure(screenId2, 480, 360, 80, 40, Enums.RenderType.ImageMosaic, new object[] { "Tree" });
+                CreatePermanentStructure(screenId2, 400, 590, 80, 10, Enums.RenderType.ImageMosaic, new object[] { "Tree" });
+                int gateId = CreateGate(screenId2, 380, 360, 100, 40, Enums.RenderType.Plain, new object[] { Tools.HexFromColor(SysColor.Gainsboro) }, true);
+                CreateGateTrigger(screenId2, 570, 20, 20, 20, Enums.RenderType.Image, new object[] { "TriggerOff" }, 5000, gateId, false, Enums.RenderType.Image, new object[] { "TriggerOn" });
+                CreateGateTrigger(screenId2, 160, 220, 20, 20, Enums.RenderType.Image, new object[] { "TriggerOff" }, 5000, gateId, false, Enums.RenderType.Image, new object[] { "TriggerOn" });
                 CreatePickableItem(screenId2, 310, 230, Constants.Bomb.WIDTH, Constants.Bomb.HEIGHT, Enums.ItemType.Bomb, 10, null);
-                CreatePit(screenId2, 600, 400, 50, 50, nameof(Renders.ImageRender), new object[] { "Pit" }, screenId1);
+                CreatePit(screenId2, 600, 400, 50, 50, Enums.RenderType.Image, new object[] { "Pit" }, screenId1);
                 
                 #endregion
 
                 #region Top screen
 
-                int screenId3 = CreateScreen(nameof(Renders.PlainRender), new object[] { Tools.HexFromColor(SysColor.PapayaWhip) }, Enums.FloorType.Ground, 0);
-                CreateFloor(screenId3, 150, 150, 300, 200, nameof(Renders.PlainRender), new object[] { Tools.HexFromColor(SysColor.Blue) }, Enums.FloorType.Water);
-                CreateFloor(screenId3, 460, 150, 150, 200, nameof(Renders.PlainRender), new object[] { Tools.HexFromColor(SysColor.Crimson) }, Enums.FloorType.Lava);
-                CreateFloor(screenId3, 200, 360, 400, 100, nameof(Renders.PlainRender), new object[] { Tools.HexFromColor(SysColor.Azure) }, Enums.FloorType.Ice);
-                CreatePermanentStructure(screenId3, 0, 0, 800, 20, nameof(Renders.ImageMosaicRender), new object[] { "Tree" });
-                CreatePermanentStructure(screenId3, 0, 20, 20, 560, nameof(Renders.ImageMosaicRender), new object[] { "Tree" });
-                CreatePermanentStructure(screenId3, 780, 20, 20, 560, nameof(Renders.ImageMosaicRender), new object[] { "Tree" });
-                CreatePermanentStructure(screenId3, 0, 580, 400, 20, nameof(Renders.ImageMosaicRender), new object[] { "Tree" });
-                CreatePermanentStructure(screenId3, 480, 580, 320, 20, nameof(Renders.ImageMosaicRender), new object[] { "Tree" });
-                CreateDoor(screenId3, 400, 580, 80, 20, nameof(Renders.ImageRender), new object[] { "Door" }, 1, screenId1, 400, 20, nameof(Renders.ImageRender), new object[] { "DoorLocked" });
+                int screenId3 = CreateScreen(Enums.RenderType.Plain, new object[] { Tools.HexFromColor(SysColor.PapayaWhip) }, Enums.FloorType.Ground, 0);
+                CreateFloor(screenId3, 150, 150, 300, 200, Enums.RenderType.Plain, new object[] { Tools.HexFromColor(SysColor.Blue) }, Enums.FloorType.Water);
+                CreateFloor(screenId3, 460, 150, 150, 200, Enums.RenderType.Plain, new object[] { Tools.HexFromColor(SysColor.Crimson) }, Enums.FloorType.Lava);
+                CreateFloor(screenId3, 200, 360, 400, 100, Enums.RenderType.Plain, new object[] { Tools.HexFromColor(SysColor.Azure) }, Enums.FloorType.Ice);
+                CreatePermanentStructure(screenId3, 0, 0, 800, 20, Enums.RenderType.ImageMosaic, new object[] { "Tree" });
+                CreatePermanentStructure(screenId3, 0, 20, 20, 560, Enums.RenderType.ImageMosaic, new object[] { "Tree" });
+                CreatePermanentStructure(screenId3, 780, 20, 20, 560, Enums.RenderType.ImageMosaic, new object[] { "Tree" });
+                CreatePermanentStructure(screenId3, 0, 580, 400, 20, Enums.RenderType.ImageMosaic, new object[] { "Tree" });
+                CreatePermanentStructure(screenId3, 480, 580, 320, 20, Enums.RenderType.ImageMosaic, new object[] { "Tree" });
+                CreateDoor(screenId3, 400, 580, 80, 20, Enums.RenderType.Image, new object[] { "Door" }, 1, screenId1, 400, 20, Enums.RenderType.Image, new object[] { "DoorLocked" });
                 
                 #endregion
 
                 #region Right screen
 
-                int screenId4 = CreateScreen(nameof(Renders.PlainRender), new object[] { Tools.HexFromColor(SysColor.PapayaWhip) }, Enums.FloorType.Ground, 0);
-                CreatePermanentStructure(screenId4, 166, 49, 495, 50, nameof(Renders.ImageMosaicRender), new object[] { "Tree" });
-                CreatePermanentStructure(screenId4, 63, 50, 49, 194, nameof(Renders.ImageMosaicRender), new object[] { "Tree" });
-                CreatePermanentStructure(screenId4, 629, 236, 42, 284, nameof(Renders.ImageMosaicRender), new object[] { "Tree" });
-                CreatePermanentStructure(screenId4, 63, 327, 434, 61, nameof(Renders.ImageMosaicRender), new object[] { "Tree" });
-                CreatePermanentStructure(screenId4, 69, 469, 407, 56, nameof(Renders.ImageMosaicRender), new object[] { "Tree" });
+                int screenId4 = CreateScreen(Enums.RenderType.Plain, new object[] { Tools.HexFromColor(SysColor.PapayaWhip) }, Enums.FloorType.Ground, 0);
+                CreatePermanentStructure(screenId4, 166, 49, 495, 50, Enums.RenderType.ImageMosaic, new object[] { "Tree" });
+                CreatePermanentStructure(screenId4, 63, 50, 49, 194, Enums.RenderType.ImageMosaic, new object[] { "Tree" });
+                CreatePermanentStructure(screenId4, 629, 236, 42, 284, Enums.RenderType.ImageMosaic, new object[] { "Tree" });
+                CreatePermanentStructure(screenId4, 63, 327, 434, 61, Enums.RenderType.ImageMosaic, new object[] { "Tree" });
+                CreatePermanentStructure(screenId4, 69, 469, 407, 56, Enums.RenderType.ImageMosaic, new object[] { "Tree" });
 
                 #endregion
 
@@ -199,7 +199,7 @@ namespace RpeggiatorLib
                 SetNeighboringScreens(screenId4, screenId1, screenId1, screenId1, screenId1);
 
                 // Screen ID 3 is required to create this door.
-                CreateDoor(screenId1, 400, 0, 80, 20, nameof(Renders.ImageRender), new object[] { "Door" }, 1, screenId3, 400, 540, nameof(Renders.ImageRender), new object[] { "DoorLocked" });
+                CreateDoor(screenId1, 400, 0, 80, 20, Enums.RenderType.Image, new object[] { "Door" }, 1, screenId3, 400, 540, Enums.RenderType.Image, new object[] { "DoorLocked" });
             }
         }
 
@@ -304,7 +304,7 @@ namespace RpeggiatorLib
             };
             if (withRender)
             {
-                types.Add(DbType.String);
+                types.Add(DbType.Int32);
                 for (int i = 0; i < RENDER_COLUMNS_COUNT; i++)
                 {
                     types.Add(DbType.String);
@@ -318,15 +318,12 @@ namespace RpeggiatorLib
         }
 
         // Creates an array with every values to insert for a sprite.
-        private static object[] ToValuesArray(int id, int screenId, double x, double y, double width, double height, string renderType, object[] renderValues, params object[] additionalValues)
+        private static object[] ToValuesArray(int id, int screenId, double x, double y, double width, double height, Enums.RenderType? renderType, object[] renderValues, params object[] additionalValues)
         {
             List<object> values = new List<object> { id, screenId, x, y, width, height };
-            if (renderType != null)
+            if (renderType.HasValue)
             {
-                values.Add(renderType);
-            }
-            if (renderValues != null)
-            {
+                values.Add((int)renderType.Value);
                 for (int i = 0; i < RENDER_COLUMNS_COUNT; i++)
                 {
                     if (renderValues.Length > i)
@@ -763,11 +760,11 @@ namespace RpeggiatorLib
         /// <param name="y"><see cref="Sprites.Sprite.Y"/></param>
         /// <param name="width"><see cref="Sprites.Sprite.Width"/></param>
         /// <param name="height"><see cref="Sprites.Sprite.Height"/></param>
-        /// <param name="renderType"><see cref="Sprites.Sprite.Render"/> render type name.</param>
+        /// <param name="renderType"><see cref="Enums.RenderType"/></param>
         /// <param name="renderValues">Values required to instanciate a <see cref="Sprites.Sprite.Render"/> (filename, color, and so forth).</param>
         /// <returns><see cref="Sprites.Sprite.Id"/></returns>
         public int CreatePermanentStructure(int screenId, double x, double y, double width, double height,
-            string renderType, object[] renderValues)
+            Enums.RenderType renderType, object[] renderValues)
         {
             if (!ExistsId("screen", screenId))
             {
@@ -793,18 +790,18 @@ namespace RpeggiatorLib
         /// <param name="y"><see cref="Sprites.Sprite.Y"/></param>
         /// <param name="width"><see cref="Sprites.Sprite.Width"/></param>
         /// <param name="height"><see cref="Sprites.Sprite.Height"/></param>
-        /// <param name="renderType"><see cref="Sprites.Sprite.Render"/> render type name.</param>
+        /// <param name="renderType"><see cref="Enums.RenderType"/></param>
         /// <param name="renderValues">Values required to instanciate a <see cref="Sprites.Sprite.Render"/> (filename, color, and so forth).</param>
         /// <param name="actionDuration"><see cref="Sprites.FloorTrigger._actionDuration"/></param>
         /// <param name="appearOnActivation"><see cref="Sprites.GateTrigger.AppearOnActivation"/></param>
         /// <param name="gateId"><see cref="Sprites.GateTrigger.GateId"/></param>
-        /// <param name="onRenderType"><see cref="Sprites.GateTrigger._renderOn"/> render type name.</param>
+        /// <param name="onRenderType"><see cref="Enums.RenderType"/></param>
         /// <param name="onRenderValues">Values required to instanciate a <see cref="Sprites.GateTrigger._renderOn"/> (filename, color, and so forth).</param>
         /// <returns><see cref="Sprites.Sprite.Id"/></returns>
         public int CreateGateTrigger(int screenId, double x, double y, double width, double height,
-            string renderType, object[] renderValues,
+            Enums.RenderType renderType, object[] renderValues,
             double actionDuration, int gateId, bool appearOnActivation,
-            string onRenderType, object[] onRenderValues)
+            Enums.RenderType onRenderType, object[] onRenderValues)
         {
             if (!ExistsId("screen", screenId))
             {
@@ -820,11 +817,11 @@ namespace RpeggiatorLib
             };
             List<DbType> otherTypes = new List<DbType>
             {
-                DbType.Double, DbType.Int32, DbType.Boolean, DbType.String
+                DbType.Double, DbType.Int32, DbType.Boolean, DbType.Int32
             };
             List<object> otherValues = new List<object>
             {
-                actionDuration, gateId, appearOnActivation, onRenderType
+                actionDuration, gateId, appearOnActivation, (int)onRenderType
             };
             for (int i = 0; i < RENDER_COLUMNS_COUNT; i++)
             {
@@ -849,12 +846,12 @@ namespace RpeggiatorLib
         /// <param name="y"><see cref="Sprites.Sprite.Y"/></param>
         /// <param name="width"><see cref="Sprites.Sprite.Width"/></param>
         /// <param name="height"><see cref="Sprites.Sprite.Height"/></param>
-        /// <param name="renderType"><see cref="Sprites.Sprite.Render"/> render type name.</param>
+        /// <param name="renderType"><see cref="Enums.RenderType"/></param>
         /// <param name="renderValues">Values required to instanciate a <see cref="Sprites.Sprite.Render"/> (filename, color, and so forth).</param>
         /// <param name="lifepoints"><see cref="Sprites.DamageableSprite.CurrentLifePoints"/></param>
         /// <returns><see cref="Sprites.Sprite.Id"/></returns>
         public int CreateRift(int screenId, double x, double y, double width, double height,
-            string renderType, object[] renderValues, double lifepoints)
+            Enums.RenderType renderType, object[] renderValues, double lifepoints)
         {
             if (!ExistsId("screen", screenId))
             {
@@ -880,12 +877,12 @@ namespace RpeggiatorLib
         /// <param name="y"><see cref="Sprites.Sprite.Y"/></param>
         /// <param name="width"><see cref="Sprites.Sprite.Width"/></param>
         /// <param name="height"><see cref="Sprites.Sprite.Height"/></param>
-        /// <param name="renderType"><see cref="Sprites.Sprite.Render"/> render type name.</param>
+        /// <param name="renderType"><see cref="Enums.RenderType"/></param>
         /// <param name="renderValues">Values required to instanciate a <see cref="Sprites.Sprite.Render"/> (filename, color, and so forth).</param>
         /// <param name="activated"><see cref="Sprites.Gate._defaultActivated"/></param>
         /// <returns><see cref="Sprites.Sprite.Id"/></returns>
         public int CreateGate(int screenId, double x, double y, double width, double height,
-            string renderType, object[] renderValues, bool activated)
+            Enums.RenderType renderType, object[] renderValues, bool activated)
         {
             if (!ExistsId("screen", screenId))
             {
@@ -942,19 +939,19 @@ namespace RpeggiatorLib
         /// <param name="y"><see cref="Sprites.Sprite.Y"/></param>
         /// <param name="width"><see cref="Sprites.Sprite.Width"/></param>
         /// <param name="height"><see cref="Sprites.Sprite.Height"/></param>
-        /// <param name="renderType"><see cref="Sprites.Sprite.Render"/> render type name.</param>
+        /// <param name="renderType"><see cref="Enums.RenderType"/></param>
         /// <param name="renderValues">Values required to instanciate a <see cref="Sprites.Sprite.Render"/> (filename, color, and so forth).</param>
         /// <param name="connectedScreenId"><see cref="Sprites.Door._connectedScreenId"/></param>
         /// <param name="keyId"><see cref="Sprites.Door._keyId"/></param>
-        /// <param name="lockedRenderType"><see cref="Sprites.Door._renderLocked"/> render type name.</param>
+        /// <param name="lockedRenderType"><see cref="Enums.RenderType"/></param>
         /// <param name="lockedRenderValues">Values required to instanciate a <see cref="Sprites.Door._renderLocked"/> (filename, color, and so forth).</param>
         /// <param name="playerGoThroughX"><see cref="Sprites.Door.PlayerGoThroughX"/></param>
         /// <param name="playerGoThroughY"><see cref="Sprites.Door.PlayerGoThroughY"/></param>
         /// <returns><see cref="Sprites.Sprite.Id"/></returns>
         public int CreateDoor(int screenId, double x, double y, double width, double height,
-            string renderType, object[] renderValues,
+            Enums.RenderType renderType, object[] renderValues,
             int keyId, int connectedScreenId, double playerGoThroughX, double playerGoThroughY,
-            string lockedRenderType, object[] lockedRenderValues)
+            Enums.RenderType lockedRenderType, object[] lockedRenderValues)
         {
             if (!ExistsId("screen", screenId))
             {
@@ -970,11 +967,11 @@ namespace RpeggiatorLib
             };
             List<DbType> otherTypes = new List<DbType>
             {
-                DbType.Int32, DbType.Int32, DbType.Double, DbType.Double, DbType.String
+                DbType.Int32, DbType.Int32, DbType.Double, DbType.Double, DbType.Int32
             };
             List<object> otherValues = new List<object>
             {
-                keyId, connectedScreenId, playerGoThroughX, playerGoThroughY, lockedRenderType
+                keyId, connectedScreenId, playerGoThroughX, playerGoThroughY, (int)lockedRenderType
             };
             for (int i = 0; i < RENDER_COLUMNS_COUNT; i++)
             {
@@ -999,12 +996,12 @@ namespace RpeggiatorLib
         /// <param name="y"><see cref="Sprites.Sprite.Y"/></param>
         /// <param name="width"><see cref="Sprites.Sprite.Width"/></param>
         /// <param name="height"><see cref="Sprites.Sprite.Height"/></param>
-        /// <param name="renderType"><see cref="Sprites.Sprite.Render"/> render type name.</param>
+        /// <param name="renderType"><see cref="Enums.RenderType"/></param>
         /// <param name="renderValues">Values required to instanciate a <see cref="Sprites.Sprite.Render"/> (filename, color, and so forth).</param>
         /// <param name="floorType"><see cref="Sprites.Floor.FloorType"/></param>
         /// <returns><see cref="Sprites.Sprite.Id"/></returns>
         public int CreateFloor(int screenId, double x, double y, double width, double height,
-            string renderType, object[] renderValues, Enums.FloorType floorType)
+            Enums.RenderType renderType, object[] renderValues, Enums.FloorType floorType)
         {
             if (!ExistsId("screen", screenId))
             {
@@ -1030,12 +1027,12 @@ namespace RpeggiatorLib
         /// <param name="y"><see cref="Sprites.Sprite.Y"/></param>
         /// <param name="width"><see cref="Sprites.Sprite.Width"/></param>
         /// <param name="height"><see cref="Sprites.Sprite.Height"/></param>
-        /// <param name="renderType"><see cref="Sprites.Sprite.Render"/> render type name.</param>
+        /// <param name="renderType"><see cref="Enums.RenderType"/></param>
         /// <param name="renderValues">Values required to instanciate a <see cref="Sprites.Sprite.Render"/> (filename, color, and so forth).</param>
         /// <param name="screenIdEntrance"><see cref="Sprites.Pit.ScreenIdEntrance"/></param>
         /// <returns><see cref="Sprites.Sprite.Id"/></returns>
         public int CreatePit(int screenId, double x, double y, double width, double height,
-            string renderType, object[] renderValues, int? screenIdEntrance)
+            Enums.RenderType renderType, object[] renderValues, int? screenIdEntrance)
         {
             if (!ExistsId("screen", screenId))
             {
@@ -1061,18 +1058,18 @@ namespace RpeggiatorLib
         /// <param name="y"><see cref="Sprites.Sprite.Y"/></param>
         /// <param name="width"><see cref="Sprites.Sprite.Width"/></param>
         /// <param name="height"><see cref="Sprites.Sprite.Height"/></param>
-        /// <param name="renderType"><see cref="Sprites.Sprite.Render"/> render type name.</param>
+        /// <param name="renderType"><see cref="Enums.RenderType"/></param>
         /// <param name="renderValues">Values required to instanciate a <see cref="Sprites.Sprite.Render"/> (filename, color, and so forth).</param>
         /// <param name="itemType"><see cref="Sprites.Chest._itemType"/></param>
         /// <param name="keyId"><see cref="Sprites.Chest._keyId"/></param>
-        /// <param name="openRenderType"><see cref="Sprites.Chest._renderOpen"/> render type name.</param>
+        /// <param name="openRenderType"><see cref="Enums.RenderType"/></param>
         /// <param name="keyIdContainer"><see cref="Sprites.Chest._keyIdContainer"/></param>
         /// <param name="openRenderValues">Values required to instanciate a <see cref="Sprites.Chest._renderOpen"/> (filename, color, and so forth).</param>
         /// <param name="quantity"><see cref="Sprites.Chest._quantity"/></param>
         /// <returns><see cref="Sprites.Sprite.Id"/></returns>
         public int CreateChest(int screenId, double x, double y, double width, double height,
-            string renderType, object[] renderValues,
-            Enums.ItemType? itemType, int quantity, int? keyId, int? keyIdContainer, string openRenderType, object[] openRenderValues)
+            Enums.RenderType renderType, object[] renderValues,
+            Enums.ItemType? itemType, int quantity, int? keyId, int? keyIdContainer, Enums.RenderType openRenderType, object[] openRenderValues)
         {
             if (!ExistsId("screen", screenId))
             {
@@ -1088,11 +1085,11 @@ namespace RpeggiatorLib
             };
             List<DbType> otherTypes = new List<DbType>
             {
-                DbType.Int32, DbType.Int32, DbType.Int32, DbType.Int32, DbType.String
+                DbType.Int32, DbType.Int32, DbType.Int32, DbType.Int32, DbType.Int32
             };
             List<object> otherValues = new List<object>
             {
-                itemType.HasValue ? (int?)itemType.Value : null, quantity, keyId, keyIdContainer, openRenderType
+                itemType.HasValue ? (int?)itemType.Value : null, quantity, keyId, keyIdContainer, (int)openRenderType
             };
             for (int i = 0; i < RENDER_COLUMNS_COUNT; i++)
             {
@@ -1167,12 +1164,12 @@ namespace RpeggiatorLib
         /// Creates a <see cref="Sprites.Screen"/> in the database.
         /// </summary>
         /// <remarks><see cref="Sprites.Screen._neighboringScreens"/> must be set with <see cref="SetNeighboringScreens(int, int, int, int, int)"/>.</remarks>
-        /// <param name="renderType"><see cref="Sprites.Sprite.Render"/> render type name.</param>
+        /// <param name="renderType"><see cref="Enums.RenderType"/></param>
         /// <param name="renderValues">Values required to instanciate a <see cref="Sprites.Sprite.Render"/> (filename, color, and so forth).</param>
         /// <param name="darknessOpacity"><see cref="Sprites.Screen.DarknessOpacity"/></param>
         /// <param name="floorType"><see cref="Sprites.Floor.FloorType"/></param>
         /// <returns><see cref="Sprites.Sprite.Id"/></returns>
-        public int CreateScreen(string renderType, object[] renderValues, Enums.FloorType floorType, double darknessOpacity)
+        public int CreateScreen(Enums.RenderType renderType, object[] renderValues, Enums.FloorType floorType, double darknessOpacity)
         {
             int id = GetNextId("screen");
 

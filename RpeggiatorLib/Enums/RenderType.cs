@@ -8,22 +8,22 @@
         /// <summary>
         /// <see cref="Renders.PlainRender"/>
         /// </summary>
-        PlainRender = 1,
+        Plain = 1,
         /// <summary>
         /// <see cref="Renders.ImageRender"/>
         /// </summary>
-        ImageRender,
+        Image,
         /// <summary>
         /// <see cref="Renders.ImageMosaicRender"/>
         /// </summary>
-        ImageMosaicRender,
+        ImageMosaic,
         /// <summary>
         /// <see cref="Renders.ImageDirectionRender"/>
         /// </summary>
-        ImageDirectionRender,
+        ImageDirection,
         /// <summary>
         /// <see cref="Renders.ImageAnimatedRender"/>
         /// </summary>
-        ImageAnimatedRender
+        ImageAnimated
     }
 }

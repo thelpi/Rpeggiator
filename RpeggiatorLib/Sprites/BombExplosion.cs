@@ -16,7 +16,7 @@ namespace RpeggiatorLib.Sprites
             : base(bomb.Id, bomb.X - bomb.Width, bomb.Y - bomb.Height,
                   bomb.Width * Constants.Bomb.EXPLOSION_SIZE_RATIO,
                   bomb.Height * Constants.Bomb.EXPLOSION_SIZE_RATIO,
-                  Enums.RenderType.PlainRender,
+                  Enums.RenderType.Plain,
                   new[] { Tools.HexFromColor(System.Windows.Media.Colors.OrangeRed) })
         {
             // Empty.

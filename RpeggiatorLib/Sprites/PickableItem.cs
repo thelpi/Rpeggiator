@@ -58,7 +58,7 @@ namespace RpeggiatorLib.Sprites
         /// <param name="timeBeforeDisapear"><see cref="_timeManager"/> lifetime, in milliseconds.</param>
         internal PickableItem(int id, double x, double y, double width, double height,
             ItemType? itemType, int quantity, double? timeBeforeDisapear)
-            : base(id, x, y, width, height, RenderType.ImageRender, new[] { itemType.HasValue ? itemType.Value.ToString() : nameof(Filename.Coin) })
+            : base(id, x, y, width, height, RenderType.Image, new[] { itemType.HasValue ? itemType.Value.ToString() : nameof(Filename.Coin) })
         {
             ItemType = itemType;
             Quantity = quantity;
