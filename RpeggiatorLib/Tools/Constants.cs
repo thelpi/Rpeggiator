@@ -89,25 +89,25 @@ namespace RpeggiatorLib
         internal static class Player
         {
             /// <summary>
-            /// Player initial position on X-axis.
+            /// Initial <see cref="Sprites.Sprite.X"/>.
             /// </summary>
-            internal const double INITIAL_PLAYER_X = 400;
+            internal const double INITIAL_X = 400;
             /// <summary>
-            /// Player initial position on Y-axis.
+            /// Initial <see cref="Sprites.Sprite.Y"/>.
             /// </summary>
-            internal const double INITIAL_PLAYER_Y = 300;
+            internal const double INITIAL_Y = 300;
             /// <summary>
-            /// Intial player's speed, in pixels by second.
+            /// <see cref="Sprites.Sprite.Width"/>
             /// </summary>
-            internal const double INITIAL_PLAYER_SPEED = 200;
+            internal const int SPRITE_WIDTH = 40;
             /// <summary>
-            /// Size of the player on X-axis.
+            /// <see cref="Sprites.Sprite.Height"/>
             /// </summary>
-            internal const int SPRITE_SIZE_X = 40;
+            internal const int SPRITE_HEIGHT = 40;
             /// <summary>
-            /// Size of the player on Y-axis.
+            /// Intial <see cref="Sprites.LifeSprite.Speed"/>.
             /// </summary>
-            internal const int SPRITE_SIZE_Y = 40;
+            internal const double INITIAL_SPEED = 200;
             /// <summary>
             /// Delay between two hits with the sword, in milliseconds.
             /// </summary>

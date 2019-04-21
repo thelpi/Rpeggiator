@@ -88,20 +88,38 @@ namespace RpeggiatorLib {
         }
         
         /// <summary>
-        ///   Recherche une chaîne localisée semblable à The specified identifier does not exist in the database..
-        /// </summary>
-        internal static string InvalidIdForInsertionExceptionMessage {
-            get {
-                return ResourceManager.GetString("InvalidIdForInsertionExceptionMessage", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Recherche une chaîne localisée semblable à The inventory slot id is invalid..
         /// </summary>
         internal static string InvalidInventorySlotIdExceptionMessage {
             get {
                 return ResourceManager.GetString("InvalidInventorySlotIdExceptionMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Recherche une chaîne localisée semblable à The coordinates of at least one step is invalid..
+        /// </summary>
+        internal static string InvalidPathStepCoordinatesExceptionMessage {
+            get {
+                return ResourceManager.GetString("InvalidPathStepCoordinatesExceptionMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Recherche une chaîne localisée semblable à The coordinates of the player relative to the door are invalid..
+        /// </summary>
+        internal static string InvalidPlayerThroughDoorCoordinatesExceptionMessage {
+            get {
+                return ResourceManager.GetString("InvalidPlayerThroughDoorCoordinatesExceptionMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Recherche une chaîne localisée semblable à The specified render image file is invalid..
+        /// </summary>
+        internal static string InvalidRenderFilenameExceptionMessage {
+            get {
+                return ResourceManager.GetString("InvalidRenderFilenameExceptionMessage", resourceCulture);
             }
         }
         
@@ -115,11 +133,29 @@ namespace RpeggiatorLib {
         }
         
         /// <summary>
+        ///   Recherche une chaîne localisée semblable à The specified identifier does not exist in the database..
+        /// </summary>
+        internal static string InvalidSpriteIdExceptionMessage {
+            get {
+                return ResourceManager.GetString("InvalidSpriteIdExceptionMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Recherche une chaîne localisée semblable à The database connection has failed. Details : {0}. Stacktrace : {1}.
         /// </summary>
         internal static string InvalidSqliteConnectionExceptionMessage {
             get {
                 return ResourceManager.GetString("InvalidSqliteConnectionExceptionMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Recherche une chaîne localisée semblable à This parameter should be greater than zero..
+        /// </summary>
+        internal static string LowerOrEqualZeroExceptionMessage {
+            get {
+                return ResourceManager.GetString("LowerOrEqualZeroExceptionMessage", resourceCulture);
             }
         }
         

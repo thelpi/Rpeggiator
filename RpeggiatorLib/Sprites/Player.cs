@@ -61,13 +61,13 @@ namespace RpeggiatorLib.Sprites
         /// <remarks>Every initial values come from <see cref="Constants.Player"/>.</remarks>
         internal Player() : base(
             0,
-            Constants.Player.INITIAL_PLAYER_X,
-            Constants.Player.INITIAL_PLAYER_Y,
-            Constants.Player.SPRITE_SIZE_X,
-            Constants.Player.SPRITE_SIZE_Y,
+            Constants.Player.INITIAL_X,
+            Constants.Player.INITIAL_Y,
+            Constants.Player.SPRITE_WIDTH,
+            Constants.Player.SPRITE_HEIGHT,
             Constants.Player.MAXIMAL_LIFE_POINTS,
             Constants.Player.HIT_LIFE_POINT_COST,
-            Constants.Player.INITIAL_PLAYER_SPEED,
+            Constants.Player.INITIAL_SPEED,
             Constants.Player.RECOVERY_TIME,
             nameof(Filename.Player),
             nameof(Filename.PlayerRecovery),

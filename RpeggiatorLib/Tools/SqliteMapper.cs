@@ -416,7 +416,7 @@ namespace RpeggiatorLib
         {
             if (!ExistsId("screen", screenId))
             {
-                throw new ArgumentException(Messages.InvalidIdForInsertionExceptionMessage, nameof(screenId));
+                throw new ArgumentException(Messages.InvalidSpriteIdExceptionMessage, nameof(screenId));
             }
             CheckInputDimensions(x, y, width, height);
 
@@ -552,29 +552,21 @@ namespace RpeggiatorLib
         // Checks input dimensions and throws an exception if invalid.
         private static void CheckInputDimensions(double x, double y, double width, double height)
         {
-            if (x < 0)
+            if (x.Lower(0))
             {
                 throw new ArgumentException(Messages.InvalidDimensionForInsertionExceptionMessage, nameof(x));
             }
-            if (y < 0)
+            if (y.Lower(0))
             {
                 throw new ArgumentException(Messages.InvalidDimensionForInsertionExceptionMessage, nameof(y));
             }
-            if (width < 0)
+            if (width.Lower(0) || (x + width).Greater(Constants.SCREEN_WIDTH))
             {
                 throw new ArgumentException(Messages.InvalidDimensionForInsertionExceptionMessage, nameof(width));
             }
-            if (height < 0)
+            if (height.Lower(0) || (y + height).Greater(Constants.SCREEN_HEIGHT))
             {
                 throw new ArgumentException(Messages.InvalidDimensionForInsertionExceptionMessage, nameof(height));
-            }
-            if ((x + width).Greater(Constants.SCREEN_WIDTH))
-            {
-                throw new ArgumentException(Messages.InvalidDimensionForInsertionExceptionMessage, string.Concat(nameof(x), ", ", nameof(width)));
-            }
-            if ((y + height).Greater(Constants.SCREEN_HEIGHT))
-            {
-                throw new ArgumentException(Messages.InvalidDimensionForInsertionExceptionMessage, string.Concat(nameof(y), ", ", nameof(height)));
             }
         }
 
@@ -599,14 +591,26 @@ namespace RpeggiatorLib
         /// </summary>
         /// <param name="enemyId"><see cref="Sprites.Enemy"/> identifier.</param>
         /// <param name="points">List of coordinates; the key indicates the order.</param>
-        /// <exception cref="ArgumentException"><paramref name="enemyId"/> is lower or equals to zero.</exception>
+        /// <exception cref="ArgumentException"><see cref="Messages.InvalidSpriteIdExceptionMessage"/></exception>
+        /// <exception cref="ArgumentException"><see cref="Messages.InvalidPathStepCoordinatesExceptionMessage"/></exception>
         public void CreateEnemyPathSteps(int enemyId, Dictionary<int, System.Windows.Point> points)
         {
             if (!ExistsId("enemy", enemyId))
             {
-                throw new ArgumentException(Messages.InvalidIdForInsertionExceptionMessage, nameof(enemyId));
+                throw new ArgumentException(Messages.InvalidSpriteIdExceptionMessage, nameof(enemyId));
             }
-            // TODO : checks "points" argument.
+
+            if (points != null)
+            {
+                foreach (int key in points.Keys)
+                {
+                    if (points[key].X.Lower(0) || points[key].X.Greater(Constants.SCREEN_WIDTH)
+                        || points[key].Y.Lower(0) || points[key].Y.Greater(Constants.SCREEN_HEIGHT))
+                    {
+                        throw new ArgumentException(Messages.InvalidPathStepCoordinatesExceptionMessage, nameof(points));
+                    }
+                }
+            }
 
             using (SQLiteConnection connection = new SQLiteConnection(CONN_STRING))
             {
@@ -644,7 +648,9 @@ namespace RpeggiatorLib
         /// <param name="renderType"><see cref="RenderType"/></param>
         /// <param name="renderValues">Values required to instanciate a <see cref="Sprites.Sprite.Render"/> (filename, color, and so forth).</param>
         /// <returns><see cref="Sprites.Sprite.Id"/></returns>
-        private int CreatePermanentStructure(int screenId, double x, double y, double width, double height,
+        /// <exception cref="ArgumentException"><see cref="Messages.InvalidSpriteIdExceptionMessage"/></exception>
+        /// <exception cref="ArgumentException"><see cref="Messages.InvalidDimensionForInsertionExceptionMessage"/></exception>
+        public int CreatePermanentStructure(int screenId, double x, double y, double width, double height,
             RenderType renderType, string[] renderValues)
         {
             return CreateSpriteInScreen<Sprites.PermanentStructure>("permanent_structure", screenId, x, y, width, height, renderType, renderValues);
@@ -666,12 +672,22 @@ namespace RpeggiatorLib
         /// <param name="onRenderType"><see cref="RenderType"/></param>
         /// <param name="onRenderValues">Values required to instanciate a <see cref="Sprites.GateTrigger._renderOn"/> (filename, color, and so forth).</param>
         /// <returns><see cref="Sprites.Sprite.Id"/></returns>
+        /// <exception cref="ArgumentException"><see cref="Messages.InvalidSpriteIdExceptionMessage"/></exception>
+        /// <exception cref="ArgumentException"><see cref="Messages.InvalidDimensionForInsertionExceptionMessage"/></exception>
+        /// <exception cref="ArgumentException"><see cref="Messages.LowerOrEqualZeroExceptionMessage"/></exception>
         public int CreateGateTrigger(int screenId, double x, double y, double width, double height,
             RenderType renderType, string[] renderValues,
             double actionDuration, int gateId, bool appearOnActivation,
             RenderType onRenderType, string[] onRenderValues)
         {
-            // TODO : check arguments.
+            if (actionDuration.LowerEqual(0))
+            {
+                throw new ArgumentException(Messages.LowerOrEqualZeroExceptionMessage, nameof(actionDuration));
+            }
+            if (!ExistsId("gate", gateId))
+            {
+                throw new ArgumentException(Messages.InvalidSpriteIdExceptionMessage, nameof(gateId));
+            }
 
             return CreateSpriteInScreen<Sprites.GateTrigger>("gate_trigger", screenId, x, y, width, height, renderType, renderValues,
                 new Tuple<string, DbType, object>("action_duration", DbType.Double, actionDuration),
@@ -693,10 +709,16 @@ namespace RpeggiatorLib
         /// <param name="renderValues">Values required to instanciate a <see cref="Sprites.Sprite.Render"/> (filename, color, and so forth).</param>
         /// <param name="lifepoints"><see cref="Sprites.DamageableSprite.CurrentLifePoints"/></param>
         /// <returns><see cref="Sprites.Sprite.Id"/></returns>
+        /// <exception cref="ArgumentException"><see cref="Messages.InvalidSpriteIdExceptionMessage"/></exception>
+        /// <exception cref="ArgumentException"><see cref="Messages.InvalidDimensionForInsertionExceptionMessage"/></exception>
+        /// <exception cref="ArgumentException"><see cref="Messages.LowerOrEqualZeroExceptionMessage"/></exception>
         public int CreateRift(int screenId, double x, double y, double width, double height,
             RenderType renderType, string[] renderValues, double lifepoints)
         {
-            // TODO : checks "lifepoints" argument.
+            if (lifepoints.LowerEqual(0))
+            {
+                throw new ArgumentException(Messages.LowerOrEqualZeroExceptionMessage, nameof(lifepoints));
+            }
 
             return CreateSpriteInScreen<Sprites.Rift>("rift", screenId, x, y, width, height, renderType, renderValues,
                 new Tuple<string, DbType, object>("lifepoints", DbType.Double, lifepoints));
@@ -714,6 +736,8 @@ namespace RpeggiatorLib
         /// <param name="renderValues">Values required to instanciate a <see cref="Sprites.Sprite.Render"/> (filename, color, and so forth).</param>
         /// <param name="activated"><see cref="Sprites.Gate._defaultActivated"/></param>
         /// <returns><see cref="Sprites.Sprite.Id"/></returns>
+        /// <exception cref="ArgumentException"><see cref="Messages.InvalidSpriteIdExceptionMessage"/></exception>
+        /// <exception cref="ArgumentException"><see cref="Messages.InvalidDimensionForInsertionExceptionMessage"/></exception>
         public int CreateGate(int screenId, double x, double y, double width, double height,
             RenderType renderType, string[] renderValues, bool activated)
         {
@@ -733,10 +757,20 @@ namespace RpeggiatorLib
         /// <param name="quantity"><see cref="Sprites.PickableItem.Quantity"/></param>
         /// <param name="timeBeforeDisapear">Duration, in milliseconds, before <see cref="Sprites.PickableItem.Disapear"/>.</param>
         /// <returns><see cref="Sprites.Sprite.Id"/></returns>
+        /// <exception cref="ArgumentException"><see cref="Messages.InvalidSpriteIdExceptionMessage"/></exception>
+        /// <exception cref="ArgumentException"><see cref="Messages.InvalidDimensionForInsertionExceptionMessage"/></exception>
+        /// <exception cref="ArgumentException"><see cref="Messages.LowerOrEqualZeroExceptionMessage"/></exception>
         public int CreatePickableItem(int screenId, double x, double y, double width, double height,
             ItemType? itemType, int quantity, double? timeBeforeDisapear)
         {
-            // TODO : checks arguments.
+            if (timeBeforeDisapear.HasValue && timeBeforeDisapear.Value.LowerEqual(0))
+            {
+                throw new ArgumentException(Messages.LowerOrEqualZeroExceptionMessage, nameof(timeBeforeDisapear));
+            }
+            if (quantity <= 0)
+            {
+                throw new ArgumentException(Messages.LowerOrEqualZeroExceptionMessage, nameof(quantity));
+            }
 
             return CreateSpriteInScreen<Sprites.PickableItem>("pickable_item", screenId, x, y, width, height, null, null,
                 new Tuple<string, DbType, object>("item_type", DbType.Int32, (int?)itemType),
@@ -761,15 +795,34 @@ namespace RpeggiatorLib
         /// <param name="playerGoThroughX"><see cref="Sprites.Door.PlayerGoThroughX"/></param>
         /// <param name="playerGoThroughY"><see cref="Sprites.Door.PlayerGoThroughY"/></param>
         /// <returns><see cref="Sprites.Sprite.Id"/></returns>
+        /// <exception cref="ArgumentException"><see cref="Messages.InvalidSpriteIdExceptionMessage"/></exception>
+        /// <exception cref="ArgumentException"><see cref="Messages.InvalidDimensionForInsertionExceptionMessage"/></exception>
+        /// <exception cref="ArgumentException"><see cref="Messages.LowerOrEqualZeroExceptionMessage"/></exception>
+        /// <exception cref="ArgumentException"><see cref="Messages.InvalidPlayerThroughDoorCoordinatesExceptionMessage"/></exception>
         public int CreateDoor(int screenId, double x, double y, double width, double height,
             RenderType renderType, string[] renderValues,
-            int keyId, int connectedScreenId, double playerGoThroughX, double playerGoThroughY,
+            int? keyId, int connectedScreenId, double playerGoThroughX, double playerGoThroughY,
             RenderType lockedRenderType, string[] lockedRenderValues)
         {
-            // TODO : checks arguments.
+            if (keyId.HasValue && keyId <= 0)
+            {
+                throw new ArgumentException(Messages.LowerOrEqualZeroExceptionMessage, nameof(keyId));
+            }
+            if (!ExistsId("screen", connectedScreenId))
+            {
+                throw new ArgumentException(Messages.InvalidSpriteIdExceptionMessage, nameof(connectedScreenId));
+            }
+            if (playerGoThroughX.Lower(0) || playerGoThroughX.Greater(Constants.SCREEN_WIDTH - Constants.Player.SPRITE_WIDTH))
+            {
+                throw new ArgumentException(Messages.InvalidPlayerThroughDoorCoordinatesExceptionMessage, nameof(playerGoThroughX));
+            }
+            if (playerGoThroughY.Lower(0) || playerGoThroughY.Greater(Constants.SCREEN_HEIGHT - Constants.Player.SPRITE_HEIGHT))
+            {
+                throw new ArgumentException(Messages.InvalidPlayerThroughDoorCoordinatesExceptionMessage, nameof(playerGoThroughY));
+            }
 
             return CreateSpriteInScreen<Sprites.Door>("door", screenId, x, y, width, height, renderType, renderValues,
-                new Tuple<string, DbType, object>("key_id", DbType.Int32, (int?)keyId),
+                new Tuple<string, DbType, object>("key_id", DbType.Int32, keyId),
                 new Tuple<string, DbType, object>("connected_screen_id", DbType.Int32, connectedScreenId),
                 new Tuple<string, DbType, object>("player_go_through_x", DbType.Double, playerGoThroughX),
                 new Tuple<string, DbType, object>("player_go_through_y", DbType.Double, playerGoThroughY),
@@ -789,11 +842,11 @@ namespace RpeggiatorLib
         /// <param name="renderValues">Values required to instanciate a <see cref="Sprites.Sprite.Render"/> (filename, color, and so forth).</param>
         /// <param name="floorType"><see cref="Sprites.Floor.FloorType"/></param>
         /// <returns><see cref="Sprites.Sprite.Id"/></returns>
+        /// <exception cref="ArgumentException"><see cref="Messages.InvalidSpriteIdExceptionMessage"/></exception>
+        /// <exception cref="ArgumentException"><see cref="Messages.InvalidDimensionForInsertionExceptionMessage"/></exception>
         public int CreateFloor(int screenId, double x, double y, double width, double height,
             RenderType renderType, string[] renderValues, FloorType floorType)
         {
-            // TODO : checks "floorType" argument.
-
             return CreateSpriteInScreen<Sprites.Floor>("floor", screenId, x, y, width, height, renderType, renderValues,
                 new Tuple<string, DbType, object>("floor_type", DbType.Int32, (int)floorType));
         }
@@ -810,10 +863,15 @@ namespace RpeggiatorLib
         /// <param name="renderValues">Values required to instanciate a <see cref="Sprites.Sprite.Render"/> (filename, color, and so forth).</param>
         /// <param name="screenIdEntrance"><see cref="Sprites.Pit.ScreenIdEntrance"/></param>
         /// <returns><see cref="Sprites.Sprite.Id"/></returns>
+        /// <exception cref="ArgumentException"><see cref="Messages.InvalidSpriteIdExceptionMessage"/></exception>
+        /// <exception cref="ArgumentException"><see cref="Messages.InvalidDimensionForInsertionExceptionMessage"/></exception>
         public int CreatePit(int screenId, double x, double y, double width, double height,
             RenderType renderType, string[] renderValues, int? screenIdEntrance)
         {
-            // TODO : checks "screenIdEntrance" argument.
+            if (screenIdEntrance.HasValue && !ExistsId("screen", screenIdEntrance.Value))
+            {
+                throw new ArgumentException(Messages.InvalidSpriteIdExceptionMessage, nameof(screenIdEntrance));
+            }
 
             return CreateSpriteInScreen<Sprites.Pit>("pit", screenId, x, y, width, height, renderType, renderValues,
                 new Tuple<string, DbType, object>("screen_id_entrance", DbType.Int32, screenIdEntrance));
@@ -836,11 +894,31 @@ namespace RpeggiatorLib
         /// <param name="openRenderValues">Values required to instanciate a <see cref="Sprites.Chest._renderOpen"/> (filename, color, and so forth).</param>
         /// <param name="quantity"><see cref="Sprites.Chest._quantity"/></param>
         /// <returns><see cref="Sprites.Sprite.Id"/></returns>
+        /// <exception cref="ArgumentException"><see cref="Messages.InvalidSpriteIdExceptionMessage"/></exception>
+        /// <exception cref="ArgumentException"><see cref="Messages.InvalidDimensionForInsertionExceptionMessage"/></exception>
+        /// <exception cref="ArgumentException"><see cref="Messages.LowerOrEqualZeroExceptionMessage"/></exception>
         public int CreateChest(int screenId, double x, double y, double width, double height,
             RenderType renderType, string[] renderValues, ItemType? itemType, int quantity, int? keyId, int? keyIdContainer,
             RenderType openRenderType, string[] openRenderValues)
         {
-            // TODO : checks arguments.
+            if (quantity <= 0)
+            {
+                throw new ArgumentException(Messages.LowerOrEqualZeroExceptionMessage, nameof(quantity));
+            }
+            if (keyIdContainer.HasValue && keyIdContainer.Value <= 0)
+            {
+                throw new ArgumentException(Messages.LowerOrEqualZeroExceptionMessage, nameof(keyIdContainer));
+            }
+            if (keyId.HasValue && keyId.Value <= 0)
+            {
+                throw new ArgumentException(Messages.LowerOrEqualZeroExceptionMessage, nameof(keyId));
+            }
+
+            // The chest can't contain both item and key.
+            if (keyIdContainer.HasValue)
+            {
+                itemType = null;
+            }
 
             return CreateSpriteInScreen<Sprites.Chest>("chest", screenId, x, y, width, height, renderType, renderValues,
                 new Tuple<string, DbType, object>("item_type", DbType.Int32, (int?)itemType),
@@ -869,11 +947,36 @@ namespace RpeggiatorLib
         /// <param name="renderRecoveryFilename"><see cref="Sprites.LifeSprite._renderRecovery"/> image filename.</param>
         /// <param name="speed"><see cref="Sprites.LifeSprite.Speed"/></param>
         /// <remarks><see cref="Sprites.Sprite.Id"/></remarks>
+        /// <exception cref="ArgumentException"><see cref="Messages.InvalidSpriteIdExceptionMessage"/></exception>
+        /// <exception cref="ArgumentException"><see cref="Messages.InvalidDimensionForInsertionExceptionMessage"/></exception>
+        /// <exception cref="ArgumentException"><see cref="Messages.LowerOrEqualZeroExceptionMessage"/></exception>
+        /// <exception cref="ArgumentException"><see cref="Messages.InvalidRenderFilenameExceptionMessage"/></exception>
         public int CreateEnemy(int screenId, double x, double y, double width, double height, double maximalLifePoints,
             double hitLifePointCost, double speed, double recoveryTime, string renderFilename, string renderRecoveryFilename,
             Direction defaultDirection, ItemType? lootItemType, int lootQuantity)
         {
-            // TODO : checks arguments.
+            if (maximalLifePoints.LowerEqual(0))
+            {
+                throw new ArgumentException(Messages.LowerOrEqualZeroExceptionMessage, nameof(maximalLifePoints));
+            }
+            if (speed.LowerEqual(0))
+            {
+                throw new ArgumentException(Messages.LowerOrEqualZeroExceptionMessage, nameof(speed));
+            }
+            if (hitLifePointCost.LowerEqual(0))
+            {
+                throw new ArgumentException(Messages.LowerOrEqualZeroExceptionMessage, nameof(hitLifePointCost));
+            }
+            if (string.IsNullOrWhiteSpace(renderFilename))
+            {
+                throw new ArgumentException(Messages.InvalidRenderFilenameExceptionMessage, nameof(renderFilename));
+            }
+            if (string.IsNullOrWhiteSpace(renderRecoveryFilename))
+            {
+                throw new ArgumentException(Messages.InvalidRenderFilenameExceptionMessage, nameof(renderRecoveryFilename));
+            }
+            recoveryTime = recoveryTime < 0 ? 0 : recoveryTime;
+            lootQuantity = lootQuantity < 0 ? 0 : lootQuantity;
 
             return CreateSpriteInScreen<Sprites.Enemy>("enemy", screenId, x, y, width, height, null, null,
                 new Tuple<string, DbType, object>("maximal_life_points", DbType.Double, maximalLifePoints),
@@ -898,16 +1001,20 @@ namespace RpeggiatorLib
         /// <returns><see cref="Sprites.Sprite.Id"/></returns>
         public int CreateScreen(RenderType renderType, string[] renderValues, FloorType floorType, double darknessOpacity)
         {
+            darknessOpacity = darknessOpacity.Lower(0) ? 0 : (darknessOpacity.Greater(1) ? 1 : darknessOpacity);
+
             int id = GetNextId("screen");
 
             List<string> columnsList = ToColumnsArray(true, "floor_type", "darkness_opacity", "neighboring_screen_top",
                 "neighboring_screen_bottom", "neighboring_screen_right", "neighboring_screen_left").ToList();
-            columnsList.RemoveAt(1);
             List<DbType> typesList = ToTypesArray(true, DbType.Int32, DbType.Double, DbType.Int32,
                 DbType.Int32, DbType.Int32, DbType.Int32).ToList();
-            typesList.RemoveAt(1);
             List<Object> valuesList = ToValuesArray(id, 0, 0, 0, Constants.SCREEN_WIDTH, Constants.SCREEN_HEIGHT, renderType, renderValues,
                 floorType, darknessOpacity, 0, 0, 0, 0).ToList();
+
+            // Removes the "screenId" value in each list.
+            columnsList.RemoveAt(1);
+            typesList.RemoveAt(1);
             valuesList.RemoveAt(1);
 
             ExecutePreparedInsert("screen",
@@ -926,27 +1033,28 @@ namespace RpeggiatorLib
         /// <param name="screenIdLeft"><see cref="Sprites.Screen._neighboringScreens"/> left identifier.</param>
         /// <param name="screenIdRight"><see cref="Sprites.Screen._neighboringScreens"/> right identifier.</param>
         /// <param name="screenIdBottom"><see cref="Sprites.Screen._neighboringScreens"/> bottom identifier.</param>
+        /// <exception cref="ArgumentException"><see cref="Messages.InvalidSpriteIdExceptionMessage"/></exception>
         public void SetNeighboringScreens(int screenId, int screenIdTop, int screenIdLeft, int screenIdRight, int screenIdBottom)
         {
             if (!ExistsId("screen", screenId))
             {
-                throw new ArgumentException(Messages.InvalidIdForInsertionExceptionMessage, nameof(screenId));
+                throw new ArgumentException(Messages.InvalidSpriteIdExceptionMessage, nameof(screenId));
             }
             if (!ExistsId("screen", screenIdTop))
             {
-                throw new ArgumentException(Messages.InvalidIdForInsertionExceptionMessage, nameof(screenIdTop));
+                throw new ArgumentException(Messages.InvalidSpriteIdExceptionMessage, nameof(screenIdTop));
             }
             if (!ExistsId("screen", screenIdLeft))
             {
-                throw new ArgumentException(Messages.InvalidIdForInsertionExceptionMessage, nameof(screenIdLeft));
+                throw new ArgumentException(Messages.InvalidSpriteIdExceptionMessage, nameof(screenIdLeft));
             }
             if (!ExistsId("screen", screenIdRight))
             {
-                throw new ArgumentException(Messages.InvalidIdForInsertionExceptionMessage, nameof(screenIdRight));
+                throw new ArgumentException(Messages.InvalidSpriteIdExceptionMessage, nameof(screenIdRight));
             }
             if (!ExistsId("screen", screenIdBottom))
             {
-                throw new ArgumentException(Messages.InvalidIdForInsertionExceptionMessage, nameof(screenIdBottom));
+                throw new ArgumentException(Messages.InvalidSpriteIdExceptionMessage, nameof(screenIdBottom));
             }
 
             using (SQLiteConnection connection = new SQLiteConnection(CONN_STRING))

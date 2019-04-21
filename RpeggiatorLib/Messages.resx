@@ -126,17 +126,29 @@
   <data name="InvalidDimensionForInsertionExceptionMessage" xml:space="preserve">
     <value>The specified dimension is invalid.</value>
   </data>
-  <data name="InvalidIdForInsertionExceptionMessage" xml:space="preserve">
-    <value>The specified identifier does not exist in the database.</value>
-  </data>
   <data name="InvalidInventorySlotIdExceptionMessage" xml:space="preserve">
     <value>The inventory slot id is invalid.</value>
+  </data>
+  <data name="InvalidPathStepCoordinatesExceptionMessage" xml:space="preserve">
+    <value>The coordinates of at least one step is invalid.</value>
+  </data>
+  <data name="InvalidPlayerThroughDoorCoordinatesExceptionMessage" xml:space="preserve">
+    <value>The coordinates of the player relative to the door are invalid.</value>
+  </data>
+  <data name="InvalidRenderFilenameExceptionMessage" xml:space="preserve">
+    <value>The specified render image file is invalid.</value>
   </data>
   <data name="InvalidResourcesPathExceptionMessage" xml:space="preserve">
     <value>The specified resources path is invalid.</value>
   </data>
+  <data name="InvalidSpriteIdExceptionMessage" xml:space="preserve">
+    <value>The specified identifier does not exist in the database.</value>
+  </data>
   <data name="InvalidSqliteConnectionExceptionMessage" xml:space="preserve">
     <value>The database connection has failed. Details : {0}. Stacktrace : {1}</value>
+  </data>
+  <data name="LowerOrEqualZeroExceptionMessage" xml:space="preserve">
+    <value>This parameter should be greater than zero.</value>
   </data>
   <data name="NoQuadraticSolutionExceptionMessage" xml:space="preserve">
     <value>Unable to resolve this quadratic equation.</value>
