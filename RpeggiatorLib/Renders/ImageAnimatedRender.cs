@@ -11,9 +11,9 @@ namespace RpeggiatorLib.Renders
         // Current index in "_imagesPaths" and "_brushs" lists.
         private int _currentIndex;
         // List of images paths.
-        private string[] _imagesPaths;
+        private readonly string[] _imagesPaths;
         // List of brushes generated from each image.
-        private Brush[] _brushs;
+        private readonly Brush[] _brushs;
 
         /// <summary>
         /// Constructor.
@@ -31,7 +31,7 @@ namespace RpeggiatorLib.Renders
         {
             if (_brushs[_currentIndex] == null)
             {
-
+                _brushs[_currentIndex] = ComputeImageBrush(_imagesPaths[_currentIndex]);
             }
 
             return _brushs[_currentIndex];

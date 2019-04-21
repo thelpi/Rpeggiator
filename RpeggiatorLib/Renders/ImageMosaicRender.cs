@@ -11,13 +11,13 @@ namespace RpeggiatorLib.Renders
         // Image brush.
         private ImageBrush _brush;
         // The sprite which owns this render.
-        private Sprites.Sprite _forInstance;
+        private readonly Sprites.Sprite _forInstance;
 
         /// <summary>
         /// Constructor.
         /// </summary>
         /// <param name="imageName"><see cref="ImageRender._imageName"/></param>
-        /// <param name="forInstance"></param>
+        /// <param name="forInstance"><see cref="_forInstance"/></param>
         internal ImageMosaicRender(string imageName, Sprites.Sprite forInstance) : base(imageName)
         {
             _forInstance = forInstance;
@@ -28,7 +28,7 @@ namespace RpeggiatorLib.Renders
         {
             if (_brush == null)
             {
-                _brush = ComputeBrush();
+                _brush = ComputeImageBrush(_imageName);
                 _brush.TileMode = TileMode.Tile;
                 _brush.Stretch = Stretch.None;
                 _brush.ViewportUnits = BrushMappingMode.RelativeToBoundingBox;

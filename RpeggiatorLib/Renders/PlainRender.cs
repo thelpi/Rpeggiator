@@ -9,7 +9,7 @@ namespace RpeggiatorLib.Renders
     public class PlainRender : Render
     {
         // Color hexadecimal value.
-        private string _hexColor;
+        private readonly string _hexColor;
         // Color brush.
         private SolidColorBrush _brush = null;
 

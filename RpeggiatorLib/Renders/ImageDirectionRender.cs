@@ -12,9 +12,9 @@ namespace RpeggiatorLib.Renders
         // Dictionary of brushes, one by direction. 
         private Dictionary<Enums.Direction, ImageBrush> _directionBrushes = new Dictionary<Enums.Direction, ImageBrush>();
         // The property name which contains the current direction.
-        private string _directionPropertyName;
+        private readonly string _directionPropertyName;
         // The sprite which owns this render.
-        private Sprites.Sprite _forInstance;
+        private readonly Sprites.Sprite _forInstance;
 
         /// <summary>
         /// Constructor.
@@ -38,7 +38,7 @@ namespace RpeggiatorLib.Renders
 
             if (!_directionBrushes.ContainsKey(currentDirection))
             {
-                _directionBrushes.Add(currentDirection, ComputeBrush(currentDirection));
+                _directionBrushes.Add(currentDirection, ComputeImageBrush(_imageName, currentDirection));
             }
 
             return _directionBrushes[currentDirection];
