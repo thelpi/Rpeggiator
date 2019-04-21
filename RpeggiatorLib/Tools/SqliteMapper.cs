@@ -69,16 +69,16 @@ namespace RpeggiatorLib
                 connection.Open();
                 using (SQLiteCommand cmd = connection.CreateCommand())
                 {
-                    List<Sprites.PermanentStructure>  permanentStructures = GetPermanentStructures(id, cmd);
-                    List<Sprites.Door> doors = GetDoors(id, cmd);
-                    List<Sprites.Floor> floors = GetFloors(id, cmd);
-                    List<Sprites.Enemy> enemies = GetEnemies(id, cmd);
-                    List<Sprites.GateTrigger> gateTriggers = GetGateTriggers(id, cmd);
-                    List<Sprites.Gate> gates = GetGates(id, cmd);
-                    List<Sprites.Rift> rifts = GetRifts(id, cmd);
-                    List<Sprites.Pit> pits = GetPits(id, cmd);
-                    List<Sprites.Chest> chests = GetChests(id, cmd);
-                    List<Sprites.PickableItem> pickableItems = GetPickableItems(id, cmd);
+                    List<Sprites.PermanentStructure>  permanentStructures = GetTypedSpritesForAScreen<Sprites.PermanentStructure>(id, cmd);
+                    List<Sprites.Door> doors = GetTypedSpritesForAScreen<Sprites.Door>(id, cmd);
+                    List<Sprites.Floor> floors = GetTypedSpritesForAScreen<Sprites.Floor>(id, cmd);
+                    List<Sprites.Enemy> enemies = GetTypedSpritesForAScreen<Sprites.Enemy>(id, cmd);
+                    List<Sprites.GateTrigger> gateTriggers = GetTypedSpritesForAScreen<Sprites.GateTrigger>(id, cmd);
+                    List<Sprites.Gate> gates = GetTypedSpritesForAScreen<Sprites.Gate>(id, cmd);
+                    List<Sprites.Rift> rifts = GetTypedSpritesForAScreen<Sprites.Rift>(id, cmd);
+                    List<Sprites.Pit> pits = GetTypedSpritesForAScreen<Sprites.Pit>(id, cmd);
+                    List<Sprites.Chest> chests = GetTypedSpritesForAScreen<Sprites.Chest>(id, cmd);
+                    List<Sprites.PickableItem> pickableItems = GetTypedSpritesForAScreen<Sprites.PickableItem>(id, cmd);
                     
                     cmd.CommandText = GenerateSpriteTableSql("screen", true, new[]
                     {
@@ -404,40 +404,64 @@ namespace RpeggiatorLib
 
         #endregion
 
-        #region Get screen informations by sprite type.
-
-        // Gets permanent structures of a screen.
-        private List<Sprites.PermanentStructure> GetPermanentStructures(int screnId, SQLiteCommand cmd)
+        // Gets, for a specified screen, every sprites of a specified type.
+        private List<T> GetTypedSpritesForAScreen<T>(int screenId, SQLiteCommand cmd) where T : Sprites.Sprite
         {
-            List<Sprites.PermanentStructure> sprites = new List<Sprites.PermanentStructure>();
-
-            cmd.CommandText = GenerateSpriteTableSql("permanent_structure", true, null);
-            cmd.Parameters.Add("@screen_id", DbType.Int32);
-            cmd.Parameters["@screen_id"].Value = screnId;
-
-            using (SQLiteDataReader reader = cmd.ExecuteReader())
+            string tableName = "";
+            bool withRender = true;
+            string[] additionalColumns = null;
+            switch (typeof(T).Name)
             {
-                while (reader.Read())
-                {
-                    sprites.Add(new Sprites.PermanentStructure(
-                        reader.GetInt32("id"), reader.GetDouble("x"), reader.GetDouble("y"), reader.GetDouble("width"), reader.GetDouble("height"),
-                        (Enums.RenderType)reader.GetInt32("render_type"), GetRenderPropertiesForCurrentReaderRow(reader)));
-                }
+                case nameof(Sprites.Chest):
+                    tableName = "chest";
+                    additionalColumns = new[] { "item_type", "quantity", "key_id", "key_id_container", "open_render_type", "open_render_value" };
+                    break;
+                case nameof(Sprites.Door):
+                    tableName = "door";
+                    additionalColumns = new[] { "key_id", "connected_screen_id", "player_go_through_x", "player_go_through_y",
+                        "locked_render_type", "locked_render_value" };
+                    break;
+                case nameof(Sprites.Enemy):
+                    tableName = "enemy";
+                    withRender = false;
+                    additionalColumns = new[] { "maximal_life_points", "hit_life_point_cost", "speed", "recovery_time", "render_filename",
+                        "render_recovery_filename", "default_direction", "loot_item_type", "loot_quantity" };
+                    break;
+                case nameof(Sprites.Floor):
+                    tableName = "floor";
+                    additionalColumns = new[] { "floor_type" };
+                    break;
+                case nameof(Sprites.Gate):
+                    tableName = "gate";
+                    additionalColumns = new[] { "activated" };
+                    break;
+                case nameof(Sprites.GateTrigger):
+                    tableName = "gate_trigger";
+                    additionalColumns = new[] { "action_duration", "gate_id", "appear_on_activation", "on_render_type", "on_render_value" };
+                    break;
+                case nameof(Sprites.PermanentStructure):
+                    tableName = "permanent_structure";
+                    break;
+                case nameof(Sprites.PickableItem):
+                    tableName = "pickable_item";
+                    withRender = false;
+                    additionalColumns = new[] { "item_type", "quantity", "time_before_disapear" };
+                    break;
+                case nameof(Sprites.Pit):
+                    tableName = "pit";
+                    additionalColumns = new[] { "screen_id_entrance" };
+                    break;
+                case nameof(Sprites.Rift):
+                    tableName = "rift";
+                    additionalColumns = new[] { "lifepoints" };
+                    break;
+                default:
+                    throw new NotImplementedException();
             }
 
-            return sprites;
-        }
+            List<T> sprites = new List<T>();
 
-        // Gets doors of a screen.
-        private List<Sprites.Door> GetDoors(int screenId, SQLiteCommand cmd)
-        {
-            List<Sprites.Door> sprites = new List<Sprites.Door>();
-
-            List<string> otherColumns = new List<string>
-            {
-                "key_id", "connected_screen_id", "player_go_through_x", "player_go_through_y", "locked_render_type", "locked_render_value"
-            };
-            cmd.CommandText = GenerateSpriteTableSql("door", true, otherColumns.ToArray());
+            cmd.CommandText = GenerateSpriteTableSql(tableName, withRender, additionalColumns);
             cmd.Parameters.Add("@screen_id", DbType.Int32);
             cmd.Parameters["@screen_id"].Value = screenId;
 
@@ -445,69 +469,75 @@ namespace RpeggiatorLib
             {
                 while (reader.Read())
                 {
-                    sprites.Add(new Sprites.Door(
-                        reader.GetInt32("id"), reader.GetDouble("x"), reader.GetDouble("y"), reader.GetDouble("width"),
-                        reader.GetDouble("height"), reader.GetNullValue<int>("key_id"), reader.GetInt32("connected_screen_id"),
-                        reader.GetDouble("player_go_through_x"), reader.GetDouble("player_go_through_y"),
-                        (Enums.RenderType)reader.GetInt32("locked_render_type"), GetRenderPropertiesForCurrentReaderRow(reader, "locked_render_value"),
-                        (Enums.RenderType)reader.GetInt32("render_type"), GetRenderPropertiesForCurrentReaderRow(reader)));
-                }
-            }
-
-            return sprites;
-        }
-
-        // Gets chests of a screen.
-        private List<Sprites.Chest> GetChests(int id, SQLiteCommand cmd)
-        {
-            List<Sprites.Chest> sprites = new List<Sprites.Chest>();
-
-            List<string> otherColumns = new List<string>
-            {
-                "item_type", "quantity", "key_id", "key_id_container", "open_render_type", "open_render_value"
-            };
-
-            cmd.CommandText = GenerateSpriteTableSql("chest", true, otherColumns.ToArray());
-            cmd.Parameters.Add("@screen_id", DbType.Int32);
-            cmd.Parameters["@screen_id"].Value = id;
-
-            using (SQLiteDataReader reader = cmd.ExecuteReader())
-            {
-                while (reader.Read())
-                {
-                    sprites.Add(new Sprites.Chest(reader.GetInt32("id"), reader.GetDouble("x"), reader.GetDouble("y"),
-                        reader.GetDouble("width"), reader.GetDouble("height"), (Enums.ItemType?)reader.GetNullValue<int>("item_type"),
-                        reader.GetInt32("quantity"), reader.GetNullValue<int>("key_id"), reader.GetNullValue<int>("key_id_container"),
-                        (Enums.RenderType)reader.GetInt32("render_type"), GetRenderPropertiesForCurrentReaderRow(reader),
-                        (Enums.RenderType)reader.GetInt32("open_render_type"), GetRenderPropertiesForCurrentReaderRow(reader, "open_render_value")));
-                }
-            }
-
-            return sprites;
-        }
-
-        // Gets enemies of a screen.
-        private List<Sprites.Enemy> GetEnemies(int id, SQLiteCommand cmd)
-        {
-            List<Sprites.Enemy> sprites = new List<Sprites.Enemy>();
-
-            cmd.CommandText = GenerateSpriteTableSql("enemy", false, "maximal_life_points", "hit_life_point_cost", "speed",
-                "recovery_time", "render_filename", "render_recovery_filename", "default_direction", "loot_item_type", "loot_quantity");
-            cmd.Parameters.Add("@screen_id", DbType.Int32);
-            cmd.Parameters["@screen_id"].Value = id;
-
-            using (SQLiteDataReader reader = cmd.ExecuteReader())
-            {
-                while (reader.Read())
-                {
-                    sprites.Add(new Sprites.Enemy(reader.GetInt32("id"), reader.GetDouble("x"), reader.GetDouble("y"),
-                        reader.GetDouble("width"), reader.GetDouble("height"), reader.GetDouble("maximal_life_points"),
-                        reader.GetDouble("hit_life_point_cost"), reader.GetDouble("speed"), reader.GetDouble("recovery_time"),
-                        reader.GetString("render_filename"), reader.GetString("render_recovery_filename"),
-                        (Enums.Direction)reader.GetInt32("default_direction"),
-                        (Enums.ItemType?)reader.GetNullValue<int>("loot_item_type"), reader.GetInt32("loot_quantity")));
-
-                    sprites.Last().SetPath(GetEnemyPathSteps(reader.GetInt32("id")));
+                    Sprites.Sprite sp;
+                    switch (typeof(T).Name)
+                    {
+                        case nameof(Sprites.Chest):
+                            sp = new Sprites.Chest(reader.GetInt32("id"), reader.GetDouble("x"), reader.GetDouble("y"), reader.GetDouble("width"),
+                                reader.GetDouble("height"), (Enums.ItemType?)reader.GetNullValue<int>("item_type"), reader.GetInt32("quantity"),
+                                reader.GetNullValue<int>("key_id"), reader.GetNullValue<int>("key_id_container"),
+                                (Enums.RenderType)reader.GetInt32("render_type"), GetRenderPropertiesForCurrentReaderRow(reader),
+                                (Enums.RenderType)reader.GetInt32("open_render_type"),
+                                GetRenderPropertiesForCurrentReaderRow(reader, "open_render_value"));
+                            break;
+                        case nameof(Sprites.Door):
+                            sp = new Sprites.Door(reader.GetInt32("id"), reader.GetDouble("x"), reader.GetDouble("y"), reader.GetDouble("width"),
+                                reader.GetDouble("height"), reader.GetNullValue<int>("key_id"), reader.GetInt32("connected_screen_id"),
+                                reader.GetDouble("player_go_through_x"), reader.GetDouble("player_go_through_y"),
+                                (Enums.RenderType)reader.GetInt32("locked_render_type"),
+                                GetRenderPropertiesForCurrentReaderRow(reader, "locked_render_value"),
+                                (Enums.RenderType)reader.GetInt32("render_type"), GetRenderPropertiesForCurrentReaderRow(reader));
+                            break;
+                        case nameof(Sprites.Enemy):
+                            sp = new Sprites.Enemy(reader.GetInt32("id"), reader.GetDouble("x"), reader.GetDouble("y"), reader.GetDouble("width"),
+                                reader.GetDouble("height"), reader.GetDouble("maximal_life_points"), reader.GetDouble("hit_life_point_cost"),
+                                reader.GetDouble("speed"), reader.GetDouble("recovery_time"), reader.GetString("render_filename"),
+                                reader.GetString("render_recovery_filename"), (Enums.Direction)reader.GetInt32("default_direction"),
+                                (Enums.ItemType?)reader.GetNullValue<int>("loot_item_type"), reader.GetInt32("loot_quantity"));
+                            (sp as Sprites.Enemy).SetPath(GetEnemyPathSteps(reader.GetInt32("id")));
+                            break;
+                        case nameof(Sprites.Floor):
+                            sp = new Sprites.Floor(reader.GetInt32("id"), reader.GetDouble("x"), reader.GetDouble("y"), reader.GetDouble("width"),
+                                reader.GetDouble("height"), (Enums.FloorType)reader.GetInt32("floor_type"),
+                                (Enums.RenderType)reader.GetInt32("render_type"), GetRenderPropertiesForCurrentReaderRow(reader));
+                            break;
+                        case nameof(Sprites.Gate):
+                            sp = new Sprites.Gate(reader.GetInt32("id"), reader.GetDouble("x"), reader.GetDouble("y"), reader.GetDouble("width"),
+                                reader.GetDouble("height"), reader.GetInt32("activated") > 0, (Enums.RenderType)reader.GetInt32("render_type"),
+                                GetRenderPropertiesForCurrentReaderRow(reader));
+                            break;
+                        case nameof(Sprites.GateTrigger):
+                            sp = new Sprites.GateTrigger(reader.GetInt32("id"), reader.GetDouble("x"), reader.GetDouble("y"),
+                                reader.GetDouble("width"), reader.GetDouble("height"), reader.GetDouble("action_duration"),
+                                reader.GetInt32("gate_id"), reader.GetInt32("appear_on_activation") > 0,
+                                (Enums.RenderType)reader.GetInt32("render_type"), GetRenderPropertiesForCurrentReaderRow(reader),
+                                (Enums.RenderType)reader.GetInt32("on_render_type"),
+                                GetRenderPropertiesForCurrentReaderRow(reader, "on_render_value"));
+                            break;
+                        case nameof(Sprites.PermanentStructure):
+                            sp = new Sprites.PermanentStructure(reader.GetInt32("id"), reader.GetDouble("x"), reader.GetDouble("y"),
+                                reader.GetDouble("width"), reader.GetDouble("height"), (Enums.RenderType)reader.GetInt32("render_type"),
+                                GetRenderPropertiesForCurrentReaderRow(reader));
+                            break;
+                        case nameof(Sprites.PickableItem):
+                            sp = new Sprites.PickableItem(reader.GetInt32("id"), reader.GetDouble("x"), reader.GetDouble("y"),
+                                reader.GetDouble("width"), reader.GetDouble("height"), (Enums.ItemType?)reader.GetNullValue<int>("item_type"),
+                                reader.GetInt32("quantity"), reader.GetNullValue<double>("time_before_disapear"));
+                            break;
+                        case nameof(Sprites.Pit):
+                            sp = new Sprites.Pit(reader.GetInt32("id"), reader.GetDouble("x"), reader.GetDouble("y"), reader.GetDouble("width"),
+                                reader.GetDouble("height"), reader.GetNullValue<int>("screen_id_entrance"),
+                                (Enums.RenderType)reader.GetInt32("render_type"), GetRenderPropertiesForCurrentReaderRow(reader));
+                            break;
+                        case nameof(Sprites.Rift):
+                            sp = new Sprites.Rift(reader.GetInt32("id"), reader.GetDouble("x"), reader.GetDouble("y"), reader.GetDouble("width"),
+                                reader.GetDouble("height"), reader.GetDouble("lifepoints"), (Enums.RenderType)reader.GetInt32("render_type"),
+                                GetRenderPropertiesForCurrentReaderRow(reader));
+                            break;
+                        default:
+                            throw new NotImplementedException();
+                    }
+                    sprites.Add(sp as T);
                 }
             }
 
@@ -540,149 +570,6 @@ namespace RpeggiatorLib
 
             return pointOfSteps;
         }
-
-        // Gets pits of a screen.
-        private List<Sprites.Pit> GetPits(int id, SQLiteCommand cmd)
-        {
-            List<Sprites.Pit> sprites = new List<Sprites.Pit>();
-
-            cmd.CommandText = GenerateSpriteTableSql("pit", true, "screen_id_entrance");
-            cmd.Parameters.Add("@screen_id", DbType.Int32);
-            cmd.Parameters["@screen_id"].Value = id;
-
-            using (SQLiteDataReader reader = cmd.ExecuteReader())
-            {
-                while (reader.Read())
-                {
-                    sprites.Add(new Sprites.Pit(reader.GetInt32("id"), reader.GetDouble("x"), reader.GetDouble("y"),
-                        reader.GetDouble("width"), reader.GetDouble("height"), reader.GetNullValue<int>("screen_id_entrance"),
-                        (Enums.RenderType)reader.GetInt32("render_type"), GetRenderPropertiesForCurrentReaderRow(reader)));
-                }
-            }
-
-            return sprites;
-        }
-
-        // Gets floors of a screen.
-        private List<Sprites.Floor> GetFloors(int id, SQLiteCommand cmd)
-        {
-            List<Sprites.Floor> sprites = new List<Sprites.Floor>();
-
-            cmd.CommandText = GenerateSpriteTableSql("floor", true, "floor_type");
-            cmd.Parameters.Add("@screen_id", DbType.Int32);
-            cmd.Parameters["@screen_id"].Value = id;
-
-            using (SQLiteDataReader reader = cmd.ExecuteReader())
-            {
-                while (reader.Read())
-                {
-                    sprites.Add(new Sprites.Floor(reader.GetInt32("id"), reader.GetDouble("x"), reader.GetDouble("y"),
-                        reader.GetDouble("width"), reader.GetDouble("height"), (Enums.FloorType)reader.GetInt32("floor_type"),
-                        (Enums.RenderType)reader.GetInt32("render_type"), GetRenderPropertiesForCurrentReaderRow(reader)));
-                }
-            }
-
-            return sprites;
-        }
-
-        // Gets pickable items of a screen.
-        private List<Sprites.PickableItem> GetPickableItems(int id, SQLiteCommand cmd)
-        {
-            List<Sprites.PickableItem> sprites = new List<Sprites.PickableItem>();
-
-            cmd.CommandText = GenerateSpriteTableSql("pickable_item", false,
-                "item_type", "quantity", "time_before_disapear");
-            cmd.Parameters.Add("@screen_id", DbType.Int32);
-            cmd.Parameters["@screen_id"].Value = id;
-
-            using (SQLiteDataReader reader = cmd.ExecuteReader())
-            {
-                while (reader.Read())
-                {
-                    sprites.Add(new Sprites.PickableItem(reader.GetInt32("id"), reader.GetDouble("x"), reader.GetDouble("y"),
-                        reader.GetDouble("width"), reader.GetDouble("height"), (Enums.ItemType?)reader.GetNullValue<int>("item_type"),
-                        reader.GetInt32("quantity"), reader.GetNullValue<double>("time_before_disapear")));
-                }
-            }
-
-            return sprites;
-        }
-
-        // Gets gates of a screen.
-        private List<Sprites.Gate> GetGates(int id, SQLiteCommand cmd)
-        {
-            List<Sprites.Gate> sprites = new List<Sprites.Gate>();
-
-            cmd.CommandText = GenerateSpriteTableSql("gate", true, "activated");
-            cmd.Parameters.Add("@screen_id", DbType.Int32);
-            cmd.Parameters["@screen_id"].Value = id;
-
-            using (SQLiteDataReader reader = cmd.ExecuteReader())
-            {
-                while (reader.Read())
-                {
-                    sprites.Add(new Sprites.Gate(reader.GetInt32("id"), reader.GetDouble("x"), reader.GetDouble("y"), +
-                        reader.GetDouble("width"), reader.GetDouble("height"), reader.GetInt32("activated") > 0,
-                        (Enums.RenderType)reader.GetInt32("render_type"), GetRenderPropertiesForCurrentReaderRow(reader)));
-                }
-            }
-
-            return sprites;
-        }
-
-        // Gets rifts of a screen.
-        private List<Sprites.Rift> GetRifts(int id, SQLiteCommand cmd)
-        {
-            List<Sprites.Rift> sprites = new List<Sprites.Rift>();
-
-            cmd.CommandText = GenerateSpriteTableSql("rift", true, "lifepoints");
-            cmd.Parameters.Add("@screen_id", DbType.Int32);
-            cmd.Parameters["@screen_id"].Value = id;
-
-            using (SQLiteDataReader reader = cmd.ExecuteReader())
-            {
-                while (reader.Read())
-                {
-                    sprites.Add(new Sprites.Rift(reader.GetInt32("id"), reader.GetDouble("x"), reader.GetDouble("y"),
-                        reader.GetDouble("width"), reader.GetDouble("height"), reader.GetDouble("lifepoints"),
-                        (Enums.RenderType)reader.GetInt32("render_type"), GetRenderPropertiesForCurrentReaderRow(reader)));
-                }
-            }
-
-            return sprites;
-        }
-
-        // Gets gate triggers of a screen.
-        private List<Sprites.GateTrigger> GetGateTriggers(int id, SQLiteCommand cmd)
-        {
-            List<Sprites.GateTrigger> sprites = new List<Sprites.GateTrigger>();
-
-            List<string> otherColums = new List<string>
-            {
-                "action_duration", "gate_id", "appear_on_activation", "on_render_type", "on_render_value"
-            };
-
-            cmd.CommandText = GenerateSpriteTableSql("gate_trigger", true, otherColums.ToArray());
-            cmd.Parameters.Add("@screen_id", DbType.Int32);
-            cmd.Parameters["@screen_id"].Value = id;
-
-            using (SQLiteDataReader reader = cmd.ExecuteReader())
-            {
-                while (reader.Read())
-                {
-                    sprites.Add(new Sprites.GateTrigger(
-                        reader.GetInt32("id"), reader.GetDouble("x"), reader.GetDouble("y"), reader.GetDouble("width"),
-                        reader.GetDouble("height"), reader.GetDouble("action_duration"), reader.GetInt32("gate_id"),
-                        reader.GetInt32("appear_on_activation") > 0, (Enums.RenderType)reader.GetInt32("render_type"),
-                        GetRenderPropertiesForCurrentReaderRow(reader), (Enums.RenderType)reader.GetInt32("on_render_type"),
-                        GetRenderPropertiesForCurrentReaderRow(reader, "on_render_value")));
-                }
-            }
-
-            return sprites;
-        }
-
-        #endregion
 
         #region Insert methods
 
