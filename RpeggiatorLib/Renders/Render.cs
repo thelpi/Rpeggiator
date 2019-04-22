@@ -104,7 +104,7 @@ namespace RpeggiatorLib.Renders
         {
             if (_coinMenuRender == null)
             {
-                _coinMenuRender = ImageDirectionRender.Basic(nameof(Enums.Filename.Coin));
+                _coinMenuRender = ImageRender.Basic(nameof(Enums.Filename.Coin));
             }
 
             return _coinMenuRender;
@@ -118,7 +118,7 @@ namespace RpeggiatorLib.Renders
         {
             if (_keyringMenuRender == null)
             {
-                _keyringMenuRender = ImageDirectionRender.Basic(nameof(Enums.Filename.Keyring));
+                _keyringMenuRender = ImageRender.Basic(nameof(Enums.Filename.Keyring));
             }
 
             return _keyringMenuRender;

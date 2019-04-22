@@ -97,11 +97,11 @@ namespace RpeggiatorLib.Sprites
             switch (renderType)
             {
                 case RenderType.ImageDirection:
-                    return ImageDirectionRender.WithDirection(renderProperties[0], this, GetType().GetProperty(renderProperties[1]));
+                    return ImageRender.WithDirection(renderProperties[0], this, GetType().GetProperty(renderProperties[1]));
                 case RenderType.ImageMosaic:
-                    return ImageDirectionRender.WithMosaic(renderProperties[0], this);
+                    return ImageRender.WithMosaic(renderProperties[0], this);
                 case RenderType.Image:
-                    return ImageDirectionRender.Basic(renderProperties[0]);
+                    return ImageRender.Basic(renderProperties[0]);
                 case RenderType.Plain:
                     return new PlainRender(renderProperties[0]);
                 default:

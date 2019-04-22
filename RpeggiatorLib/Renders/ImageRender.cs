@@ -8,7 +8,7 @@ namespace RpeggiatorLib.Renders
     /// Represents a <see cref="Sprites.Sprite"/> render using a bitmap image for each direction.
     /// </summary>
     /// <seealso cref="Render"/>
-    public class ImageDirectionRender : Render
+    public class ImageRender : Render
     {
         // Image name without extension.
         private readonly string _imageName;
@@ -26,9 +26,9 @@ namespace RpeggiatorLib.Renders
         /// Creates a basic instance.
         /// </summary>
         /// <param name="imageName"><see cref="_imageName"/></param>
-        internal static ImageDirectionRender Basic(string imageName)
+        internal static ImageRender Basic(string imageName)
         {
-            return new ImageDirectionRender(imageName, null, null, false);
+            return new ImageRender(imageName, null, null, false);
         }
 
         /// <summary>
@@ -37,9 +37,9 @@ namespace RpeggiatorLib.Renders
         /// <param name="imageName"><see cref="_imageName"/></param>
         /// <param name="owner"><see cref="_owner"/></param>
         /// <param name="directionProperty"><see cref="_directionProperty"/></param>
-        internal static ImageDirectionRender WithDirection(string imageName, Sprites.Sprite owner, PropertyInfo directionProperty)
+        internal static ImageRender WithDirection(string imageName, Sprites.Sprite owner, PropertyInfo directionProperty)
         {
-            return new ImageDirectionRender(imageName, owner, directionProperty, false);
+            return new ImageRender(imageName, owner, directionProperty, false);
         }
 
         /// <summary>
@@ -47,9 +47,9 @@ namespace RpeggiatorLib.Renders
         /// </summary>
         /// <param name="imageName"><see cref="_imageName"/></param>
         /// <param name="owner"><see cref="_owner"/></param>
-        internal static ImageDirectionRender WithMosaic(string imageName, Sprites.Sprite owner)
+        internal static ImageRender WithMosaic(string imageName, Sprites.Sprite owner)
         {
-            return new ImageDirectionRender(imageName, owner, null, true);
+            return new ImageRender(imageName, owner, null, true);
         }
 
         /// <summary>
@@ -58,9 +58,9 @@ namespace RpeggiatorLib.Renders
         /// <param name="imageName"><see cref="_imageName"/></param>
         /// <param name="owner"><see cref="_owner"/></param>
         /// <param name="directionProperty"><see cref="_directionProperty"/></param>
-        internal static ImageDirectionRender WithDirectionAndMosaic(string imageName, Sprites.Sprite owner, PropertyInfo directionProperty)
+        internal static ImageRender WithDirectionAndMosaic(string imageName, Sprites.Sprite owner, PropertyInfo directionProperty)
         {
-            return new ImageDirectionRender(imageName, owner, directionProperty, true);
+            return new ImageRender(imageName, owner, directionProperty, true);
         }
 
         /// <summary>
@@ -70,7 +70,7 @@ namespace RpeggiatorLib.Renders
         /// <param name="owner"><see cref="_owner"/></param>
         /// <param name="directionProperty"><see cref="_directionProperty"/></param>
         /// <param name="mosaicDisplay"><see cref="_mosaicDisplay"/></param>
-        private ImageDirectionRender(string imageName, Sprites.Sprite owner, PropertyInfo directionProperty, bool mosaicDisplay)
+        private ImageRender(string imageName, Sprites.Sprite owner, PropertyInfo directionProperty, bool mosaicDisplay)
         {
             _owner = owner;
             _directionProperty = directionProperty;
