@@ -430,7 +430,7 @@ namespace RpeggiatorLib
             string[] renderValueString = null;
             if (renderType.HasValue)
             {
-                renderValueString = CheckRenderValues(renderType.Value, renderValues);
+                renderValueString = CheckRenderValues(typeof(T), renderType.Value, renderValues);
             }
 
             int id = GetNextId(tableName);
@@ -583,42 +583,6 @@ namespace RpeggiatorLib
             }
         }
 
-        // Checks render properties and throws an exception if invalid.
-        private string[] CheckRenderValues(RenderType renderType, object[] renderValues)
-        {
-            if (renderValues == null || renderValues.Length == 0 || renderValues[0] == null)
-            {
-                throw new ArgumentException(Messages.InvalidRenderExceptionMessage, nameof(renderValues));
-            }
-
-            switch (renderType)
-            {
-                case RenderType.Image:
-                case RenderType.ImageMosaic:
-                    if (!System.IO.File.Exists(Tools.GetImagePath(_resourcePath, renderValues[0].ToString())))
-                    {
-                        throw new ArgumentException(Messages.InvalidRenderExceptionMessage, nameof(renderValues));
-                    }
-                    return new string[] { renderValues[0].ToString() };
-                case RenderType.ImageDirection:
-                    if (!System.IO.File.Exists(Tools.GetImagePath(_resourcePath, renderValues[0].ToString()))
-                        // TODO : check the "Direction" property on the target.
-                        || renderValues[1] == null || string.IsNullOrWhiteSpace(renderValues[1].ToString()))
-                    {
-                        throw new ArgumentException(Messages.InvalidRenderExceptionMessage, nameof(renderValues));
-                    }
-                    return new string[] { renderValues[0].ToString(), renderValues[1].ToString() };
-                case RenderType.Plain:
-                    if (renderValues[0].GetType() != typeof(System.Windows.Media.Color))
-                    {
-                        throw new ArgumentException(Messages.InvalidRenderExceptionMessage, nameof(renderValues));
-                    }
-                    return new string[] { Tools.HexFromColor((System.Windows.Media.Color)renderValues[0]) };
-                default:
-                    throw new NotImplementedException(Messages.NotImplementedRenderExceptionMessage);
-            }
-        }
-
         // Transforms an array of render properties to a string for SQL insertion.
         private static string RenderPropertiesToSqlValue(string[] renderValues)
         {
@@ -629,6 +593,109 @@ namespace RpeggiatorLib
                         v.Replace(RENDER_VALUES_SEPARATOR.ToString(), RENDER_VALUES_ESCAPE_SEPARATOR)
                     )
             );
+        }
+
+        #endregion
+
+        #region Render values check
+
+        // Checks render properties and throws an exception if invalid.
+        private string[] CheckRenderValues(Type ownerType, RenderType renderType, object[] renderValues)
+        {
+            switch (renderType)
+            {
+                case RenderType.Plain:
+                    CheckRenderValuesCount(renderValues, 1);
+                    CheckRenderColor(renderValues, 0);
+                    return new string[] { Tools.HexFromColor((System.Windows.Media.Color)renderValues[0]) };
+                case RenderType.Image:
+                case RenderType.ImageMosaic:
+                    CheckRenderValuesCount(renderValues, 1);
+                    CheckRenderFileName(renderValues, 0);
+                    return new string[] { renderValues[0].ToString() };
+                case RenderType.ImageDirection:
+                case RenderType.ImageMosaicDirection:
+                    CheckRenderValuesCount(renderValues, 2);
+                    CheckRenderFileName(renderValues, 0);
+                    CheckRenderDirectionProperty(renderValues, 1, ownerType);
+                    return new string[] { renderValues[0].ToString(), ((System.Reflection.PropertyInfo)renderValues[1]).Name };
+                case RenderType.ImageAnimated:
+                case RenderType.ImageMosaicAnimated:
+                    CheckRenderValuesCount(renderValues, 3);
+                    CheckRenderFileName(renderValues, 0, true);
+                    CheckRenderElapserProperty(renderValues, 1, ownerType);
+                    CheckRenderElapserNextStep(renderValues, 2);
+                    return new string[] { renderValues[0].ToString(), ((System.Reflection.PropertyInfo)renderValues[1]).Name, renderValues[2].ToString() };
+                case RenderType.ImageDirectionAnimated:
+                case RenderType.ImageMosaicDirectionAnimated:
+                    CheckRenderValuesCount(renderValues, 4);
+                    CheckRenderFileName(renderValues, 0, true);
+                    CheckRenderElapserProperty(renderValues, 1, ownerType);
+                    CheckRenderElapserNextStep(renderValues, 2);
+                    CheckRenderDirectionProperty(renderValues, 4, ownerType);
+                    return new string[] { renderValues[0].ToString(), ((System.Reflection.PropertyInfo)renderValues[1]).Name, renderValues[2].ToString(), ((System.Reflection.PropertyInfo)renderValues[3]).Name };
+                default:
+                    throw new NotImplementedException(Messages.NotImplementedRenderExceptionMessage);
+            }
+        }
+
+        private void CheckRenderValuesCount(object[] renderValues, int expectedCount)
+        {
+            if (renderValues == null || renderValues.Length < expectedCount)
+            {
+                throw new ArgumentException(Messages.InvalidRenderExceptionMessage, nameof(renderValues));
+            }
+        }
+
+        private void CheckRenderColor(object[] renderValues, int index)
+        {
+            if (renderValues[index].GetType() != typeof(System.Windows.Media.Color))
+            {
+                throw new ArgumentException(Messages.InvalidRenderExceptionMessage, nameof(renderValues));
+            }
+        }
+
+        private void CheckRenderFileName(object[] renderValues, int index, bool checkZeroSuffix = false)
+        {
+            string fullFilenameWithoutExtension = string.Concat(renderValues[index].ToString(), checkZeroSuffix ? "0" : string.Empty);
+            if (renderValues[index] == null || !System.IO.File.Exists(Tools.GetImagePath(_resourcePath, fullFilenameWithoutExtension)))
+            {
+                throw new ArgumentException(Messages.InvalidRenderExceptionMessage, nameof(renderValues));
+            }
+        }
+
+        private void CheckRenderDirectionProperty(object[] renderValues, int index, Type ownerType)
+        {
+            if (renderValues[index] == null
+                || ownerType == null
+                || renderValues[index].GetType() != typeof(System.Reflection.PropertyInfo)
+                || ((System.Reflection.PropertyInfo)renderValues[index]).PropertyType != typeof(Elapser)
+                || !ownerType.GetProperties().Any(p => p == (System.Reflection.PropertyInfo)renderValues[index]))
+            {
+                throw new ArgumentException(Messages.InvalidRenderExceptionMessage, nameof(renderValues));
+            }
+        }
+
+        private void CheckRenderElapserNextStep(object[] renderValues, int index)
+        {
+            if (renderValues[index] == null
+                || renderValues[index].GetType() != typeof(double)
+                || ((double)renderValues[index]).LowerEqual(0))
+            {
+                throw new ArgumentException(Messages.InvalidRenderExceptionMessage, nameof(renderValues));
+            }
+        }
+
+        private void CheckRenderElapserProperty(object[] renderValues, int index, Type ownerType)
+        {
+            if (renderValues[index] == null
+                || ownerType == null
+                || renderValues[index].GetType() != typeof(System.Reflection.PropertyInfo)
+                || ((System.Reflection.PropertyInfo)renderValues[index]).PropertyType != typeof(Direction)
+                || !ownerType.GetProperties().Any(p => p == (System.Reflection.PropertyInfo)renderValues[index]))
+            {
+                throw new ArgumentException(Messages.InvalidRenderExceptionMessage, nameof(renderValues));
+            }
         }
 
         #endregion
@@ -741,7 +808,7 @@ namespace RpeggiatorLib
             {
                 throw new ArgumentException(Messages.InvalidSpriteIdExceptionMessage, nameof(gateId));
             }
-            string[] onRenderValuesString = CheckRenderValues(onRenderType, onRenderValues);
+            string[] onRenderValuesString = CheckRenderValues(typeof(Sprites.GateTrigger), onRenderType, onRenderValues);
 
             return CreateSpriteInScreen<Sprites.GateTrigger>("gate_trigger", screenId, x, y, width, height, renderType, renderValues,
                 new Tuple<string, DbType, object>("action_duration", DbType.Double, actionDuration),
@@ -880,7 +947,7 @@ namespace RpeggiatorLib
             {
                 throw new ArgumentException(Messages.InvalidPlayerThroughDoorCoordinatesExceptionMessage, nameof(playerGoThroughY));
             }
-            string[] lockedRenderValuesString = CheckRenderValues(lockedRenderType, lockedRenderValues);
+            string[] lockedRenderValuesString = CheckRenderValues(typeof(Sprites.Door), lockedRenderType, lockedRenderValues);
 
             return CreateSpriteInScreen<Sprites.Door>("door", screenId, x, y, width, height, renderType, renderValues,
                 new Tuple<string, DbType, object>("key_id", DbType.Int32, keyId),
@@ -980,7 +1047,7 @@ namespace RpeggiatorLib
             {
                 throw new ArgumentException(Messages.LowerOrEqualZeroExceptionMessage, nameof(keyId));
             }
-            string[] openRenderValuesString = CheckRenderValues(openRenderType, openRenderValues);
+            string[] openRenderValuesString = CheckRenderValues(typeof(Sprites.Chest), openRenderType, openRenderValues);
 
             // The chest can't contain both item and key.
             if (keyIdContainer.HasValue)
@@ -1071,7 +1138,7 @@ namespace RpeggiatorLib
         /// <exception cref="NotImplementedException"><see cref="Messages.NotImplementedRenderExceptionMessage"/></exception>
         public int CreateScreen(RenderType renderType, object[] renderValues, FloorType floorType, double darknessOpacity)
         {
-            string[] renderValuesString = CheckRenderValues(renderType, renderValues);
+            string[] renderValuesString = CheckRenderValues(typeof(Sprites.Screen), renderType, renderValues);
 
             darknessOpacity = darknessOpacity.Lower(0) ? 0 : (darknessOpacity.Greater(1) ? 1 : darknessOpacity);
 

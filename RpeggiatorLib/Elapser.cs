@@ -71,10 +71,16 @@ namespace RpeggiatorLib
         /// Computes the current step index considering a step delay.
         /// </summary>
         /// <param name="stepDelay">Step delay (in milliseconds).</param>
+        /// <param name="maxStep">Maximal step index before reset to zero.</param>
         /// <returns>Step index.</returns>
-        internal int GetStepIndex(double stepDelay)
+        internal int GetStepIndex(double stepDelay, int maxStep)
         {
-            return ElapsedMilliseconds / Convert.ToInt32(Math.Floor(stepDelay));
+            int index = ElapsedMilliseconds / Convert.ToInt32(Math.Floor(stepDelay));
+            while (index > maxStep)
+            {
+                index -= maxStep;
+            }
+            return index;
         }
     }
 }

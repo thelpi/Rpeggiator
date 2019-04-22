@@ -36,6 +36,8 @@ namespace RpeggiatorLib.Renders
         private readonly Elapser _animationElapser;
         // Color hexadecimal value.
         private readonly string _hexColor;
+        // Biggest contiguous index as a suffix from _imageName 
+        private readonly int _topIndex;
 
         /// <summary>
         /// Creates a plain color instance.
@@ -167,6 +169,15 @@ namespace RpeggiatorLib.Renders
             _elapserNextStep = elapserNextStep;
             _animationElapser = animationElapser;
             _hexColor = hexColor;
+            if (animationElapser != null)
+            {
+                _topIndex = 0;
+                while (File.Exists(Tools.GetImagePath(Engine.ResourcesPath, string.Concat(_imageName, _topIndex))))
+                {
+                    _topIndex++;
+                }
+                _topIndex--;
+            }
         }
  
         /// <inheritdoc />
@@ -182,7 +193,7 @@ namespace RpeggiatorLib.Renders
                 return _brushByStatus.Values.First();
             }
 
-            int currentIndex = _animationElapser?.GetStepIndex(_elapserNextStep) ?? -1;
+            int currentIndex = _animationElapser?.GetStepIndex(_elapserNextStep, _topIndex) ?? -1;
             Enums.Direction currentDirection =
                 _directionProperty != null ? (Enums.Direction)_directionProperty.GetValue(_owner) : Enums.Direction.Right;
             KeyValuePair<int, Enums.Direction> statusKey = new KeyValuePair<int, Enums.Direction>(currentIndex, currentDirection);
