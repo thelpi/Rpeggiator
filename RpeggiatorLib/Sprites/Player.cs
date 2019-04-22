@@ -15,15 +15,15 @@ namespace RpeggiatorLib.Sprites
         // History of movements.
         private Queue<Point> _moveHistory = new Queue<Point>(Constants.MOVE_HISTORY_COUNT);
         // Delay, in milliseconds, between two hits with the current weapon.
-        private double _currentWeaponHitDelay;
+        private readonly double _currentWeaponHitDelay;
         // Movement time manager.
         private Elapser _movementTimeManager;
         // Lifetime manager for the current hit with the current weapon.
         private Elapser _hitElapser;
         // Render while holding a shield.
-        private IRender _renderShield;
+        private readonly IRender _renderShield;
         // Render while recovering and holding a shield.
-        private IRender _renderRecoveryShield;
+        private readonly IRender _renderRecoveryShield;
 
         /// <summary>
         /// When coming into a new screen, indicates the direction relative to the former screen.
@@ -79,8 +79,8 @@ namespace RpeggiatorLib.Sprites
             _hitElapser = null;
             _currentWeaponHitDelay = Constants.Player.SWORD_HIT_DELAY;
             _movementTimeManager = new Elapser();
-            _renderShield = ImageRender.ImageWithDirection(nameof(Filename.PlayerShield), this, GetType().GetProperty(nameof(Direction)));
-            _renderRecoveryShield = ImageRender.ImageWithDirection(nameof(Filename.PlayerRecoveryShield), this, GetType().GetProperty(nameof(Direction)));
+            _renderShield = DefaultRender.ImageWithDirection(nameof(Filename.PlayerShield), this, GetType().GetProperty(nameof(Direction)));
+            _renderRecoveryShield = DefaultRender.ImageWithDirection(nameof(Filename.PlayerRecoveryShield), this, GetType().GetProperty(nameof(Direction)));
         }
 
         /// <inheritdoc />

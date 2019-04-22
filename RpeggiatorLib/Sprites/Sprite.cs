@@ -97,21 +97,21 @@ namespace RpeggiatorLib.Sprites
             switch (renderType)
             {
                 case RenderType.ImageDirection:
-                    return ImageRender.ImageWithDirection(renderProperties[0], this, GetType().GetProperty(renderProperties[1]));
+                    return DefaultRender.ImageWithDirection(renderProperties[0], this, GetType().GetProperty(renderProperties[1]));
                 case RenderType.ImageMosaic:
-                    return ImageRender.ImageWithMosaic(renderProperties[0], this);
+                    return DefaultRender.ImageWithMosaic(renderProperties[0], this);
                 case RenderType.Image:
-                    return ImageRender.BasicImage(renderProperties[0]);
+                    return DefaultRender.BasicImage(renderProperties[0]);
                 case RenderType.Plain:
-                    return ImageRender.PlainColor(renderProperties[0]);
+                    return DefaultRender.PlainColor(renderProperties[0]);
                 case RenderType.ImageAnimated:
-                    return ImageRender.AnimatedBasicImage(renderProperties[0], (Elapser)GetType().GetProperty(renderProperties[1]).GetValue(this), System.Convert.ToDouble(renderProperties[2]));
+                    return DefaultRender.AnimatedBasicImage(renderProperties[0], (Elapser)GetType().GetProperty(renderProperties[1]).GetValue(this), System.Convert.ToDouble(renderProperties[2]));
                 case RenderType.ImageDirectionAnimated:
-                    return ImageRender.AnimatedImageWithDirection(renderProperties[0], (Elapser)GetType().GetProperty(renderProperties[1]).GetValue(this), System.Convert.ToDouble(renderProperties[2]), this, GetType().GetProperty(renderProperties[3]));
+                    return DefaultRender.AnimatedImageWithDirection(renderProperties[0], (Elapser)GetType().GetProperty(renderProperties[1]).GetValue(this), System.Convert.ToDouble(renderProperties[2]), this, GetType().GetProperty(renderProperties[3]));
                 case RenderType.ImageMosaicAnimated:
-                    return ImageRender.AnimatedImageWithMosaic(renderProperties[0], (Elapser)GetType().GetProperty(renderProperties[1]).GetValue(this), System.Convert.ToDouble(renderProperties[2]));
+                    return DefaultRender.AnimatedImageWithMosaic(renderProperties[0], (Elapser)GetType().GetProperty(renderProperties[1]).GetValue(this), System.Convert.ToDouble(renderProperties[2]));
                 case RenderType.ImageMosaicDirectionAnimated:
-                    return ImageRender.AnimatedImageWithDirectionAndMosaic(renderProperties[0], (Elapser)GetType().GetProperty(renderProperties[1]).GetValue(this), System.Convert.ToDouble(renderProperties[2]), this, GetType().GetProperty(renderProperties[3]));
+                    return DefaultRender.AnimatedImageWithDirectionAndMosaic(renderProperties[0], (Elapser)GetType().GetProperty(renderProperties[1]).GetValue(this), System.Convert.ToDouble(renderProperties[2]), this, GetType().GetProperty(renderProperties[3]));
                 default:
                     throw new System.NotImplementedException(Messages.NotImplementedRenderExceptionMessage);
             }

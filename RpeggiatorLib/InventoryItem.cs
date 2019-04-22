@@ -49,7 +49,7 @@ namespace RpeggiatorLib
         {
             BaseItem = Item.GetItem(itemType);
             Quantity = BaseItem.Unique ? 1 : quantity;
-            Render = ImageRender.BasicImage(BaseItem.Type.ToString());
+            Render = DefaultRender.BasicImage(BaseItem.Type.ToString());
         }
 
         /// <summary>

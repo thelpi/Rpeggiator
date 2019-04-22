@@ -87,7 +87,7 @@ namespace RpeggiatorLib.Sprites
             _recoveryTime = recoveryTime;
             ExplosionLifePointCost = Constants.Bomb.EXPLOSION_LIFE_POINT_COST;
             ArrowLifePointCost = Constants.Arrow.LIFE_POINT_COST;
-            _renderRecovery = ImageRender.ImageWithDirection(renderRecoveryFilename, this, GetType().GetProperty(nameof(Direction)));
+            _renderRecovery = DefaultRender.ImageWithDirection(renderRecoveryFilename, this, GetType().GetProperty(nameof(Direction)));
         }
 
         /// <summary>

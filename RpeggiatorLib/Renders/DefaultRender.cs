@@ -11,7 +11,7 @@ namespace RpeggiatorLib.Renders
     /// Represents a <see cref="Sprites.Sprite"/> render using a bitmap image for each direction.
     /// </summary>
     /// <seealso cref="IRender"/>
-    public class ImageRender : IRender
+    public class DefaultRender : IRender
     {
         // Instance specific to coins in the menu.
         private static IRender _coinMenuRender = null;
@@ -41,20 +41,20 @@ namespace RpeggiatorLib.Renders
         /// Creates a plain color instance.
         /// </summary>
         /// <param name="hexColor"><see cref="_hexColor"/></param>
-        /// <returns><see cref="ImageRender"/></returns>
-        internal static ImageRender PlainColor(string hexColor)
+        /// <returns><see cref="DefaultRender"/></returns>
+        internal static DefaultRender PlainColor(string hexColor)
         {
-            return new ImageRender(hexColor, null, null, null, false, null, 0);
+            return new DefaultRender(hexColor, null, null, null, false, null, 0);
         }
 
         /// <summary>
         /// Creates a basic image instance.
         /// </summary>
         /// <param name="imageName"><see cref="_imageName"/></param>
-        /// <returns><see cref="ImageRender"/></returns>
-        internal static ImageRender BasicImage(string imageName)
+        /// <returns><see cref="DefaultRender"/></returns>
+        internal static DefaultRender BasicImage(string imageName)
         {
-            return new ImageRender(null, imageName, null, null, false, null, 0);
+            return new DefaultRender(null, imageName, null, null, false, null, 0);
         }
 
         /// <summary>
@@ -63,10 +63,10 @@ namespace RpeggiatorLib.Renders
         /// <param name="imageName"><see cref="_imageName"/></param>
         /// <param name="owner"><see cref="_owner"/></param>
         /// <param name="directionProperty"><see cref="_directionProperty"/></param>
-        /// <returns><see cref="ImageRender"/></returns>
-        internal static ImageRender ImageWithDirection(string imageName, Sprites.Sprite owner, PropertyInfo directionProperty)
+        /// <returns><see cref="DefaultRender"/></returns>
+        internal static DefaultRender ImageWithDirection(string imageName, Sprites.Sprite owner, PropertyInfo directionProperty)
         {
-            return new ImageRender(null, imageName, owner, directionProperty, false, null, 0);
+            return new DefaultRender(null, imageName, owner, directionProperty, false, null, 0);
         }
 
         /// <summary>
@@ -74,10 +74,10 @@ namespace RpeggiatorLib.Renders
         /// </summary>
         /// <param name="imageName"><see cref="_imageName"/></param>
         /// <param name="owner"><see cref="_owner"/></param>
-        /// <returns><see cref="ImageRender"/></returns>
-        internal static ImageRender ImageWithMosaic(string imageName, Sprites.Sprite owner)
+        /// <returns><see cref="DefaultRender"/></returns>
+        internal static DefaultRender ImageWithMosaic(string imageName, Sprites.Sprite owner)
         {
-            return new ImageRender(null, imageName, owner, null, true, null, 0);
+            return new DefaultRender(null, imageName, owner, null, true, null, 0);
         }
 
         /// <summary>
@@ -86,10 +86,10 @@ namespace RpeggiatorLib.Renders
         /// <param name="imageName"><see cref="_imageName"/></param>
         /// <param name="owner"><see cref="_owner"/></param>
         /// <param name="directionProperty"><see cref="_directionProperty"/></param>
-        /// <returns><see cref="ImageRender"/></returns>
-        internal static ImageRender ImageWithDirectionAndMosaic(string imageName, Sprites.Sprite owner, PropertyInfo directionProperty)
+        /// <returns><see cref="DefaultRender"/></returns>
+        internal static DefaultRender ImageWithDirectionAndMosaic(string imageName, Sprites.Sprite owner, PropertyInfo directionProperty)
         {
-            return new ImageRender(null, imageName, owner, directionProperty, true, null, 0);
+            return new DefaultRender(null, imageName, owner, directionProperty, true, null, 0);
         }
 
         /// <summary>
@@ -98,10 +98,10 @@ namespace RpeggiatorLib.Renders
         /// <param name="imageName"><see cref="_imageName"/></param>
         /// <param name="animationElapser"><see cref="_animationElapser"/></param>
         /// <param name="elapserNextStep"><see cref="_elapserNextStep"/></param>
-        /// <returns><see cref="ImageRender"/></returns>
-        internal static ImageRender AnimatedBasicImage(string imageName, Elapser animationElapser, double elapserNextStep)
+        /// <returns><see cref="DefaultRender"/></returns>
+        internal static DefaultRender AnimatedBasicImage(string imageName, Elapser animationElapser, double elapserNextStep)
         {
-            return new ImageRender(null, imageName, null, null, false, animationElapser, elapserNextStep);
+            return new DefaultRender(null, imageName, null, null, false, animationElapser, elapserNextStep);
         }
 
         /// <summary>
@@ -110,10 +110,10 @@ namespace RpeggiatorLib.Renders
         /// <param name="imageName"><see cref="_imageName"/></param>
         /// <param name="animationElapser"><see cref="_animationElapser"/></param>
         /// <param name="elapserNextStep"><see cref="_elapserNextStep"/></param>
-        /// <returns><see cref="ImageRender"/></returns>
-        internal static ImageRender AnimatedImageWithMosaic(string imageName, Elapser animationElapser, double elapserNextStep)
+        /// <returns><see cref="DefaultRender"/></returns>
+        internal static DefaultRender AnimatedImageWithMosaic(string imageName, Elapser animationElapser, double elapserNextStep)
         {
-            return new ImageRender(null, imageName, null, null, true, animationElapser, elapserNextStep);
+            return new DefaultRender(null, imageName, null, null, true, animationElapser, elapserNextStep);
         }
 
         /// <summary>
@@ -124,11 +124,11 @@ namespace RpeggiatorLib.Renders
         /// <param name="elapserNextStep"><see cref="_elapserNextStep"/></param>
         /// <param name="owner"><see cref="_owner"/></param>
         /// <param name="directionProperty"><see cref="_directionProperty"/></param>
-        /// <returns><see cref="ImageRender"/></returns>
-        internal static ImageRender AnimatedImageWithDirection(string imageName, Elapser animationElapser, double elapserNextStep,
+        /// <returns><see cref="DefaultRender"/></returns>
+        internal static DefaultRender AnimatedImageWithDirection(string imageName, Elapser animationElapser, double elapserNextStep,
             Sprites.Sprite owner, PropertyInfo directionProperty)
         {
-            return new ImageRender(null, imageName, owner, directionProperty, false, animationElapser, elapserNextStep);
+            return new DefaultRender(null, imageName, owner, directionProperty, false, animationElapser, elapserNextStep);
         }
 
         /// <summary>
@@ -139,11 +139,11 @@ namespace RpeggiatorLib.Renders
         /// <param name="elapserNextStep"><see cref="_elapserNextStep"/></param>
         /// <param name="owner"><see cref="_owner"/></param>
         /// <param name="directionProperty"><see cref="_directionProperty"/></param>
-        /// <returns><see cref="ImageRender"/></returns>
-        internal static ImageRender AnimatedImageWithDirectionAndMosaic(string imageName, Elapser animationElapser, double elapserNextStep,
+        /// <returns><see cref="DefaultRender"/></returns>
+        internal static DefaultRender AnimatedImageWithDirectionAndMosaic(string imageName, Elapser animationElapser, double elapserNextStep,
             Sprites.Sprite owner, PropertyInfo directionProperty)
         {
-            return new ImageRender(null, imageName, owner, directionProperty, true, animationElapser, elapserNextStep);
+            return new DefaultRender(null, imageName, owner, directionProperty, true, animationElapser, elapserNextStep);
         }
 
         /// <summary>
@@ -156,7 +156,7 @@ namespace RpeggiatorLib.Renders
         /// <param name="mosaicDisplay"><see cref="_mosaicDisplay"/></param>
         /// <param name="animationElapser"><see cref="_animationElapser"/></param>
         /// <param name="elapserNextStep"><see cref="_elapserNextStep"/></param>
-        private ImageRender(string hexColor, string imageName, Sprites.Sprite owner, PropertyInfo directionProperty, bool mosaicDisplay,
+        private DefaultRender(string hexColor, string imageName, Sprites.Sprite owner, PropertyInfo directionProperty, bool mosaicDisplay,
             Elapser animationElapser, double elapserNextStep)
         {
             _owner = owner;
@@ -281,7 +281,7 @@ namespace RpeggiatorLib.Renders
         {
             if (_coinMenuRender == null)
             {
-                _coinMenuRender = ImageRender.BasicImage(nameof(Enums.Filename.Coin));
+                _coinMenuRender = BasicImage(nameof(Enums.Filename.Coin));
             }
 
             return _coinMenuRender;
@@ -295,7 +295,7 @@ namespace RpeggiatorLib.Renders
         {
             if (_keyringMenuRender == null)
             {
-                _keyringMenuRender = ImageRender.BasicImage(nameof(Enums.Filename.Keyring));
+                _keyringMenuRender = BasicImage(nameof(Enums.Filename.Keyring));
             }
 
             return _keyringMenuRender;
