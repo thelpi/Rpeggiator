@@ -79,8 +79,8 @@ namespace RpeggiatorLib.Sprites
             _hitElapser = null;
             _currentWeaponHitDelay = Constants.Player.SWORD_HIT_DELAY;
             _movementTimeManager = new Elapser();
-            _renderShield = new ImageDirectionRender(nameof(Filename.PlayerShield), this, nameof(Direction));
-            _renderRecoveryShield = new ImageDirectionRender(nameof(Filename.PlayerRecoveryShield), this, nameof(Direction));
+            _renderShield = ImageDirectionRender.WithDirection(nameof(Filename.PlayerShield), this, GetType().GetProperty(nameof(Direction)));
+            _renderRecoveryShield = ImageDirectionRender.WithDirection(nameof(Filename.PlayerRecoveryShield), this, GetType().GetProperty(nameof(Direction)));
         }
 
         /// <inheritdoc />

@@ -88,11 +88,11 @@ namespace RpeggiatorLib
         /// <summary>
         /// Gets the <see cref="Render.Render"/> for inventory coins.
         /// </summary>
-        public Render CoinMenuRender { get { return ImageRender.CoinMenuRender(); } }
+        public Render CoinMenuRender { get { return Render.CoinMenuRender(); } }
         /// <summary>
         /// Gets the <see cref="Render.Render"/> for inventory keyring.
         /// </summary>
-        public Render KeyringMenuRender { get { return ImageRender.KeyringMenuRender(); } }
+        public Render KeyringMenuRender { get { return Render.KeyringMenuRender(); } }
 
         // Private constructor.
         private Engine(int screenId)

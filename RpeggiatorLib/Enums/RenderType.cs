@@ -6,23 +6,27 @@
     public enum RenderType
     {
         /// <summary>
-        /// <see cref="Renders.PlainRender"/>
+        /// Plain color.
         /// </summary>
         Plain = 1,
         /// <summary>
-        /// <see cref="Renders.ImageRender"/>
+        /// Static image.
         /// </summary>
         Image,
         /// <summary>
-        /// <see cref="Renders.ImageMosaicRender"/>
+        /// Image used as mosaic.
         /// </summary>
         ImageMosaic,
         /// <summary>
-        /// <see cref="Renders.ImageDirectionRender"/>
+        /// Image which follows <see cref="Sprites.Sprite"/> <see cref="Direction"/>.
         /// </summary>
         ImageDirection,
         /// <summary>
-        /// <see cref="Renders.ImageAnimatedRender"/>
+        /// Combination of <see cref="ImageDirection"/> and <see cref="ImageMosaic"/>
+        /// </summary>
+        ImageMosaicDirection,
+        /// <summary>
+        /// Several images displayed sequentially.
         /// </summary>
         ImageAnimated
     }
