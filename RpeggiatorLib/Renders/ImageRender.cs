@@ -1,6 +1,8 @@
 ﻿using System.Collections.Generic;
+using System.IO;
 using System.Reflection;
 using System.Windows.Media;
+using System.Windows.Media.Imaging;
 
 namespace RpeggiatorLib.Renders
 {
@@ -90,7 +92,72 @@ namespace RpeggiatorLib.Renders
 
             if (!_directionBrushes.ContainsKey(currentDirection))
             {
-                ImageBrush brush = ComputeImageBrush(_imageName, currentDirection);
+                BitmapImage bitmapImage = new BitmapImage();
+
+                string resourcePath = Tools.GetImagePath(Engine.ResourcesPath, _imageName);
+
+                using (FileStream stream = new FileStream(resourcePath, FileMode.Open, FileAccess.Read))
+                {
+                    stream.Position = 0;
+                    bitmapImage.BeginInit();
+                    bitmapImage.StreamSource = stream;
+                    bitmapImage.CacheOption = BitmapCacheOption.OnLoad;
+                    bitmapImage.EndInit();
+                }
+
+                double angle = 0;
+                bool flip = false;
+                switch (currentDirection)
+                {
+                    case Enums.Direction.Bottom:
+                        angle = 90;
+                        break;
+                    case Enums.Direction.BottomLeft:
+                        angle = 45;
+                        flip = true;
+                        break;
+                    case Enums.Direction.BottomRight:
+                        angle = 45;
+                        break;
+                    case Enums.Direction.Left:
+                        flip = true;
+                        break;
+                    case Enums.Direction.Right:
+                        break;
+                    case Enums.Direction.Top:
+                        angle = -90;
+                        break;
+                    case Enums.Direction.TopLeft:
+                        angle = -45;
+                        flip = true;
+                        break;
+                    case Enums.Direction.TopRight:
+                        angle = -45;
+                        break;
+                }
+
+                ImageBrush brush = new ImageBrush
+                {
+                    ImageSource = bitmapImage,
+                    Stretch = Stretch.UniformToFill,
+                    RelativeTransform = new TransformGroup
+                    {
+                        Children = new TransformCollection
+                    {
+                        new RotateTransform
+                        {
+                            CenterX = 0.5,
+                            CenterY = 0.5,
+                            Angle = angle
+                        }, new ScaleTransform
+                        {
+                            CenterX = 0.5,
+                            CenterY = 0.5,
+                            ScaleX = flip ? -1 : 1
+                        }
+                    }
+                    }
+                };
 
                 if (_mosaicDisplay)
                 {

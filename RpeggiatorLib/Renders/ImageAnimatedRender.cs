@@ -31,7 +31,7 @@ namespace RpeggiatorLib.Renders
         {
             if (_brushs[_currentIndex] == null)
             {
-                _brushs[_currentIndex] = ComputeImageBrush(_imagesPaths[_currentIndex]);
+                //_brushs[_currentIndex] = ComputeImageBrush(_imagesPaths[_currentIndex]);
             }
 
             return _brushs[_currentIndex];
