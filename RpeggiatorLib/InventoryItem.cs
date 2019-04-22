@@ -30,9 +30,9 @@ namespace RpeggiatorLib
             }
         }
         /// <summary>
-        /// <see cref="Renders.Render"/>
+        /// <see cref="Renders.IRender"/>
         /// </summary>
-        public Render Render { get; private set; }
+        public IRender Render { get; private set; }
 
         /// <summary>
         /// Constructor.
@@ -49,7 +49,7 @@ namespace RpeggiatorLib
         {
             BaseItem = Item.GetItem(itemType);
             Quantity = BaseItem.Unique ? 1 : quantity;
-            Render = ImageRender.Basic(BaseItem.Type.ToString());
+            Render = ImageRender.BasicImage(BaseItem.Type.ToString());
         }
 
         /// <summary>

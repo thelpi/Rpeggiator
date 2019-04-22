@@ -21,9 +21,9 @@ namespace RpeggiatorLib.Sprites
         // Lifetime manager for the current hit with the current weapon.
         private Elapser _hitElapser;
         // Render while holding a shield.
-        private Render _renderShield;
+        private IRender _renderShield;
         // Render while recovering and holding a shield.
-        private Render _renderRecoveryShield;
+        private IRender _renderRecoveryShield;
 
         /// <summary>
         /// When coming into a new screen, indicates the direction relative to the former screen.
@@ -42,7 +42,7 @@ namespace RpeggiatorLib.Sprites
         /// </summary>
         public SwordHit SwordHitSprite { get; private set; }
         /// <inheritdoc />
-        public override Render Render
+        public override IRender Render
         {
             get
             {
@@ -79,8 +79,8 @@ namespace RpeggiatorLib.Sprites
             _hitElapser = null;
             _currentWeaponHitDelay = Constants.Player.SWORD_HIT_DELAY;
             _movementTimeManager = new Elapser();
-            _renderShield = ImageRender.WithDirection(nameof(Filename.PlayerShield), this, GetType().GetProperty(nameof(Direction)));
-            _renderRecoveryShield = ImageRender.WithDirection(nameof(Filename.PlayerRecoveryShield), this, GetType().GetProperty(nameof(Direction)));
+            _renderShield = ImageRender.ImageWithDirection(nameof(Filename.PlayerShield), this, GetType().GetProperty(nameof(Direction)));
+            _renderRecoveryShield = ImageRender.ImageWithDirection(nameof(Filename.PlayerRecoveryShield), this, GetType().GetProperty(nameof(Direction)));
         }
 
         /// <inheritdoc />

@@ -17,7 +17,7 @@ namespace RpeggiatorLib.Sprites
         // Recovery time, in milliseconds.
         private readonly double _recoveryTime;
         // Render while recovering.
-        private readonly Render _renderRecovery;
+        private readonly IRender _renderRecovery;
 
         /// <summary>
         /// Maximal number of life points.
@@ -58,7 +58,7 @@ namespace RpeggiatorLib.Sprites
         /// </summary>
         public Direction Direction { get; protected set; }
         /// <inheritdoc />
-        public override Render Render { get { return RecoveryRenderSwitch(); } }
+        public override IRender Render { get { return RecoveryRenderSwitch(); } }
 
         /// <summary>
         /// Constructor.
@@ -87,7 +87,7 @@ namespace RpeggiatorLib.Sprites
             _recoveryTime = recoveryTime;
             ExplosionLifePointCost = Constants.Bomb.EXPLOSION_LIFE_POINT_COST;
             ArrowLifePointCost = Constants.Arrow.LIFE_POINT_COST;
-            _renderRecovery = ImageRender.WithDirection(renderRecoveryFilename, this, GetType().GetProperty(nameof(Direction)));
+            _renderRecovery = ImageRender.ImageWithDirection(renderRecoveryFilename, this, GetType().GetProperty(nameof(Direction)));
         }
 
         /// <summary>
@@ -158,10 +158,10 @@ namespace RpeggiatorLib.Sprites
         /// <summary>
         /// Creates an altenation between <see cref="Sprite._render"/> and <see cref="_renderRecovery"/> (or any render alternative).
         /// </summary>
-        /// <param name="alternativeRender">Optionnal; alternative <see cref="Renders.Render"/> for <see cref="Sprite._render"/>.</param>
-        /// <param name="alternativeRecoveryRender">Optionnal; alternative <see cref="Renders.Render"/> for <see cref="_renderRecovery"/>.</param>
-        /// <returns>Current <see cref="Renders.Render"/>.</returns>
-        protected Render RecoveryRenderSwitch(Render alternativeRender = null, Render alternativeRecoveryRender = null)
+        /// <param name="alternativeRender">Optionnal; alternative <see cref="Renders.IRender"/> for <see cref="Sprite._render"/>.</param>
+        /// <param name="alternativeRecoveryRender">Optionnal; alternative <see cref="Renders.IRender"/> for <see cref="_renderRecovery"/>.</param>
+        /// <returns>Current <see cref="Renders.IRender"/>.</returns>
+        protected IRender RecoveryRenderSwitch(IRender alternativeRender = null, IRender alternativeRecoveryRender = null)
         {
             alternativeRender = alternativeRender ?? _render;
             alternativeRecoveryRender = alternativeRecoveryRender ?? _renderRecovery;

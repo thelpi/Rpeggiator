@@ -1,7 +1,7 @@
 ﻿namespace RpeggiatorLib.Enums
 {
     /// <summary>
-    /// <see cref="Renders.Render"/> sub-types enumeration.
+    /// <see cref="Renders.IRender"/> sub-types enumeration.
     /// </summary>
     public enum RenderType
     {

@@ -27,7 +27,7 @@
         /// <param name="height"><see cref="Sprite.Height"/></param>
         /// <param name="actionDuration"><see cref="_actionDuration"/></param>
         /// <param name="renderType"><see cref="Enums.RenderType"/></param>
-        /// <param name="renderProperties">Datas required to initialize the <see cref="Renders.Render"/>.</param>
+        /// <param name="renderProperties">Datas required to initialize the <see cref="Renders.IRender"/>.</param>
         protected FloorTrigger(int id, double x, double y, double width, double height
             , double actionDuration, Enums.RenderType renderType, params string[] renderProperties)
             : base(id, x, y, width, height, renderType, renderProperties)

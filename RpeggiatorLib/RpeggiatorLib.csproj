@@ -107,8 +107,7 @@
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
     <Compile Include="Renders\ImageRender.cs" />
-    <Compile Include="Renders\Render.cs" />
-    <Compile Include="Renders\PlainRender.cs" />
+    <Compile Include="Renders\IRender.cs" />
     <Compile Include="Sprites\ActionnedArrow.cs" />
     <Compile Include="Sprites\ActionnedBomb.cs" />
     <Compile Include="Sprites\ActionnedItem.cs" />

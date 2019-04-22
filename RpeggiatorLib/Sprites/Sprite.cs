@@ -11,9 +11,9 @@ namespace RpeggiatorLib.Sprites
     public abstract class Sprite
     {
         /// <summary>
-        /// Default <see cref="Renders.Render"/>.
+        /// Default <see cref="Renders.IRender"/>.
         /// </summary>
-        protected Render _render;
+        protected IRender _render;
 
         /// <summary>
         /// X
@@ -38,7 +38,7 @@ namespace RpeggiatorLib.Sprites
         /// <summary>
         /// Overridden; <see cref="_render"/>
         /// </summary>
-        public virtual Render Render { get { return _render; } }
+        public virtual IRender Render { get { return _render; } }
         /// <summary>
         /// Unique identifier.
         /// </summary>
@@ -74,7 +74,7 @@ namespace RpeggiatorLib.Sprites
         /// <param name="width"><see cref="Width"/></param>
         /// <param name="height"><see cref="Height"/></param>
         /// <param name="renderType"><see cref="Enums.RenderType"/></param>
-        /// <param name="renderProperties">Datas required to initialize the <see cref="Renders.Render"/>.</param>
+        /// <param name="renderProperties">Datas required to initialize the <see cref="Renders.IRender"/>.</param>
         protected Sprite(int id, double x, double y, double width, double height, RenderType renderType, string[] renderProperties)
         {
             X = x;
@@ -87,31 +87,31 @@ namespace RpeggiatorLib.Sprites
         }
 
         /// <summary>
-        /// Computes and gets a <see cref="Renders.Render"/> from given properties.
+        /// Computes and gets a <see cref="Renders.IRender"/> from given properties.
         /// </summary>
         /// <param name="renderType"><see cref="Enums.RenderType"/></param>
-        /// <param name="renderProperties">Datas required to initialize the <see cref="Renders.Render"/>.</param>
-        /// <returns><see cref="Renders.Render"/></returns>
-        protected Render GetRenderFromValues(RenderType renderType, params string[] renderProperties)
+        /// <param name="renderProperties">Datas required to initialize the <see cref="Renders.IRender"/>.</param>
+        /// <returns><see cref="Renders.IRender"/></returns>
+        protected IRender GetRenderFromValues(RenderType renderType, params string[] renderProperties)
         {
             switch (renderType)
             {
                 case RenderType.ImageDirection:
-                    return ImageRender.WithDirection(renderProperties[0], this, GetType().GetProperty(renderProperties[1]));
+                    return ImageRender.ImageWithDirection(renderProperties[0], this, GetType().GetProperty(renderProperties[1]));
                 case RenderType.ImageMosaic:
-                    return ImageRender.WithMosaic(renderProperties[0], this);
+                    return ImageRender.ImageWithMosaic(renderProperties[0], this);
                 case RenderType.Image:
-                    return ImageRender.Basic(renderProperties[0]);
+                    return ImageRender.BasicImage(renderProperties[0]);
                 case RenderType.Plain:
-                    return new PlainRender(renderProperties[0]);
+                    return ImageRender.PlainColor(renderProperties[0]);
                 case RenderType.ImageAnimated:
-                    return ImageRender.AnimatedBasic(renderProperties[0], (Elapser)GetType().GetProperty(renderProperties[1]).GetValue(this), System.Convert.ToDouble(renderProperties[2]));
+                    return ImageRender.AnimatedBasicImage(renderProperties[0], (Elapser)GetType().GetProperty(renderProperties[1]).GetValue(this), System.Convert.ToDouble(renderProperties[2]));
                 case RenderType.ImageDirectionAnimated:
-                    return ImageRender.AnimatedWithDirection(renderProperties[0], (Elapser)GetType().GetProperty(renderProperties[1]).GetValue(this), System.Convert.ToDouble(renderProperties[2]), this, GetType().GetProperty(renderProperties[3]));
+                    return ImageRender.AnimatedImageWithDirection(renderProperties[0], (Elapser)GetType().GetProperty(renderProperties[1]).GetValue(this), System.Convert.ToDouble(renderProperties[2]), this, GetType().GetProperty(renderProperties[3]));
                 case RenderType.ImageMosaicAnimated:
-                    return ImageRender.AnimatedWithMosaic(renderProperties[0], (Elapser)GetType().GetProperty(renderProperties[1]).GetValue(this), System.Convert.ToDouble(renderProperties[2]));
+                    return ImageRender.AnimatedImageWithMosaic(renderProperties[0], (Elapser)GetType().GetProperty(renderProperties[1]).GetValue(this), System.Convert.ToDouble(renderProperties[2]));
                 case RenderType.ImageMosaicDirectionAnimated:
-                    return ImageRender.AnimatedWithDirectionAndMosaic(renderProperties[0], (Elapser)GetType().GetProperty(renderProperties[1]).GetValue(this), System.Convert.ToDouble(renderProperties[2]), this, GetType().GetProperty(renderProperties[3]));
+                    return ImageRender.AnimatedImageWithDirectionAndMosaic(renderProperties[0], (Elapser)GetType().GetProperty(renderProperties[1]).GetValue(this), System.Convert.ToDouble(renderProperties[2]), this, GetType().GetProperty(renderProperties[3]));
                 default:
                     throw new System.NotImplementedException(Messages.NotImplementedRenderExceptionMessage);
             }

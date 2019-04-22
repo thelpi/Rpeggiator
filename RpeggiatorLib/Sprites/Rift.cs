@@ -18,7 +18,7 @@ namespace RpeggiatorLib.Sprites
         /// <param name="height"><see cref="Sprite.Height"/></param>
         /// <param name="lifepoints"><see cref="DamageableSprite.CurrentLifePoints"/></param>
         /// <param name="renderType"><see cref="Enums.RenderType"/></param>
-        /// <param name="renderProperties">Datas required to initialize the <see cref="Render.Render"/>.</param>
+        /// <param name="renderProperties">Datas required to initialize the <see cref="IRender"/>.</param>
         internal Rift(int id, double x, double y, double width, double height,
             double lifepoints, Enums.RenderType renderType, string[] renderProperties)
             : base(id, x, y, width, height, lifepoints, renderType, renderProperties)

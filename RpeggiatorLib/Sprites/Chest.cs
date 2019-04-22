@@ -17,7 +17,7 @@ namespace RpeggiatorLib.Sprites
         // Optionnal key identifier inside the chest; in that case, replace any value of "_itemType".
         private int? _keyIdContainer;
         // Render after opening the chest.
-        private readonly Render _renderOpen;
+        private readonly IRender _renderOpen;
 
         /// <summary>
         /// Indicates if the chest has been open.
@@ -26,7 +26,7 @@ namespace RpeggiatorLib.Sprites
         /// <summary>
         /// The render, which changes regarding if the chest has been opened or not.
         /// </summary>
-        public override Render Render { get { return IsOpen ? _renderOpen : _render; } }
+        public override IRender Render { get { return IsOpen ? _renderOpen : _render; } }
 
         /// <summary>
         /// Constructor.
@@ -41,7 +41,7 @@ namespace RpeggiatorLib.Sprites
         /// <param name="keyId"><see cref="_keyId"/></param>
         /// <param name="keyIdContainer"><see cref="_keyIdContainer"/></param>
         /// <param name="renderType"><see cref="Enums.RenderType"/></param>
-        /// <param name="renderProperties">Datas required to initialize the <see cref="Renders.Render"/>.</param>
+        /// <param name="renderProperties">Datas required to initialize the <see cref="Renders.IRender"/>.</param>
         /// <param name="openRenderType"><see cref="Enums.RenderType"/></param>
         /// <param name="openRenderProperties">Datas required to initialize <see cref="_renderOpen"/>.</param>
         internal Chest(int id, double x, double y, double width, double height,
