@@ -104,6 +104,14 @@ namespace RpeggiatorLib.Sprites
                     return ImageRender.Basic(renderProperties[0]);
                 case RenderType.Plain:
                     return new PlainRender(renderProperties[0]);
+                case RenderType.ImageAnimated:
+                    return ImageRender.AnimatedBasic(renderProperties[0], (Elapser)GetType().GetProperty(renderProperties[1]).GetValue(this), System.Convert.ToDouble(renderProperties[2]));
+                case RenderType.ImageDirectionAnimated:
+                    return ImageRender.AnimatedWithDirection(renderProperties[0], (Elapser)GetType().GetProperty(renderProperties[1]).GetValue(this), System.Convert.ToDouble(renderProperties[2]), this, GetType().GetProperty(renderProperties[3]));
+                case RenderType.ImageMosaicAnimated:
+                    return ImageRender.AnimatedWithMosaic(renderProperties[0], (Elapser)GetType().GetProperty(renderProperties[1]).GetValue(this), System.Convert.ToDouble(renderProperties[2]));
+                case RenderType.ImageMosaicDirectionAnimated:
+                    return ImageRender.AnimatedWithDirectionAndMosaic(renderProperties[0], (Elapser)GetType().GetProperty(renderProperties[1]).GetValue(this), System.Convert.ToDouble(renderProperties[2]), this, GetType().GetProperty(renderProperties[3]));
                 default:
                     throw new System.NotImplementedException(Messages.NotImplementedRenderExceptionMessage);
             }

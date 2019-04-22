@@ -66,5 +66,15 @@ namespace RpeggiatorLib
         {
             _latestTimestamp = null;
         }
+
+        /// <summary>
+        /// Computes the current step index considering a step delay.
+        /// </summary>
+        /// <param name="stepDelay">Step delay (in milliseconds).</param>
+        /// <returns>Step index.</returns>
+        internal int GetStepIndex(double stepDelay)
+        {
+            return ElapsedMilliseconds / Convert.ToInt32(Math.Floor(stepDelay));
+        }
     }
 }

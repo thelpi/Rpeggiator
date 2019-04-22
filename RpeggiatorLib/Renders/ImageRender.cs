@@ -12,8 +12,8 @@ namespace RpeggiatorLib.Renders
     /// <seealso cref="Render"/>
     public class ImageRender : Render
     {
-        // Images names without extension.
-        private readonly string[] _imagesNames;
+        // Image name without extension (and index for animations).
+        private readonly string _imageName;
         // Dictionary of ImageBrush, one by direction.
         private readonly Dictionary<KeyValuePair<int, Enums.Direction>, ImageBrush> _brushByStatus;
         // The PropertyInfo which contains the current direction.
@@ -23,79 +23,145 @@ namespace RpeggiatorLib.Renders
         private readonly Sprites.Sprite _owner;
         // Indicates if the image is used as mosaic in the ImageBrush.
         private readonly bool _mosaicDisplay;
-        // Current index in the list of images.
-        private int _currentIndex;
+        // Time, in milliseconds, between each step of the animation.
+        private readonly double _elapserNextStep;
+        // Animation elapser
+        private readonly Elapser _animationElapser;
 
         /// <summary>
         /// Creates a basic instance.
         /// </summary>
-        /// <param name="imageName">Single image of <see cref="_imagesNames"/>.</param>
+        /// <param name="imageName"><see cref="_imageName"/></param>
+        /// <returns><see cref="ImageRender"/></returns>
         internal static ImageRender Basic(string imageName)
         {
-            return new ImageRender(new[] { imageName }, null, null, false);
+            return new ImageRender(imageName, null, null, false, null, 0);
         }
 
         /// <summary>
         /// Creates an instance with direction.
         /// </summary>
-        /// <param name="imageName">Single image of <see cref="_imagesNames"/>.</param>
+        /// <param name="imageName"><see cref="_imageName"/></param>
         /// <param name="owner"><see cref="_owner"/></param>
         /// <param name="directionProperty"><see cref="_directionProperty"/></param>
+        /// <returns><see cref="ImageRender"/></returns>
         internal static ImageRender WithDirection(string imageName, Sprites.Sprite owner, PropertyInfo directionProperty)
         {
-            return new ImageRender(new[] { imageName }, owner, directionProperty, false);
+            return new ImageRender(imageName, owner, directionProperty, false, null, 0);
         }
 
         /// <summary>
-        /// Creates an instance with mosaic.
+        /// Creates an instance with mosaic display.
         /// </summary>
-        /// <param name="imageName">Single image of <see cref="_imagesNames"/>.</param>
+        /// <param name="imageName"><see cref="_imageName"/></param>
         /// <param name="owner"><see cref="_owner"/></param>
+        /// <returns><see cref="ImageRender"/></returns>
         internal static ImageRender WithMosaic(string imageName, Sprites.Sprite owner)
         {
-            return new ImageRender(new[] { imageName }, owner, null, true);
+            return new ImageRender(imageName, owner, null, true, null, 0);
         }
 
         /// <summary>
-        /// Creates an instance with mosaic and direction.
+        /// Creates an instance with mosaic display and direction.
         /// </summary>
-        /// <param name="imageName">Single image of <see cref="_imagesNames"/>.</param>
+        /// <param name="imageName"><see cref="_imageName"/></param>
         /// <param name="owner"><see cref="_owner"/></param>
         /// <param name="directionProperty"><see cref="_directionProperty"/></param>
+        /// <returns><see cref="ImageRender"/></returns>
         internal static ImageRender WithDirectionAndMosaic(string imageName, Sprites.Sprite owner, PropertyInfo directionProperty)
         {
-            return new ImageRender(new[] { imageName }, owner, directionProperty, true);
+            return new ImageRender(imageName, owner, directionProperty, true, null, 0);
+        }
+
+        /// <summary>
+        /// Creates an animated instance.
+        /// </summary>
+        /// <param name="imageName"><see cref="_imageName"/></param>
+        /// <param name="animationElapser"><see cref="_animationElapser"/></param>
+        /// <param name="elapserNextStep"><see cref="_elapserNextStep"/></param>
+        /// <returns><see cref="ImageRender"/></returns>
+        internal static ImageRender AnimatedBasic(string imageName, Elapser animationElapser, double elapserNextStep)
+        {
+            return new ImageRender(imageName, null, null, false, animationElapser, elapserNextStep);
+        }
+
+        /// <summary>
+        /// Creates an animated instance with mosaic display.
+        /// </summary>
+        /// <param name="imageName"><see cref="_imageName"/></param>
+        /// <param name="animationElapser"><see cref="_animationElapser"/></param>
+        /// <param name="elapserNextStep"><see cref="_elapserNextStep"/></param>
+        /// <returns><see cref="ImageRender"/></returns>
+        internal static ImageRender AnimatedWithMosaic(string imageName, Elapser animationElapser, double elapserNextStep)
+        {
+            return new ImageRender(imageName, null, null, true, animationElapser, elapserNextStep);
+        }
+
+        /// <summary>
+        /// Creates an animated instance with direction.
+        /// </summary>
+        /// <param name="imageName"><see cref="_imageName"/></param>
+        /// <param name="animationElapser"><see cref="_animationElapser"/></param>
+        /// <param name="elapserNextStep"><see cref="_elapserNextStep"/></param>
+        /// <param name="owner"><see cref="_owner"/></param>
+        /// <param name="directionProperty"><see cref="_directionProperty"/></param>
+        /// <returns><see cref="ImageRender"/></returns>
+        internal static ImageRender AnimatedWithDirection(string imageName, Elapser animationElapser, double elapserNextStep,
+            Sprites.Sprite owner, PropertyInfo directionProperty)
+        {
+            return new ImageRender(imageName, owner, directionProperty, false, animationElapser, elapserNextStep);
+        }
+
+        /// <summary>
+        /// Creates an animated instance with mosaic display and direction.
+        /// </summary>
+        /// <param name="imageName"><see cref="_imageName"/></param>
+        /// <param name="animationElapser"><see cref="_animationElapser"/></param>
+        /// <param name="elapserNextStep"><see cref="_elapserNextStep"/></param>
+        /// <param name="owner"><see cref="_owner"/></param>
+        /// <param name="directionProperty"><see cref="_directionProperty"/></param>
+        /// <returns><see cref="ImageRender"/></returns>
+        internal static ImageRender AnimatedWithDirectionAndMosaic(string imageName, Elapser animationElapser, double elapserNextStep,
+            Sprites.Sprite owner, PropertyInfo directionProperty)
+        {
+            return new ImageRender(imageName, owner, directionProperty, true, animationElapser, elapserNextStep);
         }
 
         /// <summary>
         /// Constructor.
         /// </summary>
-        /// <param name="imagesNames"><see cref="_imagesNames"/></param>
+        /// <param name="imageName"><see cref="_imageName"/></param>
         /// <param name="owner"><see cref="_owner"/></param>
         /// <param name="directionProperty"><see cref="_directionProperty"/></param>
         /// <param name="mosaicDisplay"><see cref="_mosaicDisplay"/></param>
-        private ImageRender(string[] imagesNames, Sprites.Sprite owner, PropertyInfo directionProperty, bool mosaicDisplay)
+        /// <param name="animationElapser"><see cref="_animationElapser"/></param>
+        /// <param name="elapserNextStep"><see cref="_elapserNextStep"/></param>
+        private ImageRender(string imageName, Sprites.Sprite owner, PropertyInfo directionProperty, bool mosaicDisplay,
+            Elapser animationElapser, double elapserNextStep)
         {
             _owner = owner;
             _directionProperty = directionProperty;
-            _imagesNames = imagesNames;
+            _imageName = imageName;
             _mosaicDisplay = mosaicDisplay;
-            _currentIndex = 0;
             _brushByStatus = new Dictionary<KeyValuePair<int, Enums.Direction>, ImageBrush>();
+            _elapserNextStep = elapserNextStep;
+            _animationElapser = animationElapser;
         }
  
         /// <inheritdoc />
         public override Brush GetRenderBrush()
         {
+            int currentIndex = _animationElapser?.GetStepIndex(_elapserNextStep) ?? -1;
             Enums.Direction currentDirection =
                 _directionProperty != null ? (Enums.Direction)_directionProperty.GetValue(_owner) : Enums.Direction.Right;
-            KeyValuePair<int, Enums.Direction> statusKey = new KeyValuePair<int, Enums.Direction>(_currentIndex, currentDirection);
+            KeyValuePair<int, Enums.Direction> statusKey = new KeyValuePair<int, Enums.Direction>(currentIndex, currentDirection);
 
             if (!_brushByStatus.ContainsKey(statusKey))
             {
                 BitmapImage bitmapImage = new BitmapImage();
 
-                string resourcePath = Tools.GetImagePath(Engine.ResourcesPath, _imagesNames[_currentIndex]);
+                string actualImageName = currentIndex >= 0 ? string.Concat(_imageName, currentIndex) : _imageName;
+                string resourcePath = Tools.GetImagePath(Engine.ResourcesPath, actualImageName);
 
                 using (FileStream stream = new FileStream(resourcePath, FileMode.Open, FileAccess.Read))
                 {
