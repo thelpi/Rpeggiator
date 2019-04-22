@@ -106,7 +106,6 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
-    <Compile Include="Renders\ImageAnimatedRender.cs" />
     <Compile Include="Renders\ImageRender.cs" />
     <Compile Include="Renders\Render.cs" />
     <Compile Include="Renders\PlainRender.cs" />

@@ -22,12 +22,24 @@
         /// </summary>
         ImageDirection,
         /// <summary>
-        /// Combination of <see cref="ImageDirection"/> and <see cref="ImageMosaic"/>
+        /// Combination of <see cref="ImageDirection"/> and <see cref="ImageMosaic"/>.
         /// </summary>
         ImageMosaicDirection,
         /// <summary>
         /// Several images displayed sequentially.
         /// </summary>
-        ImageAnimated
+        ImageAnimated,
+        /// <summary>
+        /// Combination of <see cref="ImageAnimated"/> and <see cref="ImageDirection"/>.
+        /// </summary>
+        ImageDirectionAnimated,
+        /// <summary>
+        /// Combination of <see cref="ImageAnimated"/> and <see cref="ImageMosaic"/>.
+        /// </summary>
+        ImageMosaicAnimated,
+        /// <summary>
+        /// Combination of <see cref="ImageAnimated"/> and <see cref="ImageMosaicDirection"/>.
+        /// </summary>
+        ImageMosaicDirectionAnimated
     }
 }
