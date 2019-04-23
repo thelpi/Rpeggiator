@@ -96,22 +96,16 @@ namespace RpeggiatorLib.Sprites
         {
             switch (renderType)
             {
-                case RenderType.ImageDirection:
-                    return DefaultRender.ImageWithDirection(renderProperties[0], this, GetType().GetProperty(renderProperties[1]));
                 case RenderType.ImageMosaic:
-                    return DefaultRender.ImageWithMosaic(renderProperties[0], this);
+                    return DefaultRender.ImageWithMosaic(this, renderProperties[0]);
                 case RenderType.Image:
-                    return DefaultRender.BasicImage(renderProperties[0]);
+                    return DefaultRender.BasicImage(this, renderProperties[0]);
                 case RenderType.Plain:
-                    return DefaultRender.PlainColor(renderProperties[0]);
+                    return DefaultRender.PlainColor(this, renderProperties[0]);
                 case RenderType.ImageAnimated:
-                    return DefaultRender.AnimatedBasicImage(renderProperties[0], (Elapser)GetType().GetProperty(renderProperties[1]).GetValue(this), System.Convert.ToDouble(renderProperties[2]));
-                case RenderType.ImageDirectionAnimated:
-                    return DefaultRender.AnimatedImageWithDirection(renderProperties[0], (Elapser)GetType().GetProperty(renderProperties[1]).GetValue(this), System.Convert.ToDouble(renderProperties[2]), this, GetType().GetProperty(renderProperties[3]));
+                    return DefaultRender.AnimatedBasicImage(this, renderProperties[0], (Elapser)GetType().GetProperty(renderProperties[1]).GetValue(this), System.Convert.ToDouble(renderProperties[2]));
                 case RenderType.ImageMosaicAnimated:
-                    return DefaultRender.AnimatedImageWithMosaic(renderProperties[0], (Elapser)GetType().GetProperty(renderProperties[1]).GetValue(this), System.Convert.ToDouble(renderProperties[2]));
-                case RenderType.ImageMosaicDirectionAnimated:
-                    return DefaultRender.AnimatedImageWithDirectionAndMosaic(renderProperties[0], (Elapser)GetType().GetProperty(renderProperties[1]).GetValue(this), System.Convert.ToDouble(renderProperties[2]), this, GetType().GetProperty(renderProperties[3]));
+                    return DefaultRender.AnimatedImageWithMosaic(this, renderProperties[0], (Elapser)GetType().GetProperty(renderProperties[1]).GetValue(this), System.Convert.ToDouble(renderProperties[2]));
                 default:
                     throw new System.NotImplementedException(Messages.NotImplementedRenderExceptionMessage);
             }
@@ -167,6 +161,16 @@ namespace RpeggiatorLib.Sprites
         internal virtual void BehaviorAtNewFrame()
         {
             // no default behavior to implement
+        }
+
+        /// <summary>
+        /// Overriden; Gets the current <see cref="Direction"/> of this instance, if applicable.
+        /// The default value is <see cref="Direction.Right"/>.
+        /// </summary>
+        /// <returns><see cref="Direction"/></returns>
+        internal virtual Direction GetDirection()
+        {
+            return Constants.DEFAULT_SPRITE_DIRECTION;
         }
 
         /// <summary>

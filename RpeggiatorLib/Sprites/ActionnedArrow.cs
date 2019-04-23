@@ -29,7 +29,7 @@ namespace RpeggiatorLib.Sprites
         /// <param name="thrownBy"><see cref="LifeSprite"/> who throws the arrow.</param>
         internal ActionnedArrow(Point point, Direction direction, LifeSprite thrownBy)
             : base(0, point.X, point.Y, Constants.Arrow.WIDTH, Constants.Arrow.HEIGHT,
-                  RenderType.ImageDirection, nameof(Filename.Arrow), nameof(Direction))
+                  RenderType.Image, nameof(Filename.Arrow), nameof(Direction))
         {
             Direction = direction;
             _elapser = new Elapser();
@@ -57,6 +57,12 @@ namespace RpeggiatorLib.Sprites
         internal override double GetLifePointsCost(DamageableSprite sprite)
         {
             return Overlap(sprite) && sprite != _thrownBy ? sprite.ArrowLifePointCost : 0;
+        }
+
+        /// <inheritdoc />
+        internal override Direction GetDirection()
+        {
+            return Direction;
         }
     }
 }

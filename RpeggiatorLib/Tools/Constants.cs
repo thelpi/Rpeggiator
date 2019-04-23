@@ -9,6 +9,10 @@ namespace RpeggiatorLib
     internal static class Constants
     {
         /// <summary>
+        /// <see cref="Sprites.Sprite"/> default direction.
+        /// </summary>
+        internal const Direction DEFAULT_SPRITE_DIRECTION = Direction.Right;
+        /// <summary>
         /// <see cref="Sprites.Screen"/> width.
         /// </summary>
         internal const double SCREEN_WIDTH = 800;

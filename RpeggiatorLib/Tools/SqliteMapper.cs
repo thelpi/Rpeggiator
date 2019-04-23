@@ -613,12 +613,6 @@ namespace RpeggiatorLib
                     CheckRenderValuesCount(renderValues, 1);
                     CheckRenderFileName(renderValues, 0);
                     return new string[] { renderValues[0].ToString() };
-                case RenderType.ImageDirection:
-                case RenderType.ImageMosaicDirection:
-                    CheckRenderValuesCount(renderValues, 2);
-                    CheckRenderFileName(renderValues, 0);
-                    CheckRenderDirectionProperty(renderValues, 1, ownerType);
-                    return new string[] { renderValues[0].ToString(), ((System.Reflection.PropertyInfo)renderValues[1]).Name };
                 case RenderType.ImageAnimated:
                 case RenderType.ImageMosaicAnimated:
                     CheckRenderValuesCount(renderValues, 3);
@@ -626,14 +620,6 @@ namespace RpeggiatorLib
                     CheckRenderElapserProperty(renderValues, 1, ownerType);
                     CheckRenderElapserNextStep(renderValues, 2);
                     return new string[] { renderValues[0].ToString(), ((System.Reflection.PropertyInfo)renderValues[1]).Name, renderValues[2].ToString() };
-                case RenderType.ImageDirectionAnimated:
-                case RenderType.ImageMosaicDirectionAnimated:
-                    CheckRenderValuesCount(renderValues, 4);
-                    CheckRenderFileName(renderValues, 0, true);
-                    CheckRenderElapserProperty(renderValues, 1, ownerType);
-                    CheckRenderElapserNextStep(renderValues, 2);
-                    CheckRenderDirectionProperty(renderValues, 4, ownerType);
-                    return new string[] { renderValues[0].ToString(), ((System.Reflection.PropertyInfo)renderValues[1]).Name, renderValues[2].ToString(), ((System.Reflection.PropertyInfo)renderValues[3]).Name };
                 default:
                     throw new NotImplementedException(Messages.NotImplementedRenderExceptionMessage);
             }
@@ -659,18 +645,6 @@ namespace RpeggiatorLib
         {
             string fullFilenameWithoutExtension = string.Concat(renderValues[index].ToString(), checkZeroSuffix ? "0" : string.Empty);
             if (renderValues[index] == null || !System.IO.File.Exists(Tools.GetImagePath(_resourcePath, fullFilenameWithoutExtension)))
-            {
-                throw new ArgumentException(Messages.InvalidRenderExceptionMessage, nameof(renderValues));
-            }
-        }
-
-        private void CheckRenderDirectionProperty(object[] renderValues, int index, Type ownerType)
-        {
-            if (renderValues[index] == null
-                || ownerType == null
-                || renderValues[index].GetType() != typeof(System.Reflection.PropertyInfo)
-                || ((System.Reflection.PropertyInfo)renderValues[index]).PropertyType != typeof(Elapser)
-                || !ownerType.GetProperties().Any(p => p == (System.Reflection.PropertyInfo)renderValues[index]))
             {
                 throw new ArgumentException(Messages.InvalidRenderExceptionMessage, nameof(renderValues));
             }

@@ -77,7 +77,7 @@ namespace RpeggiatorLib.Sprites
         /// <param name="defaultDirection">Default <see cref="Direction"/>.</param>
         protected LifeSprite(int id, double x, double y, double width, double height, double maximalLifePoints, double hitLifePointCost,
             double speed, double recoveryTime, string renderFilename, string renderRecoveryFilename, Direction defaultDirection)
-            : base(id, x, y, width, height, maximalLifePoints, Enums.RenderType.ImageDirection, new[] { renderFilename, nameof(Direction) })
+            : base(id, x, y, width, height, maximalLifePoints, RenderType.Image, new[] { renderFilename, nameof(Direction) })
         {
             Direction = defaultDirection;
             MaximalLifePoints = maximalLifePoints;
@@ -87,7 +87,7 @@ namespace RpeggiatorLib.Sprites
             _recoveryTime = recoveryTime;
             ExplosionLifePointCost = Constants.Bomb.EXPLOSION_LIFE_POINT_COST;
             ArrowLifePointCost = Constants.Arrow.LIFE_POINT_COST;
-            _renderRecovery = DefaultRender.ImageWithDirection(renderRecoveryFilename, this, GetType().GetProperty(nameof(Direction)));
+            _renderRecovery = DefaultRender.BasicImage(this, renderRecoveryFilename);
         }
 
         /// <summary>
@@ -169,6 +169,12 @@ namespace RpeggiatorLib.Sprites
                 ((_recoveryManager.ElapsedMilliseconds / 100) % 2 == 0 ?
                     alternativeRender : alternativeRecoveryRender)
                 : alternativeRender;
+        }
+
+        /// <inheritdoc />
+        internal override Direction GetDirection()
+        {
+            return Direction;
         }
     }
 }
