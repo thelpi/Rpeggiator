@@ -58,7 +58,7 @@ namespace RpeggiatorLib.Sprites
         /// </summary>
         public Direction Direction { get; protected set; }
         /// <inheritdoc />
-        public override IRender Render { get { return RecoveryRenderSwitch(); } }
+        public override IRender Render { get { return IsRecovering ? _renderRecovery : _render; } }
 
         /// <summary>
         /// Constructor.
@@ -87,7 +87,7 @@ namespace RpeggiatorLib.Sprites
             _recoveryTime = recoveryTime;
             ExplosionLifePointCost = Constants.Bomb.EXPLOSION_LIFE_POINT_COST;
             ArrowLifePointCost = Constants.Arrow.LIFE_POINT_COST;
-            _renderRecovery = DefaultRender.BasicImage(this, renderRecoveryFilename);
+            _renderRecovery = DefaultRender.AnimatedBasicImage(this, renderRecoveryFilename, ElapserUse.LifeSpriteRecovery, 100);
         }
 
         /// <summary>
@@ -154,22 +154,6 @@ namespace RpeggiatorLib.Sprites
         /// </summary>
         /// <returns>Life points cost.</returns>
         protected abstract double ComputeLifePointCostFromEnemies();
-
-        /// <summary>
-        /// Creates an altenation between <see cref="Sprite._render"/> and <see cref="_renderRecovery"/> (or any render alternative).
-        /// </summary>
-        /// <param name="alternativeRender">Optionnal; alternative <see cref="Renders.IRender"/> for <see cref="Sprite._render"/>.</param>
-        /// <param name="alternativeRecoveryRender">Optionnal; alternative <see cref="Renders.IRender"/> for <see cref="_renderRecovery"/>.</param>
-        /// <returns>Current <see cref="Renders.IRender"/>.</returns>
-        protected IRender RecoveryRenderSwitch(IRender alternativeRender = null, IRender alternativeRecoveryRender = null)
-        {
-            alternativeRender = alternativeRender ?? _render;
-            alternativeRecoveryRender = alternativeRecoveryRender ?? _renderRecovery;
-            return IsRecovering ?
-                ((_recoveryManager.ElapsedMilliseconds / 100) % 2 == 0 ?
-                    alternativeRender : alternativeRecoveryRender)
-                : alternativeRender;
-        }
 
         /// <inheritdoc />
         internal override Direction GetDirection()

@@ -47,7 +47,7 @@ namespace RpeggiatorLib.Sprites
             get
             {
                 return Engine.Default.KeyPress.PressShield ?
-                    RecoveryRenderSwitch(_renderShield, _renderRecoveryShield) : RecoveryRenderSwitch();
+                    (IsRecovering ? _renderRecoveryShield : _renderShield) : base.Render;
             }
         }
         /// <summary>
@@ -80,7 +80,7 @@ namespace RpeggiatorLib.Sprites
             _currentWeaponHitDelay = Constants.Player.SWORD_HIT_DELAY;
             _movementTimeManager = new Elapser(this, ElapserUse.PlayerMovement);
             _renderShield = DefaultRender.BasicImage(this, nameof(Filename.PlayerShield));
-            _renderRecoveryShield = DefaultRender.BasicImage(this, nameof(Filename.PlayerRecoveryShield));
+            _renderRecoveryShield = DefaultRender.AnimatedBasicImage(this, nameof(Filename.PlayerRecoveryShield), ElapserUse.LifeSpriteRecovery, 100);
         }
 
         /// <inheritdoc />

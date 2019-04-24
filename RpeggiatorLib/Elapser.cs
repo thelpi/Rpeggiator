@@ -107,11 +107,7 @@ namespace RpeggiatorLib
         internal int GetStepIndex(double stepDelay, int maxStep)
         {
             int index = ElapsedMilliseconds / Convert.ToInt32(Math.Floor(stepDelay));
-            while (index > maxStep)
-            {
-                index -= maxStep;
-            }
-            return index;
+            return index % (maxStep + 1);
         }
 
         /// <summary>
