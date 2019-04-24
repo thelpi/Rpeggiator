@@ -32,7 +32,7 @@ namespace RpeggiatorLib.Sprites
                   RenderType.Image, nameof(Filename.Arrow), nameof(Direction))
         {
             Direction = direction;
-            _elapser = new Elapser();
+            _elapser = new Elapser(this, ElapserUse.ArrowMovement);
             _hitOrAway = false;
             _thrownBy = thrownBy;
         }

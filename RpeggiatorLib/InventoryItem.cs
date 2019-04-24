@@ -63,7 +63,7 @@ namespace RpeggiatorLib
                 return false;
             }
 
-            _useTimeManager = new Elapser(BaseItem.UseDelay);
+            _useTimeManager = new Elapser(this, ElapserUse.InventoryUseManagement, BaseItem.UseDelay);
             if (Quantity > 0 && !BaseItem.Unique)
             {
                 Quantity--;

@@ -141,7 +141,7 @@ namespace RpeggiatorLib.Sprites
                 if (cumuledLifePoints.Greater(0))
                 {
                     CurrentLifePoints -= cumuledLifePoints;
-                    _recoveryManager = _recoveryTime > 0 ? new Elapser(_recoveryTime) : null;
+                    _recoveryManager = _recoveryTime > 0 ? new Elapser(this, ElapserUse.LifeSpriteRecovery, _recoveryTime) : null;
                     return true;
                 }
             }

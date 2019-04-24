@@ -47,7 +47,7 @@ namespace RpeggiatorLib.Sprites
             : base(id, x, y, width, height, maximalLifePoints, hitLifePointCost, speed, recoveryTime, renderFilename,
                   renderRecoveryFilename, defaultDirection)
         {
-            _movementTimeManager = new Elapser();
+            _movementTimeManager = new Elapser(this, Enums.ElapserUse.EnemyMovement);
             LootItemType = lootItemType;
             LootQuantity = lootQuantity;
         }

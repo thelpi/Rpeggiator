@@ -64,7 +64,7 @@ namespace RpeggiatorLib.Sprites
             Quantity = quantity;
             if (timeBeforeDisapear.HasValue)
             {
-                _timeManager = new Elapser(timeBeforeDisapear.Value);
+                _timeManager = new Elapser(this, ElapserUse.PickableItemLifetime, timeBeforeDisapear.Value);
             }
         }
 

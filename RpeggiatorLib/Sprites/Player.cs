@@ -78,7 +78,7 @@ namespace RpeggiatorLib.Sprites
             SwordHitSprite = null;
             _hitElapser = null;
             _currentWeaponHitDelay = Constants.Player.SWORD_HIT_DELAY;
-            _movementTimeManager = new Elapser();
+            _movementTimeManager = new Elapser(this, ElapserUse.PlayerMovement);
             _renderShield = DefaultRender.BasicImage(this, nameof(Filename.PlayerShield));
             _renderRecoveryShield = DefaultRender.BasicImage(this, nameof(Filename.PlayerRecoveryShield));
         }
@@ -261,7 +261,7 @@ namespace RpeggiatorLib.Sprites
         {
             if (Engine.Default.KeyPress.PressHit && _hitElapser == null)
             {
-                _hitElapser = new Elapser(_currentWeaponHitDelay);
+                _hitElapser = new Elapser(this, ElapserUse.PlayerSwordManagement, _currentWeaponHitDelay);
                 double hitX = X;
                 double hitY = Y;
                 switch (Direction)

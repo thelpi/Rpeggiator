@@ -40,7 +40,7 @@
         {
             if (Engine.Default.IsTriggered(this))
             {
-                _triggerTimeManager = new Elapser(_actionDuration);
+                _triggerTimeManager = new Elapser(this, Enums.ElapserUse.FloorTriggerManagement, _actionDuration);
             }
             else if (_triggerTimeManager?.Elapsed == true)
             {

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 
 namespace RpeggiatorLib
 {
@@ -7,10 +8,33 @@ namespace RpeggiatorLib
     /// </summary>
     internal class Elapser
     {
+        // List of every instances. One by ElapserUse and owner.
+        private static readonly List<Elapser> _instances = new List<Elapser>();
+
+        /// <summary>
+        /// <see cref="_instances"/>
+        /// </summary>
+        public static IReadOnlyCollection<Elapser> Instances
+        {
+            get
+            {
+                return _instances;
+            }
+        }
+
         private readonly DateTime _timestamp;
         private readonly double _lifetime;
         private DateTime? _latestTimestamp;
 
+        /// <summary>
+        /// Instance owner.
+        /// Most of the time a <see cref="Sprites.Sprite"/>, but not always (<see cref="InventoryItem"/> for example).
+        /// </summary>
+        internal object Owner { get; private set; }
+        /// <summary>
+        /// <see cref="Enums.ElapserUse"/>
+        /// </summary>
+        internal Enums.ElapserUse UseId { get; private set; }
         /// <summary>
         /// Inferred; indicates if the instance is elapsed.
         /// </summary>
@@ -35,16 +59,23 @@ namespace RpeggiatorLib
         /// <summary>
         /// Constructor.
         /// </summary>
-        internal Elapser() : this(double.PositiveInfinity) { }
+        /// <param name="owner"><see cref="Owner"/></param>
+        /// <param name="useId"><see cref="UseId"/></param>
+        internal Elapser(object owner, Enums.ElapserUse useId) : this(owner, useId, double.PositiveInfinity) { }
 
         /// <summary>
         /// Constructor.
         /// </summary>
+        /// <param name="owner"><see cref="Owner"/></param>
+        /// <param name="useId"><see cref="UseId"/></param>
         /// <param name="lifetime">Lifetime, in milliseconds.</param>
-        internal Elapser(double lifetime)
+        internal Elapser(object owner, Enums.ElapserUse useId, double lifetime)
         {
             _timestamp = DateTime.Now;
             _lifetime = lifetime;
+            UseId = useId;
+            Owner = owner;
+            AddOrReplaceInInstances();
         }
 
         /// <summary>
@@ -81,6 +112,22 @@ namespace RpeggiatorLib
                 index -= maxStep;
             }
             return index;
+        }
+
+        /// <summary>
+        /// Adds or replaces this instance in <see cref="Instances"/>.
+        /// </summary>
+        private void AddOrReplaceInInstances()
+        {
+            int indexOf = _instances.FindIndex(x => x != null && x.UseId == UseId && x.Owner == Owner);
+            if (indexOf >= 0)
+            {
+                _instances[indexOf] = this;
+            }
+            else
+            {
+                _instances.Add(this);
+            }
         }
     }
 }

@@ -33,7 +33,7 @@ namespace RpeggiatorLib.Sprites
         internal ActionnedBomb(Point point)
             : base(0, point.X, point.Y, Constants.Bomb.WIDTH, Constants.Bomb.HEIGHT, Enums.RenderType.Image, nameof(Enums.Filename.Bomb))
         {
-            _pendingTimeManager = new Elapser(Constants.Bomb.TIME_WHILE_PENDING);
+            _pendingTimeManager = new Elapser(this, Enums.ElapserUse.BonbPending, Constants.Bomb.TIME_WHILE_PENDING);
             ExplosionSprite = null;
         }
 
@@ -43,7 +43,7 @@ namespace RpeggiatorLib.Sprites
             // Explosion beginning.
             if (_explodingTimeManager == null && _pendingTimeManager.Elapsed)
             {
-                _explodingTimeManager = new Elapser(Constants.Bomb.TIME_WHILE_EXPLODING);
+                _explodingTimeManager = new Elapser(this, Enums.ElapserUse.BonbExploding, Constants.Bomb.TIME_WHILE_EXPLODING);
                 ExplosionSprite = new BombExplosion(this);
             }
             else if (IsDone)
