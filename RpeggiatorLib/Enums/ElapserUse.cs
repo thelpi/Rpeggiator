@@ -4,7 +4,7 @@
     /// Enumeration of every possible uses of <see cref="Elapser"/>
     /// </summary>
     /// <remarks>An use is unique in the collection <see cref="Elapser.Instances"/>.</remarks>
-    internal enum ElapserUse
+    public enum ElapserUse
     {
         /// <summary>
         /// <see cref="Sprites.ActionnedArrow"/> movement.

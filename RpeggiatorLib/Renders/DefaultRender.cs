@@ -28,8 +28,8 @@ namespace RpeggiatorLib.Renders
         private readonly bool _mosaicDisplay;
         // Time, in milliseconds, between each step of the animation.
         private readonly double _elapserNextStep;
-        // Animation elapser
-        private readonly Elapser _animationElapser;
+        // Animation elapser use enum.
+        private readonly Enums.ElapserUse? _animationElapser;
         // Color hexadecimal value.
         private readonly string _hexColor;
         // Biggest contiguous index as a suffix from _imageName (start to zero, the only mandatory index)
@@ -76,7 +76,8 @@ namespace RpeggiatorLib.Renders
         /// <param name="animationElapser"><see cref="_animationElapser"/></param>
         /// <param name="elapserNextStep"><see cref="_elapserNextStep"/></param>
         /// <returns><see cref="DefaultRender"/></returns>
-        internal static DefaultRender AnimatedBasicImage(Sprites.Sprite owner, string imageName, Elapser animationElapser, double elapserNextStep)
+        internal static DefaultRender AnimatedBasicImage(Sprites.Sprite owner, string imageName,
+            Enums.ElapserUse animationElapser, double elapserNextStep)
         {
             return new DefaultRender(owner, null, imageName, false, animationElapser, elapserNextStep);
         }
@@ -89,7 +90,8 @@ namespace RpeggiatorLib.Renders
         /// <param name="animationElapser"><see cref="_animationElapser"/></param>
         /// <param name="elapserNextStep"><see cref="_elapserNextStep"/></param>
         /// <returns><see cref="DefaultRender"/></returns>
-        internal static DefaultRender AnimatedImageWithMosaic(Sprites.Sprite owner, string imageName, Elapser animationElapser, double elapserNextStep)
+        internal static DefaultRender AnimatedImageWithMosaic(Sprites.Sprite owner, string imageName,
+            Enums.ElapserUse animationElapser, double elapserNextStep)
         {
             return new DefaultRender(owner, null, imageName, true, animationElapser, elapserNextStep);
         }
@@ -104,7 +106,7 @@ namespace RpeggiatorLib.Renders
         /// <param name="animationElapser"><see cref="_animationElapser"/></param>
         /// <param name="elapserNextStep"><see cref="_elapserNextStep"/></param>
         private DefaultRender(Sprites.Sprite owner, string hexColor, string imageName, bool mosaicDisplay,
-            Elapser animationElapser, double elapserNextStep)
+            Enums.ElapserUse? animationElapser, double elapserNextStep)
         {
             _owner = owner;
             _imageName = imageName;
@@ -113,7 +115,7 @@ namespace RpeggiatorLib.Renders
             _elapserNextStep = elapserNextStep;
             _animationElapser = animationElapser;
             _hexColor = hexColor;
-            if (animationElapser != null)
+            if (animationElapser.HasValue)
             {
                 _topIndex = 0;
                 while (File.Exists(Tools.GetImagePath(Engine.ResourcesPath, string.Concat(_imageName, _topIndex))))
@@ -137,7 +139,16 @@ namespace RpeggiatorLib.Renders
                 return _brushByStatus.Values.First();
             }
 
-            int currentIndex = _animationElapser?.GetStepIndex(_elapserNextStep, _topIndex) ?? -1;
+            int currentIndex = -1;
+            if (_animationElapser.HasValue)
+            {
+                Elapser elapser = Elapser.Instances.First(x => x.Owner == _owner && x.UseId == _animationElapser);
+                if (elapser != null)
+                {
+                    currentIndex = elapser.GetStepIndex(_elapserNextStep, _topIndex);
+                }
+            }
+
             Enums.Direction currentDirection = _owner?.GetDirection() ?? Constants.DEFAULT_SPRITE_DIRECTION;
             KeyValuePair<int, Enums.Direction> statusKey = new KeyValuePair<int, Enums.Direction>(currentIndex, currentDirection);
 

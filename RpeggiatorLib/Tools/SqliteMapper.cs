@@ -430,7 +430,7 @@ namespace RpeggiatorLib
             string[] renderValueString = null;
             if (renderType.HasValue)
             {
-                renderValueString = CheckRenderValues(typeof(T), renderType.Value, renderValues);
+                renderValueString = CheckRenderValues(renderType.Value, renderValues);
             }
 
             int id = GetNextId(tableName);
@@ -600,7 +600,7 @@ namespace RpeggiatorLib
         #region Render values check
 
         // Checks render properties and throws an exception if invalid.
-        private string[] CheckRenderValues(Type ownerType, RenderType renderType, object[] renderValues)
+        private string[] CheckRenderValues(RenderType renderType, object[] renderValues)
         {
             switch (renderType)
             {
@@ -617,9 +617,9 @@ namespace RpeggiatorLib
                 case RenderType.ImageMosaicAnimated:
                     CheckRenderValuesCount(renderValues, 3);
                     CheckRenderFileName(renderValues, 0, true);
-                    CheckRenderElapserProperty(renderValues, 1, ownerType);
+                    CheckRenderElapserProperty(renderValues, 1);
                     CheckRenderElapserNextStep(renderValues, 2);
-                    return new string[] { renderValues[0].ToString(), ((System.Reflection.PropertyInfo)renderValues[1]).Name, renderValues[2].ToString() };
+                    return new string[] { renderValues[0].ToString(), renderValues[1].ToString(), renderValues[2].ToString() };
                 default:
                     throw new NotImplementedException(Messages.NotImplementedRenderExceptionMessage);
             }
@@ -660,13 +660,11 @@ namespace RpeggiatorLib
             }
         }
 
-        private void CheckRenderElapserProperty(object[] renderValues, int index, Type ownerType)
+        private void CheckRenderElapserProperty(object[] renderValues, int index)
         {
             if (renderValues[index] == null
-                || ownerType == null
-                || renderValues[index].GetType() != typeof(System.Reflection.PropertyInfo)
-                || ((System.Reflection.PropertyInfo)renderValues[index]).PropertyType != typeof(Direction)
-                || !ownerType.GetProperties().Any(p => p == (System.Reflection.PropertyInfo)renderValues[index]))
+                || renderValues[index].GetType() != typeof(int)
+                || Enum.IsDefined(typeof(ElapserUse), renderValues[index]))
             {
                 throw new ArgumentException(Messages.InvalidRenderExceptionMessage, nameof(renderValues));
             }
@@ -782,7 +780,7 @@ namespace RpeggiatorLib
             {
                 throw new ArgumentException(Messages.InvalidSpriteIdExceptionMessage, nameof(gateId));
             }
-            string[] onRenderValuesString = CheckRenderValues(typeof(Sprites.GateTrigger), onRenderType, onRenderValues);
+            string[] onRenderValuesString = CheckRenderValues(onRenderType, onRenderValues);
 
             return CreateSpriteInScreen<Sprites.GateTrigger>("gate_trigger", screenId, x, y, width, height, renderType, renderValues,
                 new Tuple<string, DbType, object>("action_duration", DbType.Double, actionDuration),
@@ -921,7 +919,7 @@ namespace RpeggiatorLib
             {
                 throw new ArgumentException(Messages.InvalidPlayerThroughDoorCoordinatesExceptionMessage, nameof(playerGoThroughY));
             }
-            string[] lockedRenderValuesString = CheckRenderValues(typeof(Sprites.Door), lockedRenderType, lockedRenderValues);
+            string[] lockedRenderValuesString = CheckRenderValues(lockedRenderType, lockedRenderValues);
 
             return CreateSpriteInScreen<Sprites.Door>("door", screenId, x, y, width, height, renderType, renderValues,
                 new Tuple<string, DbType, object>("key_id", DbType.Int32, keyId),
@@ -1021,7 +1019,7 @@ namespace RpeggiatorLib
             {
                 throw new ArgumentException(Messages.LowerOrEqualZeroExceptionMessage, nameof(keyId));
             }
-            string[] openRenderValuesString = CheckRenderValues(typeof(Sprites.Chest), openRenderType, openRenderValues);
+            string[] openRenderValuesString = CheckRenderValues(openRenderType, openRenderValues);
 
             // The chest can't contain both item and key.
             if (keyIdContainer.HasValue)
@@ -1112,7 +1110,7 @@ namespace RpeggiatorLib
         /// <exception cref="NotImplementedException"><see cref="Messages.NotImplementedRenderExceptionMessage"/></exception>
         public int CreateScreen(RenderType renderType, object[] renderValues, FloorType floorType, double darknessOpacity)
         {
-            string[] renderValuesString = CheckRenderValues(typeof(Sprites.Screen), renderType, renderValues);
+            string[] renderValuesString = CheckRenderValues(renderType, renderValues);
 
             darknessOpacity = darknessOpacity.Lower(0) ? 0 : (darknessOpacity.Greater(1) ? 1 : darknessOpacity);
 

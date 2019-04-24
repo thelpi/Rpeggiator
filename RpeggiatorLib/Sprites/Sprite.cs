@@ -103,9 +103,9 @@ namespace RpeggiatorLib.Sprites
                 case RenderType.Plain:
                     return DefaultRender.PlainColor(this, renderProperties[0]);
                 case RenderType.ImageAnimated:
-                    return DefaultRender.AnimatedBasicImage(this, renderProperties[0], (Elapser)GetType().GetProperty(renderProperties[1]).GetValue(this), System.Convert.ToDouble(renderProperties[2]));
+                    return DefaultRender.AnimatedBasicImage(this, renderProperties[0], (ElapserUse)System.Convert.ToInt32(renderProperties[1]), System.Convert.ToDouble(renderProperties[2]));
                 case RenderType.ImageMosaicAnimated:
-                    return DefaultRender.AnimatedImageWithMosaic(this, renderProperties[0], (Elapser)GetType().GetProperty(renderProperties[1]).GetValue(this), System.Convert.ToDouble(renderProperties[2]));
+                    return DefaultRender.AnimatedImageWithMosaic(this, renderProperties[0], (ElapserUse)System.Convert.ToInt32(renderProperties[1]), System.Convert.ToDouble(renderProperties[2]));
                 default:
                     throw new System.NotImplementedException(Messages.NotImplementedRenderExceptionMessage);
             }
