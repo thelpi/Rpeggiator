@@ -17,7 +17,7 @@ namespace RpeggiatorLib.Sprites
         /// <param name="width"><see cref="Sprite.Width"/></param>
         /// <param name="height"><see cref="Sprite.Height"/></param>
         internal SwordHit(int id, double x, double y, double width, double height)
-            : base(id, x, y, width, height, Enums.RenderType.Image, new[] { nameof(Enums.Filename.Sword) })
+            : base(id, x, y, width, height, Enums.RenderType.Plain, new[] { Tools.HexFromColor(System.Windows.Media.Colors.Transparent) })
         {
             // Empty.
         }
@@ -29,7 +29,64 @@ namespace RpeggiatorLib.Sprites
         {
             // Shortcut.
             Player p = Engine.Default.Player;
-            Move(X + (p.X - (p.LatestMove?.X ?? p.X)), Y + (p.Y - (p.LatestMove?.Y ?? p.Y)));
+            double newX = 0;
+            double newY = 0;
+            double newWidth = 0;
+            double newHeight = 0;
+            switch (p.Direction)
+            {
+                case Enums.Direction.Bottom:
+                    newX = p.X;
+                    newY = p.Y + p.Height;
+                    newWidth = p.Width;
+                    newHeight = p.Height * Constants.Player.HIT_SPRITE_RATIO;
+                    break;
+                case Enums.Direction.Top:
+                    newX = p.X;
+                    newY = p.Y - (p.Height * Constants.Player.HIT_SPRITE_RATIO);
+                    newWidth = p.Width;
+                    newHeight = p.Height * Constants.Player.HIT_SPRITE_RATIO;
+                    break;
+                case Enums.Direction.Left:
+                    newX = p.X - (p.Width * Constants.Player.HIT_SPRITE_RATIO);
+                    newY = p.Y;
+                    newWidth = p.Width * Constants.Player.HIT_SPRITE_RATIO;
+                    newHeight = p.Height;
+                    break;
+                case Enums.Direction.Right:
+                    newX = p.X + p.Width;
+                    newY = p.Y;
+                    newWidth = p.Width * Constants.Player.HIT_SPRITE_RATIO;
+                    newHeight = p.Height;
+                    break;
+                case Enums.Direction.BottomLeft:
+                    newX = p.X - (p.Width * Constants.Player.HIT_SPRITE_RATIO);
+                    newY = p.Y + (p.Height * (1 - Constants.Player.HIT_SPRITE_RATIO));
+                    newWidth = p.Width * (1 - Constants.Player.HIT_SPRITE_RATIO);
+                    newHeight = p.Height * (1 - Constants.Player.HIT_SPRITE_RATIO);
+                    break;
+                case Enums.Direction.BottomRight:
+                    newX = p.X + (p.Width * (1 - Constants.Player.HIT_SPRITE_RATIO));
+                    newY = p.Y + (p.Height * (1 - Constants.Player.HIT_SPRITE_RATIO));
+                    newWidth = p.Width * (1 - Constants.Player.HIT_SPRITE_RATIO);
+                    newHeight = p.Height * (1 - Constants.Player.HIT_SPRITE_RATIO);
+                    break;
+                case Enums.Direction.TopLeft:
+                    newX = p.X - (p.Width * Constants.Player.HIT_SPRITE_RATIO);
+                    newY = p.Y - (p.Height * Constants.Player.HIT_SPRITE_RATIO);
+                    newWidth = p.Width * (1 - Constants.Player.HIT_SPRITE_RATIO);
+                    newHeight = p.Height * (1 - Constants.Player.HIT_SPRITE_RATIO);
+                    break;
+                case Enums.Direction.TopRight:
+                    newX = p.X + (p.Width * (1 - Constants.Player.HIT_SPRITE_RATIO));
+                    newY = p.Y - (p.Height * Constants.Player.HIT_SPRITE_RATIO);
+                    newWidth = p.Width * (1 - Constants.Player.HIT_SPRITE_RATIO);
+                    newHeight = p.Height * (1 - Constants.Player.HIT_SPRITE_RATIO);
+                    break;
+            }
+
+            Move(newX, newY);
+            Resize(newWidth, newHeight);
         }
     }
 }

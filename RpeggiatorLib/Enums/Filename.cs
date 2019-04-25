@@ -22,10 +22,6 @@
         /// </summary>
         Bomb,
         /// <summary>
-        /// <see cref="Sprites.SwordHit"/>
-        /// </summary>
-        Sword,
-        /// <summary>
         /// <see cref="Sprites.Player"/>
         /// </summary>
         Player,
@@ -33,6 +29,14 @@
         /// <see cref="Sprites.Player"/> when recovering.
         /// </summary>
         PlayerRecovery,
+        /// <summary>
+        /// <see cref="Sprites.Player"/> holding his sword.
+        /// </summary>
+        PlayerSword,
+        /// <summary>
+        /// <see cref="Sprites.Player"/> holding his sword while recovering.
+        /// </summary>
+        PlayerRecoverySword,
         /// <summary>
         /// <see cref="Sprites.Player"/> holding his shield.
         /// </summary>

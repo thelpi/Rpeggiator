@@ -92,8 +92,8 @@ namespace RpeggiatorLib
             CreateChest(screenId1, 400, 380, 40, 40, RenderType.Image, new object[] { "Chest" }, null, 10, null, 1, RenderType.Image, new object[] { "OpenChest" });
             CreatePit(screenId1, 700, 100, 50, 50, RenderType.Image, new object[] { "Pit" }, null);
             CreateRift(screenId1, 700, 400, 20, 100, RenderType.Plain, new object[] { SysColor.BurlyWood }, 8);
-            int enemyId = CreateEnemy(screenId1, 50, 50, 40, 40, 20, 1, 150, 500, "Enemy", "EnemyRecovery", Direction.Right, null, 10);
-            CreateEnemy(screenId1, 600, 50, 40, 40, 20, 1, 150, 500, "Enemy", "EnemyRecovery", Direction.Bottom, ItemType.Arrow, 1);
+            int enemyId = CreateEnemy(screenId1, 50, 50, 40, 40, 20, 1, 100, 50, "Enemy", "EnemyRecovery", Direction.Right, null, 10);
+            CreateEnemy(screenId1, 600, 50, 40, 40, 20, 1, 100, 50, "Enemy", "EnemyRecovery", Direction.Bottom, ItemType.Arrow, 1);
             CreateEnemyPathSteps(enemyId, new Dictionary<int, System.Windows.Point>
                 {
                     { 1, new System.Windows.Point(730, 350) },

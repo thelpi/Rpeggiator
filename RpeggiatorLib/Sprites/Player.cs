@@ -24,6 +24,10 @@ namespace RpeggiatorLib.Sprites
         private readonly IRender _renderShield;
         // Render while recovering and holding a shield.
         private readonly IRender _renderRecoveryShield;
+        // Render while holding a shield.
+        private readonly IRender _renderSword;
+        // Render while recovering and holding a shield.
+        private readonly IRender _renderRecoverySword;
 
         /// <summary>
         /// When coming into a new screen, indicates the direction relative to the former screen.
@@ -46,8 +50,8 @@ namespace RpeggiatorLib.Sprites
         {
             get
             {
-                return Engine.Default.KeyPress.PressShield ?
-                    (IsRecovering ? _renderRecoveryShield : _renderShield) : base.Render;
+                return IsHitting ? (IsRecovering ? _renderRecoverySword : _renderSword) : (Engine.Default.KeyPress.PressShield ?
+                    (IsRecovering ? _renderRecoveryShield : _renderShield) : base.Render);
             }
         }
         /// <summary>
@@ -80,7 +84,11 @@ namespace RpeggiatorLib.Sprites
             _currentWeaponHitDelay = Constants.Player.SWORD_HIT_DELAY;
             _movementTimeManager = new Elapser(this, ElapserUse.PlayerMovement);
             _renderShield = DefaultRender.BasicImage(this, nameof(Filename.PlayerShield));
-            _renderRecoveryShield = DefaultRender.AnimatedBasicImage(this, nameof(Filename.PlayerRecoveryShield), ElapserUse.LifeSpriteRecovery, 100);
+            _renderRecoveryShield = DefaultRender.AnimatedBasicImage(this,
+                nameof(Filename.PlayerRecoveryShield), ElapserUse.LifeSpriteRecovery, Constants.RECOVERY_BLINK_DELAY);
+            _renderSword = DefaultRender.BasicImage(this, nameof(Filename.PlayerSword));
+            _renderRecoverySword = DefaultRender.AnimatedBasicImage(this,
+                nameof(Filename.PlayerRecoverySword), ElapserUse.LifeSpriteRecovery, Constants.RECOVERY_BLINK_DELAY);
         }
 
         /// <inheritdoc />
@@ -262,40 +270,8 @@ namespace RpeggiatorLib.Sprites
             if (Engine.Default.KeyPress.PressHit && _hitElapser == null)
             {
                 _hitElapser = new Elapser(this, ElapserUse.PlayerSwordManagement, _currentWeaponHitDelay);
-                double hitX = X;
-                double hitY = Y;
-                switch (Direction)
-                {
-                    case Direction.Bottom:
-                        hitY += Height;
-                        break;
-                    case Direction.BottomLeft:
-                        hitY += Height;
-                        hitX -= Width;
-                        break;
-                    case Direction.BottomRight:
-                        hitY += Height;
-                        hitX += Width;
-                        break;
-                    case Direction.Left:
-                        hitX -= Width;
-                        break;
-                    case Direction.Right:
-                        hitX += Width;
-                        break;
-                    case Direction.TopRight:
-                        hitY -= Height;
-                        hitX += Width;
-                        break;
-                    case Direction.TopLeft:
-                        hitY -= Height;
-                        hitX -= Width;
-                        break;
-                    case Direction.Top:
-                        hitY -= Height;
-                        break;
-                }
-                SwordHitSprite = new SwordHit(Id, hitX, hitY, Width, Height);
+                // Sprite coordinates are not important here, as we compute them below.
+                SwordHitSprite = new SwordHit(Id, 0, 0, 0, 0);
             }
             else if (_hitElapser?.Elapsed == true)
             {

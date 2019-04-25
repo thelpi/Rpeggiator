@@ -298,15 +298,17 @@ namespace RPG4.Visuals
 
             if (_engine.Player.Inventory.LampIsOn)
             {
-                System.Windows.Point pt = new System.Windows.Point(
+                Point pt = new Point(
                     _engine.Player.CenterPointX / _engine.CurrentScreen.Width,
                     _engine.Player.CenterPointY / _engine.CurrentScreen.Height);
 
-                RadialGradientBrush lampBrush = new RadialGradientBrush(Colors.Transparent, Colors.Black);
-                lampBrush.Center = pt;
-                lampBrush.GradientOrigin = pt;
-                lampBrush.RadiusX = 0.2 * (_engine.CurrentScreen.Height / _engine.CurrentScreen.Width);
-                lampBrush.RadiusY = 0.2;
+                RadialGradientBrush lampBrush = new RadialGradientBrush(Colors.Transparent, Colors.Black)
+                {
+                    Center = pt,
+                    GradientOrigin = pt,
+                    RadiusX = 0.2 * (_engine.CurrentScreen.Height / _engine.CurrentScreen.Width),
+                    RadiusY = 0.2
+                };
                 rctDarkness.Fill = lampBrush;
             }
             else

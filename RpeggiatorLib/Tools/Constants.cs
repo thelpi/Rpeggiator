@@ -9,6 +9,10 @@ namespace RpeggiatorLib
     internal static class Constants
     {
         /// <summary>
+        /// Delay between two images while recovering.
+        /// </summary>
+        internal const double RECOVERY_BLINK_DELAY = 100;
+        /// <summary>
         /// <see cref="Sprites.Sprite"/> default direction.
         /// </summary>
         internal const Direction DEFAULT_SPRITE_DIRECTION = Direction.Right;
@@ -113,9 +117,13 @@ namespace RpeggiatorLib
             /// </summary>
             internal const double INITIAL_SPEED = 200;
             /// <summary>
+            /// Ratio of the hit sprite compared to <see cref="Player"/>.
+            /// </summary>
+            internal const double HIT_SPRITE_RATIO = 1 / (double)3;
+            /// <summary>
             /// Delay between two hits with the sword, in milliseconds.
             /// </summary>
-            internal const double SWORD_HIT_DELAY = 500;
+            internal const double SWORD_HIT_DELAY = 250;
             /// <summary>
             /// Hit life points cost on enemies.
             /// </summary>

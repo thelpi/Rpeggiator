@@ -87,7 +87,7 @@ namespace RpeggiatorLib.Sprites
             _recoveryTime = recoveryTime;
             ExplosionLifePointCost = Constants.Bomb.EXPLOSION_LIFE_POINT_COST;
             ArrowLifePointCost = Constants.Arrow.LIFE_POINT_COST;
-            _renderRecovery = DefaultRender.AnimatedBasicImage(this, renderRecoveryFilename, ElapserUse.LifeSpriteRecovery, 100);
+            _renderRecovery = DefaultRender.AnimatedBasicImage(this, renderRecoveryFilename, ElapserUse.LifeSpriteRecovery, Constants.RECOVERY_BLINK_DELAY);
         }
 
         /// <summary>

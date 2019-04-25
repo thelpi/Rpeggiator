@@ -114,12 +114,23 @@ namespace RpeggiatorLib.Sprites
         /// <summary>
         /// Moves this instance.
         /// </summary>
-        /// <param name="newX">New X-axis value.</param>
-        /// <param name="newY">New Y-axis value.</param>
+        /// <param name="newX">New <see cref="X"/>.</param>
+        /// <param name="newY">New <see cref="Y"/>.</param>
         protected void Move(double newX, double newY)
         {
             X = newX;
             Y = newY;
+        }
+
+        /// <summary>
+        /// Resizes this instance.
+        /// </summary>
+        /// <param name="width">New <see cref="Width"/>.</param>
+        /// <param name="height">New <see cref="Height"/>.</param>
+        protected void Resize(double width, double height)
+        {
+            Width = width;
+            Height = height;
         }
 
         /// <summary>

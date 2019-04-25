@@ -94,7 +94,8 @@ namespace RpeggiatorLib
 
             PressHit = hit;
             PressAction = action;
-            PressShield = shield;
+            // Can't shield while hitting.
+            PressShield = shield && !hit;
             InventorySlotId = inventorySlotId;
 
             // up and down both pressed cancel each other
