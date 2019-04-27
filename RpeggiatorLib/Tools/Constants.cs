@@ -141,6 +141,7 @@ namespace RpeggiatorLib
                 { ItemType.Bow, 1 },
                 { ItemType.Arrow, 10 }
             };
+            internal static readonly int[] ACTIVE_ITEMS = new int[Inventory.SLOT_COUNT] { 0, 1, -1 };
             /// <summary>
             /// Initial coins.
             /// </summary>
@@ -177,9 +178,9 @@ namespace RpeggiatorLib
             /// </summary>
             internal const double LARGE_LIFE_POTION_RECOVERY_LIFE_POINTS = 10;
             /// <summary>
-            /// Initial size of the inventory.
+            /// Active item slots count.
             /// </summary>
-            internal const int SIZE = 10;
+            internal const int SLOT_COUNT = 3;
             /// <summary>
             /// Coins limit.
             /// </summary>

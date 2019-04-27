@@ -13,6 +13,7 @@ namespace RpeggiatorLib
         private List<InventoryItem> _items;
         private Dictionary<ItemType, int> _maxQuantityByItem;
         private List<int> _keyring;
+        private int[] _activeItemsIndex;
 
         /// <summary>
         /// List of <see cref="InventoryItem"/> which can be displayed on the screen.
@@ -21,7 +22,7 @@ namespace RpeggiatorLib
         {
             get
             {
-                return _items.Where(it => !it.BaseItem.AmmoFor.HasValue).ToList();
+                return _items.Where(it => _activeItemsIndex.Contains(_items.IndexOf(it))).ToList();
             }
         }
         /// <summary>
@@ -41,9 +42,9 @@ namespace RpeggiatorLib
         /// </summary>
         public IReadOnlyCollection<int> Keyring { get { return _keyring; } }
         /// <summary>
-        /// Inventory max size.
+        /// Active item slots count.
         /// </summary>
-        public int InventoryMaxSize { get { return Constants.Inventory.SIZE; } }
+        public int ActiveSlotCount { get { return Constants.Inventory.SLOT_COUNT; } }
 
         /// <summary>
         /// Constructor.
@@ -59,6 +60,8 @@ namespace RpeggiatorLib
             }
             Coins = Constants.Player.COINS;
             _keyring = new List<int>();
+            _activeItemsIndex = new int[Constants.Inventory.SLOT_COUNT];
+            Constants.Player.ACTIVE_ITEMS.CopyTo(_activeItemsIndex, 0);
         }
 
         /// <summary>
@@ -90,14 +93,10 @@ namespace RpeggiatorLib
             {
                 remaining = _items.First(item => item.BaseItem.Type == itemType.Value).TryStore(quantity, _maxQuantityByItem[itemType.Value]);
             }
-            else if (_items.Count < Constants.Inventory.SIZE)
+            else
             {
                 _items.Add(new InventoryItem(itemType.Value, quantity));
                 SetItemMaxQuantity(itemType.Value, Item.GetItem(itemType.Value).InitialMaximalQuantity);
-            }
-            else
-            {
-                remaining = quantity;
             }
             return remaining;
         }
@@ -125,7 +124,7 @@ namespace RpeggiatorLib
                 return null;
             }
 
-            int inventorySlotId = Engine.Default.KeyPress.InventorySlotId.Value;
+            int inventorySlotId = Engine.Default.KeyPress.InventorySlotId.Value - 1;
 
             if (inventorySlotId >= DisplayableItems.Count)
             {

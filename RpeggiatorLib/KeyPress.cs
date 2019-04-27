@@ -25,7 +25,7 @@ namespace RpeggiatorLib
         /// </summary>
         public bool PressShield { get; private set; }
         /// <summary>
-        /// Indicates the inventory slot index pressed.
+        /// Indicates the inventory slot index pressed. Starts to one.
         /// </summary>
         public int? InventorySlotId { get; private set; }
 
@@ -88,7 +88,7 @@ namespace RpeggiatorLib
         /// <exception cref="System.ArgumentException"><see cref="Messages.InvalidInventorySlotIdExceptionMessage"/></exception>
         public KeyPress(bool up, bool down, bool right, bool left, bool hit, bool action, bool shield, int? inventorySlotId)
         {
-            if (inventorySlotId.HasValue && (inventorySlotId.Value < 0 || inventorySlotId.Value >= Constants.Inventory.SIZE))
+            if (inventorySlotId.HasValue && (inventorySlotId.Value < 0 || inventorySlotId.Value > Constants.Inventory.SLOT_COUNT))
             {
                 throw new System.ArgumentException(Messages.InvalidInventorySlotIdExceptionMessage, nameof(inventorySlotId));
             }

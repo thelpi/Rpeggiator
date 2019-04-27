@@ -75,13 +75,13 @@ namespace RPG4.Visuals
                         KeyPress pressedKeys = (KeyPress)Dispatcher.Invoke(new KeyPressHandler(delegate ()
                         {
                             KeyPress kp = new KeyPress(
-                                Keyboard.IsKeyDown(Key.Up),
-                                Keyboard.IsKeyDown(Key.Down),
-                                Keyboard.IsKeyDown(Key.Right),
-                                Keyboard.IsKeyDown(Key.Left),
+                                Keyboard.IsKeyDown(Key.Z),
+                                Keyboard.IsKeyDown(Key.S),
+                                Keyboard.IsKeyDown(Key.D),
+                                Keyboard.IsKeyDown(Key.Q),
                                 _hitKeyPressed,
                                 _actionKeyPressed,
-                                Keyboard.IsKeyDown(Key.LeftCtrl),
+                                Keyboard.IsKeyDown(Key.NumPad6),
                                 _inventoryKeyPressed
                             );
                             _inventoryKeyPressed = null;
@@ -239,7 +239,7 @@ namespace RPG4.Visuals
         {
             pgbPlayerLifePoints.Maximum = _engine.Player.MaximalLifePoints;
             pgbPlayerLifePoints.Value = _engine.Player.CurrentLifePoints;
-            for (int i = 0; i < _engine.Player.Inventory.InventoryMaxSize; i++)
+            for (int i = 0; i < _engine.Player.Inventory.ActiveSlotCount; i++)
             {
                 Rectangle itemSlotRct = (Rectangle)FindName(string.Format("rctItem{0}", i));
                 TextBlock itemSlotTxt = (TextBlock)FindName(string.Format("txbItem{0}", i));
@@ -264,48 +264,28 @@ namespace RPG4.Visuals
         {
             switch (e.Key)
             {
-                case Key.F:
-                    _actionKeyPressed = true;
-                    break;
                 case Key.Enter:
                     _pauseKeyPressed = true;
                     Hide();
-                    new inventoryWindow().ShowDialog();
+                    new InventoryWindow().ShowDialog();
                     _pauseKeyPressed = false;
                     ShowDialog();
                     break;
-                case Key.Space:
+                case Key.NumPad4:
                     _hitKeyPressed = true;
                     break;
-                case Key.D0:
-                    _inventoryKeyPressed = _engine.Player.Inventory.InventoryMaxSize - 1;
+                case Key.NumPad5:
+                    _actionKeyPressed = true;
                     break;
-                case Key.D1:
-                    _inventoryKeyPressed = 0;
-                    break;
-                case Key.D2:
+                // TODO : link this to _engine.Player.Inventory.ActiveSlotCount
+                case Key.NumPad7:
                     _inventoryKeyPressed = 1;
                     break;
-                case Key.D3:
+                case Key.NumPad8:
                     _inventoryKeyPressed = 2;
                     break;
-                case Key.D4:
+                case Key.NumPad9:
                     _inventoryKeyPressed = 3;
-                    break;
-                case Key.D5:
-                    _inventoryKeyPressed = 4;
-                    break;
-                case Key.D6:
-                    _inventoryKeyPressed = 5;
-                    break;
-                case Key.D7:
-                    _inventoryKeyPressed = 6;
-                    break;
-                case Key.D8:
-                    _inventoryKeyPressed = 7;
-                    break;
-                case Key.D9:
-                    _inventoryKeyPressed = 8;
                     break;
             }
         }

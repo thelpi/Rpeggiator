@@ -105,8 +105,8 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
-    <Compile Include="Visuals\inventoryWindow.xaml.cs">
-      <DependentUpon>inventoryWindow.xaml</DependentUpon>
+    <Compile Include="Visuals\InventoryWindow.xaml.cs">
+      <DependentUpon>InventoryWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="Visuals\ScreenEditorWindow.xaml.cs">
       <DependentUpon>ScreenEditorWindow.xaml</DependentUpon>
@@ -115,7 +115,7 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Visuals\inventoryWindow.xaml">
+    <Page Include="Visuals\InventoryWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
