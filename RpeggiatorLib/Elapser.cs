@@ -14,7 +14,7 @@ namespace RpeggiatorLib
         /// <summary>
         /// <see cref="_instances"/>
         /// </summary>
-        public static IReadOnlyCollection<Elapser> Instances
+        internal static IReadOnlyCollection<Elapser> Instances
         {
             get
             {

@@ -105,10 +105,17 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
+    <Compile Include="Visuals\inventoryWindow.xaml.cs">
+      <DependentUpon>inventoryWindow.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Visuals\ScreenEditorWindow.xaml.cs">
       <DependentUpon>ScreenEditorWindow.xaml</DependentUpon>
     </Compile>
     <Page Include="Visuals\IntroWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Visuals\inventoryWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

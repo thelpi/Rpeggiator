@@ -32,6 +32,7 @@ namespace RPG4.Visuals
 
         private bool _hitKeyPressed;
         private bool _actionKeyPressed;
+        private bool _pauseKeyPressed;
         private int? _inventoryKeyPressed;
         
         private int _currentScreenId;
@@ -61,6 +62,15 @@ namespace RPG4.Visuals
                     stopWatch.Restart();
                     try
                     {
+                        if (_pauseKeyPressed)
+                        {
+                            _engine.Pause();
+                            while (_pauseKeyPressed)
+                            {
+                                Thread.Sleep(500);
+                            }
+                        }
+
                         // check pressed keys
                         KeyPress pressedKeys = (KeyPress)Dispatcher.Invoke(new KeyPressHandler(delegate ()
                         {
@@ -77,6 +87,7 @@ namespace RPG4.Visuals
                             _inventoryKeyPressed = null;
                             _hitKeyPressed = false;
                             _actionKeyPressed = false;
+                            _pauseKeyPressed = false;
                             return kp;
                         }));
 
@@ -253,8 +264,15 @@ namespace RPG4.Visuals
         {
             switch (e.Key)
             {
-                case Key.Enter:
+                case Key.F:
                     _actionKeyPressed = true;
+                    break;
+                case Key.Enter:
+                    _pauseKeyPressed = true;
+                    Hide();
+                    new inventoryWindow().ShowDialog();
+                    _pauseKeyPressed = false;
+                    ShowDialog();
                     break;
                 case Key.Space:
                     _hitKeyPressed = true;

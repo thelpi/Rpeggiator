@@ -280,5 +280,17 @@ namespace RpeggiatorLib
         {
             return Player.CheckDeath(CurrentScreen);
         }
+
+        /// <summary>
+        /// Stops every current actions.
+        /// </summary>
+        public void Pause()
+        {
+            Elapser.Instances.All(e =>
+            {
+                e.Reset();
+                return true;
+            });
+        }
     }
 }

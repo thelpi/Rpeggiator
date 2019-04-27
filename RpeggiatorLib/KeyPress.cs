@@ -1,5 +1,5 @@
-﻿using RpeggiatorLib.Enums;
-using System.Linq;
+﻿using System.Linq;
+using RpeggiatorLib.Enums;
 
 namespace RpeggiatorLib
 {
@@ -25,9 +25,10 @@ namespace RpeggiatorLib
         /// </summary>
         public bool PressShield { get; private set; }
         /// <summary>
-        /// Indicates the inventory slot pressed.
+        /// Indicates the inventory slot index pressed.
         /// </summary>
         public int? InventorySlotId { get; private set; }
+
         /// <summary>
         /// Inferred; indicates if the general direction of pressed keys is left.
         /// </summary>

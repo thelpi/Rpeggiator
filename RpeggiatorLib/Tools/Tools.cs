@@ -120,7 +120,8 @@ namespace RpeggiatorLib
 
             if (quadraticSolution == null)
             {
-                throw new Exceptions.NoQuadraticSolutionException(pStart, pDest, d);
+                //throw new Exceptions.NoQuadraticSolutionException(pStart, pDest, d);
+                return pStart;
             }
 
             double xn_s1 = quadraticSolution.Item1;
